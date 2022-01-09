@@ -9,7 +9,11 @@ class ContainerWidget(biui.Widget.Widget):
         super().__init__()
         self._children = []
         self._surface = biui.createSurface(self.getSize())
-    
+        #
+        self.onChildAdded = biui.EventManager()
+        #
+        self.onChildRemoved = biui.EventManager()
+        
     ## Returns all child elements.
     #
     #  @return               A list with Widgets.
@@ -23,6 +27,7 @@ class ContainerWidget(biui.Widget.Widget):
     #   
     def removeChild(self,child):
         self._children.remove(child)
+        self.onChildRemoved.provoke(biui.Event(self))
      
     ## Adds a child element to the container.
     #
@@ -32,6 +37,7 @@ class ContainerWidget(biui.Widget.Widget):
         child.setParent(self)
         self._children.append(child)
         self._invalidate()
+        self.onChildAdded.provoke(biui.Event(self))
     
     ## Returns the child element at the given position, itself or None.
     #
@@ -88,18 +94,18 @@ class ContainerWidget(biui.Widget.Widget):
         for c in self._children:
             c._redraw(self._surface)
                 
-    def onKeyDown(self,ev):
-        #print( "ContainerWidget::onKeyDown  : " +str(ev) )
+    def _onKeyDown(self,ev):
+        super()._onKeyDown(ev)
         for c in self._children:
-            c.onKeyDown(ev)
+            c._onKeyDown(ev)
             
-    def onKeyUp(self,ev):
-        #print( "ContainerWidget::onKeyUp    : " +str(ev) )
+    def _onKeyUp(self,ev):
+        super()._onKeyUp(ev)
         for c in self._children:
-            c.onKeyUp(ev)
+            c._onKeyUp(ev)
     
-    def onTextInput(self,ev):
-        #print( "ContainerWidget::onTextInput: " +str(ev) )
+    def _onTextInput(self,ev):
+        super()._onTextInput(ev)
         for c in self._children:
-            c.onTextInput(ev)
+            c._onTextInput(ev)
                 

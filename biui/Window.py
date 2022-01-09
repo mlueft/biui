@@ -14,107 +14,150 @@ class Window(biui.ContainerWidget.ContainerWidget):
         self.setHeight(768)
         self._surface = biui.createWindow(self)
         biui._addWindow(self)
+
+        #
+        self.onWindowEnter = biui.EventManager()
+        #
+        self.onWindowLeave = biui.EventManager()
+        #
+        self.onWindowFocus = biui.EventManager()
+        #
+        self.onWindowFocusLost = biui.EventManager()
+        #
+        self.onWindowHidden = biui.EventManager()
+        #
+        self.onWindowMinimized = biui.EventManager()
+        #
+        self.onWindowRestored = biui.EventManager()
+        #
+        self.onWindowShown = biui.EventManager()
+        #
+        self.onWindowShown = biui.EventManager()
+        #
+        self.onWindowFocusGained = biui.EventManager()
+        #
+        self.onWindowFocusTaken = biui.EventManager()
+        #
+        self.onWindowClose = biui.EventManager()
+        #
+        self.onWindowMaximized = biui.EventManager()
+        #
+        self.onWindowMoved = biui.EventManager()
+        #
+        self.onWindowMSizeChanged = biui.EventManager()
+        #
+        self.onWindowSizeChanged = biui.EventManager()
+        #
+        self.onWindowResized = biui.EventManager()
+        #
+        self.onWindowExposed = biui.EventManager()
         
     ##
     #
     #
-    def onWindowEnter(self):
-        pass
+    def _onWindowEnter(self,ev):
+        self.onWindowEnter.provoke(ev)
     
     ##
     #
     #
-    def onWindowLeave(self):
-        pass
+    def _onWindowLeave(self,ev):
+        self.onWindowLeave.provoke(ev)
 
     ##
     #
     #
-    def onWindowFocus(self):
+    def _onWindowFocus(self,ev):
+        self.onWindowFocus.provoke(ev)
         self._invalidate()
     
     ##
     #
     #
-    def onWindowFocusLost(self):
-        pass
+    def _onWindowFocusLost(self,ev):
+        self.onWindowFocusLost.provoke(ev)
     
     ##
     #
     #
-    def onWindowHidden(self):
-        pass
+    def _onWindowHidden(self,ev):
+        self.onWindowHidden.provoke(ev)
     
     ##
     #
     #
-    def onWindowMinimized(self):
-        pass
+    def _onWindowMinimized(self,ev):
+        self.onWindowMinimized.provoke(ev)
     
     ##
     #
     #
-    def onWindowRestored(self):
+    def _onWindowRestored(self,ev):
+        self.onWindowRestored.provoke(ev)
         self._invalidate()
     
     ##
     #
     #
-    def onWindowShown(self):
+    def _onWindowShown(self,ev):
+        self.onWindowShown.provoke(ev)
         self._invalidate()
     
     ##
     #
     #
-    def onWindowFocusGained(self):
-        pass
+    def _onWindowFocusGained(self,ev):
+        self.onWindowFocusGained.provoke(ev)
     
     ##
     #
     #
-    def onWindowTakeFocus(self):
-        pass
+    def _onWindowTakeFocus(self,ev):
+        self.onWindowFocusTaken.provoke(ev)
     
     ##
     #
     #
-    def onWindowClose(self):
-        pass
+    def _onWindowClose(self,ev):
+        self.onWindowClose.provoke(ev)
     
     ##
     #
     #
-    def onWindowMaximized(self):
-        pass
+    def _onWindowMaximized(self,ev):
+        self.onWindowMaximized.provoke(ev)
     
     ##
     #
     #
-    def onWindowMoved(self):
-        pass
+    def _onWindowMoved(self,ev):
+        self.onWindowMoved.provoke(ev)
     
     ##
     #
     #
-    def onWindowSizeChanged(self):
+    def _onWindowSizeChanged(self,ev):
+        self.onWindowSizeChanged.provoke(ev)
         self._invalidate()
     
     ##
     #
     #
-    def onWindowResized(self):
+    def _onWindowResized(self,ev):
+        self.onWindowResized.provoke(ev)
         self._invalidate()
     
     ##
     #
     #
-    def onWindowExposed(self):
+    def _onWindowExposed(self,ev):
+        self.onWindowExposed.provoke(ev)
         pass
     
     ##
     #
     #
-    def onQuit(self):
+    def _onQuit(self):
         pass
 
     def setX(self, value):

@@ -1,3 +1,4 @@
+import biui
 
 ##
 #
@@ -20,6 +21,26 @@ class Widget:
         self._dirtyRects = []
         # Stores a reference the parent GUI element
         self._parent = None
+        #
+        self.onMouseUp = biui.EventManager()
+        #
+        self.onTextInput = biui.EventManager()
+        #
+        self.onKeyUp = biui.EventManager()
+        #
+        self.onKeyDown = biui.EventManager()
+        #
+        self.onMouseMove = biui.EventManager()
+        #
+        self.onMouseLeave = biui.EventManager()
+        #
+        self.onMouseEnter = biui.EventManager()
+        #
+        self.onMouseWheel = biui.EventManager()
+        #
+        self.onMouseUp = biui.EventManager()
+        #
+        self.onMouseDown = biui.EventManager()
         
     ## Sets the x/y position of the GUI element.
     #
@@ -188,8 +209,8 @@ class Widget:
     #  @param ev                 A MouseEvent
     #  @return            None
     #
-    def onMouseDown(self,ev):
-        pass
+    def _onMouseDown(self,ev):
+        self.onMouseDown.provoke(ev)
 
     ## Is called if a mouse button got released and the
     #  mouse pointer is over the GUI element.
@@ -197,8 +218,8 @@ class Widget:
     #  @param ev                 A MouseEvent
     #  @return                   None
     #
-    def onMouseUp(self,ev):
-        pass
+    def _onMouseUp(self,ev):
+        self.onMouseUp.provoke(ev)
      
     ## Is called if a mouse wheel got turned and the
     #  mouse pointer is over the GUI element.
@@ -207,24 +228,24 @@ class Widget:
     #  @param ev                 A MouseEvent
     #  @return                   None
     #
-    def onMouseWheel(self,ev):
-        pass
+    def _onMouseWheel(self,ev):
+        self.onMouseWheel.provoke(ev)
     
     ## Is called if the mouse pointer enters the GUI element.
     #
     #  @param ev                 A MouseEvent
     #  @return                   None
     #
-    def onMouseEnter(self,ev):
-        pass
+    def _onMouseEnter(self,ev):
+        self.onMouseEnter.provoke(ev)
     
     ## Is called if the mouse pointer leaves the GUI element.
     #
     #  @param ev                 A MouseEvent
     #  @return                   None
     #
-    def onMouseLeave(self,ev):
-        pass
+    def _onMouseLeave(self,ev):
+        self.onMouseLeave.provoke(ev)
     
     ## Is called if the mouse pointer is over the GUI element
     #  and moved.
@@ -232,8 +253,8 @@ class Widget:
     #  @param ev                 A MouseEvent
     #  @return                   None
     #
-    def onMouseMove(self,ev):
-        pass
+    def _onMouseMove(self,ev):
+        self.onMouseMove.provoke(ev)
     
     ## Is called key got pressed.
     #  It's necassry to call super().onKeyDown(ev)
@@ -242,9 +263,8 @@ class Widget:
     #  @param ev                 A KeyEvent.
     #  @return                   None
     #
-    def onKeyDown(self,ev):
-        #print( "Widget::onKeyDown  : " +str(ev) )
-        pass
+    def _onKeyDown(self,ev):
+        self.onKeyDown.provoke(ev)
     
     ## Is called if a key got released.
     #  It's necassry to call super().onKeyUp(ev)
@@ -253,9 +273,8 @@ class Widget:
     #  @param ev                 A KeyEvent.
     #  @return                   None
     #
-    def onKeyUp(self,ev):
-        #print( "Widget::onKeyUp    : " +str(ev) )
-        pass
+    def _onKeyUp(self,ev):
+        self.onKeyUp.provoke(ev)
     
     ## Is called if a key press ends in a entered character.
     #  It's necassry to call super().onTextInput(ev)
@@ -264,9 +283,8 @@ class Widget:
     #  @param ev                 A KeyEvent.
     #  @return                   None
     #    
-    def onTextInput(self,ev):
-        #print( "Widget::onTextInput: " +str(ev) )
-        pass
+    def _onTextInput(self,ev):
+        self.onTextInput.provoke(ev)
 
     ## Converts global coordinates to local coordinates
     #

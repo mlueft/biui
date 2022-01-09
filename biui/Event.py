@@ -8,5 +8,11 @@ class Event():
     ##
     #
     #
-    def __init__(self):
-        pass
+    def __init__(self, eventSource):
+        self._eventSource = eventSource
+        
+    ##
+    #
+    #
+    def getEventSource(self):
+        return self._eventSource

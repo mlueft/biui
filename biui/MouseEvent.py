@@ -8,7 +8,8 @@ class MouseEvent(biui.Event.Event):
     ##
     #
     #
-    def __init__(self, buttonStates, position, wheelX, wheelY):
+    def __init__(self,eventSource,buttonStates,position,wheelX,wheelY):
+        super().__init__(eventSource)
         self.__buttonStates = buttonStates
         self.__position = position
         self.__wheelX = wheelX

@@ -9,36 +9,24 @@ class EventManager (object):
 	#
 	#
 	def __init__(self):
-		self.__qeue_misc = []
+		self.__handlers= []
 
 	##
 	#
 	#
-	def register(self, type, callback ):
-		if type == biui.EventTypes.MISC:
-			# Prevent callbacks from regictered twice.
-			if callback not in self.__qeue_misc:
-				self.__qeue_misc.append(callback)
-		else:
-			raise ValueError("EventType: '"+str(type)+"' not recognized!")
+	def add(self, handler):
+		self.__handlers.append(handler)
 
 	##
 	#
 	#
-	def unregister(self, type, callback):
-		if type == biui.EventTypes.MISC:
-			self.__qeue_misc.remove(callback)
-		else:
-			raise ValueError("EventType: '"+str(type)+"' not recognized!")
+	def remove(self, handler):
+		self.__handlers.remove(handler)
 
 	##
 	#
 	#
-	def pour(self, type, event = None):
-		if type == biui.EventTypes.MISC:
-			for callback in self.__qeue_misc:
-				callback(event)
-			return
-		else:
-			raise ValueError("EventType: '"+str(type)+"' not recognized!")
+	def provoke(self, event):
+		for handler in self.__handlers:
+			handler(event)
 			

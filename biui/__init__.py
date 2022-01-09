@@ -1,4 +1,5 @@
 import pygame
+from pygame import surface
 
 import biui.Event
 import biui.MouseEvent
@@ -13,9 +14,11 @@ import biui.ContainerWidget
 import biui.Window
 import biui.Pane
 import biui.Button
-from pygame import surface
+import biui.ButtonStates
+import biui.ToggleButton
+import biui.ButtonGroup
 
-EventsEvent = biui.Event.Event
+Event = biui.Event.Event
 MouseEvent = biui.MouseEvent.MouseEvent
 KeyEvent = biui.KeyEvent.KeyEvent
 EventTypes = biui.EventTypes.EventTypes
@@ -25,7 +28,10 @@ Pane = biui.Pane.Pane
 KeyModifiers = biui.KeyModifiers.KeyMofifiers
 Keys = biui.Keys.Keys
 Button = biui.Button.Button
-
+ButtonStates = biui.ButtonStates.ButtonStates
+ToggleButton = biui.ToggleButton.ToggleButton
+ButtonGroup = biui.ButtonGroup.ButtonGroup
+    
 # Defines if all directy rects are drawn on screen.
 # For debug use. This makes everything slower.
 __SHOWUPDATEBOXES = False
@@ -142,39 +148,39 @@ def main():
         #
         if event.type == pygame.MOUSEMOTION:
             bStates = pygame.mouse.get_pressed(num_buttons=5)
-            ev = biui.MouseEvent(bStates,event.pos,0,0)
             receiver = biui.__getChildAt(event.pos)
+            ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
             if receiver != __hoverWidget:
                 if __hoverWidget != None:
-                    __hoverWidget.onMouseLeave(ev)
+                    __hoverWidget._onMouseLeave(ev)
                 __hoverWidget = receiver
-                __hoverWidget.onMouseEnter(ev)
+                __hoverWidget._onMouseEnter(ev)
             else:
-                receiver.onMouseMove(ev)
+                receiver._onMouseMove(ev)
 
             
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Filter wheel action.
             if event.button not in [4,5]:
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
-                ev = biui.MouseEvent(bStates,event.pos,0,0)
                 receiver = biui.__getChildAt(event.pos)
-                receiver.onMouseDown(ev)
+                ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
+                receiver._onMouseDown(ev)
             
         elif event.type == pygame.MOUSEBUTTONUP:
             # Filter wheel action.
             if event.button not in [4,5]:
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
-                ev = biui.MouseEvent(bStates,event.pos,0,0)
                 receiver = biui.__getChildAt(event.pos)
-                receiver.onMouseUp(ev)
+                ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
+                receiver._onMouseUp(ev)
             
         elif event.type == pygame.MOUSEWHEEL:
             mpos = pygame.mouse.get_pos()
             bStates = pygame.mouse.get_pressed(num_buttons=5)
-            ev = biui.MouseEvent(bStates,mpos,event.x,event.y)
             receiver = biui.__getChildAt(mpos)
-            receiver.onMouseWheel(ev)
+            ev = biui.MouseEvent(receiver,bStates,mpos,event.x,event.y)
+            receiver._onMouseWheel(ev)
             
             
         #
@@ -184,31 +190,34 @@ def main():
         #
         elif event.type == pygame.KEYDOWN:
             #print( "keydown: "+ str(event) )
-            ev = biui.KeyEvent(
-                event.unicode,
-                event.key,
-                event.scancode,
-                event.mod
-            )
             for w in __windowSurfaces:
-                w.onKeyDown(ev)
+                ev = biui.KeyEvent(
+                    w,
+                    event.unicode,
+                    event.key,
+                    event.scancode,
+                    event.mod
+                )
+                w._onKeyDown(ev)
         elif event.type == pygame.KEYUP:
             #print( "keyup: "+ str(event) )
-            ev = biui.KeyEvent(
-                event.unicode,
-                event.key,
-                event.scancode,
-                event.mod
-            )        
             for w in __windowSurfaces:
-                w.onKeyUp(ev)
+                ev = biui.KeyEvent(
+                    w.
+                    event.unicode,
+                    event.key,
+                    event.scancode,
+                    event.mod
+                )        
+                w._onKeyUp(ev)
         elif event.type == pygame.TEXTINPUT:
             #print( "textinput: "+ str(event) )
-            ev = biui.KeyEvent(
-                event.text
-            )            
             for w in __windowSurfaces:
-                w.onTextInput(ev)
+                ev = biui.KeyEvent(
+                    w,
+                    event.text
+                )            
+                w._onTextInput(ev)
             
             
         #
@@ -220,56 +229,56 @@ def main():
         #
         elif event.type == pygame.WINDOWLEAVE:
             for w in __windowSurfaces:
-                w.onWindowLeave()
+                w._onWindowLeave(biui.Event(w))
         elif event.type == pygame.WINDOWENTER:
             for w in __windowSurfaces:
-                w.onWindowEnter()
+                w._onWindowEnter(biui.Event(w))
         elif event.type == pygame.ACTIVEEVENT:
             for w in __windowSurfaces:
-                w.onWindowFocus()
+                w._onWindowFocus(biui.Event(w))
         elif event.type == pygame.WINDOWFOCUSLOST:
             for w in __windowSurfaces:
-                w.onWindowFocusLost()
+                w._onWindowFocusLost(biui.Event(w))
         elif event.type == pygame.WINDOWHIDDEN:
             for w in __windowSurfaces:
-                w.onWindowHidden()
+                w._onWindowHidden(biui.Event(w))
         elif event.type == pygame.WINDOWMINIMIZED:
             for w in __windowSurfaces:
-                w.onWindowMinimized()
+                w._onWindowMinimized(biui.Event(w))
         elif event.type == pygame.WINDOWRESTORED:
             for w in __windowSurfaces:
-                w.onWindowRestored()
+                w._onWindowRestored(biui.Event(w))
         elif event.type == pygame.WINDOWSHOWN:
             for w in __windowSurfaces:
-                w.onWindowShown()
+                w._onWindowShown(biui.Event(w))
         elif event.type == pygame.WINDOWFOCUSGAINED:
             for w in __windowSurfaces:
-                w.onWindowFocusGained()
+                w._onWindowFocusGained(biui.Event(w))
         elif event.type == pygame.WINDOWTAKEFOCUS:
             for w in __windowSurfaces:
-                w.onWindowTakeFocus()
+                w._onWindowTakeFocus(biui.Event(w))
         elif event.type == pygame.WINDOWCLOSE:
             for w in __windowSurfaces:
-                w.onWindowClose()
+                w._onWindowClose(biui.Event(w))
         elif event.type == pygame.WINDOWMAXIMIZED:
             for w in __windowSurfaces:
-                w.onWindowMaximized()
+                w._onWindowMaximized(biui.Event(w))
         elif event.type == pygame.WINDOWMOVED:
             for w in __windowSurfaces:
-                w.onWindowMoved()
+                w._onWindowMoved(biui.Event(w))
         elif event.type == pygame.WINDOWSIZECHANGED:
             for w in __windowSurfaces:
                 w.setWidth(event.x)
                 w.setHeight(event.y)
-                w.onWindowSizeChanged()
+                w._onWindowSizeChanged(biui.Event(w))
         elif event.type == pygame.WINDOWRESIZED:
             for w in __windowSurfaces:
                 w.setWidth(event.x)
                 w.setHeight(event.y)
-                w.onWindowResized()
+                w._onWindowResized(biui.Event(w))
         elif event.type == pygame.WINDOWEXPOSED:
             for w in __windowSurfaces:
-                w.onWindowExposed()
+                w._onWindowExposed(biui.Event(w))
         elif event.type == pygame.VIDEORESIZE:
             pass
         elif event.type == pygame.VIDEOEXPOSE:
@@ -281,7 +290,7 @@ def main():
         #
         elif event.type == pygame.QUIT:
             for w in __windowSurfaces:
-                w.onWindowExposed()
+                w._onWindowExposed(biui.Event(w))
             return False
         
         

@@ -5,7 +5,8 @@ import biui
 #
 class KeyEvent(biui.Event.Event):
     
-    def __init__(self,char,key=None,scanCode=None, modifiers=None):
+    def __init__(self,eventSource,char,key=None,scanCode=None, modifiers=None):
+        super().__init__(eventSource)
         self.__char = char
         self.__key = key
         self.__scanCode = scanCode

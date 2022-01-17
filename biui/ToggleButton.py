@@ -38,9 +38,6 @@ class ToggleButton(biui.Button.Button):
         self._recordDirtyRect()
         self._checked = not self._checked
         self._invalidate()
-        # We have to call super() at the end!
-        # otherwise setChecked in an handler
-        # doesn't work
         super()._onMouseUp(ev)
         
         

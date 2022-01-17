@@ -17,6 +17,8 @@ import biui.Button
 import biui.ButtonStates
 import biui.ToggleButton
 import biui.ButtonGroup
+import biui.LayoutManager
+import biui.Alignment
 
 Event = biui.Event.Event
 MouseEvent = biui.MouseEvent.MouseEvent
@@ -31,7 +33,9 @@ Button = biui.Button.Button
 ButtonStates = biui.ButtonStates.ButtonStates
 ToggleButton = biui.ToggleButton.ToggleButton
 ButtonGroup = biui.ButtonGroup.ButtonGroup
-    
+LayoutManager = biui.LayoutManager.LayoutManager
+Alignment = biui.Alignment.Alignment
+
 # Defines if all directy rects are drawn on screen.
 # For debug use. This makes everything slower.
 __SHOWUPDATEBOXES = False
@@ -78,7 +82,7 @@ def createSurface(size):
     return sf
 
 def _addWindow(window):
-    __windowSurfaces.append(window)
+    __windowSurfaces.insert(0,window)
 
 ## Returns the Widget at the given position.
 #  Currently the function doesn't care about

@@ -170,6 +170,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         return self._surface
         
     def _redraw(self):
+        self._calculateLayout()
         #print("Window::_redraw")
         theme = biui.getTheme()
         theme.drawWindowBeforeChildren(self,self._surface)
@@ -177,15 +178,16 @@ class Window(biui.ContainerWidget.ContainerWidget):
         theme.drawWindowAfterChildren(self,self._surface)
         
     def setWidth(self, value):
-        self._width = value
+        self._width = max(1,value)
         #self._surface = biui.createSurface(self.getSize())
         
     def setHeight(self, value):
-        self._height = value
+        self._height = max(1,value)
         #self._surface = biui.createSurface(self.getSize())
         
     def getChildAt(self, pos):
-        for c in self._children:
+        for i in range(len(self._children)-1,-1,-1):
+            c = self._children[i]
             cPos = c.toGlobal((0,0))
             if cPos[0] <= pos[0]:
                 if cPos[0]+c.getWidth() >= pos[0]: 

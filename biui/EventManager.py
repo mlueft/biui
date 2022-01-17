@@ -21,6 +21,9 @@ class EventManager (object):
 	#
 	#
 	def remove(self, handler):
+		if handler not in self.__handlers:
+			return
+		 
 		self.__handlers.remove(handler)
 
 	##

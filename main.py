@@ -172,13 +172,6 @@ def main():
 	wnd.addChild(b1)
 	
 	
-	
-	
-	
-	
-	
-	
-	
 	#
 	# Temporary main loop
 	#
@@ -209,12 +202,6 @@ def main():
 	em.unregister(biui.EventTypes.MISC, eventHandler1 )
 	em.pour( biui.EventTypes.MISC )
 	"""
-	
-def eventHandler0(event = None):
-	print("event0")
-
-def eventHandler1(event = None):
-	print("event1")
 
 if __name__ == "__main__":
 	main()

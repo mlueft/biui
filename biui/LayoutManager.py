@@ -9,13 +9,13 @@ class LayoutManager():
         #        
         self._children = [[]]
         #
-        self.onChildAdded = biui.EventManager()
-        #
-        self.onChildRemoved = biui.EventManager()
-        #
         self._columnWidths = []
         #
         self._rowHeights = []
+        #
+        self.onChildAdded = biui.EventManager()
+        #
+        self.onChildRemoved = biui.EventManager()
         
         self._resizeChildList( width,height)
         
@@ -94,6 +94,7 @@ class LayoutManager():
     #
     def setColumnWidth(self,column,value):
         self._resizeChildList(column,0)
+        #TODO: Should self._columnWidths be extended implicitly?
         if column > len(self._columnWidths):
             raise Exception( Messages.ERR_COL_INDEX_OUT_OF_RANGE )
         
@@ -104,6 +105,7 @@ class LayoutManager():
     #
     def setRowHeight(self,row,values):
         self._resizeChildList(0,row)
+        #TODO: Should self._rowHeights be extended implicitly?
         if row > len(self._rowHeights):
             raise Exception( Messages.ERR_ROW_INDEX_OUT_OF_RANGE )
         

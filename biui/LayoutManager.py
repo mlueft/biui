@@ -6,10 +6,6 @@ import biui
 class LayoutManager():
     
     def __init__(self,width=1,height=1):
-        # Stores the width of the GUI element.
-        self._width = width
-        #Stores the height of the GUI element.
-        self._height = height
         #        
         self._children = [[]]
         #
@@ -36,47 +32,17 @@ class LayoutManager():
                 _max = max(_max,len(i))
             height = _max
              
-        for i in range(max(width,self._width)):
+        for i in range(width):
             
             if i >= len(self._children):
                 self._children.append([])
                 
             tmp = self._children[i]
                 
-            for j in range(max(height,self._height)):
+            for j in range(height):
                 if j >= len(tmp):
                     tmp.append(None)
         
-    ## 
-    #
-    #  @param value       An integer value.
-    #  @return            None
-    #       
-    def setWidth(self, value):
-        self._width = max(1,value)
-    
-    ## 
-    #
-    #  @return            An integer value.
-    #
-    def getWidth(self):
-        return self._width
-    
-    ## 
-    #
-    #  @param value       An integer value.
-    #  @return            None
-    #
-    def setHeight(self, value):
-        self._height = max(1,value)
-        
-    # 
-    #
-    #  @return            An integer value.
-    #
-    def getHeight(self):
-        return self._height
-                
     ## Adds a child element to the Layout.
     #
     #  @param child         A Widget instance.
@@ -151,12 +117,13 @@ class LayoutManager():
     #        filler will be negative. :-(
     #        Could turn into a problem!?
     #
-    #  @param cols        An array with widths definition
+    #  @param cols        A list with widths definition.
     #                     floats - percent values
     #                     int    - absolut values
     #                     0      - fill the rest
     #  @param size        The complete size
     #  @return            An array with absolute values.
+    #
     def __calculatePixelWidths(self, cols, size):
         
         result = []
@@ -188,8 +155,6 @@ class LayoutManager():
     #   @param            The parent's size.
     #
     def _calculateLayout(self, size):
-        # TODO: calculate position and size
-        #       for each child.
         cellX = 0
         widths  = self.__calculatePixelWidths(self._columnWidths,size[0])
         heights = self.__calculatePixelWidths(self._rowHeights,size[1])

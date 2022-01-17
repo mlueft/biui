@@ -1,18 +1,8 @@
 import pygame
 import math
-
 import biui
-import pygame.locals
 
 
-screen = None
-
-class Test():
-	def upHandler(self, ev):
-		print("up")
-		print(self)
-
-_test = Test()
 
 sub = None
 wnd = None
@@ -146,8 +136,8 @@ def main():
 	pane3_1.setY(10)
 	pane3_1.setWidth(30)
 	pane3_1.setHeight(30)
-	pane3_1.setAlignment(biui.Alignment.BOTTOM_RIGHT)
-	pane3.addChild(pane3_1,0,0)
+	pane3_1.setAlignment(biui.Alignment.CENTER_CENTER)
+	pane3.addChild(pane3_1,0,1)
 
 	pane3_2 = biui.Pane()
 	pane3_2.setX(120)
@@ -155,11 +145,11 @@ def main():
 	pane3_2.setWidth(100)
 	pane3_2.setHeight(100)
 	pane3_2.setAlignment(biui.Alignment.FILL)
-	#pane3.addChild(pane3_2,1,1)
+	pane3.addChild(pane3_2,1,1)
 			
 	lm = pane3.getLayoutManager()
-	lm.setColumnWidths([0])
-	lm.setRowHeights([0])
+	lm.setColumnWidths([0,50.0])
+	lm.setRowHeights([0,50,0])
 	
 	# Drag buttons
 	b0 = biui.Button()

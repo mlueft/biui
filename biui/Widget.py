@@ -1,11 +1,11 @@
 import biui
 
-##
+## Base class for all GUI elements.
 #
 #
 class Widget:
     
-    ## Base class for all GUI elements.
+    ##
     #
     #
     def __init__(self):

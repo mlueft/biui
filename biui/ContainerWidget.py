@@ -1,6 +1,6 @@
 import biui
 
-##
+## Base class for all container widgets.
 #
 #
 class ContainerWidget(biui.Widget.Widget):

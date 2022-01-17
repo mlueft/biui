@@ -149,6 +149,9 @@ def main():
         # Mouse events
         #
         # Mouse events are send directly to the widget.
+        # TODO: I think it's better to send them throu the DOM.
+        #       This way parents can catch events and prevent
+        #       further handling
         #
         if event.type == pygame.MOUSEMOTION:
             bStates = pygame.mouse.get_pressed(num_buttons=5)

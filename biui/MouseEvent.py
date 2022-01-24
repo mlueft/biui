@@ -14,7 +14,12 @@ class MouseEvent(biui.Event.Event):
         self.__position = position
         self.__wheelX = wheelX
         self.__wheelY = wheelY
-    
+        
+        #
+        #
+        #
+        self.stopPropagation = False
+        
     ## Position as tuple with x and y.
     #  @return         A tuple with the position of the action.
     #

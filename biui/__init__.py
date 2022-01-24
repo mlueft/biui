@@ -149,9 +149,6 @@ def main():
         # Mouse events
         #
         # Mouse events are send directly to the widget.
-        # TODO: I think it's better to send them throu the DOM.
-        #       This way parents can catch events and prevent
-        #       further handling
         #
         if event.type == pygame.MOUSEMOTION:
             bStates = pygame.mouse.get_pressed(num_buttons=5)
@@ -159,11 +156,14 @@ def main():
             ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
             if receiver != __hoverWidget:
                 if __hoverWidget != None:
-                    __hoverWidget._onMouseLeave(ev)
+                    evLeave = biui.MouseEvent(__hoverWidget,bStates,event.pos,0,0)
+                    for w in __windowSurfaces:
+                        w._onMouseLeave(evLeave)
                 __hoverWidget = receiver
                 __hoverWidget._onMouseEnter(ev)
             else:
-                receiver._onMouseMove(ev)
+                for w in __windowSurfaces:
+                    w._onMouseMove(ev)
 
             
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -172,22 +172,25 @@ def main():
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
                 receiver = biui.__getChildAt(event.pos)
                 ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
-                receiver._onMouseDown(ev)
-            
+                for w in __windowSurfaces:
+                    w._onMouseDown(ev)
+                    
         elif event.type == pygame.MOUSEBUTTONUP:
             # Filter wheel action.
             if event.button not in [4,5]:
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
                 receiver = biui.__getChildAt(event.pos)
                 ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
-                receiver._onMouseUp(ev)
+                for w in __windowSurfaces:
+                    w._onMouseUp(ev)
             
         elif event.type == pygame.MOUSEWHEEL:
             mpos = pygame.mouse.get_pos()
             bStates = pygame.mouse.get_pressed(num_buttons=5)
             receiver = biui.__getChildAt(mpos)
             ev = biui.MouseEvent(receiver,bStates,mpos,event.x,event.y)
-            receiver._onMouseWheel(ev)
+            for w in __windowSurfaces:
+                w._onMouseWheel(ev)
             
             
         #

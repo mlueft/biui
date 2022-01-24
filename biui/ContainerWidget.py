@@ -27,6 +27,16 @@ class ContainerWidget(biui.Widget.Widget):
     def getChildren(self):
         return self._children
      
+    ##
+    #
+    #
+    def hasChild(self,child):
+        for c in self._children:
+            if c.hasChild(child):
+                return True
+            
+        return self == child
+    
     ##  Removes the given child element.
     #
     #  @param child         A Widget instance.
@@ -146,6 +156,48 @@ class ContainerWidget(biui.Widget.Widget):
         for c in self._children:
             c._redraw(self._surface)
                 
+    def _onMouseDown(self,ev):
+        self.onMouseDown.provoke(ev)
+        for c in self._children:
+            if c.hasChild(ev.getEventSource()):
+                c._onMouseDown(ev)
+                break
+            
+    def _onMouseUp(self,ev):
+        self.onMouseUp.provoke(ev)
+        for c in self._children:
+            if c.hasChild(ev.getEventSource()):
+                c._onMouseUp(ev)
+                break
+        
+    def _onMouseWheel(self,ev):
+        self.onMouseWheel.provoke(ev)
+        for c in self._children:
+            if c.hasChild(ev.getEventSource()):
+                c._onMouseWheel(ev)
+                break
+            
+    def _onMouseEnter(self,ev):
+        self.onMouseEnter.provoke(ev)
+        for c in self._children:
+            if c.hasChild(ev.getEventSource()):
+                c._onMouseEnter(ev)
+                break
+            
+    def _onMouseLeave(self,ev):
+        self.onMouseLeave.provoke(ev)
+        for c in self._children:
+            if c.hasChild(ev.getEventSource()):
+                c._onMouseLeave(ev)
+                break
+            
+    def _onMouseMove(self,ev):
+        self.onMouseMove.provoke(ev)
+        for c in self._children:
+            if c.hasChild(ev.getEventSource()):
+                c._onMouseMove(ev)
+                break
+            
     def _onKeyDown(self,ev):
         super()._onKeyDown(ev)
         for c in self._children:

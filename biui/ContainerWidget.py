@@ -162,13 +162,15 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.getEventSource()):
                 c._onMouseDown(ev)
                 break
-            
+        super()._onMouseDown(ev)
+        
     def _onMouseUp(self,ev):
         self.onMouseUp.provoke(ev)
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseUp(ev)
                 break
+        super()._onMouseUp(ev)
         
     def _onMouseWheel(self,ev):
         self.onMouseWheel.provoke(ev)
@@ -176,28 +178,32 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.getEventSource()):
                 c._onMouseWheel(ev)
                 break
-            
+        super()._onMouseWheel(ev)
+        
     def _onMouseEnter(self,ev):
         self.onMouseEnter.provoke(ev)
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseEnter(ev)
                 break
-            
+        super()._onMouseEnter(ev)
+        
     def _onMouseLeave(self,ev):
         self.onMouseLeave.provoke(ev)
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseLeave(ev)
                 break
-            
+        super()._onMouseLeave(ev)
+        
     def _onMouseMove(self,ev):
         self.onMouseMove.provoke(ev)
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseMove(ev)
                 break
-            
+        super()._onMouseMove(ev)
+        
     def _onKeyDown(self,ev):
         super()._onKeyDown(ev)
         for c in self._children:

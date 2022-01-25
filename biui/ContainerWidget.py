@@ -157,52 +157,64 @@ class ContainerWidget(biui.Widget.Widget):
             c._redraw(self._surface)
                 
     def _onMouseDown(self,ev):
+        super()._onMouseDown(ev)
         self.onMouseDown.provoke(ev)
+        if ev.stopPropagation:
+            return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseDown(ev)
                 break
-        super()._onMouseDown(ev)
         
     def _onMouseUp(self,ev):
+        super()._onMouseUp(ev)
         self.onMouseUp.provoke(ev)
+        if ev.stopPropagation:
+            return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseUp(ev)
                 break
-        super()._onMouseUp(ev)
         
     def _onMouseWheel(self,ev):
+        super()._onMouseWheel(ev)
         self.onMouseWheel.provoke(ev)
+        if ev.stopPropagation:
+            return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseWheel(ev)
                 break
-        super()._onMouseWheel(ev)
         
     def _onMouseEnter(self,ev):
+        super()._onMouseEnter(ev)
         self.onMouseEnter.provoke(ev)
+        if ev.stopPropagation:
+            return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseEnter(ev)
                 break
-        super()._onMouseEnter(ev)
         
     def _onMouseLeave(self,ev):
+        super()._onMouseLeave(ev)
         self.onMouseLeave.provoke(ev)
+        if ev.stopPropagation:
+            return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseLeave(ev)
                 break
-        super()._onMouseLeave(ev)
         
     def _onMouseMove(self,ev):
+        super()._onMouseMove(ev)
         self.onMouseMove.provoke(ev)
+        if ev.stopPropagation:
+            return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
                 c._onMouseMove(ev)
                 break
-        super()._onMouseMove(ev)
         
     def _onKeyDown(self,ev):
         super()._onKeyDown(ev)

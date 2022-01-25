@@ -1,6 +1,5 @@
 import biui
 
-
 ##
 #
 #
@@ -13,7 +12,7 @@ class Pane(biui.ContainerWidget.ContainerWidget):
         super().__init__()
         self.setWidth(100)
         self.setHeight(100)
-            
+        
     def _redraw(self, surface):
         #print("Pane::_redraw")
         pos = self.getPosition()

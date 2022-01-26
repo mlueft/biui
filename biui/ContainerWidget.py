@@ -159,7 +159,7 @@ class ContainerWidget(biui.Widget.Widget):
     def _onMouseDown(self,ev):
         super()._onMouseDown(ev)
         self.onMouseDown.provoke(ev)
-        if ev.stopPropagation:
+        if ev._stopPropagation:
             return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
@@ -169,7 +169,7 @@ class ContainerWidget(biui.Widget.Widget):
     def _onMouseUp(self,ev):
         super()._onMouseUp(ev)
         self.onMouseUp.provoke(ev)
-        if ev.stopPropagation:
+        if ev._stopPropagation:
             return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
@@ -179,7 +179,7 @@ class ContainerWidget(biui.Widget.Widget):
     def _onMouseWheel(self,ev):
         super()._onMouseWheel(ev)
         self.onMouseWheel.provoke(ev)
-        if ev.stopPropagation:
+        if ev._stopPropagation:
             return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
@@ -189,7 +189,7 @@ class ContainerWidget(biui.Widget.Widget):
     def _onMouseEnter(self,ev):
         super()._onMouseEnter(ev)
         self.onMouseEnter.provoke(ev)
-        if ev.stopPropagation:
+        if ev._stopPropagation:
             return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
@@ -199,7 +199,7 @@ class ContainerWidget(biui.Widget.Widget):
     def _onMouseLeave(self,ev):
         super()._onMouseLeave(ev)
         self.onMouseLeave.provoke(ev)
-        if ev.stopPropagation:
+        if ev._stopPropagation:
             return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):
@@ -209,7 +209,7 @@ class ContainerWidget(biui.Widget.Widget):
     def _onMouseMove(self,ev):
         super()._onMouseMove(ev)
         self.onMouseMove.provoke(ev)
-        if ev.stopPropagation:
+        if ev._stopPropagation:
             return
         for c in self._children:
             if c.hasChild(ev.getEventSource()):

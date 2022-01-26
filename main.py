@@ -34,6 +34,9 @@ def b0OnUp(ev):
 	sub.onMouseUp.remove(b0OnUp)
 	sub.onMouseMove.remove(b0OnMove)
 	
+def stopMousePropagation(ev):
+	ev.stopPropagation()
+	
 def main():
 	global wnd, pane3, b0, b1
 	
@@ -102,6 +105,7 @@ def main():
 	# ButtonGroup
 	#
 	buttonGroup = biui.ButtonGroup()
+	buttonGroup.onMouseDown.add(stopMousePropagation)
 	buttonGroup.setX(10)
 	buttonGroup.setY(10)
 	buttonGroup.setWidth(80)

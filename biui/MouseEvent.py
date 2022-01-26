@@ -14,11 +14,13 @@ class MouseEvent(biui.Event.Event):
         self.__position = position
         self.__wheelX = wheelX
         self.__wheelY = wheelY
+        self._stopPropagation = False
         
-        #
-        #
-        #
-        self.stopPropagation = False
+    ##
+    #
+    #
+    def stopPropagation(self):
+        self._stopPropagation = True
         
     ## Position as tuple with x and y.
     #  @return         A tuple with the position of the action.

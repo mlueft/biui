@@ -43,7 +43,8 @@ class ContainerWidget(biui.Widget.Widget):
     #   
     def removeChild(self,child):
         self._layoutManager.removeChild(child)
-        self._children.remove(child)
+        if child in self._children:
+            self._children.remove(child)
         self.onChildRemoved.provoke(biui.Event(self))
      
     ## Adds a child element to the container.
@@ -101,7 +102,7 @@ class ContainerWidget(biui.Widget.Widget):
     #
     def setLayoutManager(self, value):
         self._layoutManager = value
-    
+        
     ## 
     #
     #  @return            A biui.LayoutManager.
@@ -158,7 +159,6 @@ class ContainerWidget(biui.Widget.Widget):
                 
     def _onMouseDown(self,ev):
         super()._onMouseDown(ev)
-        self.onMouseDown.provoke(ev)
         if ev._stopPropagation:
             return
         for c in self._children:
@@ -168,7 +168,6 @@ class ContainerWidget(biui.Widget.Widget):
         
     def _onMouseUp(self,ev):
         super()._onMouseUp(ev)
-        self.onMouseUp.provoke(ev)
         if ev._stopPropagation:
             return
         for c in self._children:
@@ -178,7 +177,6 @@ class ContainerWidget(biui.Widget.Widget):
         
     def _onMouseWheel(self,ev):
         super()._onMouseWheel(ev)
-        self.onMouseWheel.provoke(ev)
         if ev._stopPropagation:
             return
         for c in self._children:
@@ -188,7 +186,6 @@ class ContainerWidget(biui.Widget.Widget):
         
     def _onMouseEnter(self,ev):
         super()._onMouseEnter(ev)
-        self.onMouseEnter.provoke(ev)
         if ev._stopPropagation:
             return
         for c in self._children:
@@ -198,7 +195,6 @@ class ContainerWidget(biui.Widget.Widget):
         
     def _onMouseLeave(self,ev):
         super()._onMouseLeave(ev)
-        self.onMouseLeave.provoke(ev)
         if ev._stopPropagation:
             return
         for c in self._children:
@@ -208,7 +204,6 @@ class ContainerWidget(biui.Widget.Widget):
         
     def _onMouseMove(self,ev):
         super()._onMouseMove(ev)
-        self.onMouseMove.provoke(ev)
         if ev._stopPropagation:
             return
         for c in self._children:

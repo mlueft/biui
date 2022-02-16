@@ -266,6 +266,13 @@ class Widget:
         self._dirtyRects.clear()
         return result
     
+    def getWindow(self):
+        parent = self.getParent()
+        while True:
+            newParent = parent.getParent()
+            if newParent == None:
+                return parent
+            parent = newParent 
     ## Returns the parent GUI element of the GUI element.
     #  Normally it is the main window or a container element
     #  that contains the GUI element.

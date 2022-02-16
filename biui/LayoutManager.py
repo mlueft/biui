@@ -1,25 +1,25 @@
 import biui
 
-##
-#
+## Manages a virtual grid of cells containing children. 
+#  Each child has to be a biui.Widget.
 #
 class LayoutManager():
     
     def __init__(self,width=1,height=1):
         #        
-        self._children = [[]]
+        self._children = [[[]]]
         #
-        self._columnWidths = []
+        self._columnWidths = [0]
         #
-        self._rowHeights = []
+        self._rowHeights = [0]
         #
         self.onChildAdded = biui.EventManager()
         #
         self.onChildRemoved = biui.EventManager()
         
-        self._resizeChildList( width,height)
+        self._resizeChildList(width,height)
         
-    ##
+    ## Just adds columns or Rows at the end
     #
     #
     def _resizeChildList(self,width,height):
@@ -33,15 +33,24 @@ class LayoutManager():
             height = _max
              
         for i in range(width):
-            
+        
+            # add column    
             if i >= len(self._children):
                 self._children.append([])
                 
-            tmp = self._children[i]
+            row = self._children[i]
                 
             for j in range(height):
-                if j >= len(tmp):
-                    tmp.append(None)
+                if j >= len(row):
+                    row.append([])
+        
+        # columnWidths
+        for i in range(len(self._columnWidths),len(self._children)):
+            self._columnWidths.append(0)
+            
+        # rowHeights
+        for i in range(len(self._rowHeights),len(self._children[0])):
+            self._rowHeights.append(0)        
         
     ## Adds a child element to the Layout.
     #
@@ -53,7 +62,7 @@ class LayoutManager():
         self._resizeChildList(x+1,y+1)
         self._width = len(self._children)
         self._height = len(self._children[0])
-        self._children[x][y] = child
+        self._children[x][y].append(child)
         self.onChildAdded.provoke(biui.Event(self))
      
     ## Removes the given child element.
@@ -62,7 +71,9 @@ class LayoutManager():
     #   
     def removeChild(self,child):
         for i,column in enumerate(self._children):
-            self._children[i].remove(child)
+            for j,row in enumerate(column):
+                if child in self._children[i][j]:
+                    self._children[i][j].remove(child)
         self.onChildRemoved.provoke(biui.Event(self))
     
     ##
@@ -94,22 +105,69 @@ class LayoutManager():
     #
     def setColumnWidth(self,column,value):
         self._resizeChildList(column,0)
-        #TODO: Should self._columnWidths be extended implicitly?
-        if column > len(self._columnWidths):
-            raise Exception( Messages.ERR_COL_INDEX_OUT_OF_RANGE )
-        
+        for i in range(len(self._columnWidths),column+1):
+            self._columnWidths.append(0.0)
+            
         self._columnWidths[column] = value
-    
+            
     ##
     #
     #
     def setRowHeight(self,row,values):
         self._resizeChildList(0,row)
-        #TODO: Should self._rowHeights be extended implicitly?
-        if row > len(self._rowHeights):
-            raise Exception( Messages.ERR_ROW_INDEX_OUT_OF_RANGE )
-        
+        for i in range(len(self._rowHeights),row+1):
+            self._rowHeights.append(0.0)
+                    
         self._rowHeights[row] = value
+    
+    ##
+    #
+    #
+    def getColumnWidths(self):
+        return self._columnWidths
+    
+    ##
+    #
+    #
+    def getRowHeights(self):
+        return self._rowHeights
+    
+    ##
+    #
+    #
+    def getPositionOfChild(self,child):
+        for i,column in enumerate(self._children):
+            for j,row in enumerate(column):
+                for c in row:
+                    if c==child:
+                        return (i,j)
+        return None
+    
+    ##
+    #
+    #
+    def insertColumnAt(self,index,width = 0):
+        self._children.insert(index,[])
+        self._columnWidths.insert(index,width)
+        
+        for i in self._rowHeights:
+            self._children[index].append([])
+
+    ##
+    #
+    #
+    def insertRowAt(self,index,height=0):
+
+        for i,child in enumerate(self._children):
+            self._children[i].insert(index,[])
+            
+        self._rowHeights.insert(index,height)
+        
+    ##
+    #
+    #
+    def getColumnWidth(self,index):
+        return self._columnWidths[index]
     
     ## Calculates the absolute values of cols
     #  in relation to size.
@@ -157,99 +215,84 @@ class LayoutManager():
     #   @param            The parent's size.
     #
     def _calculateLayout(self, size):
-        cellX = 0
         widths  = self.__calculatePixelWidths(self._columnWidths,size[0])
         heights = self.__calculatePixelWidths(self._rowHeights,size[1])
+        cellX = 0
         for i,cellWidth in enumerate(widths):
             cellY = 0
             for j,cellHeight in enumerate(heights):
-                child = self._children[i][j]
-                if child != None:
-                    alignment = child.getAlignment()
-                    if alignment == biui.Alignment.FILL:
-                        child.setX(cellX)
-                        child.setY(cellY)
-                        child.setWidth(cellWidth)
-                        child.setHeight(cellHeight)
-                    else:
+                for child in self._children[i][j]:
+                    if child != None:
+                        alignment = child.getAlignment()
+                        if alignment == biui.Alignment.ABSOLUTE:
+                            pass
                         
-                        childX = 0
-                        childY = 0
-                        
-                        #
-                        # Y
-                        #
-                        
-                        # TOP
-                        #if    alignment == biui.Alignment.TOP_LEFT   \
-                        #   or alignment == biui.Alignment.TOP_CENTER \
-                        #   or alignment == biui.Alignment.TOP_RIGHT:
-                        #    childY = 0
-                           
-                         
-                        # CENTER
-                        #if    alignment == biui.Alignment.CENTER_LEFT   \
-                        #   or alignment == biui.Alignment.CENTER_CENTER \
-                        #   or alignment == biui.Alignment.CENTER_RIGHT:
-                        if alignment in [5,6,7]:
-                            childY = cellHeight/2-child.getHeight()/2
-                        
-                        
-                        # BOTTOM
-                        #elif    alignment == biui.Alignment.BOTTOM_LEFT \
-                        #   or alignment == biui.Alignment.BOTTOM_CENTER \
-                        #   or alignment == biui.Alignment.BOTTOM_RIGHT:
-                        elif alignment in [8,9,10]:
-                            childY = cellHeight-child.getHeight()
+                        elif alignment == biui.Alignment.FILL:
+                            child.setX(cellX)
+                            child.setY(cellY)
+                            child.setWidth(cellWidth)
+                            child.setHeight(cellHeight)
+                        else:
                             
-                        
-                        #
-                        # X
-                        #  
-                          
-                        # LEFT
-                        #if    alignment == biui.Alignment.TOP_LEFT    \
-                        #   or alignment == biui.Alignment.CENTER_LEFT \
-                        #   or alignment == biui.Alignment.BOTTOM_LEFT:
-                        #    pass
-                        
-                        # CENTER
-                        #if    alignment == biui.Alignment.TOP_CENTER    \
-                        #   or alignment == biui.Alignment.CENTER_CENTER \
-                        #   or alignment == biui.Alignment.BOTTOM_CENTER:
-                        if alignment in [3,6,9]:
-                            childX = cellWidth/2-child.getWidth()/2
-                        
-                        # RIGHT
-                        #elif    alignment == biui.Alignment.TOP_RIGHT  \
-                        #   or alignment == biui.Alignment.CENTER_RIGHT \
-                        #   or alignment == biui.Alignment.BOTTOM_RIGHT:
-                        elif alignment in [4,7,10]:
-                            childX = cellWidth-child.getWidth()
-                        
-                        child.setX(cellX+childX)
-                        child.setY(cellY+childY)
-                        #child.setWidth(cellWidth)
-                        #child.setHeight(cellHeight)
-                        
+                            childX = 0
+                            childY = 0
+                            
+                            #
+                            # Y
+                            #
+                            
+                            # TOP
+                            #if    alignment == biui.Alignment.TOP_LEFT   \
+                            #   or alignment == biui.Alignment.TOP_CENTER \
+                            #   or alignment == biui.Alignment.TOP_RIGHT:
+                            #    childY = 0
+                               
+                             
+                            # CENTER
+                            #if    alignment == biui.Alignment.CENTER_LEFT   \
+                            #   or alignment == biui.Alignment.CENTER_CENTER \
+                            #   or alignment == biui.Alignment.CENTER_RIGHT:
+                            if alignment in [5,6,7]:
+                                childY = cellHeight/2-child.getHeight()/2
+                            
+                            
+                            # BOTTOM
+                            #elif    alignment == biui.Alignment.BOTTOM_LEFT \
+                            #   or alignment == biui.Alignment.BOTTOM_CENTER \
+                            #   or alignment == biui.Alignment.BOTTOM_RIGHT:
+                            elif alignment in [8,9,10]:
+                                childY = cellHeight-child.getHeight()
+                                
+                            
+                            #
+                            # X
+                            #  
+                              
+                            # LEFT
+                            #if    alignment == biui.Alignment.TOP_LEFT    \
+                            #   or alignment == biui.Alignment.CENTER_LEFT \
+                            #   or alignment == biui.Alignment.BOTTOM_LEFT:
+                            #    pass
+                            
+                            # CENTER
+                            #if    alignment == biui.Alignment.TOP_CENTER    \
+                            #   or alignment == biui.Alignment.CENTER_CENTER \
+                            #   or alignment == biui.Alignment.BOTTOM_CENTER:
+                            if alignment in [3,6,9]:
+                                childX = cellWidth/2-child.getWidth()/2
+                            
+                            # RIGHT
+                            #elif    alignment == biui.Alignment.TOP_RIGHT  \
+                            #   or alignment == biui.Alignment.CENTER_RIGHT \
+                            #   or alignment == biui.Alignment.BOTTOM_RIGHT:
+                            elif alignment in [4,7,10]:
+                                childX = cellWidth-child.getWidth()
+                            
+                            child.setX(cellX+childX)
+                            child.setY(cellY+childY)
+                            #child.setWidth(cellWidth)
+                            #child.setHeight(cellHeight)
+                            
                 cellY = cellY + cellHeight
             cellX = cellX + cellWidth
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     

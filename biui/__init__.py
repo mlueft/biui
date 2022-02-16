@@ -19,6 +19,11 @@ import biui.ToggleButton
 import biui.ButtonGroup
 import biui.LayoutManager
 import biui.Alignment
+import biui.FlexPane
+import biui.HorizontalSplitter
+import biui.VerticalSplitter
+import biui.FlexSpacer
+import biui.FlexGrid
 
 Event = biui.Event.Event
 MouseEvent = biui.MouseEvent.MouseEvent
@@ -35,6 +40,11 @@ ToggleButton = biui.ToggleButton.ToggleButton
 ButtonGroup = biui.ButtonGroup.ButtonGroup
 LayoutManager = biui.LayoutManager.LayoutManager
 Alignment = biui.Alignment.Alignment
+FlexPane = biui.FlexPane.FlexPane
+HorizontalSplitter = biui.HorizontalSplitter.HorizontalSplitter
+VerticalSplitter = biui.VerticalSplitter.VerticalSplitter
+FlexSpacer = biui.FlexSpacer.FlexSpacer
+FlexGrid = biui.FlexGrid.FlexGrid
 
 # Defines if all directy rects are drawn on screen.
 # For debug use. This makes everything slower.
@@ -42,6 +52,9 @@ __SHOWUPDATEBOXES = False
 
 # Stores if pygame is initialized.
 __pygame_initialized__ = False
+
+# Stores the last known mouse position
+__lastMousePos = None
 
 ## Initializes pygame. Can be called more than once.
 #  It takes care about multiple calls.
@@ -115,6 +128,12 @@ def default(value,default):
         return value
     return default
 
+##
+#
+#
+def getMousePosition():
+    return biui.__lastMousePos
+
 ## Stores the Instance of Theme.
 #
 #
@@ -151,6 +170,7 @@ def main():
         # Mouse events are send directly to the widget.
         #
         if event.type == pygame.MOUSEMOTION:
+            biui.__lastMousePos = event.pos
             bStates = pygame.mouse.get_pressed(num_buttons=5)
             receiver = biui.__getChildAt(event.pos)
             ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)

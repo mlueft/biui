@@ -32,7 +32,7 @@ class Theme:
                 0,
                 widget.getWidth(),
                 widget.getHeight()
-            ),5
+            ),1
         )
     
     #######################################################
@@ -61,6 +61,7 @@ class Theme:
     #  top most like border
     #
     def drawPaneAfterChildren(self, widget, surface):
+        return
         pygame.draw.rect(
             surface,
             (255,255,255),
@@ -72,6 +73,43 @@ class Theme:
             ),1
         )
     
+    #######################################################
+    #
+    #                                              FLEXPANE
+    #
+    #######################################################
+        
+    ## Is called before the window child objects are drawn.
+    #  So, it's useed to draw the background.
+    # 
+    def drawFlexPaneBeforeChildren(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (55,55,55),
+            (
+                0,
+                0,
+                widget.getWidth(),
+                widget.getHeight()
+            )  
+        )
+    
+    ## Is called after the child objects are drawn.
+    #  So it's used to draw everything that has to be
+    #  top most like border
+    #
+    def drawFlexPaneAfterChildren(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (255,255,255),
+            (
+                0,
+                0,
+                widget.getWidth(),
+                widget.getHeight()
+            ),1
+        )
+        
     #######################################################
     #
     #                                                BUTTON
@@ -157,3 +195,76 @@ class Theme:
             ),1
         )
     
+    #######################################################
+    #
+    #                                             SPlLITTER
+    #
+    #######################################################
+        
+    ## Is called before the window child objects are drawn.
+    #  So, it's useed to draw the background.
+    # 
+    def drawSplitterBeforeChildren(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (100,53,53),
+            (
+                0,
+                0,
+                widget.getWidth(),
+                widget.getHeight()
+            )  
+        )
+    
+    ## Is called after the child objects are drawn.
+    #  So it's used to draw everything that has to be
+    #  top most like border
+    #
+    def drawSplitterAfterChildren(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (255,255,255),
+            (
+                0,
+                0,
+                widget.getWidth(),
+                widget.getHeight()
+            ),1
+        )
+        
+    #######################################################
+    #
+    #                                             FLEXGRID
+    #
+    #######################################################
+        
+    ## Is called before the window child objects are drawn.
+    #  So, it's useed to draw the background.
+    # 
+    def drawFlexGridBeforeChildren(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (100,53,53),
+            (
+                0,
+                0,
+                widget.getWidth(),
+                widget.getHeight()
+            )  
+        )
+    
+    ## Is called after the child objects are drawn.
+    #  So it's used to draw everything that has to be
+    #  top most like border
+    #
+    def drawFlexGridAfterChildren(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (255,255,255),
+            (
+                0,
+                0,
+                widget.getWidth(),
+                widget.getHeight()
+            ),1
+        )

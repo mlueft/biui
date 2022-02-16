@@ -157,6 +157,12 @@ class Window(biui.ContainerWidget.ContainerWidget):
     ##
     #
     #
+    def getMousePosition(self):
+        return biui.getMousePosition()
+    
+    ##
+    #
+    #
     def _onQuit(self):
         pass
 

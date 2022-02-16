@@ -44,14 +44,6 @@ def main():
         
         wnd.addChild(grid)
         
-    if False:
-        splitter = biui.HorizontalSplitter()
-        #fg = biui.VerticalSplitter()
-        splitter.setAlignment(biui.Alignment.FILL)
-        splitter.addChild( biui.FlexPane() )
-            
-        wnd.addChild(splitter)
-        lm = wnd.getLayoutManager()
     
     if False:
         fp = biui.FlexPane()

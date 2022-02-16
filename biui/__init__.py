@@ -20,8 +20,6 @@ import biui.ButtonGroup
 import biui.LayoutManager
 import biui.Alignment
 import biui.FlexPane
-import biui.HorizontalSplitter
-import biui.VerticalSplitter
 import biui.FlexSpacer
 import biui.FlexGrid
 
@@ -41,8 +39,6 @@ ButtonGroup = biui.ButtonGroup.ButtonGroup
 LayoutManager = biui.LayoutManager.LayoutManager
 Alignment = biui.Alignment.Alignment
 FlexPane = biui.FlexPane.FlexPane
-HorizontalSplitter = biui.HorizontalSplitter.HorizontalSplitter
-VerticalSplitter = biui.VerticalSplitter.VerticalSplitter
 FlexSpacer = biui.FlexSpacer.FlexSpacer
 FlexGrid = biui.FlexGrid.FlexGrid
 

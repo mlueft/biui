@@ -78,8 +78,8 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     #
     def _createActiveCorner(self):
         ac = biui.Button()
-        ac.setWidth(15)
-        ac.setHeight(15)
+        ac.setWidth(25)
+        ac.setHeight(25)
         return ac
         
     ##
@@ -90,11 +90,11 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         ac = ev.getEventSource()
         pos = ac.toLocal(ev.getPosition())
         
-        if pos[0] < 0:
+        if pos[0] <= 0:
             self.onJoinLeft.provoke(biui.Event(self))
-        elif pos[1] < 0:
+        elif pos[1] <= 0:
             self.onJoinUp.provoke(biui.Event(self)) 
-        elif pos[0] > ac.getWidth():
+        elif pos[0] >= ac.getWidth():
             self.onVerticalSplit.provoke(biui.Event(self))
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
@@ -109,11 +109,11 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         ac = ev.getEventSource()
         pos = ac.toLocal(ev.getPosition())
         
-        if pos[0] < 0:
+        if pos[0] <= 0:
             self.onVerticalSplit.provoke(biui.Event(self))
-        elif pos[1] > ac.getHeight():
+        elif pos[1] >= ac.getHeight():
             self.onHorizontalSplit.provoke(biui.Event(self))
-        elif pos[0] > ac.getWidth():
+        elif pos[0] >= ac.getWidth():
             self.onJoinRight.provoke(biui.Event(self)) 
         else:
             self.onJoinUp.provoke(biui.Event(self))
@@ -128,11 +128,11 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         ac = ev.getEventSource()
         pos = ac.toLocal(ev.getPosition())
         
-        if pos[0] < 0:
+        if pos[0] <= 0:
             self.onJoinLeft.provoke(biui.Event(self))
-        elif pos[1] > ac.getHeight():
+        elif pos[1] >= ac.getHeight():
             self.onJoinDown.provoke(biui.Event(self))
-        elif pos[0] > ac.getWidth():
+        elif pos[0] >= ac.getWidth():
             self.onVerticalSplit.provoke(biui.Event(self)) 
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
@@ -147,11 +147,11 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         ac = ev.getEventSource()
         pos = ac.toLocal(ev.getPosition())
         
-        if pos[0] < 0:
+        if pos[0] <= 0:
             self.onVerticalSplit.provoke(biui.Event(self))
-        elif pos[1] > ac.getHeight():
+        elif pos[1] >= ac.getHeight():
             self.onJoinDown.provoke(biui.Event(self))
-        elif pos[0] > ac.getWidth():
+        elif pos[0] >= ac.getWidth():
             self.onJoinRight.provoke(biui.Event(self)) 
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))

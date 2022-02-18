@@ -104,6 +104,58 @@ class Widget:
     def getY(self):
         return self._y
     
+    ##
+    #
+    #
+    def getLeft(self):
+        return self._x
+    
+    ##
+    #
+    #
+    def setLeft(self,value):
+        r = self._x+self._width
+        self.setX(value)
+        self.setWidth(r-self._x)
+    
+    ##
+    #
+    #
+    def getTop(self):
+        return self._y
+    
+    ##
+    #
+    #
+    def setTop(self,value):
+        b = self._y+self._height
+        self.setY(value)
+        self.setHeight(b-self._y)
+    
+    ##
+    #
+    #
+    def getRight(self):
+        return self._x+self._width
+    
+    ##
+    #
+    #
+    def setRight(self,value):
+        self.setWidth(value-self._x)
+    
+    ##
+    #
+    #
+    def getBottom(self):
+        return self._y+self._height
+    
+    ##
+    #
+    #
+    def setBottom(self,value):
+        self.setHeight(value-self._y)
+    
     ## Sets the width of the GUI element.
     #
     #  @param value       An integer value.

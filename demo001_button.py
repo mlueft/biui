@@ -10,8 +10,8 @@ def main():
     #                                       WINDOW
     ##############################################
     wnd = biui.Window()
-    wnd.setWidth(1024)
-    wnd.setHeight(768)
+    wnd.width = 1024
+    wnd.height = 768
         
 
     #
@@ -20,8 +20,8 @@ def main():
     for i in range(10):
         button0 = biui.Button()
         #button0.onMouseUp.add(_test.upHandler)
-        button0.setX(10)
-        button0.setY(10+i*25)
+        button0.x = 10
+        button0.y = 10+i*25
         wnd.addChild(button0)
         
     #

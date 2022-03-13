@@ -13,9 +13,9 @@ class ButtonGroup(biui.ContainerWidget.ContainerWidget):
         child.onMouseUp.add(self.upHandler)
     
     def upHandler(self,ev):
-        source = ev.getEventSource()
+        source = ev.eventSource
         for c in self._children:
-            c.setChecked(c == source)
+            c.checked = c == source
         
     def _redraw(self, surface, forceRedraw=False):
         
@@ -24,7 +24,7 @@ class ButtonGroup(biui.ContainerWidget.ContainerWidget):
                 return
                 
         #print("Pane::_redraw")
-        pos = self.getPosition()
+        pos = self.position
         
         # we paint on our own surface
         # not on the parent's surface
@@ -42,7 +42,7 @@ class ButtonGroup(biui.ContainerWidget.ContainerWidget):
         # Now we copy the visible area 
         # of our own surface
         # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        surface.blit(_surface,pos,(0,0,self.width,self.height))
         
         self._isInvalide = False
 

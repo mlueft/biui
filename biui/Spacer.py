@@ -10,7 +10,7 @@ class Spacer(biui.Widget.Widget):
         
     def _redraw(self, surface, forceRedraw=False):
         #pos = self.toGlobal(self.getPosition())
-        pos = self.getPosition()
+        pos = self.position
         theme = biui.getTheme()
         theme.drawSpacer(self,surface)
         self._isInvalide = False

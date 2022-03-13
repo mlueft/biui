@@ -13,13 +13,15 @@ class ToggleButton(biui.Button.Button):
     ##
     #
     #    
-    def getChecked(self):
+    @property
+    def checked(self):
         return self._checked
     
     ##
     #
     #
-    def setChecked(self,value):
+    @checked.setter
+    def checked(self,value):
         # Prevents unnacassary _draw-calls
         if self._checked == value:
             return
@@ -28,7 +30,8 @@ class ToggleButton(biui.Button.Button):
         self._checked = value
         self._invalidate()
         
-    def getState(self):
+    @property
+    def state(self):
         if self._checked:
             return biui.ButtonStates.CHECKED
         

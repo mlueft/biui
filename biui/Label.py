@@ -4,7 +4,7 @@ class Label(biui.Widget.Widget):
     
     def __init__(self):
         super().__init__()
-        self.setFont(biui.Font())
+        self.font = biui.Font()
         self._text = "Label"
         self._antialiased = True
         self._color = (100,100,100)
@@ -28,47 +28,61 @@ class Label(biui.Widget.Widget):
      
     ##
     #
-    #   
-    def setText(self,value):
-        self._text = value
-        self._invalidate()
-     
-    ##
     #
-    #   
-    def getText(self):
+    @property   
+    def text(self):
         return self._text
     
     ##
     #
-    #
-    def setColor(self,value):
-        self._color = value
+    #   
+    @text.setter
+    def text(self,value):
+        self._text = value
         self._invalidate()
         
     ##
     #
     #
-    def getColor(self):
+    @property
+    def color(self):
         return self._color
     
     ##
     #
     #
-    def setAntialiased(self,value):
-        self._antialiased = value
+    @color.setter
+    def color(self,value):
+        self._color = value
         self._invalidate()
-        
+    
     ##
     #
     #
-    def getAntialiased(self):
+    @property
+    def antialiased(self):
         return self._antialiased
     
     ##
     #
     #
-    def setFont(self,value):
+    @antialiased.setter
+    def antialiased(self,value):
+        self._antialiased = value
+        self._invalidate()
+     
+    ##
+    #
+    #
+    @property   
+    def font(self):
+        return self._font
+        
+    ##
+    #
+    #
+    @font.setter
+    def font(self,value):
         
         if not value.onNameChanged.has(self._onFontChanged): 
             value.onNameChanged.add(self._onFontChanged)
@@ -78,9 +92,3 @@ class Label(biui.Widget.Widget):
             
         self._font = value
         self._invalidate()
-     
-    ##
-    #
-    #   
-    def getFont(self):
-        return self._font

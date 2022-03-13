@@ -79,7 +79,15 @@ class LayoutManager():
     ##
     #
     #
-    def setColumnWidths(self,values):
+    @property
+    def columnWidths(self):
+        return self._columnWidths
+        
+    ##
+    #
+    #
+    @columnWidths.setter
+    def columnWidths(self,values):
         self._resizeChildList(len(values),0)
         self._columnWidths.clear()
         for i in range(max(len(self._children),len(values))):
@@ -91,7 +99,15 @@ class LayoutManager():
     ##
     #
     #
-    def setRowHeights(self,values):
+    @property
+    def rowHeights(self):
+        return self._rowHeights
+    
+    ##
+    #
+    #
+    @rowHeights.setter
+    def rowHeights(self,values):
         self._resizeChildList(0,len(values))
         self._rowHeights.clear()
         for i in range(max(len(self._children[0]),len(values))):
@@ -120,17 +136,7 @@ class LayoutManager():
                     
         self._rowHeights[row] = value
     
-    ##
-    #
-    #
-    def getColumnWidths(self):
-        return self._columnWidths
-    
-    ##
-    #
-    #
-    def getRowHeights(self):
-        return self._rowHeights
+
     
     ##
     #
@@ -223,15 +229,15 @@ class LayoutManager():
             for j,cellHeight in enumerate(heights):
                 for child in self._children[i][j]:
                     if child != None:
-                        alignment = child.getAlignment()
+                        alignment = child.alignment
                         if alignment == biui.Alignment.ABSOLUTE:
                             pass
                         
                         elif alignment == biui.Alignment.FILL:
-                            child.setX(cellX)
-                            child.setY(cellY)
-                            child.setWidth(cellWidth)
-                            child.setHeight(cellHeight)
+                            child.x = cellX
+                            child.y = cellY
+                            child.width = cellWidth
+                            child.height = cellHeight
                         else:
                             
                             childX = 0
@@ -253,7 +259,7 @@ class LayoutManager():
                             #   or alignment == biui.Alignment.CENTER_CENTER \
                             #   or alignment == biui.Alignment.CENTER_RIGHT:
                             if alignment in [5,6,7]:
-                                childY = cellHeight/2-child.getHeight()/2
+                                childY = cellHeight/2-child.height/2
                             
                             
                             # BOTTOM
@@ -261,7 +267,7 @@ class LayoutManager():
                             #   or alignment == biui.Alignment.BOTTOM_CENTER \
                             #   or alignment == biui.Alignment.BOTTOM_RIGHT:
                             elif alignment in [8,9,10]:
-                                childY = cellHeight-child.getHeight()
+                                childY = cellHeight-child.height
                                 
                             
                             #
@@ -279,17 +285,17 @@ class LayoutManager():
                             #   or alignment == biui.Alignment.CENTER_CENTER \
                             #   or alignment == biui.Alignment.BOTTOM_CENTER:
                             if alignment in [3,6,9]:
-                                childX = cellWidth/2-child.getWidth()/2
+                                childX = cellWidth/2-child.width/2
                             
                             # RIGHT
                             #elif    alignment == biui.Alignment.TOP_RIGHT  \
                             #   or alignment == biui.Alignment.CENTER_RIGHT \
                             #   or alignment == biui.Alignment.BOTTOM_RIGHT:
                             elif alignment in [4,7,10]:
-                                childX = cellWidth-child.getWidth()
+                                childX = cellWidth-child.width
                             
-                            child.setX(cellX+childX)
-                            child.setY(cellY+childY)
+                            child.x = cellX+childX
+                            child.y = cellY+childY
                             #child.setWidth(cellWidth)
                             #child.setHeight(cellHeight)
                             

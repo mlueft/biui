@@ -7,30 +7,38 @@ class Button(biui.ContainerWidget.ContainerWidget):
     
     def __init__(self):
         super().__init__()
-        self.setWidth(50)
-        self.setHeight(20)
+        self.width = 50
+        self.height = 20
         self._state = biui.ButtonStates.NORMAL
         self._icon = None
         
         self._label = biui.Label()
-        self._label.setAlignment = biui.Alignment.CENTER_CENTER
-        self._label.setWidth(100)
-        self._label.setHeight(50)
+        self._label.alignment = biui.Alignment.CENTER_CENTER
+        self._label.width = 100
+        self._label.height = 50
         #self.addChild(self._label,1,0)
         
-        self._layoutManager.setColumnWidths([1,0,1])
-        self._layoutManager.setRowHeights([0])
+        self._layoutManager.columnWidths = [1,0,1]
+        self._layoutManager.rowHeights = [0]
         
     ## Returns the current state of the button.
     #  See: biui.ButtonStates
     #  
-    def getState(self):
+    @property
+    def state(self):
         return self._state
     
     ##
     #
     #
-    def setIcon(self,icon):
+    @property
+    def icon(self):
+        return self._icon
+    ##
+    #
+    #
+    @icon.setter
+    def icon(self,icon):
         self._icon = icon
         self.addChild(icon,0,0)
         self._invalidate()
@@ -38,8 +46,16 @@ class Button(biui.ContainerWidget.ContainerWidget):
     ##
     #
     #
-    def setText(self,value):
-        self._label.setText(value)
+    @property
+    def text(self):
+        return self._label.text
+    
+    ##
+    #
+    #
+    @text.setter
+    def text(self,value):
+        self._label.text = value
                 
     def _onMouseEnter(self,ev):
         self._recordDirtyRect()
@@ -75,7 +91,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
                 return
         
         #print("Pane::_redraw")
-        pos = self.getPosition()
+        pos = self.position
         
         # we paint on our own surface
         # not on the parent's surface
@@ -92,7 +108,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
         # Now we copy the visible area 
         # of our own surface
         # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        surface.blit(_surface,pos,(0,0,self.width,self.height))
         
         self._isInvalide = False
         

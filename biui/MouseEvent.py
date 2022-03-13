@@ -25,62 +25,72 @@ class MouseEvent(biui.Event.Event):
     ## Position as tuple with x and y.
     #  @return         A tuple with the position of the action.
     #
-    def getPosition(self):
+    @property
+    def position(self):
         return self.__position
     
     ## X position of the mouse action.
     #  @return         X position of the action
     #    
-    def getX(self):
+    @property
+    def x(self):
         return self.__position[0]
     
     ## Y position of the mouse action.
     #  @return         Y position of the action
     #
-    def getY(self):
+    @property
+    def y(self):
         return self.__position[1]
     
     ## Horicontal scroll action.
     #  @return         Horicontal scroll action.
     #                  Positive or negative integer value.
     #
-    def getWheelX(self):
+    @property
+    def wheelX(self):
         return self.__wheelX
     
     ## Vertical scroll action.
     #  @return         Vertical scroll action.
     #                  Positive or negative integer value.
     #    
-    def getWheelY(self):
+    @property
+    def wheelY(self):
         return self.__wheelY
         
     ## State of button 0 at action time.
     #  @return         A boolean value representing the button's state.
     #
+    @property
     def pressed0(self):
         return self.__buttonStates[0]
     
     ## State of button 1 at action time.
     #  @return         A boolean value representing the button's state.
     #
+    @property
     def pressed1(self):
         return self.__buttonStates[1]
     
     ## State of button 2 at action time.
     #  @return         A boolean value representing the button's state.
     #
+    @property
     def pressed2(self):
         return self.__buttonStates[2]
     
     ## State of button 3 at action time.
     #  @return         A boolean value representing the button's state.
     #
+    @property
     def pressed3(self):
         return self.__buttonStates[3]
     
     ## State of button 4 at action time.
     #  @return         A boolean value representing the button's state.
     #
+    @property
     def pressed4(self):
         return self.__buttonStates[4]
     

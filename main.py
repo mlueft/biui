@@ -30,25 +30,25 @@ def main():
     #                                       WINDOW
     ##############################################
     wnd = biui.Window()
-    wnd.setWidth(1024)
-    wnd.setHeight(768)
+    wnd.width = 1024
+    wnd.height = 768
     
     if False:
         lbl = biui.Label()
-        lbl.setX(10)
-        lbl.setY(10)
-        lbl.getFont().setSize(25)
-        lbl.getFont().setName("Courier")
-        lbl.setColor((200,200,200))
-        lbl.setAntialiased(True)
+        lbl.x = 10
+        lbl.y = 10
+        lbl.font.size = 25
+        lbl.font.name = "Courier"
+        lbl.color = (200,200,200)
+        lbl.anialiased = True
         
         wnd.addChild(lbl)
         
         btn = biui.Button()
-        btn.setX(19)
-        btn.setY(100)
-        btn.setWidth(300)
-        btn.setHeight(100)
+        btn.x = 19
+        btn.y = 100
+        btn.width = 300
+        btn.height = 100
         
         wnd.addChild(btn)
         
@@ -94,13 +94,13 @@ def main():
         
     if True:
         grid = biui.FlexGrid()
-        grid.setAlignment(biui.Alignment.FILL)
+        grid.alignment = biui.Alignment.FILL
         
         pane = biui.FlexPane()
-        pane.setX(0)
-        pane.setY(0)
-        pane.setWidth(1024)
-        pane.setHeight(768)
+        pane.x = 0
+        pane.y = 0
+        pane.width = 1024
+        pane.height = 768
           
         grid.addFlexPane(pane)
         
@@ -114,10 +114,10 @@ def main():
         fp.onJoinLeft.add(childJoinLeft)
         fp.onHorizontalSplit.add(childHorizontalSplit)
         fp.onVerticalSplit.add(childVerticalSplit)
-        fp.setX(10)
-        fp.setY(10)
-        fp.setWidth(500)
-        fp.setHeight(500)
+        fp.x = 10
+        fp.y = 10
+        fp.width = 500
+        fp.height = 500
         wnd.addChild(fp)
     
     #

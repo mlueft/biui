@@ -10,8 +10,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
     #
     def __init__(self):
         super().__init__()
-        self.setWidth(1024)
-        self.setHeight(768)
+        self.width = 1024
+        self.height = 768
         self._surface = biui.createWindow(self)
         biui._addWindow(self)
 
@@ -166,10 +166,20 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def _onQuit(self):
         pass
 
-    def setX(self, value):
+    @property
+    def x(self):
+        return self._x
+    
+    @x.setter
+    def x(self, value):
         self._x = value
-            
-    def setY(self, value):
+    
+    @property
+    def y(self):
+        return self._y
+    
+    @y.setter
+    def y(self, value):
         self._y = value
     
     def _getSurface(self):
@@ -195,11 +205,21 @@ class Window(biui.ContainerWidget.ContainerWidget):
         
         self._isInvalide = False
         
-    def setWidth(self, value):
+    @property
+    def width(self):
+        return self._width
+    
+    @width.setter
+    def width(self, value):
         self._width = max(1,value)
         #self._surface = biui.createSurface(self.getSize())
         
-    def setHeight(self, value):
+    @property
+    def height(self):
+        return self._height
+    
+    @height.setter
+    def height(self, value):
         self._height = max(1,value)
         #self._surface = biui.createSurface(self.getSize())
         
@@ -208,9 +228,9 @@ class Window(biui.ContainerWidget.ContainerWidget):
             c = self._children[i]
             cPos = c.toGlobal((0,0))
             if cPos[0] <= pos[0]:
-                if cPos[0]+c.getWidth() >= pos[0]: 
+                if cPos[0]+c.width >= pos[0]: 
                     if cPos[1] <= pos[1]:
-                        if cPos[1]+c.getHeight() >= pos[1]:
+                        if cPos[1]+c.height >= pos[1]:
                             if isinstance(c,biui.ContainerWidget.ContainerWidget):
                                 return c.getChildAt(pos)
                             else:

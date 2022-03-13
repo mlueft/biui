@@ -11,20 +11,20 @@ localPos = None
 
 def b0OnDown(ev):
 	global sub, localPos
-	sub = ev.getEventSource()
-	localPos = sub.toLocal(ev.getPosition())
+	sub = ev.eventSource
+	localPos = sub.toLocal(ev.position)
 	sub.onMouseUp.add(b0OnUp)
 	sub.onMouseMove.add(b0OnMove)
 	
 def b0OnMove(ev):
 	global sub, pane3, b0, b1, localPos
-	curPos = ev.getPosition()
-	sub.setX( curPos[0]-localPos[0])
-	sub.setY( curPos[1]-localPos[0])
-	pane3.setX(b0.getX())
-	pane3.setY(b0.getY())
-	pane3.setWidth( b1.getX()-b0.getX()+b1.getWidth())
-	pane3.setHeight( b1.getY()-b0.getY()+b1.getHeight())
+	curPos = ev.position
+	sub.x = curPos[0]-localPos[0]
+	sub.y = curPos[1]-localPos[0]
+	pane3.x = b0.x
+	pane3.y = b0.y
+	pane3.width = b1.x-b0.x+b1.width
+	pane3.height = b1.y-b0.y+b1.height
 	
 def b0OnUp(ev):
 	global sub
@@ -42,18 +42,18 @@ def main():
 	#                                       WINDOW
 	##############################################
 	wnd = biui.Window()
-	wnd.setWidth(1024)
-	wnd.setHeight(768)
+	wnd.width = 1024
+	wnd.height = 768
 	
 	
 	##############################################
 	#                                      Panel 0
 	##############################################
 	pane0 = biui.Pane()
-	pane0.setX(10)
-	pane0.setY(10)
-	pane0.setWidth(300)
-	pane0.setHeight(300)
+	pane0.x = 10
+	pane0.y = 10
+	pane0.width = 300
+	pane0.height = 300
 	wnd.addChild(pane0)
 	
 	#
@@ -62,8 +62,8 @@ def main():
 	for i in range(3):
 		button0 = biui.Button()
 		#button0.onMouseUp.add(_test.upHandler)
-		button0.setX(10)
-		button0.setY(10+i*25)
+		button0.x = 10
+		button0.y = 10+i*25
 		pane0.addChild(button0)
 			
 	
@@ -71,10 +71,10 @@ def main():
 	#                                      PANEL 1
 	##############################################
 	pane1 = biui.Pane()
-	pane1.setX(320)
-	pane1.setY(10)
-	pane1.setWidth(300)
-	pane1.setHeight(300)
+	pane1.x = 320
+	pane1.y = 10
+	pane1.width = 300
+	pane1.height = 300
 	wnd.addChild(pane1)
 	
 	#
@@ -82,8 +82,8 @@ def main():
 	#
 	for i in range(3):
 		button0 = biui.ToggleButton()
-		button0.setX(10)
-		button0.setY(10+i*25)
+		button0.x = 10
+		button0.y = 10+i*25
 		pane1.addChild(button0)
 		
 	
@@ -93,10 +93,10 @@ def main():
 	#                                      PANEL 2
 	##############################################
 	pane2 = biui.Pane()
-	pane2.setX(630)
-	pane2.setY(10)
-	pane2.setWidth(300)
-	pane2.setHeight(300)
+	pane2.x = 630
+	pane2.y = 10
+	pane2.width = 300
+	pane2.height = 300
 	wnd.addChild(pane2)
 		
 	#
@@ -104,10 +104,10 @@ def main():
 	#
 	buttonGroup = biui.ButtonGroup()
 	buttonGroup.onMouseDown.add(stopMousePropagation)
-	buttonGroup.setX(10)
-	buttonGroup.setY(10)
-	buttonGroup.setWidth(80)
-	buttonGroup.setHeight(280)
+	buttonGroup.x = 10
+	buttonGroup.y = 10
+	buttonGroup.width = 80
+	buttonGroup.height = 280
 	pane2.addChild(buttonGroup)
 	
 	#
@@ -115,8 +115,8 @@ def main():
 	#
 	for i in range(5):
 		button0 = biui.ToggleButton()
-		button0.setX(10)
-		button0.setY(10+i*30)
+		button0.x = 10
+		button0.y = 10+i*30
 		buttonGroup.addChild(button0)
 	
 	
@@ -126,51 +126,51 @@ def main():
 	#                                      PANEL 3
 	##############################################
 	pane3 = biui.Pane()
-	pane3.setX(10)
-	pane3.setY(320)
-	pane3.setWidth(300)
-	pane3.setHeight(300)
+	pane3.x = 10
+	pane3.y = 320
+	pane3.width = 300
+	pane3.height = 300
 	wnd.addChild(pane3)
 	
 	# content
 	pane3_1 = biui.Pane()
-	pane3_1.setX(10)
-	pane3_1.setY(10)
-	pane3_1.setWidth(30)
-	pane3_1.setHeight(30)
-	pane3_1.setAlignment(biui.Alignment.CENTER_CENTER)
+	pane3_1.x = 10
+	pane3_1.y = 10
+	pane3_1.width = 30
+	pane3_1.height = 30
+	pane3_1.alignment = biui.Alignment.CENTER_CENTER
 	pane3.addChild(pane3_1,0,1)
 
 	pane3_2 = biui.Pane()
-	pane3_2.setX(120)
-	pane3_2.setY(10)
-	pane3_2.setWidth(100)
-	pane3_2.setHeight(100)
-	pane3_2.setAlignment(biui.Alignment.FILL)
+	pane3_2.x = 120
+	pane3_2.y = 10
+	pane3_2.width = 100
+	pane3_2.height = 100
+	pane3_2.alignment = biui.Alignment.FILL
 	pane3.addChild(pane3_2,1,1)
 			
-	lm = pane3.getLayoutManager()
-	lm.setColumnWidths([0,50.0])
-	lm.setRowHeights([0,50,0])
+	lm = pane3.layoutManager
+	lm.columnWidths = [0,50.0]
+	lm.rowHeights = [0,50,0]
 	
 	# Drag buttons
 	b0 = biui.Button()
 	b0.onMouseDown.add(b0OnDown)
 	b0.onMouseUp.add(b0OnUp)
-	b0.setX(10)
-	b0.setY(320)
-	b0.setWidth(15)
-	b0.setHeight(15)
+	b0.x = 10
+	b0.y = 320
+	b0.width = 15
+	b0.height = 15
 	wnd.addChild(b0)
 	
 	
 	b1 = biui.Button()
 	b1.onMouseDown.add(b0OnDown)
 	b1.onMouseUp.add(b0OnUp)
-	b1.setX(295)
-	b1.setY(295+310)
-	b1.setWidth(15)
-	b1.setHeight(15)
+	b1.x = 295
+	b1.y = 295+310
+	b1.width = 15
+	b1.height = 15
 	wnd.addChild(b1)
 	
 	
@@ -194,8 +194,8 @@ def main():
 				pos[0]+math.cos(angle)*radius,
 				pos[1]+math.sin(angle)*radius
 			)
-			b0.setX(end[0])		
-			b0.setY(end[1])
+			b0.x = end[0]		
+			b0.y = end[1]
 		
 	"""
 	em = biui.EventManager()

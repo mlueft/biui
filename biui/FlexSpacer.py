@@ -13,7 +13,7 @@ class FlexSpacer(biui.Widget.Widget):
             if not forceRedraw:
                 return
                     
-        pos = self.getPosition()
+        pos = self.position
         theme = biui.getTheme()
         theme.drawFlexSpacer(self,surface)
         self._isInvalide = False

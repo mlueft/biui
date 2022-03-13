@@ -13,35 +13,35 @@ def main():
     #                                       WINDOW
     ##############################################
     wnd = biui.Window()
-    wnd.setWidth(1024)
-    wnd.setHeight(768)
+    wnd.width = 1024
+    wnd.height = 768
     
     if True:
 
         for i in range(1):
             button0 = biui.Button()
             button0.onMouseUp.add(upHandler)
-            button0.setX(10)
-            button0.setY(10+i*25)
+            button0.x = 10
+            button0.y = 10+i*25
             wnd.addChild(button0)
 
         for i in range(1):
             button0 = biui.FlexSpacer()
             button0.onMouseUp.add(upHandler)
-            button0.setX(100)
-            button0.setY(10+i*25)
-            button0.setWidth(100)
-            button0.setHeight(20)
+            button0.x = 100
+            button0.y = 10+i*25
+            button0.width = 100
+            button0.height = 20
             wnd.addChild(button0)
     if False:
         grid = biui.FlexGrid()
-        grid.setAlignment(biui.Alignment.FILL)
+        grid.alignment = biui.Alignment.FILL
         
         pane = biui.FlexPane()
-        pane.setX(0)
-        pane.setY(0)
-        pane.setWidth(1024)
-        pane.setHeight(768)
+        pane.x = 0
+        pane.y = 0
+        pane.width = 1024
+        pane.height = 768
           
         grid.addFlexPane(pane)
         

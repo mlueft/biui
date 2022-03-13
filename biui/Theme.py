@@ -30,8 +30,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             ),1
         )
     
@@ -51,8 +51,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             )  
         )
     
@@ -68,8 +68,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             ),1
         )
     
@@ -89,8 +89,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             )  
         )
     
@@ -105,8 +105,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             ),1
         )
         
@@ -121,7 +121,7 @@ class Theme:
     #
     def drawButtonBeforeChildren(self, widget, surface):
         
-        state = widget.getState()
+        state = widget.state
         #print(state)
         # Normal color
         color = (89,89,89)
@@ -140,8 +140,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             )  
         )
         
@@ -174,10 +174,10 @@ class Theme:
             surface,
             (55,55,55),
             (
-                widget.getX(),
-                widget.getY(),
-                widget.getWidth(),
-                widget.getHeight()
+                widget.x,
+                widget.y,
+                widget.width,
+                widget.height
             )
         )
                 
@@ -197,8 +197,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             )  
         )
     
@@ -213,8 +213,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             ),1
         )
     
@@ -234,8 +234,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             )  
         )
     
@@ -250,8 +250,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             ),1
         )
         
@@ -271,8 +271,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             )  
         )
     
@@ -287,8 +287,8 @@ class Theme:
             (
                 0,
                 0,
-                widget.getWidth(),
-                widget.getHeight()
+                widget.width,
+                widget.height
             ),1
         )
         
@@ -304,20 +304,20 @@ class Theme:
     def drawLabel(self, widget, surface):
         
         font = pygame.font.SysFont(
-            widget.getFont().getName(),
-            widget.getFont().getSize()
+            widget.font.name,
+            widget.font.size
         )
         
         sf = font.render(
-            widget.getText(), 
-            widget.getAntialiased(),
-            widget.getColor()
+            widget.text, 
+            widget.antialiased,
+            widget.color
         )
         
         surface.blit(
             sf,
-            widget.getPosition(),
-            (0,0,widget.getWidth(),widget.getHeight())
+            widget.position,
+            (0,0,widget.width,widget.height)
         )
         
         

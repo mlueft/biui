@@ -1,4 +1,5 @@
 import biui
+from pexpect import expect
 
 ## Base class for all container widgets.
 #
@@ -10,7 +11,7 @@ class ContainerWidget(biui.Widget.Widget):
         #
         self._children = []
         #
-        self._surface = biui.createSurface(self.getSize())
+        self._surface = biui.createSurface(self.size)
         #
         self._layoutManager = biui.LayoutManager()
         #
@@ -51,7 +52,7 @@ class ContainerWidget(biui.Widget.Widget):
     #  @param y             Row for layout manager to add the child to.
     #       
     def addChild(self,child,x=0,y=0):
-        child.setParent(self)
+        child.parent = self
         #self._children.insert(0,child)
         self._children.append(child)
         self._layoutManager.addChild(child,x,y)
@@ -69,22 +70,22 @@ class ContainerWidget(biui.Widget.Widget):
         if cPos[0] > pos[0]:
             return None
         
-        if cPos[0]+self.getWidth() < pos[0]:
+        if cPos[0]+self.width < pos[0]:
             return None
          
         if cPos[1] > pos[1]:
             return None
         
-        if cPos[1]+self.getHeight() < pos[1]:
+        if cPos[1]+self.height < pos[1]:
             return None
                 
         for i in range(len(self._children)-1,-1,-1):
             c = self._children[i]
             cPos = c.toGlobal((0,0))
             if cPos[0] <= pos[0]:
-                if cPos[0]+c.getWidth() >= pos[0]: 
+                if cPos[0]+c.width >= pos[0]: 
                     if cPos[1] <= pos[1]:
-                        if cPos[1]+c.getHeight() >= pos[1]:
+                        if cPos[1]+c.height >= pos[1]:
                             if isinstance(c,biui.ContainerWidget.ContainerWidget):
                                 return c.getChildAt(pos)
                             else:
@@ -103,29 +104,45 @@ class ContainerWidget(biui.Widget.Widget):
         
     ## 
     #
-    #  @param value       A biui.ayoutManager.
-    #  @return            None
+    #  @return            A biui.LayoutManager.
     #
-    def setLayoutManager(self, value):
-        self._layoutManager = value
+    @property
+    def layoutManager(self):
+        return self._layoutManager
         
     ## 
     #
-    #  @return            A biui.LayoutManager.
+    #  @param value       A biui.ayoutManager.
+    #  @return            None
     #
-    def getLayoutManager(self):
-        return self._layoutManager
+    @layoutManager.setter
+    def layoutManager(self, value):
+        self._layoutManager = value
         
-    def setWidth(self, value):
+    @property
+    def width(self):
+        #TODO: call super
+        return self._width
+    
+    @width.setter
+    def width(self, value):
         if value > self._width:
             self._recreateSurface = True
-        super().setWidth(value)
+        super(biui.Widget.Widget, self.__class__).__thisclass__.width.__set__(self,value)
+        #super().width = value
         #self._surface = biui.createSurface(self.getSize())
-        
-    def setHeight(self, value):
+    
+    @property    
+    def height(self):
+        #TODO: call super
+        return self._height
+    
+    @height.setter
+    def height(self, value):
         if value > self._height:
             self._recreateSurface = True
-        super().setHeight(value)
+        super(biui.Widget.Widget, self.__class__).__thisclass__.height.__set__(self,value)
+        #super().setHeight(value)
         #self._surface = biui.createSurface(self.getSize())
     
     def _getDirtyRectangles(self):
@@ -137,7 +154,7 @@ class ContainerWidget(biui.Widget.Widget):
     
     def _calculateLayout(self):
         
-        mySize = self.getSize()
+        mySize = self.size
         
         # If necassary create a new surface.
         # TODO: Is it cheaper to hold a big
@@ -164,7 +181,7 @@ class ContainerWidget(biui.Widget.Widget):
         if ev._stopPropagation:
             return
         for c in self._children:
-            if c.hasChild(ev.getEventSource()):
+            if c.hasChild(ev.eventSource):
                 c._onMouseDown(ev)
                 break
         
@@ -173,7 +190,7 @@ class ContainerWidget(biui.Widget.Widget):
         if ev._stopPropagation:
             return
         for c in self._children:
-            if c.hasChild(ev.getEventSource()):
+            if c.hasChild(ev.eventSource):
                 c._onMouseUp(ev)
                 break
         
@@ -182,7 +199,7 @@ class ContainerWidget(biui.Widget.Widget):
         if ev._stopPropagation:
             return
         for c in self._children:
-            if c.hasChild(ev.getEventSource()):
+            if c.hasChild(ev.eventSource):
                 c._onMouseWheel(ev)
                 break
         
@@ -191,7 +208,7 @@ class ContainerWidget(biui.Widget.Widget):
         if ev._stopPropagation:
             return
         for c in self._children:
-            if c.hasChild(ev.getEventSource()):
+            if c.hasChild(ev.eventSource):
                 c._onMouseEnter(ev)
                 break
         
@@ -200,7 +217,7 @@ class ContainerWidget(biui.Widget.Widget):
         if ev._stopPropagation:
             return
         for c in self._children:
-            if c.hasChild(ev.getEventSource()):
+            if c.hasChild(ev.eventSource):
                 c._onMouseLeave(ev)
                 break
         
@@ -209,7 +226,7 @@ class ContainerWidget(biui.Widget.Widget):
         if ev._stopPropagation:
             return
         for c in self._children:
-            if c.hasChild(ev.getEventSource()):
+            if c.hasChild(ev.eventSource):
                 c._onMouseMove(ev)
                 break
         

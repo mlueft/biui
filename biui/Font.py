@@ -11,32 +11,36 @@ class Font():
     ##
     #
     #
-    def setName(self,value):
-        if value == self._name:
-            return
-        self._name = value
-        self.onNameChanged.provoke(biui.Event)
-    
-    ##
-    #
-    #   
-    def getName(self):
+    @property   
+    def name(self):
         return self._name
     
     ##
     #
     #
-    def setSize(self,value):
+    @name.setter
+    def name(self,value):
+        if value == self._name:
+            return
+        self._name = value
+        self.onNameChanged.provoke(biui.Event)
+     
+    ##
+    #
+    #
+    @property
+    def size(self):
+        return self._size
+    
+    ##
+    #
+    #
+    @size.setter
+    def size(self,value):
         if value == self._size:
             return
         self._size = value
         self.onSizeChanged.provoke(biui.Event)
-     
-    ##
-    #
-    #   
-    def getSize(self):
-        return self._size
     
         
         

@@ -58,110 +58,133 @@ class Widget:
     #
     #  @return            A tuple representing the position.
     #
-    def getPosition(self):
+    @property
+    def position(self):
         return (self._x, self._y)
     
     ## Returns the x/y position of the GUI element.
     #
     #  @return            A tuple representing the size.
     #
-    def getSize(self):
+    @property
+    def size(self):
         return (self._width, self._height)
+    
+    ## Returns the x position of the GUI element.
+    #
+    #  @return            An integer value.
+    #
+    @property
+    def x(self):
+        return self._x
     
     ## Sets the x position of the GUI element.
     #
     #  @param value       An integer value.
     #  @return            None
     #
-    def setX(self, value):
+    @x.setter
+    def x(self, value):
         # record old dirty rect for the old position
         self._recordDirtyRect()
         self._x = value
-        self._invalidate()
-    
-    ## Returns the x position of the GUI element.
-    #
-    #  @return            An integer value.
-    #
-    def getX(self):
-        return self._x
-
-    ## Sets the y position of the GUI element.
-    #
-    #  @param value       An integer value.
-    #  @return            None    
-    #
-    def setY(self, value):
-        # record old dirty rect
-        self._recordDirtyRect()
-        self._y = value
         self._invalidate()
     
     # Returns the y position of the GUI element.
     #
     #  @return            An integer value.
     #
-    def getY(self):
+    @property
+    def y(self):
         return self._y
+
+    ## Sets the y position of the GUI element.
+    #
+    #  @param value       An integer value.
+    #  @return            None    
+    #
+    @y.setter
+    def y(self, value):
+        # record old dirty rect
+        self._recordDirtyRect()
+        self._y = value
+        self._invalidate()
     
     ##
     #
     #
-    def getLeft(self):
+    @property
+    def left(self):
         return self._x
     
     ##
     #
     #
-    def setLeft(self,value):
+    @left.setter
+    def left(self,value):
         r = self._x+self._width
-        self.setX(value)
-        self.setWidth(r-self._x)
+        self.x = value
+        self.width = r-self._x
     
     ##
     #
     #
-    def getTop(self):
+    @property
+    def top(self):
         return self._y
     
     ##
     #
     #
-    def setTop(self,value):
+    @top.setter
+    def top(self,value):
         b = self._y+self._height
-        self.setY(value)
-        self.setHeight(b-self._y)
+        self.y = value
+        self.height = b-self._y
     
     ##
     #
     #
-    def getRight(self):
+    @property
+    def right(self):
         return self._x+self._width
     
     ##
     #
     #
-    def setRight(self,value):
-        self.setWidth(value-self._x)
+    @right.setter
+    def right(self,value):
+        self.width = value-self._x
     
     ##
     #
     #
-    def getBottom(self):
+    @property
+    def bottom(self):
         return self._y+self._height
     
     ##
     #
     #
-    def setBottom(self,value):
-        self.setHeight(value-self._y)
+    @bottom.setter
+    def bottom(self,value):
+        self.height = value-self._y
+    
+    ## Return the width of the GUI element.
+    #
+    #  @return            An integer value.
+    #
+    @property
+    def width(self):
+        return self._width
     
     ## Sets the width of the GUI element.
     #
     #  @param value       An integer value.
     #  @return            None
-    #       
-    def setWidth(self, value):
+    #
+    @width.setter     
+    def width(self, value):
         # record old dirty rect
         if self._alignment != biui.Alignment.FILL:
             value = min(value, self._maxWidth)
@@ -171,54 +194,60 @@ class Widget:
             self._recordDirtyRect()
             self._width = max(1,value)
             self._invalidate()
-    
-    ## Return the width of the GUI element.
-    #
-    #  @return            An integer value.
-    #
-    def getWidth(self):
-        return self._width
-    
-    ## 
-    #
-    #  @param value       An integer value.
-    #  @return            None
-    #       
-    def setMinWidth(self, value):
-        self._minWidth = max(1,value)
-        if self._minWidth > self._width:
-            self.setWidth( self._minWidth )
             
     ## 
     #
     #  @return            An integer value.
     #
-    def getMinWidth(self):
+    @property
+    def minWidth(self):
         return self._minWidth
-
+    
     ## 
     #
     #  @param value       An integer value.
     #  @return            None
-    #       
-    def setMaxWidth(self, value):
-        self._maxWidth = max(1,value)
-        if self._maxWidth < self._width:
-            self.setWidth( self._maxWidth )
+    #    
+    @minWidth.setter   
+    def minWidth(self, value):
+        self._minWidth = max(1,value)
+        if self._minWidth > self._width:
+            self.width = self._minWidth
 
     ## 
     #
     #  @return            An integer value.
     #
-    def getMaxWidth(self):
+    @property
+    def maxWidth(self):
         return self._maxWidth
+
+    ## 
+    #
+    #  @param value       An integer value.
+    #  @return            None
+    #    
+    @maxWidth.setter   
+    def maxWidth(self, value):
+        self._maxWidth = max(1,value)
+        if self._maxWidth < self._width:
+            self.width = self._maxWidth
+    
+    # Returns the y position of the GUI element.
+    #
+    #  @return            An integer value.
+    #
+    @property
+    def height(self):
+        return self._height
             
     ## Sets the height of the GUI element.
     #
     #  @param value       An integer value.
     #  @return            None
     #
-    def setHeight(self, value):
+    @height.setter
+    def height(self, value):
         # record old dirty rect
         if self._alignment != biui.Alignment.FILL:
             value = min(value, self._maxWidth)
@@ -228,65 +257,64 @@ class Widget:
             self._recordDirtyRect()
             self._height = max(1,value)
             self._invalidate()
-    
-    # Returns the y position of the GUI element.
-    #
-    #  @return            An integer value.
-    #
-    def getHeight(self):
-        return self._height
-    
-    ## 
-    #
-    #  @param value       An integer value.
-    #  @return            None
-    #       
-    def setMinHeight(self, value):
-        self._minHeight = max(1,value)
-        if self._minHeight > self._height:
-            self.setHeight( self._minHeight )
             
     ## 
     #
     #  @return            An integer value.
     #
-    def getMinHeight(self):
+    @property
+    def minHeight(self):
         return self._minHeight
-
+    
     ## 
     #
     #  @param value       An integer value.
     #  @return            None
-    #       
-    def setMaxHeight(self, value):
-        self._maxHeight = max(1,value)
-        if self._maxHeight < self._height:
-            self.setHeight( self._maxHeight )
+    #    
+    @minHeight.setter   
+    def minHeight(self, value):
+        self._minHeight = max(1,value)
+        if self._minHeight > self._height:
+            self.height = self._minHeight
 
     ## 
     #
     #  @return            An integer value.
     #
-    def getMaxHeight(self):
+    @property
+    def maxHeight(self):
         return self._maxHeight
+
+    ## 
+    #
+    #  @param value       An integer value.
+    #  @return            None
+    #    
+    @maxHeight.setter   
+    def maxHeight(self, value):
+        self._maxHeight = max(1,value)
+        if self._maxHeight < self._height:
+            self.height = self._maxHeight
         
     ##
     #
     #
     def hasChild(self,child):
         return child == self
-            
-    ##
-    #
-    #
-    def setAlignment(self,value):
-        self._alignment = value
     
     ##
     #
     #
-    def getAlignment(self):
+    @property
+    def alignment(self):
         return self._alignment
+            
+    ##
+    #
+    #
+    @alignment.setter
+    def alignment(self,value):
+        self._alignment = value
     
     ## Records the current Rect of the GUI element
     #  in the parent's coordinate system.
@@ -334,10 +362,11 @@ class Widget:
     ##
     #
     #
-    def getWindow(self):
-        parent = self.getParent()
+    @property
+    def window(self):
+        parent = self.parent
         while True:
-            newParent = parent.getParent()
+            newParent = parent.parent
             if newParent == None:
                 return parent
             parent = newParent 
@@ -347,7 +376,8 @@ class Widget:
     #
     #  @return            A Widget instance.
     #
-    def getParent(self):
+    @property
+    def parent(self):
         return self._parent
     
     ## Sets the parent GUI element.
@@ -356,7 +386,8 @@ class Widget:
     #
     #  @return            None
     #
-    def setParent(self,parent):
+    @parent.setter
+    def parent(self,parent):
         if self._parent != None:
             self._parent.removeChild(self)
         

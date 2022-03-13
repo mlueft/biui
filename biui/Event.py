@@ -14,5 +14,6 @@ class Event():
     ##
     #
     #
-    def getEventSource(self):
+    @property
+    def eventSource(self):
         return self._eventSource

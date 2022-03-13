@@ -38,23 +38,23 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     def childVerticalSplit(self,ev:biui.Event)->None:
         
         #print("childVerticalSplit")
-        oldPane = ev.getEventSource()
+        oldPane = ev.eventSource
         
-        if oldPane.getWidth() <= 2*oldPane.getMinWidth():
+        if oldPane.width <= 2*oldPane.minWidth:
             return
         
         newPane = biui.FlexPane()
-        newPane.setX(oldPane.getX()+oldPane.getWidth()/2+FlexGrid._spacerWidth/2)
-        newPane.setY(oldPane.getY())
-        newPane.setHeight(oldPane.getHeight())
-        newPane.setWidth(oldPane.getWidth()/2-FlexGrid._spacerWidth/2)
+        newPane.x = oldPane.x+oldPane.width/2+FlexGrid._spacerWidth/2
+        newPane.y = oldPane.y
+        newPane.height = oldPane.height
+        newPane.width = oldPane.width/2-FlexGrid._spacerWidth/2
         
-        oldPane.setWidth(newPane.getWidth())
+        oldPane.width = newPane.width
         
         spacer = self._createSpacer()
-        spacer.setX(oldPane.getRight() )
-        spacer.setY(oldPane.getY())
-        spacer.setHeight(oldPane.getHeight())
+        spacer.x = oldPane.right
+        spacer.y = oldPane.y
+        spacer.height = oldPane.height
         
         self.addFlexPane(newPane)
         self.addHorizontalSpacer(spacer)
@@ -66,23 +66,23 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     def childHorizontalSplit(self,ev:biui.Event)->None:
         #print("childHorizontalSplit")
-        oldPane = ev.getEventSource()
+        oldPane = ev.eventSource
 
-        if oldPane.getHeight() <= 2*oldPane.getMinHeight():
+        if oldPane.height <= 2*oldPane.minHeight:
             return
                 
         newPane = biui.FlexPane()
-        newPane.setX(oldPane.getX())
-        newPane.setY(oldPane.getY()+oldPane.getHeight()/2+FlexGrid._spacerWidth/2)
-        newPane.setWidth(oldPane.getWidth())
-        newPane.setHeight(oldPane.getHeight()/2-FlexGrid._spacerWidth/2)
+        newPane.x = oldPane.x
+        newPane.y = oldPane.y+oldPane.height/2+FlexGrid._spacerWidth/2
+        newPane.width = oldPane.width
+        newPane.height = oldPane.height/2-FlexGrid._spacerWidth/2
         
-        oldPane.setHeight(newPane.getHeight())
+        oldPane.height = newPane.height
         
         spacer = self._createSpacer()
-        spacer.setX(oldPane.getX())
-        spacer.setY(oldPane.getBottom())
-        spacer.setWidth(oldPane.getWidth())
+        spacer.x = oldPane.x
+        spacer.y = oldPane.bottom
+        spacer.width = oldPane.width
         
         self.addFlexPane(newPane)
         self.addVerticalSpacer(spacer)
@@ -94,9 +94,9 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     def _createSpacer(self)->biui.FlexSpacer:
         spacer = biui.FlexSpacer()
-        spacer.setHeight(FlexGrid._spacerWidth)
-        spacer.setWidth(FlexGrid._spacerWidth)
-        spacer.setAlignment(biui.Alignment.ABSOLUTE)
+        spacer.height = FlexGrid._spacerWidth
+        spacer.width = FlexGrid._spacerWidth
+        spacer.alignment = biui.Alignment.ABSOLUTE
         return spacer  
           
     ##
@@ -109,30 +109,30 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         # 2. The spacer is wider than the pane. => we need to split the spacer
         # 3. The spacer lays at the right end of the pane. => fix width
         # 4. The spacer lays the the left end of the Pane. => move it and fix width
-        if spacer.getX() == stayPane.getX() and spacer.getWidth() == stayPane.getWidth():
+        if spacer.x == stayPane.x and spacer.width == stayPane.width:
             # Case 1
             self.removeHorizontalSpacer(spacer)
-        elif spacer.getX() == stayPane.getX():
+        elif spacer.x == stayPane.x:
             # Case 4
-            spacer.setX( stayPane.getRight()+FlexGrid._spacerWidth )
-            spacer.setWidth(spacer.getWidth()-stayPane.getWidth()-FlexGrid._spacerWidth)
+            spacer.x = stayPane.right+FlexGrid._spacerWidth
+            spacer.width = spacer.width-stayPane.width-FlexGrid._spacerWidth
             
-        elif spacer.getRight() == stayPane.getRight():
+        elif spacer.right == stayPane.right:
             # case 3
-            spacer.setWidth(spacer.getWidth()-stayPane.getWidth()-FlexGrid._spacerWidth)
+            spacer.width = spacer.width-stayPane.width-FlexGrid._spacerWidth
             
         else:
             # case 2
-            ow = spacer.getWidth()
+            ow = spacer.width
 
-            spacer.setWidth( stayPane.getX()-FlexGrid._spacerWidth-spacer.getX())
+            spacer.width = stayPane.x-FlexGrid._spacerWidth-spacer.x
             
             newSplitter = self._createSpacer()
-            newSplitter.setY(spacer.getY())
-            newSplitter.setX(stayPane.getRight()+FlexGrid._spacerWidth)
-            w = spacer.getX()+ow-newSplitter.getX()
+            newSplitter.y = spacer.y
+            newSplitter.x = stayPane.right+FlexGrid._spacerWidth
+            w = spacer.x+ow-newSplitter.x
 
-            newSplitter.setWidth(w)
+            newSplitter.width = w
             self.addVerticalSpacer(newSplitter)
                 
     ##
@@ -145,35 +145,35 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         # 2. The spacer is higher than the pane. => we need to split the spacer
         # 3. The spacer lays at the lower end of the pane. => fix height
         # 4. The spacer lays the the lower end of the Pane. => move it and fix height
-        if spacer.getY() == stayPane.getY() and spacer.getHeight() == stayPane.getHeight():
+        if spacer.y == stayPane.y and spacer.height == stayPane.height:
             #print("1")
             # Case 1
             self.removeVerticalSpacer(spacer)
-        elif spacer.getY() == stayPane.getY():
+        elif spacer.y == stayPane.y:
             #print("4")
             # Case 4
-            spacer.setY( stayPane.getBottom()+FlexGrid._spacerWidth )
-            w = spacer.getHeight()-stayPane.getHeight()-FlexGrid._spacerWidth
-            spacer.setHeight(w)
+            spacer.y = stayPane.bottom+FlexGrid._spacerWidth 
+            w = spacer.height-stayPane.height-FlexGrid._spacerWidth
+            spacer.height = w
             
-        elif spacer.getBottom() == stayPane.getBottom():
+        elif spacer.getBottom() == stayPane.bottom:
             #print("3")
             # case 3
-            w = spacer.getHeight()-stayPane.getHeight()-FlexGrid._spacerWidth
-            spacer.setHeight(w)
+            w = spacer.height-stayPane.height-FlexGrid._spacerWidth
+            spacer.height = w
             
         else:
             #print("2")
             # case 2
-            ow = spacer.getHeight()
+            ow = spacer.height
 
-            spacer.setHeight( stayPane.getY()-FlexGrid._spacerWidth-spacer.getY())
+            spacer.height = stayPane.y-FlexGrid._spacerWidth-spacer.y
             
             newSpacer = self._createSpacer()
-            newSpacer.setX(spacer.getX())
-            newSpacer.setY(stayPane.getBottom()+FlexGrid._spacerWidth)
-            w = spacer.getY()+ow-newSpacer.getY()
-            newSpacer.setHeight(w)
+            newSpacer.x = spacer.x
+            newSpacer.y = stayPane.bottom+FlexGrid._spacerWidth
+            w = spacer.y+ow-newSpacer.y
+            newSpacer.height = w
             self.addHorizontalSpacer(newSpacer)
             
     ##
@@ -181,16 +181,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     def childJoinUp(self,ev:biui.Event)->None:
         self.__simplifySpacer()
-        stayPane = ev.getEventSource()
+        stayPane = ev.eventSource
         
         removePane = None
         # We are looking for a Pane with the same width
         # at the same x position
         # with a distance above of the spacer width
         for p in self._panes:
-            if p.getX() == stayPane.getX():
-                if p.getWidth() == stayPane.getWidth():
-                    if stayPane.getY()-p.getY()-p.getHeight() == FlexGrid._spacerWidth:
+            if p.x == stayPane.x:
+                if p.width == stayPane.width:
+                    if stayPane.y-p.y-p.height == FlexGrid._spacerWidth:
                         removePane = p
                         break
         
@@ -200,16 +200,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         spacer = None
         # we are looking for the spacer above the stayPane
         for s in self._spacers:
-            if stayPane.getX() >= s.getX():
-                if stayPane.getX() <= s.getLeft():
-                    if s.getBottom() == stayPane.getY():
+            if stayPane.x >= s.x:
+                if stayPane.x <= s.left:
+                    if s.bottom == stayPane.y:
                         spacer = s
                         break
 
         self.__recreateVerticalSpacer(stayPane,spacer)
         
-        stayPane.setY(removePane.getY())
-        stayPane.setHeight(stayPane.getHeight()+removePane.getHeight()+FlexGrid._spacerWidth)
+        stayPane.y = removePane.y
+        stayPane.height = stayPane.height+removePane.height+FlexGrid._spacerWidth
         
         self.removeFlexPane(removePane)
                 
@@ -218,16 +218,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     def childJoinDown(self,ev:biui.Event)->None:
         self.__simplifySpacer()
-        stayPane = ev.getEventSource()
+        stayPane = ev.eventSource
         
         removePane = None
         # We are looking for a Pane with the same width
         # at the same x position
         # with a distance below of the spacer width
         for p in self._panes:
-            if p.getX() == stayPane.getX():
-                if p.getWidth() == stayPane.getWidth():
-                    if p.getY()-stayPane.getBottom() == FlexGrid._spacerWidth:
+            if p.x == stayPane.x:
+                if p.width == stayPane.width:
+                    if p.y-stayPane.bottom == FlexGrid._spacerWidth:
                         removePane = p
                         break
         
@@ -237,16 +237,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         spacer = None
         # we are looking for the spacer below the stayPane
         for s in self._spacers:
-            if stayPane.getX() >= s.getX():
-                if stayPane.getX() <= s.getRight():
-                    if s.getBottom() == removePane.getY():
+            if stayPane.x >= s.x:
+                if stayPane.x <= s.right:
+                    if s.bottom == removePane.y:
                         spacer = s
                         break
 
 
         self.__recreateVerticalSpacer(stayPane,spacer)
         
-        stayPane.setHeight(stayPane.getHeight()+removePane.getHeight()+FlexGrid._spacerWidth)
+        stayPane.height = stayPane.height+removePane.height+FlexGrid._spacerWidth
         
         self.removeFlexPane(removePane)
                 
@@ -255,16 +255,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     def childJoinLeft(self,ev:biui.Event)->None:
         self.__simplifySpacer()
-        stayPane = ev.getEventSource()
+        stayPane = ev.eventSource
         
         removePane = None
         # We are looking for a Pane with the same height
         # at the same y position
         # with a distance left of the spacer width
         for p in self._panes:
-            if p.getY() == stayPane.getY():
-                if p.getHeight() == stayPane.getHeight():
-                    if stayPane.getX()-p.getX()-p.getWidth() == FlexGrid._spacerWidth:
+            if p.y == stayPane.y:
+                if p.height == stayPane.height:
+                    if stayPane.x-p.x-p.width == FlexGrid._spacerWidth:
                         removePane = p
                         break
                        
@@ -274,16 +274,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         spacer = None
         # we are looking for the left above the stayPane
         for s in self._spacers:
-            if stayPane.getY() >= s.getY():
-                if stayPane.getY() <= s.getBottom():
-                    if s.getX()+s.getWidth() == stayPane.getX():
+            if stayPane.y >= s.y:
+                if stayPane.y <= s.bottom:
+                    if s.x+s.width == stayPane.x:
                         spacer = s
                         break
                     
         self.__recreateHorizontalSpacer(stayPane,spacer)
         
-        stayPane.setX(removePane.getX())
-        stayPane.setWidth(stayPane.getWidth()+removePane.getWidth()+FlexGrid._spacerWidth)
+        stayPane.x = removePane.x
+        stayPane.width = stayPane.width+removePane.width+FlexGrid._spacerWidth
         
         self.removeFlexPane(removePane)
                 
@@ -292,16 +292,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     def childJoinRight(self,ev:biui.Event)->None:
         self.__simplifySpacer()
-        stayPane = ev.getEventSource()
+        stayPane = ev.eventSource
         
         removePane = None
         # We are looking for a Pane with the same height
         # at the same y position
         # with a distance left of the spacer width
         for p in self._panes:
-            if p.getY() == stayPane.getY():
-                if p.getHeight() == stayPane.getHeight():
-                    if p.getX()-stayPane.getRight() == FlexGrid._spacerWidth:
+            if p.y == stayPane.y:
+                if p.height == stayPane.height:
+                    if p.x-stayPane.right == FlexGrid._spacerWidth:
                         removePane = p
                         break
         
@@ -311,16 +311,16 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         spacer = None
         # we are looking for the spacer right the stayPane
         for s in self._spacers:
-            if stayPane.getY() >= s.getY():
-                if stayPane.getY() <= s.getBottom():
-                    if s.getX()+s.getWidth() == removePane.getX():
+            if stayPane.y >= s.y:
+                if stayPane.y <= s.bottom:
+                    if s.x+s.width == removePane.x:
                         spacer = s
                         break
 
 
         self.__recreateHorizontalSpacer(stayPane,spacer)
         
-        stayPane.setWidth(stayPane.getWidth()+removePane.getWidth()+FlexGrid._spacerWidth)
+        stayPane.width = stayPane.width+removePane.width+FlexGrid._spacerWidth
         
         self.removeFlexPane(removePane)
         
@@ -329,7 +329,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     #
     def addFlexPane(self,child:biui.FlexPane)->None:
-        child.setAlignment(biui.Alignment.ABSOLUTE)
+        child.alignment = biui.Alignment.ABSOLUTE
         super().addChild(child)
         child.onHorizontalSplit.add( self.childHorizontalSplit )
         child.onVerticalSplit.add( self.childVerticalSplit )
@@ -398,18 +398,18 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     def __simplifySpacer(self)->None:
         for s0 in self._spacers:
             for s1 in self._spacers:
-                if s0.getY() == s1.getY():
-                    if s0.getRight()+FlexGrid._spacerWidth == s1.getX():
+                if s0.y == s1.y:
+                    if s0.right+FlexGrid._spacerWidth == s1.x:
                         # horizontally side by side
-                        s0.setWidth( s0.getWidth()+s1.getWidth()+FlexGrid._spacerWidth )
+                        s0.width = s0.width+s1.width+FlexGrid._spacerWidth
                         if s1 == self._draggedSpacer:
                             self._draggedSpacer  = s0
                         self.removeHorizontalSpacer(s1)
                         return self.__simplifySpacer()
-                elif s0.getX() == s1.getX():
-                    if s0.getBottom()+FlexGrid._spacerWidth == s1.getY():
+                elif s0.x == s1.x:
+                    if s0.bottom+FlexGrid._spacerWidth == s1.y:
                         # vertically side by side
-                        s0.setHeight( s0.getHeight()+s1.getHeight()+FlexGrid._spacerWidth )
+                        s0.height = s0.height+s1.height+FlexGrid._spacerWidth
                         if s1 == self._draggedSpacer:
                             self._draggedSpacer  = s0
                         self.removeHorizontalSpacer(s1)
@@ -424,46 +424,46 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         self._rightPanes = []
         
         s = self._draggedSpacer
-        sl = s.getX()
-        sr = s.getRight()
-        st = s.getY()
-        sb = s.getBottom()
+        sl = s.x
+        sr = s.right
+        st = s.y
+        sb = s.bottom
         
         dragMin = 0
-        dragMax = max(self.getWidth(),self.getHeight())
+        dragMax = max(self.width,self.height)
         
-        if s.getWidth() == FlexGrid._spacerWidth:
+        if s.width == FlexGrid._spacerWidth:
             # vertical spacer
             # we are looking for panes above or below the
             # spacer
             # Spacers can be neighbours too.
             for p in self._panes+self._spacers:
-                if p.getY() >= st:
-                    if p.getBottom() <= sb:
-                        if abs(p.getX()-sr) < FlexGrid._spacerWidth/2:
+                if p.y >= st:
+                    if p.bottom <= sb:
+                        if abs(p.x-sr) < FlexGrid._spacerWidth/2:
                             # pane is right
                             self._rightPanes.append(p)
-                            dragMax = min(dragMax,p.getRight()-p.getMinWidth()-FlexGrid._spacerWidth/2)
-                        elif abs(p.getRight()-sl) < FlexGrid._spacerWidth/2:
+                            dragMax = min(dragMax,p.right-p.minWidth-FlexGrid._spacerWidth/2)
+                        elif abs(p.right-sl) < FlexGrid._spacerWidth/2:
                             # pane is left
                             self._leftPanes.append(p)
-                            dragMin = max(dragMin,p.getX()+p.getMinWidth()+FlexGrid._spacerWidth/2)
+                            dragMin = max(dragMin,p.x+p.minWidth+FlexGrid._spacerWidth/2)
         else:
             # horizontal spacer
             # we are looking for panes left or 
             # right the spacer
             # Spacers can be neighbours too.
             for p in self._panes+self._spacers:
-                if p.getX() >= sl:
-                    if p.getRight() <= sr:
-                        if abs(p.getY()-sb) < FlexGrid._spacerWidth/2:
+                if p.x >= sl:
+                    if p.right <= sr:
+                        if abs(p.y-sb) < FlexGrid._spacerWidth/2:
                             # pane is below
                             self._rightPanes.append(p)
-                            dragMax = min(dragMax,p.getBottom()-p.getMinHeight()-FlexGrid._spacerWidth/2)
-                        elif abs(p.getBottom()-st) < FlexGrid._spacerWidth/2:
+                            dragMax = min(dragMax,p.bottom-p.minHeight-FlexGrid._spacerWidth/2)
+                        elif abs(p.bottom-st) < FlexGrid._spacerWidth/2:
                             # pane is above
                             self._leftPanes.append(p)
-                            dragMin = max(dragMin,p.getY()+p.getMinHeight()+FlexGrid._spacerWidth/2)
+                            dragMin = max(dragMin,p.y+p.minHeight+FlexGrid._spacerWidth/2)
         
         self._minDragPosition = int(dragMin/self._rasterSize)*self._rasterSize + FlexGrid._rasterSize
         self._maxDragPosition = int(dragMax/self._rasterSize)*self._rasterSize - FlexGrid._rasterSize
@@ -475,7 +475,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         #print("__onHorizontalSpacerDown")
         
         # Store dragged spacer.
-        self._draggedSpacer = ev.getEventSource()
+        self._draggedSpacer = ev.eventSource
         
         # simplify spacers.
         self.__simplifySpacer()
@@ -494,7 +494,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         #print("__onVerticalSpacerDown")
         
         # Store dragged spacer.
-        self._draggedSpacer = ev.getEventSource()
+        self._draggedSpacer = ev.eventSource
         
         # simplify spacers.
         self.__simplifySpacer()
@@ -512,19 +512,19 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     def __onVerticalMouseMove(self,ev:biui.MouseEvent)->None:
         sh = FlexGrid._spacerWidth/2
         
-        pos = self.toLocal(ev.getPosition())[0]
+        pos = self.toLocal(ev.position)[0]
         pos = max(min(pos,self._maxDragPosition),self._minDragPosition)
         pos = int(pos/FlexGrid._rasterSize)*FlexGrid._rasterSize
         
-        self._draggedSpacer.setX(pos-sh)
+        self._draggedSpacer.x = pos-sh
         
         for p in self._rightPanes:
-            x = p.getRight()
-            p.setX( pos+sh )
-            p.setWidth( x-pos-sh )
+            x = p.right
+            p.x = pos+sh
+            p.width = x-pos-sh
     
         for p in self._leftPanes:
-            p.setWidth( pos-p.getX()-sh )
+            p.width = pos-p.x-sh
         
     ##
     #
@@ -533,19 +533,19 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         
         sh = FlexGrid._spacerWidth/2
         
-        pos = self.toLocal(ev.getPosition())[1]
+        pos = self.toLocal(ev.position)[1]
         pos = max(min(pos,self._maxDragPosition),self._minDragPosition)
         pos = int(pos/FlexGrid._rasterSize)*FlexGrid._rasterSize
         
-        self._draggedSpacer.setY(pos-sh)
+        self._draggedSpacer.y = pos-sh
         
         for p in self._rightPanes:
-            y = p.getBottom()
-            p.setY( pos+sh )
-            p.setHeight( y-pos-sh )
+            y = p.bottom
+            p.y = pos+sh
+            p.height = y-pos-sh
     
         for p in self._leftPanes:
-            p.setHeight( pos-p.getY()-sh )
+            p.height = pos-p.y-sh
             
     ##
     #
@@ -565,7 +565,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
                 return
                     
         #print("Pane::_redraw")
-        pos = self.getPosition()
+        pos = self.position
         
         # we paint on our own surface
         # not on the parent's surface
@@ -584,7 +584,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         # Now we copy the visible area 
         # of our own surface
         # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        surface.blit(_surface,pos,(0,0,self.width,self.height))
         
     def _calculateLayout(self):
         

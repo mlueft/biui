@@ -80,7 +80,7 @@ __windowSurfaces = []
 def createWindow(window):
     global __windowSurfaces
     biui.initPyGame()
-    sf = pygame.display.set_mode( window.getSize(), pygame.RESIZABLE, vsync=1 )
+    sf = pygame.display.set_mode( window.size, pygame.RESIZABLE, vsync=1 )
     return sf
 
 ## Creates a pygame surface and returns it.
@@ -298,13 +298,13 @@ def main():
                 w._onWindowMoved(biui.Event(w))
         elif event.type == pygame.WINDOWSIZECHANGED:
             for w in __windowSurfaces:
-                w.setWidth(event.x)
-                w.setHeight(event.y)
+                w.width = event.x
+                w.height = event.y
                 w._onWindowSizeChanged(biui.Event(w))
         elif event.type == pygame.WINDOWRESIZED:
             for w in __windowSurfaces:
-                w.setWidth(event.x)
-                w.setHeight(event.y)
+                w.width = event.x
+                w.height = event.y
                 w._onWindowResized(biui.Event(w))
         elif event.type == pygame.WINDOWEXPOSED:
             for w in __windowSurfaces:

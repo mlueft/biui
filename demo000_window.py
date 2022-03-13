@@ -16,8 +16,8 @@ def main():
 	#                                       WINDOW
 	##############################################
 	wnd = biui.Window()
-	wnd.setWidth(1024)
-	wnd.setHeight(768)
+	wnd.width = 1024
+	wnd.height = 768
 	
 	
 	#
@@ -40,8 +40,8 @@ def main():
 				pos[0]+math.cos(angle)*radius,
 				pos[1]+math.sin(angle)*radius
 			)
-			b0.setX(end[0])		
-			b0.setY(end[1])
+			b0.x = end[0]		
+			b0.y = end[1]
 
 if __name__ == "__main__":
 	main()

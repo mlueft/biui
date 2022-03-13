@@ -10,8 +10,8 @@ class Pane(biui.ContainerWidget.ContainerWidget):
     #
     def __init__(self):
         super().__init__()
-        self.setWidth(100)
-        self.setHeight(100)
+        self.width = 100
+        self.height = 100
         
     def _redraw(self, surface, forceRedraw=False):
         
@@ -20,7 +20,7 @@ class Pane(biui.ContainerWidget.ContainerWidget):
                 return
         
         #print("Pane::_redraw")
-        pos = self.getPosition()
+        pos = self.position
         
         # we paint on our own surface
         # not on the parent's surface
@@ -38,7 +38,7 @@ class Pane(biui.ContainerWidget.ContainerWidget):
         # Now we copy the visible area 
         # of our own surface
         # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        surface.blit(_surface,pos,(0,0,self.width,self.height))
         
         self._isInvalide = False
         

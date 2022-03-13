@@ -26,25 +26,25 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         self._acTopLeft = self._createActiveCorner()
         self._acTopLeft.onMouseDown.add(self._onActiveCornerTopLeftMouseDown)
         self._acTopLeft.onMouseUp.add(self._onActiveCornerTopLeftMouseUp)
-        self._acTopLeft.setAlignment(biui.Alignment.TOP_LEFT)
+        self._acTopLeft.alignment = biui.Alignment.TOP_LEFT
         self.addChild(self._acTopLeft)
         
         self._acTopRight = self._createActiveCorner()
         self._acTopRight.onMouseDown.add(self._onActiveCornerTopRightMouseDown)
         self._acTopRight.onMouseUp.add(self._onActiveCornerTopRightMouseUp)
-        self._acTopRight.setAlignment(biui.Alignment.TOP_RIGHT)
+        self._acTopRight.alignment = biui.Alignment.TOP_RIGHT
         self.addChild(self._acTopRight)
 
         self._acBottomLeft = self._createActiveCorner()
         self._acBottomLeft.onMouseDown.add(self._onActiveCornerBottomLeftMouseDown)
         self._acBottomLeft.onMouseUp.add(self._onActiveCornerBottomLeftMouseUp)
-        self._acBottomLeft.setAlignment(biui.Alignment.BOTTOM_LEFT)
+        self._acBottomLeft.alignment = biui.Alignment.BOTTOM_LEFT
         self.addChild(self._acBottomLeft)
         
         self._acBottomRight = self._createActiveCorner()
         self._acBottomRight.onMouseDown.add(self._onActiveCornerBottomRightMouseDown)
         self._acBottomRight.onMouseUp.add(self._onActiveCornerBottomRightMouseUp)
-        self._acBottomRight.setAlignment(biui.Alignment.BOTTOM_RIGHT)
+        self._acBottomRight.alignment = biui.Alignment.BOTTOM_RIGHT
         self.addChild(self._acBottomRight)
         
         
@@ -78,8 +78,8 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     #
     def _createActiveCorner(self):
         ac = biui.Pane()
-        ac.setWidth(25)
-        ac.setHeight(25)
+        ac.width = 25
+        ac.height = 25
         return ac
         
     ##
@@ -87,14 +87,14 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     #
     def onActiveCornerTopLeftLeave(self,ev):
 
-        ac = ev.getEventSource()
-        pos = ac.toLocal(ev.getPosition())
+        ac = ev.eventSource
+        pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
             self.onJoinLeft.provoke(biui.Event(self))
         elif pos[1] <= 0:
             self.onJoinUp.provoke(biui.Event(self)) 
-        elif pos[0] >= ac.getWidth():
+        elif pos[0] >= ac.width:
             self.onVerticalSplit.provoke(biui.Event(self))
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
@@ -106,14 +106,14 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     #
     def onActiveCornerTopRightLeave(self,ev):
 
-        ac = ev.getEventSource()
-        pos = ac.toLocal(ev.getPosition())
+        ac = ev.eventSource
+        pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
             self.onVerticalSplit.provoke(biui.Event(self))
-        elif pos[1] >= ac.getHeight():
+        elif pos[1] >= ac.height:
             self.onHorizontalSplit.provoke(biui.Event(self))
-        elif pos[0] >= ac.getWidth():
+        elif pos[0] >= ac.width:
             self.onJoinRight.provoke(biui.Event(self)) 
         else:
             self.onJoinUp.provoke(biui.Event(self))
@@ -125,14 +125,14 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     #
     def onActiveCornerBottomLeftLeave(self,ev):
 
-        ac = ev.getEventSource()
-        pos = ac.toLocal(ev.getPosition())
+        ac = ev.eventSource
+        pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
             self.onJoinLeft.provoke(biui.Event(self))
-        elif pos[1] >= ac.getHeight():
+        elif pos[1] >= ac.height:
             self.onJoinDown.provoke(biui.Event(self))
-        elif pos[0] >= ac.getWidth():
+        elif pos[0] >= ac.width:
             self.onVerticalSplit.provoke(biui.Event(self)) 
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
@@ -144,14 +144,14 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     #
     def onActiveCornerBottomRightLeave(self,ev):
 
-        ac = ev.getEventSource()
-        pos = ac.toLocal(ev.getPosition())
+        ac = ev.eventSource
+        pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
             self.onVerticalSplit.provoke(biui.Event(self))
-        elif pos[1] >= ac.getHeight():
+        elif pos[1] >= ac.height:
             self.onJoinDown.provoke(biui.Event(self))
-        elif pos[0] >= ac.getWidth():
+        elif pos[0] >= ac.width:
             self.onJoinRight.provoke(biui.Event(self)) 
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
@@ -165,7 +165,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
                 return 
                 
         #print("FlexPane::_redraw")
-        pos = self.getPosition()
+        pos = self.position
         
         # we paint on our own surface
         # not on the parent's surface
@@ -183,7 +183,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         # Now we copy the visible area 
         # of our own surface
         # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        surface.blit(_surface,pos,(0,0,self.width,self.height))
         
         self._isInvalide = False        
                 

@@ -30,7 +30,7 @@ class Widget:
         # Stores a reference the parent GUI element
         self._parent = None
         #
-        self._runLayoutManager = True
+        self._isInvalide = True
         #
         self._alignment = biui.Alignment.ABSOLUTE
         #
@@ -273,6 +273,12 @@ class Widget:
     ##
     #
     #
+    def hasChild(self,child):
+        return child == self
+            
+    ##
+    #
+    #
     def setAlignment(self,value):
         self._alignment = value
     
@@ -296,6 +302,12 @@ class Widget:
             self._height
         ))
         
+    ##
+    #
+    #
+    def isInvalide(self):
+        return self._isInvalide
+     
     ## Does some enecassary work if the GUI element
     #  became invalide. For example after changing it's size.
     #
@@ -303,7 +315,8 @@ class Widget:
     #
     def _invalidate(self):
         # set flag to recalculate the layout.
-        self._runLayoutManager = True
+        # set flag to redraw widget
+        self._isInvalide = True
         # record new dirty rect
         self._recordDirtyRect()
     
@@ -318,6 +331,9 @@ class Widget:
         self._dirtyRects.clear()
         return result
     
+    ##
+    #
+    #
     def getWindow(self):
         parent = self.getParent()
         while True:
@@ -359,20 +375,21 @@ class Widget:
     #
     #
     def _calculateLayout(self):
-        if not self._runLayoutManager:
-            return
-        self._layoutManager._calculateLayout()
-        self._runLayoutManager = False
+        pass
     
     ## Redraws the GUI element. This is for internal use.
-    #  Just usr this function if you know what you are doing.
-    #
+    #  Just use this function if you know what you are doing.
+    #  Don't call super()._redraw().
+    #  Copy the guard to your _redraw()-version
+    #  and set _isInvalide to False at the end!
+    #  If you derive from a widget and call super(),
+    #  The parent would overdraw your widget.
     #  @param surface            The drawing surface.
     #
     #  @return            None
     #
-    def _redraw(self,surface):
-        pass
+    def _redraw(self,surface, forceRedraw=False):
+        self._isInvalide = False
 
     ## Is called if a mouse button got pressed and the
     #  mouse pointer is over the GUI element.

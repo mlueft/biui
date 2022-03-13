@@ -77,7 +77,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     #
     #
     def _createActiveCorner(self):
-        ac = biui.Button()
+        ac = biui.Pane()
         ac.setWidth(25)
         ac.setHeight(25)
         return ac
@@ -158,7 +158,12 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         
         self._acBottomRight.onMouseLeave.remove(self.onActiveCornerBottomRightLeave)
         
-    def _redraw(self, surface):
+    def _redraw(self, surface, forceRedraw=False):
+        
+        if not self.isInvalide():
+            if not forceRedraw:
+                return 
+                
         #print("FlexPane::_redraw")
         pos = self.getPosition()
         
@@ -168,9 +173,10 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         theme = biui.getTheme()
         theme.drawFlexPaneBeforeChildren(self,_surface)
 
+        forceRedraw = self.isInvalide() or forceRedraw
         # We draw all Children on our own surface        
         for c in self._children:
-            c._redraw(_surface)
+            c._redraw(_surface,forceRedraw)
                     
         theme.drawFlexPaneAfterChildren(self,_surface)
         
@@ -178,4 +184,6 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         # of our own surface
         # on the parent's surface
         surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        
+        self._isInvalide = False        
                 

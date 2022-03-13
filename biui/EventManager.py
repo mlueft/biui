@@ -29,6 +29,12 @@ class EventManager (object):
 	##
 	#
 	#
+	def has(self,handler):
+		return handler in self.__handlers
+	
+	##
+	#
+	#
 	def provoke(self, event):
 		for handler in self.__handlers:
 			handler(event)

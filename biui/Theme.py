@@ -119,8 +119,7 @@ class Theme:
     ## Is called to draw a button.
     #
     #
-    def drawButton(self, widget, surface):
-        pos = widget.getPosition()
+    def drawButtonBeforeChildren(self, widget, surface):
         
         state = widget.getState()
         #print(state)
@@ -139,13 +138,16 @@ class Theme:
             surface,
             color,
             (
-                pos[0],
-                pos[1],
+                0,
+                0,
                 widget.getWidth(),
                 widget.getHeight()
             )  
         )
         
+    def drawButtonAfterChildren(self, widget, surface):
+        pass
+    
     #######################################################
     #
     #                                                SPACER
@@ -157,7 +159,28 @@ class Theme:
     #
     def drawSpacer(self, widget, surface):
         pass
-            
+
+    #######################################################
+    #
+    #                                            FLEXSPACER
+    #
+    #######################################################
+    
+    ## Is called to draw a button.
+    #
+    #
+    def drawFlexSpacer(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (55,55,55),
+            (
+                widget.getX(),
+                widget.getY(),
+                widget.getWidth(),
+                widget.getHeight()
+            )
+        )
+                
     #######################################################
     #
     #                                           BUTTONGROUP
@@ -197,7 +220,7 @@ class Theme:
     
     #######################################################
     #
-    #                                             SPlLITTER
+    #                                              SPLITTER
     #
     #######################################################
         
@@ -268,3 +291,34 @@ class Theme:
                 widget.getHeight()
             ),1
         )
+        
+    #######################################################
+    #
+    #                                                 LABEL
+    #
+    #######################################################
+        
+    ## 
+    #  
+    #  
+    def drawLabel(self, widget, surface):
+        
+        font = pygame.font.SysFont(
+            widget.getFont().getName(),
+            widget.getFont().getSize()
+        )
+        
+        sf = font.render(
+            widget.getText(), 
+            widget.getAntialiased(),
+            widget.getColor()
+        )
+        
+        surface.blit(
+            sf,
+            widget.getPosition(),
+            (0,0,widget.getWidth(),widget.getHeight())
+        )
+        
+        
+        

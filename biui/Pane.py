@@ -13,7 +13,12 @@ class Pane(biui.ContainerWidget.ContainerWidget):
         self.setWidth(100)
         self.setHeight(100)
         
-    def _redraw(self, surface):
+    def _redraw(self, surface, forceRedraw=False):
+        
+        if not self.isInvalide():
+            if not forceRedraw:
+                return
+        
         #print("Pane::_redraw")
         pos = self.getPosition()
         
@@ -23,9 +28,10 @@ class Pane(biui.ContainerWidget.ContainerWidget):
         theme = biui.getTheme()
         theme.drawPaneBeforeChildren(self,_surface)
 
+        forceRedraw = self.isInvalide() or forceRedraw
         # We draw all Children on our own surface        
         for c in self._children:
-            c._redraw(_surface)
+            c._redraw(_surface,forceRedraw)
                     
         theme.drawPaneAfterChildren(self,_surface)
         
@@ -33,4 +39,6 @@ class Pane(biui.ContainerWidget.ContainerWidget):
         # of our own surface
         # on the parent's surface
         surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        
+        self._isInvalide = False
         

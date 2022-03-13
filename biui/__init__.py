@@ -22,6 +22,8 @@ import biui.Alignment
 import biui.FlexPane
 import biui.FlexSpacer
 import biui.FlexGrid
+import biui.Label
+import biui.Font
 
 Event = biui.Event.Event
 MouseEvent = biui.MouseEvent.MouseEvent
@@ -41,6 +43,8 @@ Alignment = biui.Alignment.Alignment
 FlexPane = biui.FlexPane.FlexPane
 FlexSpacer = biui.FlexSpacer.FlexSpacer
 FlexGrid = biui.FlexGrid.FlexGrid
+Label = biui.Label.Label
+Font = biui.Font.Font
 
 # Defines if all directy rects are drawn on screen.
 # For debug use. This makes everything slower.
@@ -340,7 +344,8 @@ def main():
             for r in dr:
                 pygame.draw.rect(w._getSurface(),(255,0,0),r,1)
                 pygame.display.update()
-                
-    pygame.display.update(dr)
+    
+    if len(dr) >0:            
+        pygame.display.update(dr)
     
     return True

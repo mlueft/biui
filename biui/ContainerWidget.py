@@ -27,9 +27,6 @@ class ContainerWidget(biui.Widget.Widget):
     def getChildren(self):
         return self._children
      
-    ##
-    #
-    #
     def hasChild(self,child):
         for c in self._children:
             if c.hasChild(child):
@@ -95,6 +92,15 @@ class ContainerWidget(biui.Widget.Widget):
                     
         return self
     
+    def isInvalide(self):
+        
+        for c in self._children:
+            if c.isInvalide():
+                return True
+    
+        return super().isInvalide()
+    
+        
     ## 
     #
     #  @param value       A biui.ayoutManager.
@@ -131,12 +137,6 @@ class ContainerWidget(biui.Widget.Widget):
     
     def _calculateLayout(self):
         
-        if not self._runLayoutManager:
-            # If we don't have to recalculate, prob. a child has to.
-            for c in self._children:
-                c._calculateLayout()            
-            return
-        
         mySize = self.getSize()
         
         # If necassary create a new surface.
@@ -150,13 +150,15 @@ class ContainerWidget(biui.Widget.Widget):
         self._layoutManager._calculateLayout(mySize)
         for c in self._children:
             c._calculateLayout()
-        self._runLayoutManager = False
     
-    def _redraw(self, surface ):
-        #print("ContainerWidget::_redraw")
+    def _redraw(self, surface, forceRedraw=False ):
+
+        forceRedraw = self.isInvalide() or forceRedraw
         for c in self._children:
-            c._redraw(self._surface)
+            c._redraw(self._surface,forceRedraw)
                 
+        self._isInvalide = False
+        
     def _onMouseDown(self,ev):
         super()._onMouseDown(ev)
         if ev._stopPropagation:
@@ -226,3 +228,8 @@ class ContainerWidget(biui.Widget.Widget):
         for c in self._children:
             c._onTextInput(ev)
                 
+    def _invalidate(self):
+        for c in self._children:
+            c._invalidate()
+        super()._invalidate()
+        

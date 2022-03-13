@@ -175,13 +175,25 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def _getSurface(self):
         return self._surface
         
-    def _redraw(self):
+    def _redraw(self, forceRedraw=False):
+
+        if not self.isInvalide():
+            if not forceRedraw:
+                return
+        
         self._calculateLayout()
         #print("Window::_redraw")
         theme = biui.getTheme()
         theme.drawWindowBeforeChildren(self,self._surface)
-        super()._redraw(self._surface)
+        
+        forceRedraw = self.isInvalide()
+        
+        for c in self._children:
+            c._redraw(self._surface,forceRedraw)
+                    
         theme.drawWindowAfterChildren(self,self._surface)
+        
+        self._isInvalide = False
         
     def setWidth(self, value):
         self._width = max(1,value)
@@ -203,7 +215,6 @@ class Window(biui.ContainerWidget.ContainerWidget):
                                 return c.getChildAt(pos)
                             else:
                                 return c
-                   
         return self
     
     def _recordDirtyRect(self):

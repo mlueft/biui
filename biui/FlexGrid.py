@@ -1,6 +1,6 @@
 import biui
 
-##
+## TODO: Simplify alghorithmen by using new setter for left,top,right and bottom.
 #
 #
 class FlexGrid(biui.ContainerWidget.ContainerWidget):
@@ -93,7 +93,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     #
     def _createSpacer(self)->biui.FlexSpacer:
-        spacer = biui.Button()
+        spacer = biui.FlexSpacer()
         spacer.setHeight(FlexGrid._spacerWidth)
         spacer.setWidth(FlexGrid._spacerWidth)
         spacer.setAlignment(biui.Alignment.ABSOLUTE)
@@ -503,7 +503,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         # Determine min and max drag position.
         self.__determineNeighbours()
         
-        self.onMouseMove.add(self.__onHoritontalMouseMove)
+        self.onMouseMove.add(self.__onHorizontalMouseMove)
         self.onMouseUp.add(self.__onMouseUp)
         
     ##
@@ -529,7 +529,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     ##
     #
     #
-    def __onHoritontalMouseMove(self,ev:biui.MouseEvent)->None:
+    def __onHorizontalMouseMove(self,ev:biui.MouseEvent)->None:
         
         sh = FlexGrid._spacerWidth/2
         
@@ -551,14 +551,19 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     #
     #
     def __onMouseUp(self,ev:biui.MouseEvent)->None:
-        #print("onMouseUp")
+        print("FlexGrid::onMouseUp")
         self.onMouseMove.remove(self.__onVerticalMouseMove)
-        self.onMouseMove.remove(self.__onHoritontalMouseMove)
+        self.onMouseMove.remove(self.__onHorizontalMouseMove)
         self.onMouseUp.remove(self.__onMouseUp)
         self._draggedSpacer = None
         ev.stopPropagation()
     
-    def _redraw(self, surface )->None:
+    def _redraw(self, surface, forceRedraw=False)->None:
+        
+        if not self.isInvalide():
+            if not forceRedraw:
+                return
+                    
         #print("Pane::_redraw")
         pos = self.getPosition()
         
@@ -568,9 +573,11 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         theme = biui.getTheme()
         theme.drawFlexGridBeforeChildren(self,_surface)
 
+        forceRedraw = self.isInvalide() or forceRedraw
+        
         # We draw all Children on our own surface        
         for c in self._children:
-            c._redraw(_surface)
+            c._redraw(_surface,forceRedraw)
                     
         theme.drawFlexGridAfterChildren(self,_surface)
         
@@ -578,4 +585,15 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         # of our own surface
         # on the parent's surface
         surface.blit(_surface,pos,(0,0,self.getWidth(),self.getHeight()))
+        
+    def _calculateLayout(self):
+        
+        if not self.isInvalide():
+            return 
+        
+        #print("resize")
+                
+        super()._calculateLayout()
+        
+        self._isInvalide = False
         

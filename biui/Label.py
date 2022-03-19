@@ -1,3 +1,4 @@
+import pygame
 import biui
 
 class Label(biui.Widget.Widget):
@@ -5,16 +6,33 @@ class Label(biui.Widget.Widget):
     def __init__(self):
         super().__init__()
         self.font = biui.Font()
-        self._text = "Label"
-        self._antialiased = True
-        self._color = (100,100,100)
+        self.font.size = 20
+        self.text = "Label"
+        self.antialiased = True
+        self.color = (200,200,200)
         
+    def _calculateLayout(self):
+        # TODO: resolve Pygame dependency
+        font = pygame.font.SysFont(
+            self.font.name,
+            self.font.size
+        )
+        
+        sf = font.render(
+            self.text,
+            self.antialiased,
+            self.color
+        )
+        
+        self.width = sf.get_width()
+        self.height = sf.get_height()
+            
     def _redraw(self, surface, forceRedraw=False):
         if not self.isInvalide():
             if not forceRedraw:
                 return 
         
-        print("Label::_redraw()")
+        #print("Label::_redraw()")
         theme = biui.getTheme()
         theme.drawLabel(self,surface)
         

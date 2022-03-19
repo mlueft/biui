@@ -309,7 +309,7 @@ class Theme:
         )
         
         sf = font.render(
-            widget.text, 
+            widget.text,
             widget.antialiased,
             widget.color
         )
@@ -319,6 +319,6 @@ class Theme:
             widget.position,
             (0,0,widget.width,widget.height)
         )
-        
+
         
         

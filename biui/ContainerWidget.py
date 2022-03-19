@@ -164,9 +164,10 @@ class ContainerWidget(biui.Widget.Widget):
             self._surface = biui.createSurface(mySize)
             self._recreateSurface = False
             
-        self._layoutManager._calculateLayout(mySize)
         for c in self._children:
             c._calculateLayout()
+        
+        self._layoutManager._calculateLayout(mySize)
     
     def _redraw(self, surface, forceRedraw=False ):
 

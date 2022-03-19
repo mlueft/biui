@@ -7,20 +7,25 @@ class Button(biui.ContainerWidget.ContainerWidget):
     
     def __init__(self):
         super().__init__()
-        self.width = 50
-        self.height = 20
+        self.width = 150
+        self.height = 30
         self._state = biui.ButtonStates.NORMAL
         self._icon = None
         
         self._label = biui.Label()
         self._label.alignment = biui.Alignment.CENTER_CENTER
-        self._label.width = 100
-        self._label.height = 50
-        #self.addChild(self._label,1,0)
+        self.addChild(self._label,1,0)
         
         self._layoutManager.columnWidths = [1,0,1]
         self._layoutManager.rowHeights = [0]
         
+    ##
+    #
+    #
+    @property
+    def label(self):
+        return self._label
+    
     ## Returns the current state of the button.
     #  See: biui.ButtonStates
     #  

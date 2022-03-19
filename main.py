@@ -1,133 +1,227 @@
 import pygame
 import math
 import biui
-import time
 
-def milli():
-    return round(time.time() * 1000)
+sub = None
+wnd = None
+pane3 = None
+b0 = None
+b1 = None
+localPos = None
 
-def childHorizontalSplit(ev):
-    print("childHorizontalSplit")
-
-def childVerticalSplit(ev):
-    print("childVerticalSplit")
+def b0OnDown(ev):
+    global sub, localPos
+    sub = ev.eventSource
+    localPos = sub.toLocal(ev.position)
+    sub.onMouseUp.add(b0OnUp)
+    sub.onMouseMove.add(b0OnMove)
     
-def childJoinUp(ev):
-    print("onJoinUp")
-
-def childJoinRight(ev):
-    print("onJoinRight")
-
-def childJoinDown(ev):
-    print("onJoinDown")
-
-def childJoinLeft(ev):
-    print("onJoinLeft")
+def b0OnMove(ev):
+    global sub, pane3, b0, b1, localPos
+    curPos = ev.position
+    sub.x = curPos[0]-localPos[0]
+    sub.y = curPos[1]-localPos[0]
+    pane3.x = b0.x
+    pane3.y = b0.y
+    pane3.width = b1.x-b0.x+b1.width
+    pane3.height = b1.y-b0.y+b1.height
+    
+def b0OnUp(ev):
+    global sub
+    b0OnMove(ev)
+    sub.onMouseUp.remove(b0OnUp)
+    sub.onMouseMove.remove(b0OnMove)
+    
+def stopMousePropagation(ev):
+    ev.stopPropagation()
     
 def main():
+    global wnd, pane3, b0, b1
     
     ##############################################
     #                                       WINDOW
     ##############################################
-    wnd = biui.Window()
-    wnd.width = 1024
-    wnd.height = 768
-    
-    if False:
-        lbl = biui.Label()
-        lbl.x = 10
-        lbl.y = 10
-        lbl.font.size = 25
-        lbl.font.name = "Courier"
-        lbl.color = (200,200,200)
-        lbl.anialiased = True
-        
-        wnd.addChild(lbl)
-        
-        btn = biui.Button()
-        btn.x = 19
-        btn.y = 100
-        btn.width = 300
-        btn.height = 100
-        
-        wnd.addChild(btn)
-        
-    if False:
-        start = milli()
-        print( "start           : "+str(milli()-start))
-        
-        
-        all_fonts = pygame.font.get_fonts()
-        print("fonts:"+str(len(all_fonts)))
-        
-        
-        start = milli()
-        print( "all_fonts           : "+str(milli()-start))
-        
-        
-        sf = wnd._getSurface()
+    wnd = biui.Window(1900,1024)
     
     
-        start = milli()
-        print( "surface           : "+str(milli()-start))
-        
-        
-        font = pygame.font.SysFont("Arial",72)
-        print("====================")
-        for i in dir(font):
-            print(str(i))
+    ##############################################
+    #                                      Panel 0
+    ##############################################
+    pane0 = biui.Pane()
+    pane0.x = 10
+    pane0.y = 10
+    pane0.width = 300
+    pane0.height = 300
+    wnd.addChild(pane0)
+    
+    #
+    # Buttons
+    #
+    for i in range(3):
+        button0 = biui.Button()
+        #button0.onMouseUp.add(_test.upHandler)
+        button0.x = 10
+        button0.y = 10+i*35
+        button0.width = 100
+        button0.height = 30
+        pane0.addChild(button0)
             
-            
-        start = milli()
-        print( "font           : "+str(milli()-start))
-        
-        
-        text = font.render("hello world!", True,(0,128,0))
-        print("====================")
-        for i in dir(text):
-            print(str(i))        
-        
-        
-        start = milli()
-        print( "font           : "+str(milli()-start))
-        
-        
-    if True:
-        grid = biui.FlexGrid()
-        grid.alignment = biui.Alignment.FILL
-        
-        pane = biui.FlexPane()
-        pane.x = 0
-        pane.y = 0
-        pane.width = 1024
-        pane.height = 768
-          
-        grid.addFlexPane(pane)
-        
-        wnd.addChild(grid)
-        
-    if False:
-        fp = biui.FlexPane()
-        fp.onJoinUp.add(childJoinUp)
-        fp.onJoinRight.add(childJoinRight)
-        fp.onJoinDown.add(childJoinDown)
-        fp.onJoinLeft.add(childJoinLeft)
-        fp.onHorizontalSplit.add(childHorizontalSplit)
-        fp.onVerticalSplit.add(childVerticalSplit)
-        fp.x = 10
-        fp.y = 10
-        fp.width = 500
-        fp.height = 500
-        wnd.addChild(fp)
     
+    ##############################################
+    #                                      PANEL 1
+    ##############################################
+    pane1 = biui.Pane()
+    pane1.x = 320
+    pane1.y = 10
+    pane1.width = 300
+    pane1.height = 300
+    wnd.addChild(pane1)
+    
+    #
+    # Creating a ToggleButton
+    #
+    for i in range(3):
+        button0 = biui.ToggleButton()
+        button0.x = 10
+        button0.y = 10+i*35
+        button0.width = 100
+        button0.height = 30        
+        pane1.addChild(button0)
+        
+    
+    
+    
+    ##############################################
+    #                                      PANEL 2
+    ##############################################
+    pane2 = biui.Pane()
+    pane2.x = 630
+    pane2.y = 10
+    pane2.width = 300
+    pane2.height = 300
+    wnd.addChild(pane2)
+        
+    #
+    # ButtonGroup
+    #
+    buttonGroup = biui.ButtonGroup()
+    buttonGroup.onMouseDown.add(stopMousePropagation)
+    buttonGroup.x = 10
+    buttonGroup.y = 10
+    buttonGroup.width = 180
+    buttonGroup.height = 280
+    pane2.addChild(buttonGroup)
+    
+    #
+    # Add Buttons to group
+    #
+    for i in range(5):
+        button0 = biui.ToggleButton()
+        button0.x = 10
+        button0.y = 10+i*35
+        button0.width = 100
+        button0.height = 30        
+        buttonGroup.addChild(button0)
+    
+    
+    
+    
+    ##############################################
+    #                                      PANEL 3
+    ##############################################
+    pane3 = biui.Pane()
+    pane3.x = 630+320
+    pane3.y = 10
+    pane3.width = 300
+    pane3.height = 300
+    wnd.addChild(pane3)
+    
+    # content
+    pane3_1 = biui.Pane()
+    pane3_1.x = 10
+    pane3_1.y = 10
+    pane3_1.width = 30
+    pane3_1.height = 30
+    pane3_1.alignment = biui.Alignment.CENTER_CENTER
+    pane3.addChild(pane3_1,0,1)
+
+    pane3_2 = biui.Pane()
+    pane3_2.x = 120
+    pane3_2.y = 10
+    pane3_2.width = 100
+    pane3_2.height = 100
+    pane3_2.alignment = biui.Alignment.FILL
+    pane3.addChild(pane3_2,1,1)
+            
+    lm = pane3.layoutManager
+    lm.columnWidths = [0,50.0]
+    lm.rowHeights = [0,50,0]
+    
+    # Drag buttons
+    b0 = biui.Button()
+    b0.onMouseDown.add(b0OnDown)
+    b0.onMouseUp.add(b0OnUp)
+    b0.x = pane3.x
+    b0.y = pane3.y
+    b0.width = 15
+    b0.height = 15
+    wnd.addChild(b0)
+    
+    
+    b1 = biui.Button()
+    b1.onMouseDown.add(b0OnDown)
+    b1.onMouseUp.add(b0OnUp)
+    b1.x = pane3.right-15
+    b1.y = pane3.bottom-15
+    b1.width = 15
+    b1.height = 15
+    wnd.addChild(b1)
+    
+    
+    ##############################################
+    #                                      PANEL 4
+    ##############################################
+        
+    grid = biui.FlexGrid()
+    grid.x = 10
+    grid.y = 320
+    grid.width = 610
+    grid.height = 610
+        
+    pane = biui.FlexPane()
+    pane.x = 0
+    pane.y = 0
+    pane.width = 610
+    pane.height = 610
+      
+    grid.addFlexPane(pane)
+    
+    wnd.addChild(grid)
+        
+            
     #
     # Temporary main loop
     #
     clock = pygame.time.Clock()
     
+    radius = 100
+    angle = 0
+    speed = 0.01
+    pos = [80.0,100.0]
+    
     while biui.main():
-        #sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
-        pygame.display.flip()
+        clock.tick(1000)
+        
+        # movement
+        if False:
+            angle += speed
+            end = (
+                pos[0]+math.cos(angle)*radius,
+                pos[1]+math.sin(angle)*radius
+            )
+            b0.x = end[0]        
+            b0.y = end[1]
+        
 
 if __name__ == "__main__":
     main()

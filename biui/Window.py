@@ -8,10 +8,10 @@ class Window(biui.ContainerWidget.ContainerWidget):
     ##
     #
     #
-    def __init__(self):
+    def __init__(self,width,height):
         super().__init__()
-        self.width = 1024
-        self.height = 768
+        self.width = width
+        self.height = height
         self._surface = biui.createWindow(self)
         biui._addWindow(self)
 

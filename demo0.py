@@ -41,9 +41,7 @@ def main():
 	##############################################
 	#                                       WINDOW
 	##############################################
-	wnd = biui.Window()
-	wnd.width = 1024
-	wnd.height = 768
+	wnd = biui.Window(1900,1024)
 	
 	
 	##############################################
@@ -63,7 +61,7 @@ def main():
 		button0 = biui.Button()
 		#button0.onMouseUp.add(_test.upHandler)
 		button0.x = 10
-		button0.y = 10+i*25
+		button0.y = 10+i*35
 		pane0.addChild(button0)
 			
 	
@@ -83,7 +81,7 @@ def main():
 	for i in range(3):
 		button0 = biui.ToggleButton()
 		button0.x = 10
-		button0.y = 10+i*25
+		button0.y = 10+i*35
 		pane1.addChild(button0)
 		
 	
@@ -106,7 +104,7 @@ def main():
 	buttonGroup.onMouseDown.add(stopMousePropagation)
 	buttonGroup.x = 10
 	buttonGroup.y = 10
-	buttonGroup.width = 80
+	buttonGroup.width = 180
 	buttonGroup.height = 280
 	pane2.addChild(buttonGroup)
 	
@@ -116,7 +114,7 @@ def main():
 	for i in range(5):
 		button0 = biui.ToggleButton()
 		button0.x = 10
-		button0.y = 10+i*30
+		button0.y = 10+i*40
 		buttonGroup.addChild(button0)
 	
 	
@@ -126,8 +124,8 @@ def main():
 	#                                      PANEL 3
 	##############################################
 	pane3 = biui.Pane()
-	pane3.x = 10
-	pane3.y = 320
+	pane3.x = 630+320
+	pane3.y = 10
 	pane3.width = 300
 	pane3.height = 300
 	wnd.addChild(pane3)
@@ -157,8 +155,8 @@ def main():
 	b0 = biui.Button()
 	b0.onMouseDown.add(b0OnDown)
 	b0.onMouseUp.add(b0OnUp)
-	b0.x = 10
-	b0.y = 320
+	b0.x = pane3.x
+	b0.y = pane3.y
 	b0.width = 15
 	b0.height = 15
 	wnd.addChild(b0)
@@ -167,13 +165,34 @@ def main():
 	b1 = biui.Button()
 	b1.onMouseDown.add(b0OnDown)
 	b1.onMouseUp.add(b0OnUp)
-	b1.x = 295
-	b1.y = 295+310
+	b1.x = pane3.right-15
+	b1.y = pane3.bottom-15
 	b1.width = 15
 	b1.height = 15
 	wnd.addChild(b1)
 	
 	
+	##############################################
+	#                                      PANEL 4
+	##############################################
+		
+	grid = biui.FlexGrid()
+	grid.x = 10
+	grid.y = 320
+	grid.width = 600
+	grid.height = 600
+		
+	pane = biui.FlexPane()
+	pane.x = 0
+	pane.y = 0
+	pane.width = 600
+	pane.height = 600
+	  
+	grid.addFlexPane(pane)
+	
+	wnd.addChild(grid)
+		
+			
 	#
 	# Temporary main loop
 	#

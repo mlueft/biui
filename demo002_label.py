@@ -3,28 +3,26 @@ import math
 import biui
 import time
 
-   
 def main():
     
     ##############################################
     #                                       WINDOW
     ##############################################
-    wnd = biui.Window(1024,768)
-
-    #
-    # Buttons
-    #
-    for i in range(10):
-        button0 = biui.Button()
-        #button0.onMouseUp.add(_test.upHandler)
-        button0.x = 10
-        button0.y = 10+i*45
-        button0.width = 150
-        button0.height = 40
-        button0.label.font.size = 25
-        button0.label.color = (200,200,200)
-        wnd.addChild(button0)
+    wnd = biui.Window(800,600)
+    
+    lbl = biui.Label()
+    lbl.x = 10
+    lbl.y = 10
+    lbl.alignment = biui.Alignment.CENTER_CENTER
+    lbl.font.size = 50
+    lbl.font.name = "Courier"
+    lbl.color = (255,255,255)
+    lbl.anialiased = True
+    
+    wnd.addChild(lbl)
         
+        
+    
     #
     # Temporary main loop
     #

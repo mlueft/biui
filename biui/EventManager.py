@@ -11,13 +11,13 @@ class EventManager (object):
 	def __init__(self):
 		self.__handlers= []
 
-	##
+	## Adds a function handler.
 	#
 	#
 	def add(self, handler):
 		self.__handlers.append(handler)
 
-	##
+	## Removes a function handler.
 	#
 	#
 	def remove(self, handler):
@@ -26,13 +26,13 @@ class EventManager (object):
 		 
 		self.__handlers.remove(handler)
 
-	##
+	## Checks if a handler has been added.
 	#
 	#
 	def has(self,handler):
 		return handler in self.__handlers
 	
-	##
+	## Calls all added handlers.
 	#
 	#
 	def provoke(self, event):

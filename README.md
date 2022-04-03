@@ -12,30 +12,31 @@ This lib depends on pygame. I use pygame just for window, drawing
 in the Theme class and in __init__.py and for event handling.
 I want to keep the lib in python, i hope it's not going to be laggy.
 
-TODO:
-
-* stopPropagation() for keyboardevents
-* Protect setter from unnecassary invalidate() calles.
+DONE:
 * Button
 * ToggleButton
 * Buttongroup
-* TextField
+* Label
+* FlexGrid (Blender's window layout management)
+
+TODO:
+
+* stopPropagation() for keyboardevents? Should it have it?
+* Protect setter from unnecassary invalidate() calles.
+* Label
+  + format für pre/postfix
 * Checkbox
+* Progressbar
 * NumberSlider
-  + showNavbattons
-  + step
-  + minValue
-  + maxValue
 * Combobox
 * TreeView
+* TextField
 * ListView
 * MenuBar/TopBar
 * IconBar(3D-View left side)
 * StatusBar
 * LayoutManager
-* Labels
-  + format für pre/postfix
-* FlexGrid (Blender's window layout management)
+* Scrollbar
 
 ```python
 

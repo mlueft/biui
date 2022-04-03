@@ -6,12 +6,10 @@ from pexpect import expect
 #
 class ContainerWidget(biui.Widget.Widget):
     
-    def __init__(self):
+    def __init__(self,doSurface=True):
         super().__init__()
         #
         self._children = []
-        #
-        self._surface = biui.createSurface(self.size)
         #
         self._layoutManager = biui.LayoutManager()
         #
@@ -20,6 +18,9 @@ class ContainerWidget(biui.Widget.Widget):
         self.onChildRemoved = biui.EventManager()
         #
         self._recreateSurface = False
+        #
+        if doSurface:
+            self._surface = biui.createSurface(self.size)
         
     ## Returns all child elements.
     #
@@ -79,8 +80,7 @@ class ContainerWidget(biui.Widget.Widget):
         if cPos[1]+self.height < pos[1]:
             return None
                 
-        for i in range(len(self._children)-1,-1,-1):
-            c = self._children[i]
+        for c in reversed(self._children):
             cPos = c.toGlobal((0,0))
             if cPos[0] <= pos[0]:
                 if cPos[0]+c.width >= pos[0]: 
@@ -102,7 +102,7 @@ class ContainerWidget(biui.Widget.Widget):
         return super().isInvalide()
     
         
-    ## 
+    ## Returns the layout manager.
     #
     #  @return            A biui.LayoutManager.
     #
@@ -110,7 +110,7 @@ class ContainerWidget(biui.Widget.Widget):
     def layoutManager(self):
         return self._layoutManager
         
-    ## 
+    ##
     #
     #  @param value       A biui.ayoutManager.
     #  @return            None
@@ -233,16 +233,22 @@ class ContainerWidget(biui.Widget.Widget):
         
     def _onKeyDown(self,ev):
         super()._onKeyDown(ev)
+        if ev._stopPropagation:
+            return
         for c in self._children:
             c._onKeyDown(ev)
             
     def _onKeyUp(self,ev):
         super()._onKeyUp(ev)
+        if ev._stopPropagation:
+            return
         for c in self._children:
             c._onKeyUp(ev)
     
     def _onTextInput(self,ev):
         super()._onTextInput(ev)
+        if ev._stopPropagation:
+            return
         for c in self._children:
             c._onTextInput(ev)
                 

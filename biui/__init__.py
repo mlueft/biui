@@ -1,3 +1,5 @@
+import os
+
 import pygame
 from pygame import surface
 
@@ -24,6 +26,9 @@ import biui.FlexSpacer
 import biui.FlexGrid
 import biui.Label
 import biui.Font
+import biui.NumberSlider
+import biui.ImageLibrary
+import biui.Spacer
 
 Event = biui.Event.Event
 MouseEvent = biui.MouseEvent.MouseEvent
@@ -45,6 +50,15 @@ FlexSpacer = biui.FlexSpacer.FlexSpacer
 FlexGrid = biui.FlexGrid.FlexGrid
 Label = biui.Label.Label
 Font = biui.Font.Font
+NumberSlider = biui.NumberSlider.NumberSlider
+ImageLibrary = biui.ImageLibrary.ImageLibrary
+Spacer = biui.Spacer.Spacer
+
+#
+__themeFolder = "themes"
+
+# Stores the Instance of Theme.
+__theme = None
 
 # Defines if all directy rects are drawn on screen.
 # For debug use. This makes everything slower.
@@ -56,6 +70,13 @@ __pygame_initialized__ = False
 # Stores the last known mouse position
 __lastMousePos = None
 
+## Stored a reference to the Widget the mouse is over.
+__hoverWidget = None
+
+## Stores all window objects.
+#  Pygame allows just one window.
+__windowSurfaces = []
+
 ## Initializes pygame. Can be called more than once.
 #  It takes care about multiple calls.
 #
@@ -66,11 +87,6 @@ def initPyGame():
     pygame.init()
     __pygame_initialized__ = True
  
- ## Stores all window objects.
- #  Pygame allows just one window.
- #
-__windowSurfaces = []
-
 ## Creates a pygame window object and returns it.
 #  It for internal use only. Don't call it.
 #
@@ -92,6 +108,8 @@ def createWindow(window):
 def createSurface(size):
     biui.initPyGame()
     sf = pygame.surface.Surface(size)
+    sf = sf.convert_alpha()
+    sf.fill( pygame.Color(0, 0, 0, 0) )
     return sf
 
 def _addWindow(window):
@@ -109,11 +127,6 @@ def __getChildAt(pos):
     
     for w in __windowSurfaces:
         return w.getChildAt(pos)
-
-## Stored a reference to the Widget the mouse is over.
-#
-#
-__hoverWidget = None
 
 ## Returns a defaault value if value is None
 #  If value is not None value is returned.
@@ -134,10 +147,12 @@ def default(value,default):
 def getMousePosition():
     return biui.__lastMousePos
 
-## Stores the Instance of Theme.
+##
 #
 #
-__theme = None
+def selectTheme(name="default"):
+    theme = getTheme()
+    theme.selectTheme(name)
 
 ## Returns the Theme instance. If necassary it is created.
 #
@@ -146,8 +161,8 @@ __theme = None
 def getTheme():
     global __theme
     if __theme == None:
-        __theme = biui.Theme.Theme()
-        
+        __theme = biui.Theme.Theme( os.path.join(os.getcwd(),__themeFolder) )
+        selectTheme()
     return __theme
 
  

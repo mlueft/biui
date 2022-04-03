@@ -19,7 +19,30 @@ class Button(biui.ContainerWidget.ContainerWidget):
         self._layoutManager.columnWidths = [1,0,1]
         self._layoutManager.rowHeights = [0]
         
-    ##
+    def getChildAt(self, pos):
+        
+        # we don't want to return any child 
+        # objects like labels or icons.
+        # If the position is inside the button,
+        # the button is the last element in the DOM.
+        
+        cPos = self.toGlobal((0,0))
+        if cPos[0] > pos[0]:
+            return None
+        
+        if cPos[0]+self.width < pos[0]:
+            return None
+         
+        if cPos[1] > pos[1]:
+            return None
+        
+        if cPos[1]+self.height < pos[1]:
+            return None
+                
+        return self
+    
+    ## Returns the embedded label instance
+    #  to make it's properties accessible.
     #
     #
     @property
@@ -33,13 +56,16 @@ class Button(biui.ContainerWidget.ContainerWidget):
     def state(self):
         return self._state
     
-    ##
+    ## Returns the icon instance of the button
+    #  to make it's properties accessible. 
     #
     #
     @property
     def icon(self):
         return self._icon
-    ##
+    
+    ## Sets the icon instance.
+    #  TODO: Impliment the icon class.
     #
     #
     @icon.setter
@@ -48,20 +74,21 @@ class Button(biui.ContainerWidget.ContainerWidget):
         self.addChild(icon,0,0)
         self._invalidate()
 
-    ##
+    ## Returns the value of the button.
+    #  The value is the shown text.
     #
     #
     @property
-    def text(self):
-        return self._label.text
+    def value(self):
+        return self._label.value
     
-    ##
+    ## Sets the value of the button.
+    #  The value is the shown text.
     #
-    #
-    @text.setter
-    def text(self,value):
-        self._label.text = value
-                
+    @value.setter
+    def value(self,value):
+        self._label.value = value
+
     def _onMouseEnter(self,ev):
         self._recordDirtyRect()
         self._state = biui.ButtonStates.OVER

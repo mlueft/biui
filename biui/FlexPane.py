@@ -73,17 +73,19 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     def _onActiveCornerBottomRightMouseUp(self,ev):
         self._acBottomRight.onMouseLeave.remove(self.onActiveCornerBottomRightLeave)
         
-    ##
+    ## Returns a widget used as a active corner.
     #
     #
     def _createActiveCorner(self):
-        ac = biui.Pane()
+        # We use a Spacer to get
+        # an invisible corner
+        ac = biui.Spacer()
         ac.width = 25
         ac.height = 25
         return ac
         
-    ##
-    #
+    ## Handles mouse leave event of the top left active corner.
+    #  It provokes split or join events if necessary.
     #
     def onActiveCornerTopLeftLeave(self,ev):
 
@@ -101,8 +103,8 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
      
         self._acTopLeft.onMouseLeave.remove(self.onActiveCornerTopLeftLeave)
         
-    ##
-    #
+    ## Handles mouse leave event of the top right active corner.
+    #  It provokes split or join events if necessary.
     #
     def onActiveCornerTopRightLeave(self,ev):
 
@@ -120,8 +122,8 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
 
         self._acTopRight.onMouseLeave.remove(self.onActiveCornerTopRightLeave)
         
-    ##
-    #
+    ## Handles mouse leave event of the bottom left active corner.
+    #  It provokes split or join events if necessary.
     #
     def onActiveCornerBottomLeftLeave(self,ev):
 
@@ -139,8 +141,8 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
             
         self._acBottomLeft.onMouseLeave.remove(self.onActiveCornerBottomLeftLeave)
         
-    ##
-    #
+    ## Handles mouse leave event of the bottom right active corner.
+    #  It provokes split or join events if necessary.
     #
     def onActiveCornerBottomRightLeave(self,ev):
 

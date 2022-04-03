@@ -9,7 +9,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
     #
     #
     def __init__(self,width,height):
-        super().__init__()
+        super().__init__(False)
         self.width = width
         self.height = height
         self._surface = biui.createWindow(self)
@@ -224,8 +224,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         #self._surface = biui.createSurface(self.getSize())
         
     def getChildAt(self, pos):
-        for i in range(len(self._children)-1,-1,-1):
-            c = self._children[i]
+        for c in reversed(self._children):
             cPos = c.toGlobal((0,0))
             if cPos[0] <= pos[0]:
                 if cPos[0]+c.width >= pos[0]: 

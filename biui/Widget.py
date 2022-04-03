@@ -110,8 +110,8 @@ class Widget:
         self._y = value
         self._invalidate()
     
-    ##
-    #
+    ## Set/Get the left border of the widget.
+    #  Is equqalent to x.
     #
     @property
     def left(self):
@@ -126,8 +126,11 @@ class Widget:
         self.x = value
         self.width = r-self._x
     
-    ##
-    #
+    ## Set/Get the top border of the widget.
+    #  Setting this value doesn't change 
+    #  any other border of the widget.
+    #  Incrementing top decreses the height.
+    #  The bottom border stays the same.
     #
     @property
     def top(self):
@@ -142,8 +145,11 @@ class Widget:
         self.y = value
         self.height = b-self._y
     
-    ##
-    #
+    ## Set/Get the right border of the widget.
+    #  Setting this value doesn't change 
+    #  any other border of the widget.
+    #  Incrementing right increments width.
+    #  The left border stays the same.
     #
     @property
     def right(self):
@@ -156,8 +162,11 @@ class Widget:
     def right(self,value):
         self.width = value-self._x
     
-    ##
-    #
+    ## Set/Get the bottom border of the widget.
+    #  Setting this value doesn't change 
+    #  any other border of the widget.
+    #  Incrementing bottom increments height.
+    #  top stays the same.
     #
     @property
     def bottom(self):
@@ -258,7 +267,7 @@ class Widget:
             self._height = max(1,value)
             self._invalidate()
             
-    ## 
+    ## Returns the min width of the widget.
     #
     #  @return            An integer value.
     #
@@ -266,7 +275,7 @@ class Widget:
     def minHeight(self):
         return self._minHeight
     
-    ## 
+    ## Sets the min width of the widget.
     #
     #  @param value       An integer value.
     #  @return            None
@@ -277,7 +286,7 @@ class Widget:
         if self._minHeight > self._height:
             self.height = self._minHeight
 
-    ## 
+    ## Returns the max. height of the widget.
     #
     #  @return            An integer value.
     #
@@ -285,7 +294,7 @@ class Widget:
     def maxHeight(self):
         return self._maxHeight
 
-    ## 
+    ## Sets the max. height of the widget.
     #
     #  @param value       An integer value.
     #  @return            None
@@ -296,20 +305,21 @@ class Widget:
         if self._maxHeight < self._height:
             self.height = self._maxHeight
         
-    ##
+    ## Checks if the given child is a child object or
+    #  if it is the current widget.
     #
     #
     def hasChild(self,child):
         return child == self
     
-    ##
+    ## Returns the alignment setting.
     #
     #
     @property
     def alignment(self):
         return self._alignment
             
-    ##
+    ## Serts the alignment setting.
     #
     #
     @alignment.setter
@@ -330,7 +340,9 @@ class Widget:
             self._height
         ))
         
-    ##
+    ## Checks if the widget is invalide.
+    #  If it is invalide, it has to bee redrawn
+    #  at the next refresh.
     #
     #
     def isInvalide(self):
@@ -359,7 +371,7 @@ class Widget:
         self._dirtyRects.clear()
         return result
     
-    ##
+    ## Returns the parent window of the widget.
     #
     #
     @property
@@ -370,6 +382,7 @@ class Widget:
             if newParent == None:
                 return parent
             parent = newParent 
+
     ## Returns the parent GUI element of the GUI element.
     #  Normally it is the main window or a container element
     #  that contains the GUI element.
@@ -402,7 +415,7 @@ class Widget:
     def _getSurface(self):
         return self._parent._getSurface()
     
-    ##
+    ## Recalculates the layout of the widget.
     #
     #
     def _calculateLayout(self):

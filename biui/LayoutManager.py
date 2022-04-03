@@ -76,7 +76,7 @@ class LayoutManager():
                     self._children[i][j].remove(child)
         self.onChildRemoved.provoke(biui.Event(self))
     
-    ##
+    ## Set/Get all column widths.
     #
     #
     @property
@@ -96,7 +96,7 @@ class LayoutManager():
             else:
                 self._columnWidths.append(0)
     
-    ##
+    ## Set/Get all row heights.
     #
     #
     @property
@@ -116,7 +116,7 @@ class LayoutManager():
             else:
                 self._rowHeights.append(0)
     
-    ##
+    ## Sets the width of the given column.
     #
     #
     def setColumnWidth(self,column,value):
@@ -126,7 +126,7 @@ class LayoutManager():
             
         self._columnWidths[column] = value
             
-    ##
+    ## Sets the height of the given row.
     #
     #
     def setRowHeight(self,row,values):
@@ -138,7 +138,7 @@ class LayoutManager():
     
 
     
-    ##
+    ## Returns the (column,row) of the given child.
     #
     #
     def getPositionOfChild(self,child):
@@ -149,7 +149,8 @@ class LayoutManager():
                         return (i,j)
         return None
     
-    ##
+    ## Adds a column at the given position.
+    #  Columns are moved to right.
     #
     #
     def insertColumnAt(self,index,width = 0):
@@ -159,7 +160,8 @@ class LayoutManager():
         for i in self._rowHeights:
             self._children[index].append([])
 
-    ##
+    ## Adds a Row at the given position.
+    #  Rows are moved down.
     #
     #
     def insertRowAt(self,index,height=0):
@@ -169,7 +171,7 @@ class LayoutManager():
             
         self._rowHeights.insert(index,height)
         
-    ##
+    ## Returns the width value of the given column.
     #
     #
     def getColumnWidth(self,index):

@@ -1,14 +1,21 @@
 import biui
 
+##
+#
+#
 class Font():
     
     def __init__(self):
+        #
         self._name = "Arial"
+        #
         self._size = 10
+        #
         self.onSizeChanged = biui.EventManager()
+        #
         self.onNameChanged = biui.EventManager()
     
-    ##
+    ## Set/Get the font name.
     #
     #
     @property   
@@ -25,7 +32,7 @@ class Font():
         self._name = value
         self.onNameChanged.provoke(biui.Event)
      
-    ##
+    ## Set/Get the font size.
     #
     #
     @property

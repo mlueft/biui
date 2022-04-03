@@ -16,8 +16,9 @@ class MouseEvent(biui.Event.Event):
         self.__wheelY = wheelY
         self._stopPropagation = False
         
-    ##
-    #
+    ## Stops the handling of the event in the DOM structure.
+    #  So the event is not propagated to the next child
+    #  elements in the DOM.
     #
     def stopPropagation(self):
         self._stopPropagation = True

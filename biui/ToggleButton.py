@@ -10,7 +10,7 @@ class ToggleButton(biui.Button.Button):
         self._state = biui.ButtonStates.NORMAL
         self._checked = False
     
-    ##
+    ## Set/Get the checked value of the ToggleButton.
     #
     #    
     @property
@@ -30,6 +30,10 @@ class ToggleButton(biui.Button.Button):
         self._checked = value
         self._invalidate()
         
+    ## Returns the current button state.
+    #  @see ButtonStates
+    #
+    #
     @property
     def state(self):
         if self._checked:

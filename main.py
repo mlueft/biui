@@ -35,8 +35,10 @@ def b0OnUp(ev):
 def stopMousePropagation(ev):
     ev.stopPropagation()
     
-def main():
+def init():
     global wnd, pane3, b0, b1
+    
+    biui.initPyGame()
     
     ##############################################
     #                                       WINDOW
@@ -59,6 +61,8 @@ def main():
     #
     for i in range(3):
         button0 = biui.Button()
+        button0.label.format = "{:,} mm"
+        button0.value = 1000
         #button0.onMouseUp.add(_test.upHandler)
         button0.x = 10
         button0.y = 10+i*35
@@ -66,6 +70,21 @@ def main():
         button0.height = 30
         pane0.addChild(button0)
             
+    #
+    # NumberSlider
+    #
+    ns = biui.NumberSlider()
+    ns.x = 10
+    ns.y = 120
+    ns.width = 150
+    ns.height = 30
+    ns.minValue = 0
+    ns.maxValue = 100
+    ns.value = 50
+    ns.step = 7
+    ns.label.format = "{} %"
+    pane0.addChild(ns)
+                
     
     ##############################################
     #                                      PANEL 1
@@ -88,9 +107,22 @@ def main():
         button0.height = 30        
         pane1.addChild(button0)
         
-    
-    
-    
+    #
+    # NumberSlider
+    #
+    ns = biui.NumberSlider()
+    ns.showNavigation = False
+    ns.x = 10
+    ns.y = 120
+    ns.width = 150
+    ns.height = 30    
+    ns.minValue = -30
+    ns.maxValue = 30
+    ns.value = 12
+    ns.step = 1
+    ns.label.format = "{} mm"    
+    pane1.addChild(ns)
+            
     ##############################################
     #                                      PANEL 2
     ##############################################
@@ -106,8 +138,8 @@ def main():
     #
     buttonGroup = biui.ButtonGroup()
     buttonGroup.onMouseDown.add(stopMousePropagation)
-    buttonGroup.x = 10
-    buttonGroup.y = 10
+    buttonGroup.x = 0
+    buttonGroup.y = 0
     buttonGroup.width = 180
     buttonGroup.height = 280
     pane2.addChild(buttonGroup)
@@ -115,7 +147,7 @@ def main():
     #
     # Add Buttons to group
     #
-    for i in range(5):
+    for i in range(3):
         button0 = biui.ToggleButton()
         button0.x = 10
         button0.y = 10+i*35
@@ -140,7 +172,7 @@ def main():
     pane3_1 = biui.Pane()
     pane3_1.x = 10
     pane3_1.y = 10
-    pane3_1.width = 30
+    pane3_1.width = 30    
     pane3_1.height = 30
     pane3_1.alignment = biui.Alignment.CENTER_CENTER
     pane3.addChild(pane3_1,0,1)
@@ -198,30 +230,14 @@ def main():
     
     wnd.addChild(grid)
         
-            
-    #
+def main():
+
     # Temporary main loop
-    #
     clock = pygame.time.Clock()
-    
-    radius = 100
-    angle = 0
-    speed = 0.01
-    pos = [80.0,100.0]
     
     while biui.main():
         clock.tick(1000)
         
-        # movement
-        if False:
-            angle += speed
-            end = (
-                pos[0]+math.cos(angle)*radius,
-                pos[1]+math.sin(angle)*radius
-            )
-            b0.x = end[0]        
-            b0.y = end[1]
-        
-
+init()
 if __name__ == "__main__":
     main()

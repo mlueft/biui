@@ -7,26 +7,17 @@ class Label(biui.Widget.Widget):
         super().__init__()
         self.font = biui.Font()
         self.font.size = 20
-        self.text = "Label"
+        self.value = "label"
         self.antialiased = True
         self.color = (200,200,200)
+        self._format = "{}"
         
     def _calculateLayout(self):
-        # TODO: resolve Pygame dependency
-        font = pygame.font.SysFont(
-            self.font.name,
-            self.font.size
-        )
+        theme = biui.getTheme()
+        size = theme.getTextSize(self)
+        self.width = size[0]
+        self.height = size[1]
         
-        sf = font.render(
-            self.text,
-            self.antialiased,
-            self.color
-        )
-        
-        self.width = sf.get_width()
-        self.height = sf.get_height()
-            
     def _redraw(self, surface, forceRedraw=False):
         if not self.isInvalide():
             if not forceRedraw:
@@ -38,28 +29,44 @@ class Label(biui.Widget.Widget):
         
         self._isInvalide = False
 
-    ##
+    ## Handles the font change of the font element.
     #
     #        
     def _onFontChanged(self,ev):
         self._invalidate()
-     
-    ##
+
+    ## Set/Get the format string of the label.
     #
     #
     @property   
-    def text(self):
-        return self._text
+    def format(self):
+        return self._format
     
     ##
     #
     #   
-    @text.setter
-    def text(self,value):
-        self._text = value
+    @format.setter
+    def format(self,value):
+        self._format = value
+        self._invalidate()
+             
+    ## Set/Get the value of the label.
+    #  The value is the shown text.
+    #
+    #
+    @property   
+    def value(self):
+        return self._value
+    
+    ##
+    #
+    #   
+    @value.setter
+    def value(self,value):
+        self._value = value
         self._invalidate()
         
-    ##
+    ## Set/Get the text color.
     #
     #
     @property
@@ -74,7 +81,7 @@ class Label(biui.Widget.Widget):
         self._color = value
         self._invalidate()
     
-    ##
+    ## Set/Get the aliased property of the text.
     #
     #
     @property
@@ -89,7 +96,7 @@ class Label(biui.Widget.Widget):
         self._antialiased = value
         self._invalidate()
      
-    ##
+    ## Set/Get the font object.
     #
     #
     @property   

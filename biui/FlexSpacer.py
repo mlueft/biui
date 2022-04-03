@@ -1,5 +1,8 @@
 import biui
 
+##
+#
+#
 class FlexSpacer(biui.Widget.Widget):
     
     def __init__(self):
@@ -17,3 +20,5 @@ class FlexSpacer(biui.Widget.Widget):
         theme = biui.getTheme()
         theme.drawFlexSpacer(self,surface)
         self._isInvalide = False
+        
+        

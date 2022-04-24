@@ -1,5 +1,6 @@
 import biui
 
+
 ## Base class for all GUI elements.
 #
 #
@@ -33,6 +34,10 @@ class Widget:
         self._isInvalide = True
         #
         self._alignment = biui.Alignment.ABSOLUTE
+        # A reference to the theme function which is used to draw the widget.
+        # On Containerwidgets it's used to draw the widget's background.
+        theme = biui.getTheme()
+        self._themeBackgroundfunction = theme.drawEmpty        
         #
         self.onMouseUp = biui.EventManager()
         #
@@ -53,6 +58,12 @@ class Widget:
         self.onMouseUp = biui.EventManager()
         #
         self.onMouseDown = biui.EventManager()
+        #
+        self.onMouseClick = biui.EventManager()
+        #
+        self._resized = False
+        #
+        self.onResized = biui.EventManager()
         
     ## Sets the x/y position of the GUI element.
     #
@@ -203,6 +214,7 @@ class Widget:
             self._recordDirtyRect()
             self._width = max(1,value)
             self._invalidate()
+            self._resized = True
             
     ## 
     #
@@ -266,6 +278,7 @@ class Widget:
             self._recordDirtyRect()
             self._height = max(1,value)
             self._invalidate()
+            self._resized = True
             
     ## Returns the min width of the widget.
     #
@@ -419,7 +432,10 @@ class Widget:
     #
     #
     def _calculateLayout(self):
-        pass
+        if self._resized:
+            self.onResized.provoke(biui.Event(self))
+            self._resized = False
+            
     
     ## Redraws the GUI element. This is for internal use.
     #  Just use this function if you know what you are doing.
@@ -433,6 +449,13 @@ class Widget:
     #  @return            None
     #
     def _redraw(self,surface, forceRedraw=False):
+        if not self.isInvalide():
+            if not forceRedraw:
+                return 
+        
+        theme = biui.getTheme()
+        self._themeBackgroundfunction(self,surface)
+        
         self._isInvalide = False
 
     ## Is called if a mouse button got pressed and the
@@ -443,7 +466,7 @@ class Widget:
     #
     def _onMouseDown(self,ev):
         self.onMouseDown.provoke(ev)
-
+        
     ## Is called if a mouse button got released and the
     #  mouse pointer is over the GUI element.
     #
@@ -452,7 +475,16 @@ class Widget:
     #
     def _onMouseUp(self,ev):
         self.onMouseUp.provoke(ev)
-     
+
+    ## Is called if a mouse had a click release and the
+    #  mouse pointer is over the GUI element.
+    #
+    #  @param ev                 A MouseEvent
+    #  @return                   None
+    #
+    def _onMouseClick(self,ev):
+        self.onMouseClick.provoke(ev)
+             
     ## Is called if a mouse wheel got turned and the
     #  mouse pointer is over the GUI element.
     #  @param ev   biui.MouseEvent.MouseEvent

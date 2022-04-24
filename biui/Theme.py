@@ -2,6 +2,9 @@ import pygame
 import biui
 import os
 
+#debug
+from random import random
+
 ## Does all the drawing stuff.
 #
 #
@@ -45,6 +48,11 @@ class Theme:
         
         return ( sf.get_width(),sf.get_height())        
         
+    ## Draws nothing.
+    # 
+    def drawEmpty(self, widget, surface):
+        return
+    
     #######################################################
     #
     #   WINDOW
@@ -107,6 +115,17 @@ class Theme:
     def drawFlexPaneBeforeChildren(self, widget, surface):
         pygame.draw.rect(
             surface,
+            (0,150+random()*20,0),
+            (
+                0,
+                0,
+                widget.width,
+                widget.height
+            )
+        )
+        return
+        pygame.draw.rect(
+            surface,
             (55,55,55),
             (
                 0,
@@ -121,6 +140,7 @@ class Theme:
     #  top most like border
     #
     def drawFlexPaneAfterChildren(self, widget, surface):
+        return
         pygame.draw.rect(
             surface,
             (80,80,80),
@@ -145,7 +165,17 @@ class Theme:
     #
     #
     def drawFlexSpacer(self, widget, surface):
-        return
+        #return
+        pygame.draw.rect(
+            surface,
+            (50+random()*205,0,0),
+            (
+                widget.x,
+                widget.y,
+                widget.width,
+                widget.height
+            )
+        )
             
     #######################################################
     #
@@ -166,7 +196,9 @@ class Theme:
     #  top most like border
     #
     def drawPaneAfterChildren(self, widget, surface):
-        return
+        name = os.path.join(self.__themeFolder ,"button_hover_fg")
+        img = self.__lib.getI9(name,widget.width,widget.height)
+        surface.blit(img,(0,0,img.get_width(),img.get_height()))
     
     #######################################################
     #
@@ -235,27 +267,67 @@ class Theme:
         
     #######################################################
     #
-    #   NUMBERSLIDER
+    #   PROGRESSBAR
     #
     #######################################################
-        
+
     ## Is called before the child objects are drawn.
     #  So, it's useed to draw the background.
     # 
-    def drawNumberSliderBeforeChildren(self, widget, surface):
-        name = os.path.join(self.__themeFolder ,"numberslider_bg")
-        img = self.__lib.getI9(name,widget.width,widget.height)
-        surface.blit(img,(0,0,img.get_width(),img.get_height()))
-    
+    def drawProgressbarBeforeChildren(self, widget, surface):
+        # background
+        pygame.draw.rect(
+            surface,
+            (80,80,80),
+            (
+                0,
+                0,
+                widget.width,
+                widget.height
+            )
+        )
+        
+        # bar
+        if widget.value == widget.minValue:
+            return
+
+        width = widget.width*(1/((widget.maxValue-widget.minValue)/(widget.value-widget.minValue)))
+            
+        pygame.draw.rect(
+            surface,
+            (100,100,100),
+            (
+                0,
+                0,
+                int(width),
+                widget.height
+            )
+        )
+        
     ## Is called after the child objects are drawn.
     #  So it's used to draw everything that has to be
     #  top most like border
     #
-    def drawNumberSliderAfterChildren(self, widget, surface):
-        name = os.path.join(self.__themeFolder ,"numberslider_fg")
-        img = self.__lib.getI9(name,widget.width,widget.height)
-        surface.blit(img,(0,0,img.get_width(),img.get_height()))
-    
+    def drawProgressbarChildren(self, widget, surface):
+        pygame.draw.rect(
+            surface,
+            (0,0,0),
+            (
+                0,
+                0,
+                widget.width,
+                widget.height
+            ),1
+        )
+        
+    #######################################################
+    #
+    #   NUMBERSLIDER
+    #   The numberslider it self has nothing to draw.
+    #   It contains buttons, Progreessbar or textField
+    #
+    #######################################################
+        
     #######################################################
     #
     #   LABEL

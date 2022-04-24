@@ -12,23 +12,16 @@ class Label(biui.Widget.Widget):
         self.color = (200,200,200)
         self._format = "{}"
         
+        theme = biui.getTheme()
+        self._themeBackgroundfunction = theme.drawLabel
+         
     def _calculateLayout(self):
         theme = biui.getTheme()
         size = theme.getTextSize(self)
         self.width = size[0]
         self.height = size[1]
+        super()._calculateLayout()
         
-    def _redraw(self, surface, forceRedraw=False):
-        if not self.isInvalide():
-            if not forceRedraw:
-                return 
-        
-        #print("Label::_redraw()")
-        theme = biui.getTheme()
-        theme.drawLabel(self,surface)
-        
-        self._isInvalide = False
-
     ## Handles the font change of the font element.
     #
     #        

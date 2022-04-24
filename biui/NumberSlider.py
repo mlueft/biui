@@ -7,18 +7,18 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     
     def __init__(self):
         super().__init__()
-        self.width = 150
-        self.height = 50
         # 
-        self._minValue = -1024
+        self._minValue = 0
         #
-        self._maxValue = 1024
+        self._maxValue = 0
         #
         self._value = 0
         #
-        self._step = 0.5
+        self._step = 0
         #
         self._showNavigation = True
+        #
+        self._barDownPosition = None
         #
         self._decButton = biui.Button()
         self._decButton.minWidth=1
@@ -38,31 +38,45 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self.addChild(self._incButton,2,0)
         
         #
-        self._label = biui.Label()
-        self._label.alignment = biui.Alignment.CENTER_CENTER
-        self.addChild(self._label,1,0)
+        self._bar = biui.Progressbar()
+        self._bar.alignment = biui.Alignment.FILL
+        self._bar.onMouseDown.add(self._barMouseDown)
+        self.addChild(self._bar,1,0)
         
         lm = self.layoutManager
         lm.columnWidths = [30,0,30]
+        
+        #theme = biui.getTheme()
+        #self._themeBackgroundfunction = theme.drawNumberSliderBeforeChildren
+        #self._themeForegroundfunction = theme.drawNumberSliderAfterChildren
+        
+        self.width = 150
+        self.height = 50
+        
+        self.minValue = -1024
+        self.maxValue = 1024
+        self.value = 0
+        self.step = 0.5
+        self.showNavigation = True
         
     ## Handles the mouse up event of the inc-Button.
     #
     #
     def _onIncUp(self,ev):
-        self.value=self.value+self.step
+        self.value += self.step
 
     ## Handles the up mouse event of the dec-Button.
     #
     #
     def _onDecUp(self,ev):
-        self.value=self.value-self.step
+        self.value -= self.step
         
-    ## Set/Get the label object.
+    ## Get the label object.
     #
     #
     @property
     def label(self):
-        return self._label
+        return self._bar
     
     ## Set/Get the minimum value.
     #
@@ -71,7 +85,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     def minValue(self):
         return self._minValue
     
-    ##
+    ## 
     #
     #
     @minValue.setter
@@ -79,6 +93,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         if self.value < value:
             self.value = max(self.value,value)
         self._minValue = value
+        self._bar.minValue = value
     
     ## Set/Get the maximum value.
     #
@@ -95,6 +110,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         if self.value > value:
             self.value = min(self.value,value)
         self._maxValue = value
+        self._bar.maxValue = value
 
         
     ## Set/Get the current value.
@@ -113,7 +129,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         if self.value != value:
             self._invalidate()
         self._value = value
-        self._label.value = value
+        self._bar.value = value
 
     ## Set/Get the value by which the sliders value is incremented
     #  or decrimented by clicking a the navigation button.
@@ -137,6 +153,27 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     def showNavigation(self):
         return self._showNavigation
     
+    def _barMouseDown(self,ev):
+        self._barDownPosition = ev.position
+        self.window.onMouseMove.add(self._wndMouseMove)
+        self.window.onMouseUp.add(self._wndMouseUp)
+        
+    def _wndMouseMove(self,ev):
+        ev.stopPropagation()
+        delta = ev.x-self._barDownPosition[0]
+        treshold = 1
+        if delta < -treshold:
+            self.value -= self.step
+            self._barDownPosition = ev.position
+        elif delta > treshold:
+            self.value += self.step
+            self._barDownPosition = ev.position
+    
+    def _wndMouseUp(self,ev):
+        ev.stopPropagation()
+        self.window.onMouseMove.remove(self._wndMouseMove)
+        self.window.onMouseUp.remove(self._wndMouseUp)
+    
     ##
     #
     #
@@ -148,42 +185,13 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
             if value:
                 self.addChild(self._decButton,0,0)
                 self.addChild(self._incButton,2,0)
-                lm.columnsWidths = [self.height,0,self.height]
+                lm.columnWidths = [self.height,0,self.height]
             else:
                 self.removeChild(self._decButton)
                 self.removeChild(self._incButton)
-                lm.columnsWidths = [1,0,1]                
+                lm.columnWidths = [1,0,1]
             self._invalidate()
         
         self._showNavigation = value
         
-        
-    def _redraw(self, surface, forceRedraw=False):
-        
-        if not self.isInvalide():
-            if not forceRedraw:
-                return
-        
-        #print("Pane::_redraw")
-        pos = self.position
-        
-        # we paint on our own surface
-        # not on the parent's surface
-        _surface = self._surface
-        theme = biui.getTheme()
-        theme.drawNumberSliderBeforeChildren(self,_surface)
-
-        forceRedraw = self.isInvalide() or forceRedraw
-        # We draw all Children on our own surface        
-        for c in self._children:
-            c._redraw(_surface,forceRedraw)
-                    
-        theme.drawNumberSliderAfterChildren(self,_surface)
-        
-        # Now we copy the visible area 
-        # of our own surface
-        # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.width,self.height))
-        
-        self._isInvalide = False
         

@@ -3,7 +3,7 @@ import biui
 ##
 #
 #
-class EventManager (object):
+class EventManager():
 
 	##
 	#

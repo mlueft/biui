@@ -9,6 +9,7 @@ class ToggleButton(biui.Button.Button):
         super().__init__()
         self._state = biui.ButtonStates.NORMAL
         self._checked = False
+        self.onMouseUp.add(self.__onMouseUp)
     
     ## Set/Get the checked value of the ToggleButton.
     #
@@ -41,10 +42,10 @@ class ToggleButton(biui.Button.Button):
         
         return self._state
             
-    def _onMouseUp(self,ev):
+    def __onMouseUp(self,ev):
         self._recordDirtyRect()
         self._checked = not self._checked
         self._invalidate()
-        super()._onMouseUp(ev)
+        #super()._onMouseUp(ev)
         
         

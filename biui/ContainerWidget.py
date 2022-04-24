@@ -21,6 +21,9 @@ class ContainerWidget(biui.Widget.Widget):
         #
         if doSurface:
             self._surface = biui.createSurface(self.size)
+        # A reference to the theme function which is used to draw the widget forground.
+        theme = biui.getTheme()
+        self._themeForegroundfunction = theme.drawEmpty
         
     ## Returns all child elements.
     #
@@ -153,7 +156,7 @@ class ContainerWidget(biui.Widget.Widget):
         return result
     
     def _calculateLayout(self):
-        
+        super()._calculateLayout()
         mySize = self.size
         
         # If necassary create a new surface.
@@ -168,13 +171,60 @@ class ContainerWidget(biui.Widget.Widget):
             c._calculateLayout()
         
         self._layoutManager._calculateLayout(mySize)
-    
-    def _redraw(self, surface, forceRedraw=False ):
+
+    ## This version doesn't work yet, because the subsurface
+    #  must be completely inside the surface.
+    #
+    #
+    def _redrawSub(self, surface, forceRedraw=False ):
+
+        if not self.isInvalide():
+            if not forceRedraw:
+                return
+        
+        # we paint on a subsurface to
+        # get sure no child paints over the container edges.
+        _surface = surface.subsurface((self.x,self.y,self.width,self.height))
+
+        theme = biui.getTheme()
+        self._themeBackgroundfunction(self,_surface)
 
         forceRedraw = self.isInvalide() or forceRedraw
+        # We draw all Children on our own surface        
         for c in self._children:
-            c._redraw(self._surface,forceRedraw)
-                
+            c._redraw(_surface,forceRedraw)
+                    
+        self._themeForegroundfunction(self,_surface)
+        
+        self._isInvalide = False
+            
+    def _redraw(self, surface, forceRedraw=False ):
+
+        if not self.isInvalide():
+            if not forceRedraw:
+                return
+        
+        #print("Pane::_redraw")
+        pos = self.position
+        
+        # we paint on our own surface
+        # not on the parent's surface
+        _surface = self._surface
+        theme = biui.getTheme()
+        self._themeBackgroundfunction(self,_surface)
+
+        forceRedraw = self.isInvalide() or forceRedraw
+        # We draw all Children on our own surface        
+        for c in self._children:
+            c._redraw(_surface,forceRedraw)
+                    
+        self._themeForegroundfunction(self,_surface)
+        
+        # Now we copy the visible area 
+        # of our own surface
+        # on the parent's surface
+        surface.blit(_surface,pos,(0,0,self.width,self.height))
+        
         self._isInvalide = False
         
     def _onMouseDown(self,ev):
@@ -194,7 +244,16 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseUp(ev)
                 break
-        
+
+    def _onMouseClick(self,ev):
+        super()._onMouseClick(ev)
+        if ev._stopPropagation:
+            return
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onMouseClick(ev)
+                break
+                    
     def _onMouseWheel(self,ev):
         super()._onMouseWheel(ev)
         if ev._stopPropagation:

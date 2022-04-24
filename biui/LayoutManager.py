@@ -177,6 +177,10 @@ class LayoutManager():
     def getColumnWidth(self,index):
         return self._columnWidths[index]
     
+    def debug(self):
+        print(self._columnWidths)
+        print(self.rowHeights)
+        
     ## Calculates the absolute values of cols
     #  in relation to size.
     #  TODO: A column width of 0 on purpose isn't possible.

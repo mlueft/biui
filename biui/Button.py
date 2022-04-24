@@ -7,6 +7,9 @@ class Button(biui.ContainerWidget.ContainerWidget):
     
     def __init__(self):
         super().__init__()
+        theme = biui.getTheme()
+        self._themeBackgroundfunction = theme.drawButtonBeforeChildren
+        self._themeForegroundfunction = theme.drawButtonAfterChildren
         self.width = 150
         self.height = 30
         self._state = biui.ButtonStates.NORMAL
@@ -18,6 +21,11 @@ class Button(biui.ContainerWidget.ContainerWidget):
         
         self._layoutManager.columnWidths = [1,0,1]
         self._layoutManager.rowHeights = [0]
+        
+        self.onMouseEnter.add(self.__onMouseEnter)
+        self.onMouseLeave.add(self.__onMouseLeave)
+        self.onMouseDown.add(self.__onMouseDown)
+        self.onMouseUp.add(self.__onMouseUp)
         
     def getChildAt(self, pos):
         
@@ -89,58 +97,23 @@ class Button(biui.ContainerWidget.ContainerWidget):
     def value(self,value):
         self._label.value = value
 
-    def _onMouseEnter(self,ev):
+    def __onMouseEnter(self,ev):
         self._recordDirtyRect()
         self._state = biui.ButtonStates.OVER
         self._invalidate()
-        super()._onMouseEnter(ev)
         
-    def _onMouseLeave(self,ev):
+    def __onMouseLeave(self,ev):
         self._recordDirtyRect()
         self._state = biui.ButtonStates.NORMAL
         self._invalidate()
-        super()._onMouseLeave(ev)
         
-    def _onMouseDown(self,ev):
+    def __onMouseDown(self,ev):
         self._recordDirtyRect()
         self._state = biui.ButtonStates.DOWN
         self._invalidate()
-        super()._onMouseDown(ev)
                 
-    def _onMouseUp(self,ev):
+    def __onMouseUp(self,ev):
         self._recordDirtyRect()
         self._state = biui.ButtonStates.OVER
         self._invalidate()
-        super()._onMouseUp(ev)
-        
-    def _onMouseMove(self,ev):
-        super()._onMouseMove(ev)
-        
-    def _redraw(self, surface, forceRedraw=False):
-        
-        if not self.isInvalide():
-            if not forceRedraw:
-                return
-        
-        #print("Pane::_redraw")
-        pos = self.position
-        
-        # we paint on our own surface
-        # not on the parent's surface
-        _surface = self._surface
-        theme = biui.getTheme()
-        theme.drawButtonBeforeChildren(self,_surface)
-
-        # We draw all Children on our own surface        
-        for c in self._children:
-            c._redraw(_surface)
-                    
-        theme.drawButtonAfterChildren(self,_surface)
-        
-        # Now we copy the visible area 
-        # of our own surface
-        # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.width,self.height))
-        
-        self._isInvalide = False
-        
+               

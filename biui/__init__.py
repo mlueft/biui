@@ -1,5 +1,5 @@
 import os
-
+from time import time
 import pygame
 from pygame import surface
 
@@ -29,6 +29,7 @@ import biui.Font
 import biui.NumberSlider
 import biui.ImageLibrary
 import biui.Spacer
+import biui.Progressbar
 
 Event = biui.Event.Event
 MouseEvent = biui.MouseEvent.MouseEvent
@@ -53,7 +54,10 @@ Font = biui.Font.Font
 NumberSlider = biui.NumberSlider.NumberSlider
 ImageLibrary = biui.ImageLibrary.ImageLibrary
 Spacer = biui.Spacer.Spacer
+Progressbar = biui.Progressbar.Progressbar
 
+#
+__clickTime = 0.25
 #
 __themeFolder = "themes"
 
@@ -76,6 +80,9 @@ __hoverWidget = None
 ## Stores all window objects.
 #  Pygame allows just one window.
 __windowSurfaces = []
+
+# Stores the time of the mouseDown event.
+__mouseDownTime = None
 
 ## Initializes pygame. Can be called more than once.
 #  It takes care about multiple calls.
@@ -170,7 +177,7 @@ def getTheme():
 #  Cares about event distribution and drawing of the GUI.
 #
 def main():
-    global __windowSurfaces, __hoverWidget
+    global __windowSurfaces, __hoverWidget, __mouseDownTime, __clickTime
         
     # ++++++++++++++++++++++++++++++++++++++++++++++
     #                                 Event handling
@@ -204,6 +211,7 @@ def main():
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Filter wheel action.
             if event.button not in [4,5]:
+                __mouseDownTime = time()
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
                 receiver = biui.__getChildAt(event.pos)
                 ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
@@ -213,12 +221,17 @@ def main():
         elif event.type == pygame.MOUSEBUTTONUP:
             # Filter wheel action.
             if event.button not in [4,5]:
+                #print(time()-__mouseDownTime)                
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
                 receiver = biui.__getChildAt(event.pos)
                 ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
+                if time()-__mouseDownTime < __clickTime:
+                    for w in __windowSurfaces:
+                        w._onMouseClick(ev)
+
                 for w in __windowSurfaces:
                     w._onMouseUp(ev)
-            
+                        
         elif event.type == pygame.MOUSEWHEEL:
             mpos = pygame.mouse.get_pos()
             bStates = pygame.mouse.get_pressed(num_buttons=5)
@@ -248,7 +261,7 @@ def main():
             #print( "keyup: "+ str(event) )
             for w in __windowSurfaces:
                 ev = biui.KeyEvent(
-                    w.
+                    w,
                     event.unicode,
                     event.key,
                     event.scancode,
@@ -358,7 +371,7 @@ def main():
         if __SHOWUPDATEBOXES:
             for r in dr:
                 pygame.draw.rect(w._getSurface(),(255,0,0),r,1)
-                pygame.display.update()
+                #pygame.display.update()
     
     if len(dr) >0:            
         pygame.display.update(dr)

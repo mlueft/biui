@@ -3,7 +3,7 @@ import biui
 ## Represents a mouse event for onMouseDown and so on.
 #
 #
-class MouseEvent(biui.Event.Event):
+class MouseEvent(biui.DOMEvent.DOMEvent):
     
     ##
     #
@@ -14,14 +14,6 @@ class MouseEvent(biui.Event.Event):
         self.__position = position
         self.__wheelX = wheelX
         self.__wheelY = wheelY
-        self._stopPropagation = False
-        
-    ## Stops the handling of the event in the DOM structure.
-    #  So the event is not propagated to the next child
-    #  elements in the DOM.
-    #
-    def stopPropagation(self):
-        self._stopPropagation = True
         
     ## Position as tuple with x and y.
     #  @return         A tuple with the position of the action.

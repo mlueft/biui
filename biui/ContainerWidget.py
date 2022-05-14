@@ -228,89 +228,254 @@ class ContainerWidget(biui.Widget.Widget):
         self._isInvalide = False
         
     def _onMouseDown(self,ev):
+        
+        # phase down
         super()._onMouseDown(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
             if c.hasChild(ev.eventSource):
                 c._onMouseDown(ev)
+                childFound = True
                 break
         
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onMouseDown(ev)
+        
     def _onMouseUp(self,ev):
+        
+        # phase down
         super()._onMouseUp(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
             if c.hasChild(ev.eventSource):
                 c._onMouseUp(ev)
+                childFound = True
                 break
 
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onMouseUp(ev)
+            
     def _onMouseClick(self,ev):
+        # phase down
         super()._onMouseClick(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
             if c.hasChild(ev.eventSource):
                 c._onMouseClick(ev)
+                childFound = True
                 break
                     
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onMouseClick(ev)
+                    
     def _onMouseWheel(self,ev):
+        
+        # phase down
         super()._onMouseWheel(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
             if c.hasChild(ev.eventSource):
                 c._onMouseWheel(ev)
+                childFound = True
                 break
         
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onMouseWheel(ev)
+            
     def _onMouseEnter(self,ev):
+        
+        # phase down
         super()._onMouseEnter(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
             if c.hasChild(ev.eventSource):
                 c._onMouseEnter(ev)
+                childFound = True
                 break
         
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onMouseEnter(ev)
+            
     def _onMouseLeave(self,ev):
+        
+        # phase down
         super()._onMouseLeave(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
             if c.hasChild(ev.eventSource):
                 c._onMouseLeave(ev)
+                childFound = True
                 break
         
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onMouseLeave(ev)
+            
     def _onMouseMove(self,ev):
+        
+        # phase down
         super()._onMouseMove(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
             if c.hasChild(ev.eventSource):
                 c._onMouseMove(ev)
+                childFound = True
                 break
         
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onMouseMove(ev)
+                    
     def _onKeyDown(self,ev):
+        
+        #phase down
         super()._onKeyDown(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
-            c._onKeyDown(ev)
+            if c.hasChild(ev.eventSource):
+                c._onKeyDown(ev)
+                childFound = True
+                break
+            
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onKeyDown(ev)
             
     def _onKeyUp(self,ev):
+        
+        #phase down
         super()._onKeyUp(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
-            c._onKeyUp(ev)
+            if c.hasChild(ev.eventSource):
+                c._onKeyUp(ev)
+                childFound = True
+                break
+        
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onKeyUp(ev)
     
     def _onTextInput(self,ev):
+        
+        #phase down
         super()._onTextInput(ev)
         if ev._stopPropagation:
             return
+        
+        childFound = False
         for c in self._children:
-            c._onTextInput(ev)
+            if c.hasChild(ev.eventSource):
+                c._onTextInput(ev)
+                childFound = True
+                break
                 
+        # if no child has got the event.
+        # the event has reached the deepest level.
+        if not childFound:
+            # we set event phase to up!
+            ev._nextPhase()
+        else:
+            # pahse up
+            if ev._stopPropagation:
+                return
+            super()._onTextInput(ev)
+                            
     def _invalidate(self):
         for c in self._children:
             c._invalidate()

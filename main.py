@@ -4,14 +4,21 @@ import biui
 
 
 def p0Click(ev):
-    print("p0.click")
-    #ev.stopPropagation()
+    print("p0.click:"+str(ev.phase))
+    
 
 def p1Click(ev):
-    print("p1.click")
+    print("p1.click:"+str(ev.phase))
     
+    if ev.phase == biui.EventPhase.DOWN:
+        #ev.stopPropagation()
+        pass
+    else:
+        ev.stopPropagation()
+        
 def p2Click(ev):
-    print("p2.click")
+    print("p2.click:"+str(ev.phase))
+    
     
 def init():
 
@@ -20,9 +27,9 @@ def init():
     ##############################################
     #                                       WINDOW
     ##############################################
-    wnd = biui.Window(800,600)
+    wnd = biui.Window(1500,800)
     
-    if False:
+    if True:
         ##############################################
         #                                      Panel 0
         ##############################################
@@ -76,7 +83,15 @@ def init():
         ns.step = 1
         ns.label.format = "{} %"
         pane0.addChild(ns)
-                    
+                 
+        #
+        # Checkbox
+        #
+        cb = biui.Checkbox()
+        cb.x = 10
+        cb.y = 200
+        
+        pane0.addChild(cb)
         
         ##############################################
         #                                      PANEL 1
@@ -193,7 +208,7 @@ def init():
         pane3_1.addChild(pane3_2)
             
 
-    if True:
+    if False:
         ##############################################
         #                                      PANEL 4
         ##############################################
@@ -207,12 +222,8 @@ def init():
           
         grid.addFlexPane(pane)
         
-        wnd.addChild(grid,1,1)
-        
-        lm = wnd.layoutManager
-        lm.columnWidths = [20,0,20]
-        lm.rowHeights = [20,0,20]
-        
+        wnd.addChild(grid)
+                
 def main():
 
     # Temporary main loop

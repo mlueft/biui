@@ -3,7 +3,9 @@ from time import time
 import pygame
 from pygame import surface
 
+import biui.EventPhase
 import biui.Event
+import biui.DOMEvent
 import biui.MouseEvent
 import biui.KeyEvent
 import biui.EventTypes
@@ -30,7 +32,10 @@ import biui.NumberSlider
 import biui.ImageLibrary
 import biui.Spacer
 import biui.Progressbar
+import biui.Checkbox
 
+EventPhase = biui.EventPhase.EventPhase
+DOMEvent = biui.DOMEvent.DOMEvent
 Event = biui.Event.Event
 MouseEvent = biui.MouseEvent.MouseEvent
 KeyEvent = biui.KeyEvent.KeyEvent
@@ -55,6 +60,7 @@ NumberSlider = biui.NumberSlider.NumberSlider
 ImageLibrary = biui.ImageLibrary.ImageLibrary
 Spacer = biui.Spacer.Spacer
 Progressbar = biui.Progressbar.Progressbar
+Checkbox = biui.Checkbox.Checkbox
 
 #
 __clickTime = 0.25
@@ -76,6 +82,9 @@ __lastMousePos = None
 
 ## Stored a reference to the Widget the mouse is over.
 __hoverWidget = None
+
+## Stored a reference to the Widget with the focus.
+__focusedWidget = None
 
 ## Stores all window objects.
 #  Pygame allows just one window.

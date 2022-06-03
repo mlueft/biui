@@ -1,4 +1,3 @@
-import pygame
 import biui
 
 class Label(biui.Widget.Widget):

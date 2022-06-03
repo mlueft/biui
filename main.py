@@ -14,15 +14,18 @@ def p1Click(ev):
         #ev.stopPropagation()
         pass
     else:
-        ev.stopPropagation()
+        #ev.stopPropagation()
+        pass
         
 def p2Click(ev):
     print("p2.click:"+str(ev.phase))
     
+def p3Click(ev):
+    print("p3.click:"+str(ev.phase))
     
 def init():
 
-    biui.initPyGame()
+    biui.init()
     
     ##############################################
     #                                       WINDOW
@@ -207,7 +210,28 @@ def init():
         pane3_2.onMouseClick.add(p2Click)
         pane3_1.addChild(pane3_2)
             
+        button0 = biui.Label()
+        button0.format = "{:,} mm"
+        button0.value = 1000
+        #button0.onMouseUp.add(_test.upHandler)
+        button0.x = 5
+        button0.y = 10
+        button0.width = 100
+        button0.height = 30
+        button0.onMouseClick.add(p3Click)
+        pane3_1.addChild(button0)
 
+        button0 = biui.Button()
+        button0.format = "{:,} mm"
+        button0.value = 1000
+        #button0.onMouseUp.add(_test.upHandler)
+        button0.x = 5
+        button0.y = 50
+        button0.width = 100
+        button0.height = 30
+        button0.onMouseClick.add(p3Click)
+        pane3_1.addChild(button0)
+        
     if False:
         ##############################################
         #                                      PANEL 4

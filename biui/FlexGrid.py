@@ -322,11 +322,11 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
              
             # neighbours of spacer with left > spacer.right
             # are moved to newSpacer.
-            for n in spacer.leftNeighbours:
+            for n in list(spacer.leftNeighbours):
                 if n.left > spacer.right:
                     self.__addSpacerBottom(n,newSpacer)
                 
-            for n in spacer.rightNeighbours:
+            for n in list(spacer.rightNeighbours):
                 if n.left > spacer.right:
                     self.__addSpacerTop(n,newSpacer)
     
@@ -401,15 +401,12 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
             
             # neighbours of spacer with top > spacer.bottom
             # are moved to newSpacer.
-            for n in spacer.leftNeighbours:
+            for n in list(spacer.leftNeighbours):
                 if n.top > spacer.bottom:
-                    print("right")
-                    print(n)
                     self.__addSpacerRight(n,newSpacer)
                 
-            for n in spacer.rightNeighbours:
+            for n in list(spacer.rightNeighbours):
                 if n.top > spacer.bottom:
-                    print("left")
                     self.__addSpacerLeft(n,newSpacer)
                     
     ## Handles a joinUp event of a child FlexPanel.

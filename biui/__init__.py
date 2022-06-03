@@ -75,7 +75,7 @@ __theme = None
 __SHOWUPDATEBOXES = False
 
 # Stores if pygame is initialized.
-__pygame_initialized__ = False
+__initialized__ = False
 
 # Stores the last known mouse position
 __lastMousePos = None
@@ -93,15 +93,15 @@ __windowSurfaces = []
 # Stores the time of the mouseDown event.
 __mouseDownTime = None
 
-## Initializes pygame. Can be called more than once.
+## Initializes biui and sub systems. Can be called more than once.
 #  It takes care about multiple calls.
 #
-def initPyGame():
-    global __pygame_initialized__
-    if __pygame_initialized__ == True:
+def init():
+    global __initialized__
+    if __initialized__ == True:
         return 
     pygame.init()
-    __pygame_initialized__ = True
+    __initialized__ = True
  
 ## Creates a pygame window object and returns it.
 #  It for internal use only. Don't call it.
@@ -111,7 +111,7 @@ def initPyGame():
 #
 def createWindow(window):
     global __windowSurfaces
-    biui.initPyGame()
+    biui.init()
     sf = pygame.display.set_mode( window.size, pygame.RESIZABLE, vsync=1 )
     return sf
 
@@ -122,7 +122,7 @@ def createWindow(window):
 #  @return              A pygame surface
 #
 def createSurface(size):
-    biui.initPyGame()
+    biui.init()
     sf = pygame.surface.Surface(size)
     sf = sf.convert_alpha()
     sf.fill( pygame.Color(0, 0, 0, 0) )

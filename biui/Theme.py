@@ -115,17 +115,6 @@ class Theme:
     def drawFlexPaneBeforeChildren(self, widget, surface):
         pygame.draw.rect(
             surface,
-            (0,150+random()*20,0),
-            (
-                0,
-                0,
-                widget.width,
-                widget.height
-            )
-        )
-        return
-        pygame.draw.rect(
-            surface,
             (55,55,55),
             (
                 0,
@@ -140,7 +129,6 @@ class Theme:
     #  top most like border
     #
     def drawFlexPaneAfterChildren(self, widget, surface):
-        return
         pygame.draw.rect(
             surface,
             (80,80,80),
@@ -165,7 +153,7 @@ class Theme:
     #
     #
     def drawFlexSpacer(self, widget, surface):
-        #return
+        return
         pygame.draw.rect(
             surface,
             (50+random()*205,0,0),
@@ -362,6 +350,31 @@ class Theme:
     #
     #######################################################
         
+    ## Is called before the child objects are drawn.
+    #  So, it's useed to draw the background.
+    # 
+    def drawCheckboxBeforeChildren(self, widget, surface):
+        state = widget.state
+
+        if state == biui.ButtonStates.OVER:
+            name = "checkbox_hover_bg.png"
+        elif state == biui.ButtonStates.DOWN:
+            name = "checkbox_hover_bg.png"
+        elif state == biui.ButtonStates.CHECKED:
+            name = "checkbox_checked_bg.png"
+        else:
+            name = "checkbox_normal_bg.png"
+                    
+        name = os.path.join(self.__themeFolder ,name)
+        img = self.__lib.getImage(name)
+        surface.blit(img,(
+            0,
+            widget.height/2-img.get_height()/2,
+            img.get_width(),
+            img.get_height()
+        ))
+        
+        # TODO: If checked we draw a symbol on it
     
     #######################################################
     #

@@ -1,5 +1,4 @@
 import biui
-from pexpect import expect
 
 ## Base class for all container widgets.
 #
@@ -239,6 +238,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseDown(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
         
         # if no child has got the event.
@@ -264,6 +267,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseUp(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
 
         # if no child has got the event.
@@ -288,6 +295,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseClick(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
                     
         # if no child has got the event.
@@ -313,6 +324,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseWheel(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
         
         # if no child has got the event.
@@ -338,6 +353,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseEnter(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
         
         # if no child has got the event.
@@ -363,6 +382,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseLeave(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
         
         # if no child has got the event.
@@ -388,6 +411,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onMouseMove(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
         
         # if no child has got the event.
@@ -413,6 +440,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onKeyDown(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
             
         # if no child has got the event.
@@ -438,6 +469,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onKeyUp(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
         
         # if no child has got the event.
@@ -463,6 +498,10 @@ class ContainerWidget(biui.Widget.Widget):
             if c.hasChild(ev.eventSource):
                 c._onTextInput(ev)
                 childFound = True
+                if c == ev.eventSource:
+                    # we set event phase to up!
+                    # This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
                 break
                 
         # if no child has got the event.

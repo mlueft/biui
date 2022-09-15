@@ -617,7 +617,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     def __myPaneMouseUp(self, ev):
         
         s = ev.eventSource
-        print(s)
+        #print(s)
         #print( "{},{},{},{}".format(s.left,s.top,s.right,s.bottom) )
         return 
     

@@ -5,7 +5,7 @@ import biui
 #
 class ContainerWidget(biui.Widget.Widget):
     
-    def __init__(self,doSurface=True):
+    def __init__(self):
         super().__init__()
         #
         self._children = []
@@ -16,10 +16,7 @@ class ContainerWidget(biui.Widget.Widget):
         #
         self.onChildRemoved = biui.EventManager()
         #
-        self._recreateSurface = False
-        #
-        if doSurface:
-            self._surface = biui.createSurface(self.size)
+        self._texture = None
         # A reference to the theme function which is used to draw the widget forground.
         theme = biui.getTheme()
         self._themeForegroundfunction = theme.drawEmpty
@@ -121,32 +118,6 @@ class ContainerWidget(biui.Widget.Widget):
     def layoutManager(self, value):
         self._layoutManager = value
         
-    @property
-    def width(self):
-        #TODO: call super
-        return self._width
-    
-    @width.setter
-    def width(self, value):
-        if value > self._width:
-            self._recreateSurface = True
-        super(biui.Widget.Widget, self.__class__).__thisclass__.width.__set__(self,value)
-        #super().width = value
-        #self._surface = biui.createSurface(self.getSize())
-    
-    @property    
-    def height(self):
-        #TODO: call super
-        return self._height
-    
-    @height.setter
-    def height(self, value):
-        if value > self._height:
-            self._recreateSurface = True
-        super(biui.Widget.Widget, self.__class__).__thisclass__.height.__set__(self,value)
-        #super().setHeight(value)
-        #self._surface = biui.createSurface(self.getSize())
-    
     def _getDirtyRectangles(self):
         result = self._dirtyRects.copy()
         for c in self._children:
@@ -158,14 +129,6 @@ class ContainerWidget(biui.Widget.Widget):
         super()._calculateLayout()
         mySize = self.size
         
-        # If necassary create a new surface.
-        # TODO: Is it cheaper to hold a big
-        # temporary surfacee in biui than
-        # create a new one continously?
-        if self._recreateSurface:
-            self._surface = biui.createSurface(mySize)
-            self._recreateSurface = False
-            
         for c in self._children:
             c._calculateLayout()
         
@@ -175,54 +138,47 @@ class ContainerWidget(biui.Widget.Widget):
     #  must be completely inside the surface.
     #
     #
-    def _redrawSub(self, surface, forceRedraw=False ):
+
+    def _redraw(self, texture, forceRedraw=False ):
 
         if not self.isInvalide():
             if not forceRedraw:
-                return
+                #return
+                pass
         
-        # we paint on a subsurface to
-        # get sure no child paints over the container edges.
-        _surface = surface.subsurface((self.x,self.y,self.width,self.height))
-
-        theme = biui.getTheme()
-        self._themeBackgroundfunction(self,_surface)
-
-        forceRedraw = self.isInvalide() or forceRedraw
-        # We draw all Children on our own surface        
-        for c in self._children:
-            c._redraw(_surface,forceRedraw)
-                    
-        self._themeForegroundfunction(self,_surface)
-        
-        self._isInvalide = False
+        wnd = self.window
+        if self._texture == None:
+            self._texture = biui.DL.createTexture(
+                wnd.renderer,
+                self.width,
+                self.height
+            )
             
-    def _redraw(self, surface, forceRedraw=False ):
-
-        if not self.isInvalide():
-            if not forceRedraw:
-                return
-        
-        #print("Pane::_redraw")
         pos = self.position
         
         # we paint on our own surface
         # not on the parent's surface
-        _surface = self._surface
+        _texture = self._texture
         theme = biui.getTheme()
-        self._themeBackgroundfunction(self,_surface)
+        self._themeBackgroundfunction(self.window.renderer,self,_texture)
 
         forceRedraw = self.isInvalide() or forceRedraw
         # We draw all Children on our own surface        
         for c in self._children:
-            c._redraw(_surface,forceRedraw)
+            c._redraw(_texture,forceRedraw)
                     
-        self._themeForegroundfunction(self,_surface)
+        self._themeForegroundfunction(self.window.renderer,self,_texture)
         
         # Now we copy the visible area 
         # of our own surface
         # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.width,self.height))
+        biui.DL.blit(
+            self.window.renderer,
+            texture,
+            _texture,
+            (pos[0],pos[1],self.width,self.height),
+            (0,0,self.width,self.height)
+        )
         
         self._isInvalide = False
         
@@ -518,5 +474,7 @@ class ContainerWidget(biui.Widget.Widget):
     def _invalidate(self):
         for c in self._children:
             c._invalidate()
+        biui.DL.free(self._texture)
+        self._texture = None
         super()._invalidate()
         

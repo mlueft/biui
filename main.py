@@ -1,5 +1,3 @@
-import pygame
-import math
 import biui
 
 
@@ -30,7 +28,7 @@ def init():
     ##############################################
     #                                       WINDOW
     ##############################################
-    wnd = biui.Window(1500,800)
+    wnd = biui.Window(1024,800)
     
     if True:
         ##############################################
@@ -249,13 +247,12 @@ def init():
         wnd.addChild(grid)
                 
 def main():
-
+    init()
     # Temporary main loop
-    clock = pygame.time.Clock()
-    
-    while biui.main():
-        clock.tick(1000)
+    while True:
+        biui.main()
+        pass
         
-init()
+
 if __name__ == "__main__":
     main()

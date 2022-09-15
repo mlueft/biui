@@ -1,6 +1,7 @@
-import pygame
 import biui
 import os
+import sdl2
+
 
 #debug
 from random import random
@@ -14,7 +15,18 @@ class Theme:
         self.__lib = biui.ImageLibrary()
         self.__baseFolder = baseFolder
         self.__themeFolder = None
-        
+      
+    ##
+    #
+    #
+    def quit(self):
+        self.__lib.quit()
+            
+    ##
+    #
+    #
+    def getImageLibrary(self):
+        return self.__lib
     
     ## Sets the current used theme name.
     #
@@ -34,6 +46,7 @@ class Theme:
     #
     #
     def getTextSize(self,widget):
+        return (10,10)
         # TODO: resolve Pygame dependency
         font = pygame.font.SysFont(
             widget.font.name,
@@ -46,11 +59,11 @@ class Theme:
             widget.color
         )
         
-        return ( sf.get_width(),sf.get_height())        
+        return ( sf.contents.w,sf.contents.h)        
         
     ## Draws nothing.
     # 
-    def drawEmpty(self, widget, surface):
+    def drawEmpty(self, renderer, widget, texture):
         return
     
     #######################################################
@@ -62,14 +75,14 @@ class Theme:
     ## Is called before the child objects are drawn.
     #  So, it's useed to draw the background.
     #
-    def drawWindowBeforeChildren(self, widget, surface):
-        surface.fill( (66,66,66) )
+    def drawWindowBeforeChildren(self, renderer, widget, texture):
+        biui.DL.fill( renderer,texture, (66,66,66,255) )
 
     ## Is called after the child objects are drawn.
     #  So it's used to draw everything that has to be
     #  top most like border
     #
-    def drawWindowAfterChildren(self, widget, surface):
+    def drawWindowAfterChildren(self, renderer, widget, texture):
         return
     
     #######################################################
@@ -81,9 +94,10 @@ class Theme:
     ## Is called before the window child objects are drawn.
     #  So, it's useed to draw the background.
     # 
-    def drawFlexGridBeforeChildren(self, widget, surface):
-        pygame.draw.rect(
-            surface,
+    def drawFlexGridBeforeChildren(self, renderer, widget, texture):
+        biui.DL.drawRect(
+            renderer,
+            texture,
             (53,53,53),
             (
                 0,
@@ -97,7 +111,7 @@ class Theme:
     #  So it's used to draw everything that has to be
     #  top most like border
     #
-    def drawFlexGridAfterChildren(self, widget, surface):
+    def drawFlexGridAfterChildren(self, renderer, widget, texture):
         return
         
     #######################################################
@@ -112,9 +126,10 @@ class Theme:
     ## Is called before the child objects are drawn.
     #  So, it's useed to draw the background.
     # 
-    def drawFlexPaneBeforeChildren(self, widget, surface):
-        pygame.draw.rect(
-            surface,
+    def drawFlexPaneBeforeChildren(self, renderer, widget, texture):
+        biui.DL.drawRect(
+            renderer,
+            texture,
             (55,55,55),
             (
                 0,
@@ -128,9 +143,10 @@ class Theme:
     #  So it's used to draw everything that has to be
     #  top most like border
     #
-    def drawFlexPaneAfterChildren(self, widget, surface):
-        pygame.draw.rect(
-            surface,
+    def drawFlexPaneAfterChildren(self, renderer, widget, texture):
+        biui.DL.drawRect(
+            renderer,
+            texture,
             (80,80,80),
             (
                 0,
@@ -152,10 +168,11 @@ class Theme:
     ## Is called to draw a button.
     #
     #
-    def drawFlexSpacer(self, widget, surface):
+    def drawFlexSpacer(self, renderer, widget, texture):
         return
-        pygame.draw.rect(
-            surface,
+        biui.DL.drawRect(
+            renderer,
+            texture,
             (50+random()*205,0,0),
             (
                 widget.x,
@@ -174,19 +191,33 @@ class Theme:
     ## Is called before the child objects are drawn.
     #  So, it's useed to draw the background.
     # 
-    def drawPaneBeforeChildren(self, widget, surface):
+    def drawPaneBeforeChildren(self, renderer, widget, texture):
         name = os.path.join(self.__themeFolder ,"pane_bg")
-        img = self.__lib.getI9(name,widget.width,widget.height)
-        surface.blit(img,(0,0,img.get_width(),img.get_height()))
+        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
+        #img = self.__lib.getImage(renderer,name,widget.width,widget.height)
+        biui.DL.blit(
+            renderer,
+            texture,
+            img,
+            (0,0,widget.width,widget.height),
+            (0,0,widget.width,widget.height)
+        )
     
     ## Is called after the child objects are drawn.
     #  So it's used to draw everything that has to be
     #  top most like border
     #
-    def drawPaneAfterChildren(self, widget, surface):
-        name = os.path.join(self.__themeFolder ,"button_hover_fg")
-        img = self.__lib.getI9(name,widget.width,widget.height)
-        surface.blit(img,(0,0,img.get_width(),img.get_height()))
+    def drawPaneAfterChildren(self, renderer, widget, texture):
+        
+        name = os.path.join(self.__themeFolder ,"pane_fg")
+        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
+        biui.DL.blit(
+            renderer,
+            texture,
+            img,
+            (0,0,widget.width,widget.height),
+            (0,0,widget.width,widget.height)
+        )
     
     #######################################################
     #
@@ -197,7 +228,7 @@ class Theme:
     ## Is called to draw a button.
     #
     #
-    def drawButtonBeforeChildren(self, widget, surface):
+    def drawButtonBeforeChildren(self, renderer, widget, texture):
         
         state = widget.state
 
@@ -211,13 +242,19 @@ class Theme:
             name = "button_normal_bg"
                     
         name = os.path.join(self.__themeFolder ,name)
-        img = self.__lib.getI9(name,widget.width,widget.height)
-        surface.blit(img,(0,0,img.get_width(),img.get_height()))
+        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
+        biui.DL.blit(
+            renderer,
+            texture,
+            img,
+            (0,0,widget.width,widget.height),
+            (0,0,widget.width,widget.height)
+        )
 
     ##
     #
     #
-    def drawButtonAfterChildren(self, widget, surface):
+    def drawButtonAfterChildren(self, renderer, widget, texture):
 
         state = widget.state
         
@@ -231,8 +268,12 @@ class Theme:
             name = "button_normal_fg"
                     
         name = os.path.join(self.__themeFolder ,name)
-        img = self.__lib.getI9(name,widget.width,widget.height)
-        surface.blit(img,(0,0,img.get_width(),img.get_height()))
+        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
+        biui.DL.blit(
+            renderer,
+            texture,
+            img
+        )
     
     #######################################################
     #
@@ -243,14 +284,14 @@ class Theme:
     ## Is called before the child objects are drawn.
     #  So, it's useed to draw the background.
     # 
-    def drawButtonGroupBeforeChildren(self, widget, surface):
+    def drawButtonGroupBeforeChildren(self, renderer, widget, texture):
         return
     
     ## Is called after the child objects are drawn.
     #  So it's used to draw everything that has to be
     #  top most like border
     #
-    def drawButtonGroupChildren(self, widget, surface):
+    def drawButtonGroupChildren(self, renderer, widget, texture):
         return
         
     #######################################################
@@ -262,10 +303,11 @@ class Theme:
     ## Is called before the child objects are drawn.
     #  So, it's useed to draw the background.
     # 
-    def drawProgressbarBeforeChildren(self, widget, surface):
+    def drawProgressbarBeforeChildren(self, renderer, widget, texture):
         # background
-        pygame.draw.rect(
-            surface,
+        biui.DL.drawRect(
+            renderer,
+            texture,
             (80,80,80),
             (
                 0,
@@ -281,8 +323,9 @@ class Theme:
 
         width = widget.width*(1/((widget.maxValue-widget.minValue)/(widget.value-widget.minValue)))
             
-        pygame.draw.rect(
-            surface,
+        biui.DL.drawRect(
+            renderer,
+            texture,
             (100,100,100),
             (
                 0,
@@ -296,9 +339,10 @@ class Theme:
     #  So it's used to draw everything that has to be
     #  top most like border
     #
-    def drawProgressbarChildren(self, widget, surface):
-        pygame.draw.rect(
-            surface,
+    def drawProgressbarChildren(self, renderer, widget, texture):
+        biui.DL.drawRect(
+            renderer,
+            texture,
             (0,0,0),
             (
                 0,
@@ -325,8 +369,8 @@ class Theme:
     ## 
     #  
     #  
-    def drawLabel(self, widget, surface):
-        
+    def drawLabel(self, renderer, widget, texture):
+        return
         font = pygame.font.SysFont(
             widget.font.name,
             widget.font.size
@@ -338,7 +382,9 @@ class Theme:
             widget.color
         )
         
-        surface.blit(
+        biui.DL.blit(
+            renderer,
+            texture,
             sf,
             widget.position,
             (0,0,widget.width,widget.height)
@@ -353,7 +399,7 @@ class Theme:
     ## Is called before the child objects are drawn.
     #  So, it's useed to draw the background.
     # 
-    def drawCheckboxBeforeChildren(self, widget, surface):
+    def drawCheckboxBeforeChildren(self, renderer, widget, texture):
         state = widget.state
 
         if state == biui.ButtonStates.OVER:
@@ -366,13 +412,25 @@ class Theme:
             name = "checkbox_normal_bg.png"
                     
         name = os.path.join(self.__themeFolder ,name)
-        img = self.__lib.getImage(name)
-        surface.blit(img,(
-            0,
-            widget.height/2-img.get_height()/2,
-            img.get_width(),
-            img.get_height()
-        ))
+        img = self.__lib.getImage(renderer,name)
+        sizeIMG = biui.DL.getTextureSize(img)
+        biui.DL.blit(
+            renderer,
+            texture,
+            img,
+            (
+                0,
+                widget.height/2-sizeIMG[3]/2,
+                sizeIMG[2],
+                sizeIMG[3]
+            ),
+            (
+                0,
+                widget.height/2-sizeIMG[3]/2,
+                sizeIMG[2],
+                sizeIMG[3]
+            )
+        )
         
         # TODO: If checked we draw a symbol on it
     
@@ -385,7 +443,7 @@ class Theme:
     ## Is called to draw a spacer.
     #
     #
-    def drawSpacer(self, widget, surface):
+    def drawSpacer(self, renderer, widget, texture):
         pass
 
         

@@ -1,47 +1,47 @@
-import pygame
 import math
 import biui
 
 sub = None
 wnd = None
 pane3 = None
-b0 = None
-b1 = None
+widget = None
 localPos = None
 
 def main():
-	global wnd, pane3, b0, b1
+	global wnd, pane3, widget
 	
 	##############################################
 	#                                       WINDOW
 	##############################################
-	wnd = biui.Window()
-	wnd.width = 1024
-	wnd.height = 768
+	wnd = biui.Window(1024,768)
 	
+	widget = biui.Pane()
+	widget.width = widget.height = 30
+	widget.x = widget.y = 100
 	
+	wnd.addChild(widget)
 	#
 	# Temporary main loop
 	#
-	clock = pygame.time.Clock()
+	#clock = pygame.time.Clock()
 	
 	radius = 100
 	angle = 0
 	speed = 0.01
-	pos = [80.0,100.0]
 	
-	while biui.main():
-		clock.tick(1000)
+	while True:
 		
 		# movement
-		if False:
-			angle += speed
-			end = (
-				pos[0]+math.cos(angle)*radius,
-				pos[1]+math.sin(angle)*radius
-			)
-			b0.x = end[0]		
-			b0.y = end[1]
+		angle += speed
+		
+		widget.width = 100 + math.cos(angle)*50
+		widget.height = 100 + math.sin(angle)*50
+		widget.x = 300 + math.cos(angle)*200 - widget.width/2
+		widget.y = 300 + math.sin(angle)*200 - widget.height/2
 
+		biui.main()
+		#print( biui.getTheme().getImageLibrary().getSize())
+		#biui.getTheme().getImageLibrary().clearCache()
+		
 if __name__ == "__main__":
 	main()

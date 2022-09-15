@@ -1,4 +1,3 @@
-import pygame
 import biui
 
 ## TODO: Does a file based cache make sense?
@@ -9,12 +8,22 @@ class ImageLibrary():
     
     def __init__(self):
         self.__images = {}
-    
+        self.cacheImagesScaled = True
+        self.cacheImagesOriginal = True
+        self.cacheImagesI9 = True
+        
     ## Returns an I9 of the given width and height.
     #
     #
-    def getI9(self,name,width,height):
+    def getI9(self,renderer,name,width,height):
 
+        hashName = str(hash(name))[1:]
+        
+        # looking for already stored size
+        key = hashName+"_"+str(width)+"x"+str(height)
+        if key in self.__images:
+            return self.__images[key]
+        
         names = [
             name + "_tl.png",
             name + "_tc.png",
@@ -27,42 +36,102 @@ class ImageLibrary():
             name + "_br.png"
         ]
     
-        tgt = biui.createSurface((width,height))
+        tgt = biui.DL.createTexture(renderer,width,height)
         
-        tl = self.getImage(names[0])
-        tgt.blit(tl,(0,0,tl.get_width(),tl.get_height()))
+        tl = self.getImage(renderer,names[0])
+        sizeTL = biui.DL.getTextureSize(tl)
+        biui.DL.blit(
+            renderer,
+            tgt,
+            tl,
+            sizeTL,
+            sizeTL         
+        )
         
-        tr = self.getImage(names[2])
-        tgt.blit(tr,(width-tr.get_width(),0,tr.get_width(),tr.get_height()))
+        tr = self.getImage(renderer,names[2])
+        sizeTR = biui.DL.getTextureSize(tr)
+        biui.DL.blit(
+            renderer,
+            tgt,
+            tr,
+            (width-sizeTR[2],0,sizeTR[2],sizeTR[3])
+        )
         
-        size = (width-tl.get_width()-tr.get_width(),tl.get_height())
-        tc = self.getImage(names[1],size[0],size[1])
-        tgt.blit(tc,(tl.get_width(),0,size[0],size[1]))
+        sizeTC = (0,0,width-sizeTL[2]-sizeTR[2],sizeTL[3])
+        tc = self.getImage(renderer,names[1],sizeTC[2],sizeTC[3])
+        biui.DL.blit(
+            renderer,
+            tgt,
+            tc,
+            (sizeTL[2],0,sizeTC[2],sizeTC[3]),
+            sizeTC
+        )
         
+        bl = self.getImage(renderer,names[6])
+        sizeBL = biui.DL.getTextureSize(bl)
+        biui.DL.blit(
+            renderer,
+            tgt,
+            bl,
+            (0,height-sizeBL[3],sizeBL[2],sizeBL[3]),
+            sizeBL
+        )
         
-        bl = self.getImage(names[6])
-        tgt.blit(bl,(0,height-bl.get_height(),bl.get_width(),bl.get_height()))
+        br = self.getImage(renderer,names[8])
+        sizeBR = biui.DL.getTextureSize(br)
+        biui.DL.blit(
+            renderer,
+            tgt,
+            br,
+            (width-sizeBR[2],height-sizeBR[3],sizeBR[2],sizeBR[3]),
+            sizeBR
+            
+        )
         
-        br = self.getImage(names[8])
-        tgt.blit(br,(width-br.get_width(),height-br.get_height(),br.get_width(),br.get_height()))
-        
-        size = (width-bl.get_width()-br.get_width(),bl.get_height())
-        bc = self.getImage(names[7],size[0],size[1])
-        tgt.blit(bc,(bl.get_width(),height-bc.get_height(),size[0],size[1]))
+        sizeBR = (0,0,width-sizeBL[2]-sizeBR[2],sizeBL[3])
+        bc = self.getImage(renderer,names[7],sizeBR[2],sizeBR[3])
+        biui.DL.blit(
+            renderer,
+            tgt,
+            bc,
+            (sizeBL[2],height-sizeBR[3],sizeBR[2],sizeBR[3]),
+            sizeBR
+        )
 
-
-        size = (tl.get_width(),height-tl.get_height()-bl.get_height())
-        cl = self.getImage(names[3],size[0],size[1])
-        tgt.blit(cl,(0,tl.get_height(),size[0],size[1]))
+        sizeCL = (0,0,sizeTL[2],height-sizeTL[3]-sizeBL[3])
+        cl = self.getImage(renderer,names[3],sizeCL[2],sizeCL[3])
+        biui.DL.blit(
+            renderer,
+            tgt,
+            cl,
+            (0,sizeTL[3],sizeCL[2],sizeCL[3]),
+            sizeCL
+        )
         
-        size = (tr.get_width(),height-tr.get_height()-br.get_height())
-        cr = self.getImage(names[5],size[0],size[1])
-        tgt.blit(cr,(width-cr.get_width(),tr.get_height(),size[0],size[1]))
+        sizeCR = (0,0,sizeTR[2],height-sizeTR[3]-sizeBR[3])
+        cr = self.getImage(renderer,names[5],sizeCR[2],sizeCR[3])
+        biui.DL.blit(
+            renderer,
+            tgt,
+            cr,
+            (width-sizeCR[2],sizeTR[3],sizeCR[2],sizeCR[3]),
+            sizeCR
+        )
         
-        size = (width-tl.get_width()-tr.get_width(),height-tl.get_height()-bl.get_height())
-        cc = self.getImage(names[4],size[0],size[1])
-        tgt.blit(cc,(tl.get_width(),tl.get_height(),size[0],size[1]))
+        sizeCC = (0,0,width-sizeTL[2]-sizeTR[2],height-sizeTL[3]-sizeBL[3])
+        cc = self.getImage(renderer,names[4],sizeCC[2],sizeCC[3])
+        biui.DL.blit(
+            renderer,
+            tgt,
+            cc,
+            (sizeTL[2],sizeTL[3],sizeCC[2],sizeCC[3]),
+            sizeCC
+        )
         
+        # store original
+        if self.cacheImagesI9:
+            self.__images[key] = tgt
+                
         return tgt
         
     ## Loades the given image and returns it scaled
@@ -71,7 +140,7 @@ class ImageLibrary():
     #  the size of the original image is used.
     #
     #
-    def getImage(self,fileName,width=0,height=0):
+    def getImage(self,renderer,fileName,width=0,height=0):
         
         # we cut off the leading "-"
         # TODO: We should not use the absolute path.
@@ -91,12 +160,19 @@ class ImageLibrary():
             imageOriginal = self.__images[key]
             
         if imageOriginal == None:
+
             # load original
-            imageOriginal = pygame.image.load(fileName)
-            imageOriginal = imageOriginal.convert_alpha()
-        
+            imageOriginal = biui.DL.loadImage(fileName,renderer)
+            
+            # TODO: We need to convert all images to the right format
+            #imageOriginal = sdl2.SDL_ConvertSurface(imageOriginalTmp, biui._pixelFormat ,0)
+            
+            if not imageOriginal:
+                print(sdl2.SDL_GetError())
+            
             # store original
-            self.__images[key] = imageOriginal
+            if self.cacheImagesOriginal:
+                self.__images[key] = imageOriginal
             
             # if size isn't given the original is ment.
             if width < 1 and height < 1:
@@ -106,13 +182,39 @@ class ImageLibrary():
         key = hashName+"_"+str(width)+"x"+str(height)
         
         # resize a copy of  the original
-        imageScaled = pygame.transform.scale(imageOriginal, (width,height))
-        imageScaled = imageScaled.convert_alpha()
+        imageScaled = biui.DL.createTexture(renderer,width,height)
+        
+        biui.DL.blit(
+            renderer,
+            imageScaled,
+            imageOriginal,
+            (0,0,width,height)
+        )
+        
+        #if error < 0:
+        #    print(sdl2.SDL_GetError())
+        #    quit()
         
         # store scaled copy
-        self.__images[key] = imageScaled
+        if self.cacheImagesScaled:
+            self.__images[key] = imageScaled
         
         return imageScaled
+    
+    ##
+    #
+    #
+    def clearCache(self):
+        for i  in self.__images.keys():
+            img = self.__images[i]
+            biui.DL.free(img)
+        self.__images.clear()
+        
+    ##
+    #
+    #
+    def getSize(self):
+        return len(self.__images)
     
     ## Just a debug funtion for development.
     #
@@ -121,4 +223,12 @@ class ImageLibrary():
         print("length:"+str(len(self.__images)))
         for i  in self.__images.keys():
             print(i)
-        
+    
+    ##
+    #
+    #
+    def quit(self):
+        for i  in self.__images.keys():
+            img = self.__images[i]
+            biui.DL.free(img)
+            

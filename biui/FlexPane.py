@@ -160,7 +160,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         
         self._acBottomRight.onMouseLeave.remove(self.onActiveCornerBottomRightLeave)
         
-    def _redraw(self, surface, forceRedraw=False):
+    def _redraw(self, texture, forceRedraw=False):
         
         if not self.isInvalide():
             if not forceRedraw:
@@ -169,23 +169,23 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         #print("FlexPane::_redraw")
         pos = self.position
         
-        # we paint on our own surface
-        # not on the parent's surface
-        _surface = self._surface
+        # we paint on our own texture
+        # not on the parent's texture
+        _texture = self._texture
         theme = biui.getTheme()
-        theme.drawFlexPaneBeforeChildren(self,_surface)
+        theme.drawFlexPaneBeforeChildren(self.window.renderer,self,_texture)
 
         forceRedraw = self.isInvalide() or forceRedraw
-        # We draw all Children on our own surface        
+        # We draw all Children on our own texture        
         for c in self._children:
-            c._redraw(_surface,forceRedraw)
+            c._redraw(_texture,forceRedraw)
                     
-        theme.drawFlexPaneAfterChildren(self,_surface)
+        theme.drawFlexPaneAfterChildren(self.window.renderer,self,_texture)
         
         # Now we copy the visible area 
-        # of our own surface
-        # on the parent's surface
-        surface.blit(_surface,pos,(0,0,self.width,self.height))
+        # of our own texture
+        # on the parent's texture
+        texture.blit(_texture,pos,(0,0,self.width,self.height))
         
         self._isInvalide = False        
                 

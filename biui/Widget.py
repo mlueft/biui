@@ -15,9 +15,9 @@ class Widget:
         #Stores the height of the GUI element.
         self._height = 100
         # 
-        self._minWidth = 1
+        self._minWidth = 0
         # 
-        self._minHeight = 1
+        self._minHeight = 0
         # 
         self._maxWidth = 10000
         # 
@@ -96,6 +96,7 @@ class Widget:
     #
     @x.setter
     def x(self, value):
+        value = int(value)
         # record old dirty rect for the old position
         self._recordDirtyRect()
         self._x = value
@@ -116,6 +117,7 @@ class Widget:
     #
     @y.setter
     def y(self, value):
+        value = int(value)
         # record old dirty rect
         self._recordDirtyRect()
         self._y = value
@@ -126,16 +128,16 @@ class Widget:
     #
     @property
     def left(self):
-        return self._x
+        return self.x
     
     ##
     #
     #
     @left.setter
     def left(self,value):
-        r = self._x+self._width
+        r = self.x+self.width
         self.x = value
-        self.width = r-self._x
+        self.width = r-self.x
     
     ## Set/Get the top border of the widget.
     #  Setting this value doesn't change 
@@ -145,16 +147,16 @@ class Widget:
     #
     @property
     def top(self):
-        return self._y
+        return self.y
     
     ##
     #
     #
     @top.setter
     def top(self,value):
-        b = self._y+self._height
+        b = self.y+self.height
         self.y = value
-        self.height = b-self._y
+        self.height = b-self.y
     
     ## Set/Get the right border of the widget.
     #  Setting this value doesn't change 
@@ -164,14 +166,14 @@ class Widget:
     #
     @property
     def right(self):
-        return self._x+self._width
+        return self.x+self.width
     
     ##
     #
     #
     @right.setter
     def right(self,value):
-        self.width = value-self._x
+        self.width = value-self.x
     
     ## Set/Get the bottom border of the widget.
     #  Setting this value doesn't change 
@@ -181,14 +183,14 @@ class Widget:
     #
     @property
     def bottom(self):
-        return self._y+self._height
+        return self.y+self.height
     
     ##
     #
     #
     @bottom.setter
     def bottom(self,value):
-        self.height = value-self._y
+        self.height = value-self.y
     
     ## Return the width of the GUI element.
     #
@@ -205,6 +207,7 @@ class Widget:
     #
     @width.setter     
     def width(self, value):
+        value = int(value)
         # record old dirty rect
         if self._alignment != biui.Alignment.FILL:
             value = min(value, self._maxWidth)
@@ -231,6 +234,7 @@ class Widget:
     #    
     @minWidth.setter   
     def minWidth(self, value):
+        value = int(value)
         self._minWidth = max(1,value)
         if self._minWidth > self._width:
             self.width = self._minWidth
@@ -250,6 +254,7 @@ class Widget:
     #    
     @maxWidth.setter   
     def maxWidth(self, value):
+        value = int(value)
         self._maxWidth = max(1,value)
         if self._maxWidth < self._width:
             self.width = self._maxWidth
@@ -269,6 +274,7 @@ class Widget:
     #
     @height.setter
     def height(self, value):
+        value = int(value)
         # record old dirty rect
         if self._alignment != biui.Alignment.FILL:
             value = min(value, self._maxWidth)
@@ -295,6 +301,7 @@ class Widget:
     #    
     @minHeight.setter   
     def minHeight(self, value):
+        value = int(value)
         self._minHeight = max(1,value)
         if self._minHeight > self._height:
             self.height = self._minHeight
@@ -314,6 +321,7 @@ class Widget:
     #    
     @maxHeight.setter   
     def maxHeight(self, value):
+        value = int(value)
         self._maxHeight = max(1,value)
         if self._maxHeight < self._height:
             self.height = self._maxHeight
@@ -367,11 +375,11 @@ class Widget:
     #  @return            None
     #
     def _invalidate(self):
+        # record new dirty rect
+        self._recordDirtyRect()
         # set flag to recalculate the layout.
         # set flag to redraw widget
         self._isInvalide = True
-        # record new dirty rect
-        self._recordDirtyRect()
     
     ## Returns all dirty rects of the GUI element
     #  since the last call. Calling this funtion clears
@@ -391,10 +399,9 @@ class Widget:
     def window(self):
         parent = self.parent
         while True:
-            newParent = parent.parent
-            if newParent == None:
+            if type(parent) == biui.Window:
                 return parent
-            parent = newParent 
+            parent = parent.parent 
 
     ## Returns the parent GUI element of the GUI element.
     #  Normally it is the main window or a container element
@@ -419,14 +426,14 @@ class Widget:
         
         self._parent = parent
      
-    ## Returns the drawing surface of the GUI element.
-    #  This is for internal use. Just use the surface
+    ## Returns the drawing texture of the GUI element.
+    #  This is for internal use. Just use the texture
     #  if you know what you are doing.
     #
-    #  @return            The drawing surface
+    #  @return            The drawing texture
     #
-    def _getSurface(self):
-        return self._parent._getSurface()
+    def _getTexture(self):
+        return self._parent._getTexture()
     
     ## Recalculates the layout of the widget.
     #
@@ -448,13 +455,13 @@ class Widget:
     #
     #  @return            None
     #
-    def _redraw(self,surface, forceRedraw=False):
+    def _redraw(self,texture, forceRedraw=False):
         if not self.isInvalide():
             if not forceRedraw:
                 return 
-        
+                
         theme = biui.getTheme()
-        self._themeBackgroundfunction(self,surface)
+        self._themeBackgroundfunction(self.window.renderer,self,texture)
         
         self._isInvalide = False
 

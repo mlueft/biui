@@ -1,8 +1,8 @@
 import biui
 
+###
 ##
-#
-#
+##
 class Button(biui.ContainerWidget.ContainerWidget):
     
     def __init__(self):
@@ -29,10 +29,10 @@ class Button(biui.ContainerWidget.ContainerWidget):
         
     def getChildAt(self, pos):
         
-        # we don't want to return any child 
-        # objects like labels or icons.
-        # If the position is inside the button,
-        # the button is the last element in the DOM.
+        ## we don't want to return any child 
+        ## objects like labels or icons.
+        ## If the position is inside the button,
+        ## the button is the last element in the DOM.
         
         cPos = self.toGlobal((0,0))
         if cPos[0] > pos[0]:
@@ -49,50 +49,50 @@ class Button(biui.ContainerWidget.ContainerWidget):
                 
         return self
     
-    ## Returns the embedded label instance
-    #  to make it's properties accessible.
-    #
-    #
+    ### Returns the embedded label instance
+    ##  to make it's properties accessible.
+    ##
+    ##
     @property
     def label(self):
         return self._label
     
-    ## Returns the current state of the button.
-    #  See: biui.ButtonStates
-    #  
+    ### Returns the current state of the button.
+    ##  See: biui.ButtonStates
+    ##  
     @property
     def state(self):
         return self._state
     
-    ## Returns the icon instance of the button
-    #  to make it's properties accessible. 
-    #
-    #
+    ### Returns the icon instance of the button
+    ##  to make it's properties accessible. 
+    ##
+    ##
     @property
     def icon(self):
         return self._icon
     
-    ## Sets the icon instance.
-    #  TODO: Impliment the icon class.
-    #
-    #
+    ### Sets the icon instance.
+    ##  TODO: Impliment the icon class.
+    ##
+    ##
     @icon.setter
     def icon(self,icon):
         self._icon = icon
         self.addChild(icon,0,0)
         self._invalidate()
 
-    ## Returns the value of the button.
-    #  The value is the shown text.
-    #
-    #
+    ### Returns the value of the button.
+    ##  The value is the shown text.
+    ##
+    ##
     @property
     def value(self):
         return self._label.value
     
-    ## Sets the value of the button.
-    #  The value is the shown text.
-    #
+    ### Sets the value of the button.
+    ##  The value is the shown text.
+    ##
     @value.setter
     def value(self,value):
         self._label.value = value

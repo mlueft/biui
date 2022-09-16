@@ -1,9 +1,9 @@
 import sys
 import unittest
-#import sdl2
+##import sdl2
 
-sys.path.append('./../') # needed if the file is tested.
-sys.path.append('./')    # needed if the folder is tested.
+sys.path.append('./../') ## needed if the file is tested.
+sys.path.append('./')    ## needed if the folder is tested.
 import biui
 
 
@@ -14,7 +14,7 @@ class WindowTestCase(unittest.TestCase):
         biui.setThemeFolder("../themes")
  
     def tearDown(self):
-        #biui.quit()
+        ##biui.quit()
         assert 1==1, ""
     
 
@@ -81,11 +81,11 @@ class WindowTestCase(unittest.TestCase):
                     
     def testTop(self):
         
-        #dMode = sdl2.SDL_DisplayMode()
-        #if sdl2.SDL_GetDesktopDisplayMode(0,dMode) != 0:
-        #    print( SDL_GetError() )
+        ##dMode = sdl2.SDL_DisplayMode()
+        ##if sdl2.SDL_GetDesktopDisplayMode(0,dMode) != 0:
+        ##    print( SDL_GetError() )
             
-        #print( dMode.w,dMode.h)
+        ##print( dMode.w,dMode.h)
                 
         subject = biui.Window(1024,768)
         subject.x = 100
@@ -117,7 +117,7 @@ class WindowTestCase(unittest.TestCase):
         assert 1==1, ""
     
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main() ## run all tests
     
     
     

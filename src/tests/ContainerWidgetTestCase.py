@@ -1,7 +1,7 @@
 import sys
 import unittest
-sys.path.append('./../') # needed if the file is tested.
-sys.path.append('./')    # needed if the folder is tested.
+sys.path.append('./../') ## needed if the file is tested.
+sys.path.append('./')    ## needed if the folder is tested.
 import biui
 
 
@@ -12,7 +12,7 @@ class ContainerWidgetTestCase(unittest.TestCase):
         biui.setThemeFolder("../themes")
  
     def tearDown(self):
-        #biui.quit()
+        ##biui.quit()
         assert 1==1, ""
     
     def testGetChildren(self):
@@ -46,4 +46,4 @@ class ContainerWidgetTestCase(unittest.TestCase):
         assert 1==1, ""
     
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main() ## run all tests

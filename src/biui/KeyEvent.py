@@ -1,8 +1,8 @@
 import biui
 
-## Represents a KeyEvent. 
-#
-#
+### Represents a KeyEvent. 
+##
+##
 class KeyEvent(biui.DOMEvent.DOMEvent):
     
     def __init__(self,eventSource,char,key=None,scanCode=None, modifiers=None):

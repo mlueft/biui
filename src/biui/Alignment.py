@@ -1,15 +1,15 @@
 from biui.Messages import Messages
 
+###
 ##
-#
-#
+##
 class Alignment():
 
     def __init__(self):
         raise Exception( Messages.ERR_CLASS_NOT_INIT )
 
-    ABSOLUTE      = 0   # position is x and y
-    FILL          = 1   # All available space is used
+    ABSOLUTE      = 0   ## position is x and y
+    FILL          = 1   ## All available space is used
     TOP_LEFT      = 2
     TOP_CENTER    = 3
     TOP_RIGHT     = 4

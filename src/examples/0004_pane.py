@@ -7,7 +7,7 @@ import biui
 import time
    
 def paneResize(ev):
-    #print("W")
+    ##print("W")
     pass
     
 def init():
@@ -15,14 +15,14 @@ def init():
     biui.init()
     biui.setThemeFolder("../themes")
     
-    ##############################################
-    #                                       WINDOW
-    ##############################################
+    ###############################################
+    ##                                       WINDOW
+    ###############################################
     wnd = biui.Window(640,480)
 
-    #
-    # Pane
-    #
+    ##
+    ## Pane
+    ##
     pane = biui.Pane()
     pane.x = 100
     pane.y = 100
@@ -34,11 +34,11 @@ def init():
         
 def main():
     init()
-    #
-    # Temporary main loop
-    #
+    ##
+    ## Temporary main loop
+    ##
     while biui.main():
-        #sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
+        ##sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
         pass
 
 if __name__ == "__main__":

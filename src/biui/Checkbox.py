@@ -1,8 +1,8 @@
 import biui
 
+###
 ##
-#
-#
+##
 class Checkbox(biui.ToggleButton.ToggleButton):
     
     def __init__(self):

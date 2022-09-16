@@ -1,9 +1,9 @@
 import biui
 
-## TODO: Does a file based cache make sense?
-#        So we don't have to recompose all
-#        images at each program start.
-#
+### TODO: Does a file based cache make sense?
+##        So we don't have to recompose all
+##        images at each program start.
+##
 class ImageLibrary():
     
     def __init__(self):
@@ -12,14 +12,14 @@ class ImageLibrary():
         self.cacheImagesOriginal = True
         self.cacheImagesI9 = True
         
-    ## Returns an I9 of the given width and height.
-    #
-    #
+    ### Returns an I9 of the given width and height.
+    ##
+    ##
     def getI9(self,renderer,name,width,height):
 
         hashName = str(hash(name))[1:]
         
-        # looking for already stored size
+        ## looking for already stored size
         key = hashName+"_"+str(width)+"x"+str(height)
         if key in self.__images:
             return self.__images[key]
@@ -128,32 +128,32 @@ class ImageLibrary():
             sizeCC
         )
         
-        # store original
+        ## store original
         if self.cacheImagesI9:
             self.__images[key] = tgt
                 
         return tgt
         
-    ## Loades the given image and returns it scaled
-    #  to the given width and height.
-    #  If width and height are not defined.
-    #  the size of the original image is used.
-    #
-    #
+    ### Loades the given image and returns it scaled
+    ##  to the given width and height.
+    ##  If width and height are not defined.
+    ##  the size of the original image is used.
+    ##
+    ##
     def getImage(self,renderer,fileName,width=0,height=0):
         
-        # we cut off the leading "-"
-        # TODO: We should not use the absolute path.
-        #       the themename and the filename would
-        #       be great.
+        ## we cut off the leading "-"
+        ## TODO: We should not use the absolute path.
+        ##       the themename and the filename would
+        ##       be great.
         hashName = str(hash(fileName))[1:]
         
-        # looking for already stored size
+        ## looking for already stored size
         key = hashName+"_"+str(width)+"x"+str(height)
         if key in self.__images:
             return self.__images[key]
         
-        # load original
+        ## load original
         imageOriginal = None
         key = hashName+"_0x0"
         if key in self.__images:
@@ -161,27 +161,27 @@ class ImageLibrary():
             
         if imageOriginal == None:
 
-            # load original
+            ## load original
             imageOriginal = biui.DL.loadImage(fileName,renderer)
             
-            # TODO: We need to convert all images to the right format
-            #imageOriginal = sdl2.SDL_ConvertSurface(imageOriginalTmp, biui._pixelFormat ,0)
+            ## TODO: We need to convert all images to the right format
+            ##imageOriginal = sdl2.SDL_ConvertSurface(imageOriginalTmp, biui._pixelFormat ,0)
             
             if not imageOriginal:
                 print(sdl2.SDL_GetError())
             
-            # store original
+            ## store original
             if self.cacheImagesOriginal:
                 self.__images[key] = imageOriginal
             
-            # if size isn't given the original is ment.
+            ## if size isn't given the original is ment.
             if width < 1 and height < 1:
                 return imageOriginal
             
-        # resize it
+        ## resize it
         key = hashName+"_"+str(width)+"x"+str(height)
         
-        # resize a copy of  the original
+        ## resize a copy of  the original
         imageScaled = biui.DL.createTexture(renderer,width,height)
         
         biui.DL.blit(
@@ -191,42 +191,42 @@ class ImageLibrary():
             (0,0,width,height)
         )
         
-        #if error < 0:
-        #    print(sdl2.SDL_GetError())
-        #    quit()
+        ##if error < 0:
+        ##    print(sdl2.SDL_GetError())
+        ##    quit()
         
-        # store scaled copy
+        ## store scaled copy
         if self.cacheImagesScaled:
             self.__images[key] = imageScaled
         
         return imageScaled
     
+    ###
     ##
-    #
-    #
+    ##
     def clearCache(self):
         for i  in self.__images.keys():
             img = self.__images[i]
             biui.DL.free(img)
         self.__images.clear()
         
+    ###
     ##
-    #
-    #
+    ##
     def getSize(self):
         return len(self.__images)
     
-    ## Just a debug funtion for development.
-    #
-    #
+    ### Just a debug funtion for development.
+    ##
+    ##
     def debug(self):
         print("length:"+str(len(self.__images)))
         for i  in self.__images.keys():
             print(i)
     
+    ###
     ##
-    #
-    #
+    ##
     def quit(self):
         for i  in self.__images.keys():
             img = self.__images[i]

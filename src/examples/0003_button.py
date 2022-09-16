@@ -11,17 +11,17 @@ def init():
     biui.init()
     biui.setThemeFolder("../themes")
     
-    ##############################################
-    #                                       WINDOW
-    ##############################################
+    ###############################################
+    ##                                       WINDOW
+    ###############################################
     wnd = biui.Window(640,480)
 
-    #
-    # Buttons
-    #
+    ##
+    ## Buttons
+    ##
     for i in range(10):
         button0 = biui.Button()
-        #button0.onMouseUp.add(_test.upHandler)
+        ##button0.onMouseUp.add(_test.upHandler)
         button0.x = 100
         button0.y = 100+i*45
         button0.width = 150
@@ -32,12 +32,12 @@ def init():
         
 def main():
     init()
-    #
-    # Temporary main loop
-    #
+    ##
+    ## Temporary main loop
+    ##
     while True:
         biui.main()
-        #sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
+        ##sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
         pass
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
 import biui
+###
 ##
-#
-#
+##
 class Pane(biui.ContainerWidget.ContainerWidget):
     
+    ###
     ##
-    #
-    #
+    ##
     def __init__(self):
         super().__init__()
         theme = biui.getTheme()

@@ -1,21 +1,21 @@
 import biui
 
-## ENUM class for button states.
-#
-#
+### ENUM class for button states.
+##
+##
 class ButtonStates():
     
     def __init__(self):
         raise Exception( Messages.ERR_CLASS_NOT_INIT )
     
-    # normal button. Mouse is not over it.
+    ## normal button. Mouse is not over it.
     NORMAL = 0
     
-    # Mouse is over the button
+    ## Mouse is over the button
     OVER   = 1
     
-    # Mousebutton is pressed
+    ## Mousebutton is pressed
     DOWN   = 2
     
-    # Toggle button is checked
+    ## Toggle button is checked
     CHECKED = 3

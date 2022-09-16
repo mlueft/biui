@@ -34,19 +34,22 @@ def b0OnUp(ev):
 	
 def stopMousePropagation(ev):
 	ev.stopPropagation()
-	
+
+####
+###
+###
 def main():
 	global wnd, pane3, b0, b1
 	
-	##############################################
-	#                                       WINDOW
-	##############################################
+	################################################
+	###                                       WINDOW
+	################################################
 	wnd = biui.Window(1900,1024)
 	
 	
-	##############################################
-	#                                      Panel 0
-	##############################################
+	################################################
+	###                                      Panel 0
+	################################################
 	pane0 = biui.Pane()
 	pane0.x = 10
 	pane0.y = 10
@@ -54,20 +57,20 @@ def main():
 	pane0.height = 300
 	wnd.addChild(pane0)
 	
-	#
-	# Buttons
-	#
+	###
+	### Buttons
+	###
 	for i in range(3):
 		button0 = biui.Button()
-		#button0.onMouseUp.add(_test.upHandler)
+		###button0.onMouseUp.add(_test.upHandler)
 		button0.x = 10
 		button0.y = 10+i*35
 		pane0.addChild(button0)
 			
 	
-	##############################################
-	#                                      PANEL 1
-	##############################################
+	################################################
+	###                                      PANEL 1
+	################################################
 	pane1 = biui.Pane()
 	pane1.x = 320
 	pane1.y = 10
@@ -75,9 +78,9 @@ def main():
 	pane1.height = 300
 	wnd.addChild(pane1)
 	
-	#
-	# Creating a ToggleButton
-	#
+	###
+	### Creating a ToggleButton
+	###
 	for i in range(3):
 		button0 = biui.ToggleButton()
 		button0.x = 10
@@ -87,9 +90,9 @@ def main():
 	
 	
 	
-	##############################################
-	#                                      PANEL 2
-	##############################################
+	################################################
+	###                                      PANEL 2
+	################################################
 	pane2 = biui.Pane()
 	pane2.x = 630
 	pane2.y = 10
@@ -97,9 +100,9 @@ def main():
 	pane2.height = 300
 	wnd.addChild(pane2)
 		
-	#
-	# ButtonGroup
-	#
+	###
+	### ButtonGroup
+	###
 	buttonGroup = biui.ButtonGroup()
 	buttonGroup.onMouseDown.add(stopMousePropagation)
 	buttonGroup.x = 10
@@ -108,9 +111,9 @@ def main():
 	buttonGroup.height = 280
 	pane2.addChild(buttonGroup)
 	
-	#
-	# Add Buttons to group
-	#
+	###
+	### Add Buttons to group
+	###
 	for i in range(5):
 		button0 = biui.ToggleButton()
 		button0.x = 10
@@ -120,9 +123,9 @@ def main():
 	
 	
 	
-	##############################################
-	#                                      PANEL 3
-	##############################################
+	################################################
+	###                                      PANEL 3
+	################################################
 	pane3 = biui.Pane()
 	pane3.x = 630+320
 	pane3.y = 10
@@ -130,7 +133,7 @@ def main():
 	pane3.height = 300
 	wnd.addChild(pane3)
 	
-	# content
+	### content
 	pane3_1 = biui.Pane()
 	pane3_1.x = 10
 	pane3_1.y = 10
@@ -151,7 +154,7 @@ def main():
 	lm.columnWidths = [0,50.0]
 	lm.rowHeights = [0,50,0]
 	
-	# Drag buttons
+	### Drag buttons
 	b0 = biui.Button()
 	b0.onMouseDown.add(b0OnDown)
 	b0.onMouseUp.add(b0OnUp)
@@ -172,9 +175,9 @@ def main():
 	wnd.addChild(b1)
 	
 	
-	##############################################
-	#                                      PANEL 4
-	##############################################
+	################################################
+	###                                      PANEL 4
+	################################################
 		
 	grid = biui.FlexGrid()
 	grid.x = 10
@@ -193,9 +196,9 @@ def main():
 	wnd.addChild(grid)
 		
 			
-	#
-	# Temporary main loop
-	#
+	###
+	### Temporary main loop
+	###
 	clock = pygame.time.Clock()
 	
 	radius = 100
@@ -206,7 +209,7 @@ def main():
 	while biui.main():
 		clock.tick(1000)
 		
-		# movement
+		### movement
 		if False:
 			angle += speed
 			end = (

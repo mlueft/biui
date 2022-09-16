@@ -1,12 +1,12 @@
 import sdl2
 import ctypes
 
+###
 ##
-#
-#
+##
 class DL:
     
-    #_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )
+    ##_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )
     _pixelFormat = sdl2.SDL_PIXELFORMAT_RGBA32
     
     def __init__(self):
@@ -58,7 +58,7 @@ class DL:
         sdl2.SDL_RenderPresent(renderer)
         
     def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_ACCELERATED):
-    #def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_SOFTWARE):
+    ##def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_SOFTWARE):
         result = sdl2.SDL_CreateRenderer(window,index,flags)
         sdl2.SDL_SetRenderDrawBlendMode(result, sdl2.SDL_BLENDMODE_BLEND)
         return result
@@ -157,8 +157,8 @@ class DL:
             int(tgtRect[3])
         )
         
-        #print( srcRect )
-        #print( tgtRect )
+        ##print( srcRect )
+        ##print( tgtRect )
         sdl2.SDL_SetRenderTarget(renderer,tTgt)
         sdl2.render.SDL_RenderCopy(renderer,tSrc,src,tgt)
         sdl2.SDL_SetRenderTarget(renderer,tmpT)

@@ -1,8 +1,8 @@
 import biui
 
+###
 ##
-#
-#
+##
 class FlexPane(biui.ContainerWidget.ContainerWidget):
     
     def __init__(self):
@@ -10,17 +10,17 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         self._minWidth = 40
         self._minHeight = 40
         
-        #
+        ##
         self.onJoinUp = biui.EventManager()
-        #
+        ##
         self.onJoinDown = biui.EventManager()
-        #
+        ##
         self.onJoinLeft = biui.EventManager()
-        #
+        ##
         self.onJoinRight = biui.EventManager()
-        #
+        ##
         self.onVerticalSplit = biui.EventManager()
-        #
+        ##
         self.onHorizontalSplit = biui.EventManager()
         
         self._acTopLeft = self._createActiveCorner()
@@ -73,20 +73,20 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
     def _onActiveCornerBottomRightMouseUp(self,ev):
         self._acBottomRight.onMouseLeave.remove(self.onActiveCornerBottomRightLeave)
         
-    ## Returns a widget used as a active corner.
-    #
-    #
+    ### Returns a widget used as a active corner.
+    ##
+    ##
     def _createActiveCorner(self):
-        # We use a Spacer to get
-        # an invisible corner
+        ## We use a Spacer to get
+        ## an invisible corner
         ac = biui.Spacer()
         ac.width = 25
         ac.height = 25
         return ac
         
-    ## Handles mouse leave event of the top left active corner.
-    #  It provokes split or join events if necessary.
-    #
+    ### Handles mouse leave event of the top left active corner.
+    ##  It provokes split or join events if necessary.
+    ##
     def onActiveCornerTopLeftLeave(self,ev):
 
         ac = ev.eventSource
@@ -103,9 +103,9 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
      
         self._acTopLeft.onMouseLeave.remove(self.onActiveCornerTopLeftLeave)
         
-    ## Handles mouse leave event of the top right active corner.
-    #  It provokes split or join events if necessary.
-    #
+    ### Handles mouse leave event of the top right active corner.
+    ##  It provokes split or join events if necessary.
+    ##
     def onActiveCornerTopRightLeave(self,ev):
 
         ac = ev.eventSource
@@ -122,9 +122,9 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
 
         self._acTopRight.onMouseLeave.remove(self.onActiveCornerTopRightLeave)
         
-    ## Handles mouse leave event of the bottom left active corner.
-    #  It provokes split or join events if necessary.
-    #
+    ### Handles mouse leave event of the bottom left active corner.
+    ##  It provokes split or join events if necessary.
+    ##
     def onActiveCornerBottomLeftLeave(self,ev):
 
         ac = ev.eventSource
@@ -141,9 +141,9 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
             
         self._acBottomLeft.onMouseLeave.remove(self.onActiveCornerBottomLeftLeave)
         
-    ## Handles mouse leave event of the bottom right active corner.
-    #  It provokes split or join events if necessary.
-    #
+    ### Handles mouse leave event of the bottom right active corner.
+    ##  It provokes split or join events if necessary.
+    ##
     def onActiveCornerBottomRightLeave(self,ev):
 
         ac = ev.eventSource
@@ -166,25 +166,25 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
             if not forceRedraw:
                 return 
                 
-        #print("FlexPane::_redraw")
+        ##print("FlexPane::_redraw")
         pos = self.position
         
-        # we paint on our own texture
-        # not on the parent's texture
+        ## we paint on our own texture
+        ## not on the parent's texture
         _texture = self._texture
         theme = biui.getTheme()
         theme.drawFlexPaneBeforeChildren(self.window.renderer,self,_texture)
 
         forceRedraw = self.isInvalide() or forceRedraw
-        # We draw all Children on our own texture        
+        ## We draw all Children on our own texture        
         for c in self._children:
             c._redraw(_texture,forceRedraw)
                     
         theme.drawFlexPaneAfterChildren(self.window.renderer,self,_texture)
         
-        # Now we copy the visible area 
-        # of our own texture
-        # on the parent's texture
+        ## Now we copy the visible area 
+        ## of our own texture
+        ## on the parent's texture
         texture.blit(_texture,pos,(0,0,self.width,self.height))
         
         self._isInvalide = False        

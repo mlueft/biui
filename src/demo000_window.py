@@ -10,9 +10,9 @@ localPos = None
 def main():
 	global wnd, pane3, widget
 	
-	##############################################
-	#                                       WINDOW
-	##############################################
+	################################################
+	###                                       WINDOW
+	################################################
 	wnd = biui.Window(1024,768)
 	
 	widget = biui.Pane()
@@ -20,10 +20,10 @@ def main():
 	widget.x = widget.y = 100
 	
 	wnd.addChild(widget)
-	#
-	# Temporary main loop
-	#
-	#clock = pygame.time.Clock()
+	###
+	### Temporary main loop
+	###
+	###clock = pygame.time.Clock()
 	
 	radius = 100
 	angle = 0
@@ -31,7 +31,7 @@ def main():
 	
 	while True:
 		
-		# movement
+		### movement
 		angle += speed
 		
 		widget.width = 100 + math.cos(angle)*50
@@ -40,8 +40,8 @@ def main():
 		widget.y = 300 + math.sin(angle)*200 - widget.height/2
 
 		biui.main()
-		#print( biui.getTheme().getImageLibrary().getSize())
-		#biui.getTheme().getImageLibrary().clearCache()
+		###print( biui.getTheme().getImageLibrary().getSize())
+		###biui.getTheme().getImageLibrary().clearCache()
 		
 if __name__ == "__main__":
 	main()

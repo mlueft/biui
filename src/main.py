@@ -9,10 +9,10 @@ def p1Click(ev):
     print("p1.click:"+str(ev.phase))
     
     if ev.phase == biui.EventPhase.DOWN:
-        #ev.stopPropagation()
+        ###ev.stopPropagation()
         pass
     else:
-        #ev.stopPropagation()
+        ###ev.stopPropagation()
         pass
         
 def p2Click(ev):
@@ -25,15 +25,15 @@ def init():
 
     biui.init()
     
-    ##############################################
-    #                                       WINDOW
-    ##############################################
+    ################################################
+    ###                                       WINDOW
+    ################################################
     wnd = biui.Window(1024,800)
     
     if True:
-        ##############################################
-        #                                      Panel 0
-        ##############################################
+        ################################################
+        ###                                      Panel 0
+        ################################################
         pane0 = biui.Pane()
         pane0.x = 10
         pane0.y = 10
@@ -41,23 +41,23 @@ def init():
         pane0.height = 300
         wnd.addChild(pane0)
         
-        #
-        # Buttons
-        #
+        ###
+        ### Buttons
+        ###
         for i in range(3):
             button0 = biui.Button()
             button0.label.format = "{:,} mm"
             button0.value = 1000
-            #button0.onMouseUp.add(_test.upHandler)
+            ###button0.onMouseUp.add(_test.upHandler)
             button0.x = 10
             button0.y = 10+i*35
             button0.width = 100
             button0.height = 30
             pane0.addChild(button0)
                 
-        #
-        # Progressbar
-        #
+        ###
+        ### Progressbar
+        ###
         pb = biui.Progressbar()
         pb.x = 10
         pb.y = 120
@@ -70,9 +70,9 @@ def init():
         pb.showValue = False
         pane0.addChild(pb)
         
-        #
-        # NumberSlider
-        #
+        ###
+        ### NumberSlider
+        ###
         ns = biui.NumberSlider()
         ns.x = 10
         ns.y = 160
@@ -85,18 +85,18 @@ def init():
         ns.label.format = "{} %"
         pane0.addChild(ns)
                  
-        #
-        # Checkbox
-        #
+        ###
+        ### Checkbox
+        ###
         cb = biui.Checkbox()
         cb.x = 10
         cb.y = 200
         
         pane0.addChild(cb)
         
-        ##############################################
-        #                                      PANEL 1
-        ##############################################
+        ################################################
+        ###                                      PANEL 1
+        ################################################
         pane1 = biui.Pane()
         pane1.x = 320
         pane1.y = 10
@@ -104,9 +104,9 @@ def init():
         pane1.height = 300
         wnd.addChild(pane1)
         
-        #
-        # Creating a ToggleButton
-        #
+        ###
+        ### Creating a ToggleButton
+        ###
         for i in range(3):
             button0 = biui.ToggleButton()
             button0.x = 10
@@ -115,9 +115,9 @@ def init():
             button0.height = 30        
             pane1.addChild(button0)
             
-        #
-        # Progressbar
-        #
+        ###
+        ### Progressbar
+        ###
         pb = biui.Progressbar()
         pb.x = 10
         pb.y = 120
@@ -130,9 +130,9 @@ def init():
         pb.label.format = "{} mm"    
         pane1.addChild(pb)
         
-        #
-        # NumberSlider
-        #
+        ###
+        ### NumberSlider
+        ###
         ns = biui.NumberSlider()
         ns.showNavigation = False
         ns.x = 10
@@ -146,9 +146,9 @@ def init():
         ns.label.format = "{} mm"    
         pane1.addChild(ns)
                 
-        ##############################################
-        #                                      PANEL 2
-        ##############################################
+        ################################################
+        ###                                      PANEL 2
+        ################################################
         pane2 = biui.Pane()
         pane2.x = 630
         pane2.y = 10
@@ -156,9 +156,9 @@ def init():
         pane2.height = 300
         wnd.addChild(pane2)
             
-        #
-        # ButtonGroup
-        #
+        ###
+        ### ButtonGroup
+        ###
         buttonGroup = biui.ButtonGroup()
         buttonGroup.x = 0
         buttonGroup.y = 0
@@ -166,9 +166,9 @@ def init():
         buttonGroup.height = 280
         pane2.addChild(buttonGroup)
         
-        #
-        # Add Buttons to group
-        #
+        ###
+        ### Add Buttons to group
+        ###
         for i in range(3):
             button0 = biui.ToggleButton()
             button0.x = 10
@@ -180,9 +180,9 @@ def init():
         
         
         
-        ##############################################
-        #                                      PANEL 3
-        ##############################################
+        ################################################
+        ###                                      PANEL 3
+        ################################################
         pane3 = biui.Pane()
         pane3.x = 630+320
         pane3.y = 10
@@ -191,7 +191,7 @@ def init():
         pane3.onMouseClick.add(p0Click)
         wnd.addChild(pane3)
         
-        # content
+        ### content
         pane3_1 = biui.Pane()
         pane3_1.x = 50
         pane3_1.y = 50
@@ -211,7 +211,7 @@ def init():
         button0 = biui.Label()
         button0.format = "{:,} mm"
         button0.value = 1000
-        #button0.onMouseUp.add(_test.upHandler)
+        ###button0.onMouseUp.add(_test.upHandler)
         button0.x = 5
         button0.y = 10
         button0.width = 100
@@ -222,7 +222,7 @@ def init():
         button0 = biui.Button()
         button0.format = "{:,} mm"
         button0.value = 1000
-        #button0.onMouseUp.add(_test.upHandler)
+        ###button0.onMouseUp.add(_test.upHandler)
         button0.x = 5
         button0.y = 50
         button0.width = 100
@@ -231,9 +231,9 @@ def init():
         pane3_1.addChild(button0)
         
     if False:
-        ##############################################
-        #                                      PANEL 4
-        ##############################################
+        ################################################
+        ###                                      PANEL 4
+        ################################################
             
         grid = biui.FlexGrid()
         grid.alignment = biui.Alignment.FILL
@@ -248,7 +248,7 @@ def init():
                 
 def main():
     init()
-    # Temporary main loop
+    ### Temporary main loop
     while True:
         biui.main()
         pass

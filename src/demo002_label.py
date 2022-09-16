@@ -5,9 +5,9 @@ import time
 
 def main():
     
-    ##############################################
-    #                                       WINDOW
-    ##############################################
+    ################################################
+    ###                                       WINDOW
+    ################################################
     wnd = biui.Window(800,600)
     
     lbl = biui.Label()
@@ -23,13 +23,13 @@ def main():
         
         
     
-    #
-    # Temporary main loop
-    #
+    ###
+    ### Temporary main loop
+    ###
     clock = pygame.time.Clock()
     
     while biui.main():
-        #sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
+        ###sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
         pygame.display.flip()
 
 if __name__ == "__main__":

@@ -3,12 +3,12 @@ import os
 import sdl2
 
 
-#debug
+##debug
 from random import random
 
-## Does all the drawing stuff.
-#
-#
+### Does all the drawing stuff.
+##
+##
 class Theme:
     
     def __init__(self, baseFolder):
@@ -16,38 +16,38 @@ class Theme:
         self.__baseFolder = baseFolder
         self.__themeFolder = None
       
+    ###
     ##
-    #
-    #
+    ##
     def quit(self):
         self.__lib.quit()
             
+    ###
     ##
-    #
-    #
+    ##
     def getImageLibrary(self):
         return self.__lib
     
-    ## Sets the current used theme name.
-    #
-    #
+    ### Sets the current used theme name.
+    ##
+    ##
     def selectTheme(self,name):
         self.__themeFolder = name
         self.__themeFolder = os.path.join(self.__baseFolder ,self.__themeFolder)
         
-    #######################################################
-    #
-    #   MISC
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   MISC
+    ##
+    ########################################################
     
-    ## Returns the graphical size of the rendered text
-    #  of the widget.
-    #
-    #
+    ### Returns the graphical size of the rendered text
+    ##  of the widget.
+    ##
+    ##
     def getTextSize(self,widget):
         return (10,10)
-        # TODO: resolve Pygame dependency
+        ## TODO: resolve Pygame dependency
         font = pygame.font.SysFont(
             widget.font.name,
             widget.font.size
@@ -61,39 +61,39 @@ class Theme:
         
         return ( sf.contents.w,sf.contents.h)        
         
-    ## Draws nothing.
-    # 
+    ### Draws nothing.
+    ## 
     def drawEmpty(self, renderer, widget, texture):
         return
     
-    #######################################################
-    #
-    #   WINDOW
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   WINDOW
+    ##
+    ########################################################
     
-    ## Is called before the child objects are drawn.
-    #  So, it's useed to draw the background.
-    #
+    ### Is called before the child objects are drawn.
+    ##  So, it's useed to draw the background.
+    ##
     def drawWindowBeforeChildren(self, renderer, widget, texture):
         biui.DL.fill( renderer,texture, (66,66,66,255) )
 
-    ## Is called after the child objects are drawn.
-    #  So it's used to draw everything that has to be
-    #  top most like border
-    #
+    ### Is called after the child objects are drawn.
+    ##  So it's used to draw everything that has to be
+    ##  top most like border
+    ##
     def drawWindowAfterChildren(self, renderer, widget, texture):
         return
     
-    #######################################################
-    #
-    #   FLEXGRID
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   FLEXGRID
+    ##
+    ########################################################
         
-    ## Is called before the window child objects are drawn.
-    #  So, it's useed to draw the background.
-    # 
+    ### Is called before the window child objects are drawn.
+    ##  So, it's useed to draw the background.
+    ## 
     def drawFlexGridBeforeChildren(self, renderer, widget, texture):
         biui.DL.drawRect(
             renderer,
@@ -107,25 +107,25 @@ class Theme:
             )  
         )
     
-    ## Is called after the child objects are drawn.
-    #  So it's used to draw everything that has to be
-    #  top most like border
-    #
+    ### Is called after the child objects are drawn.
+    ##  So it's used to draw everything that has to be
+    ##  top most like border
+    ##
     def drawFlexGridAfterChildren(self, renderer, widget, texture):
         return
         
-    #######################################################
-    #
-    #   FLEXPANE
-    #
-    #   The Flexpane is the base container used in the
-    #   FlexGrid element.
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   FLEXPANE
+    ##
+    ##   The Flexpane is the base container used in the
+    ##   FlexGrid element.
+    ##
+    ########################################################
         
-    ## Is called before the child objects are drawn.
-    #  So, it's useed to draw the background.
-    # 
+    ### Is called before the child objects are drawn.
+    ##  So, it's useed to draw the background.
+    ## 
     def drawFlexPaneBeforeChildren(self, renderer, widget, texture):
         biui.DL.drawRect(
             renderer,
@@ -139,10 +139,10 @@ class Theme:
             )  
         )
     
-    ## Is called after the child objects are drawn.
-    #  So it's used to draw everything that has to be
-    #  top most like border
-    #
+    ### Is called after the child objects are drawn.
+    ##  So it's used to draw everything that has to be
+    ##  top most like border
+    ##
     def drawFlexPaneAfterChildren(self, renderer, widget, texture):
         biui.DL.drawRect(
             renderer,
@@ -156,18 +156,18 @@ class Theme:
             ),1
         )
         
-    #######################################################
-    #
-    #   FLEXSPACER
-    #
-    #   The Flexspacer to handle the gaps between Flexpanes
-    #   in the Flexgrid.
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   FLEXSPACER
+    ##
+    ##   The Flexspacer to handle the gaps between Flexpanes
+    ##   in the Flexgrid.
+    ##
+    ########################################################
     
-    ## Is called to draw a button.
-    #
-    #
+    ### Is called to draw a button.
+    ##
+    ##
     def drawFlexSpacer(self, renderer, widget, texture):
         return
         biui.DL.drawRect(
@@ -182,19 +182,19 @@ class Theme:
             )
         )
             
-    #######################################################
-    #
-    #   PANE
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   PANE
+    ##
+    ########################################################
         
-    ## Is called before the child objects are drawn.
-    #  So, it's useed to draw the background.
-    # 
+    ### Is called before the child objects are drawn.
+    ##  So, it's useed to draw the background.
+    ## 
     def drawPaneBeforeChildren(self, renderer, widget, texture):
         name = os.path.join(self.__themeFolder ,"pane_bg")
         img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        #img = self.__lib.getImage(renderer,name,widget.width,widget.height)
+        ##img = self.__lib.getImage(renderer,name,widget.width,widget.height)
         biui.DL.blit(
             renderer,
             texture,
@@ -203,10 +203,10 @@ class Theme:
             (0,0,widget.width,widget.height)
         )
     
-    ## Is called after the child objects are drawn.
-    #  So it's used to draw everything that has to be
-    #  top most like border
-    #
+    ### Is called after the child objects are drawn.
+    ##  So it's used to draw everything that has to be
+    ##  top most like border
+    ##
     def drawPaneAfterChildren(self, renderer, widget, texture):
         
         name = os.path.join(self.__themeFolder ,"pane_fg")
@@ -219,15 +219,15 @@ class Theme:
             (0,0,widget.width,widget.height)
         )
     
-    #######################################################
-    #
-    #   BUTTON
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   BUTTON
+    ##
+    ########################################################
         
-    ## Is called to draw a button.
-    #
-    #
+    ### Is called to draw a button.
+    ##
+    ##
     def drawButtonBeforeChildren(self, renderer, widget, texture):
         
         state = widget.state
@@ -251,9 +251,9 @@ class Theme:
             (0,0,widget.width,widget.height)
         )
 
+    ###
     ##
-    #
-    #
+    ##
     def drawButtonAfterChildren(self, renderer, widget, texture):
 
         state = widget.state
@@ -275,36 +275,36 @@ class Theme:
             img
         )
     
-    #######################################################
-    #
-    #   BUTTONGROUP
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   BUTTONGROUP
+    ##
+    ########################################################
         
-    ## Is called before the child objects are drawn.
-    #  So, it's useed to draw the background.
-    # 
+    ### Is called before the child objects are drawn.
+    ##  So, it's useed to draw the background.
+    ## 
     def drawButtonGroupBeforeChildren(self, renderer, widget, texture):
         return
     
-    ## Is called after the child objects are drawn.
-    #  So it's used to draw everything that has to be
-    #  top most like border
-    #
+    ### Is called after the child objects are drawn.
+    ##  So it's used to draw everything that has to be
+    ##  top most like border
+    ##
     def drawButtonGroupChildren(self, renderer, widget, texture):
         return
         
-    #######################################################
-    #
-    #   PROGRESSBAR
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   PROGRESSBAR
+    ##
+    ########################################################
 
-    ## Is called before the child objects are drawn.
-    #  So, it's useed to draw the background.
-    # 
+    ### Is called before the child objects are drawn.
+    ##  So, it's useed to draw the background.
+    ## 
     def drawProgressbarBeforeChildren(self, renderer, widget, texture):
-        # background
+        ## background
         biui.DL.drawRect(
             renderer,
             texture,
@@ -317,7 +317,7 @@ class Theme:
             )
         )
         
-        # bar
+        ## bar
         if widget.value == widget.minValue:
             return
 
@@ -335,10 +335,10 @@ class Theme:
             )
         )
         
-    ## Is called after the child objects are drawn.
-    #  So it's used to draw everything that has to be
-    #  top most like border
-    #
+    ### Is called after the child objects are drawn.
+    ##  So it's used to draw everything that has to be
+    ##  top most like border
+    ##
     def drawProgressbarChildren(self, renderer, widget, texture):
         biui.DL.drawRect(
             renderer,
@@ -352,23 +352,23 @@ class Theme:
             ),1
         )
         
-    #######################################################
-    #
-    #   NUMBERSLIDER
-    #   The numberslider it self has nothing to draw.
-    #   It contains buttons, Progreessbar or textField
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   NUMBERSLIDER
+    ##   The numberslider it self has nothing to draw.
+    ##   It contains buttons, Progreessbar or textField
+    ##
+    ########################################################
         
-    #######################################################
-    #
-    #   LABEL
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   LABEL
+    ##
+    ########################################################
         
-    ## 
-    #  
-    #  
+    ### 
+    ##  
+    ##  
     def drawLabel(self, renderer, widget, texture):
         return
         font = pygame.font.SysFont(
@@ -390,15 +390,15 @@ class Theme:
             (0,0,widget.width,widget.height)
         )
 
-    #######################################################
-    #
-    #   CHECKBOX
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   CHECKBOX
+    ##
+    ########################################################
         
-    ## Is called before the child objects are drawn.
-    #  So, it's useed to draw the background.
-    # 
+    ### Is called before the child objects are drawn.
+    ##  So, it's useed to draw the background.
+    ## 
     def drawCheckboxBeforeChildren(self, renderer, widget, texture):
         state = widget.state
 
@@ -432,17 +432,17 @@ class Theme:
             )
         )
         
-        # TODO: If checked we draw a symbol on it
+        ## TODO: If checked we draw a symbol on it
     
-    #######################################################
-    #
-    #   SPACER
-    #
-    #######################################################
+    ########################################################
+    ##
+    ##   SPACER
+    ##
+    ########################################################
     
-    ## Is called to draw a spacer.
-    #
-    #
+    ### Is called to draw a spacer.
+    ##
+    ##
     def drawSpacer(self, renderer, widget, texture):
         pass
 

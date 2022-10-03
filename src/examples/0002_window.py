@@ -9,7 +9,7 @@ import time
 def init():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder("../../themes")
     
     ###############################################
     ##                                       WINDOW
@@ -28,6 +28,7 @@ def init():
     
 def main():
     init()
+    
     ##
     ## Temporary main loop
     ##
@@ -35,5 +36,9 @@ def main():
         ##sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
         pass
 
+    biui.quit()
+    
+    print("quit application")
+    
 if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-import sys
+importt sys
 import unittest
 ##import sdl2
 
@@ -11,7 +11,7 @@ class WindowTestCase(unittest.TestCase):
     
     def setUp(self):
         biui.init()
-        biui.setThemeFolder("../themes")
+        biui.setThemeFolder("../../themes")
  
     def tearDown(self):
         ##biui.quit()

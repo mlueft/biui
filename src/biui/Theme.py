@@ -76,7 +76,7 @@ class Theme:
     ##  So, it's useed to draw the background.
     ##
     def drawWindowBeforeChildren(self, renderer, widget, texture):
-        biui.DL.fill( renderer,texture, (66,66,66,255) )
+        biui.DL.fill( renderer,texture, biui.Color(66,66,66,255).rgba )
 
     ### Is called after the child objects are drawn.
     ##  So it's used to draw everything that has to be
@@ -98,7 +98,7 @@ class Theme:
         biui.DL.drawRect(
             renderer,
             texture,
-            (53,53,53),
+            biui.Color(53,53,53,255).rgba,
             (
                 0,
                 0,
@@ -130,7 +130,7 @@ class Theme:
         biui.DL.drawRect(
             renderer,
             texture,
-            (55,55,55),
+            biui.Color(55,55,55,255).rgba,
             (
                 0,
                 0,
@@ -147,7 +147,7 @@ class Theme:
         biui.DL.drawRect(
             renderer,
             texture,
-            (80,80,80),
+            biui.Color(80,80,80,255).rgba,
             (
                 0,
                 0,
@@ -169,17 +169,19 @@ class Theme:
     ##
     ##
     def drawFlexSpacer(self, renderer, widget, texture):
-        return
+        #return
         biui.DL.drawRect(
             renderer,
             texture,
-            (50+random()*205,0,0),
+            #(int(50+random()*205),0,0,255),
+            biui.Color(0,0,0,255).rgba,
             (
                 widget.x,
                 widget.y,
                 widget.width,
                 widget.height
-            )
+            ),
+            1
         )
             
     ########################################################
@@ -308,7 +310,7 @@ class Theme:
         biui.DL.drawRect(
             renderer,
             texture,
-            (80,80,80),
+            biui.Color(80,80,80,255).rgba,
             (
                 0,
                 0,
@@ -326,7 +328,7 @@ class Theme:
         biui.DL.drawRect(
             renderer,
             texture,
-            (100,100,100),
+            biui.Color(100,100,100,255).rgba,
             (
                 0,
                 0,
@@ -343,7 +345,7 @@ class Theme:
         biui.DL.drawRect(
             renderer,
             texture,
-            (0,0,0),
+            biui.Color.rgba(0,0,0,255),
             (
                 0,
                 0,

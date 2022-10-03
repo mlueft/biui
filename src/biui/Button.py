@@ -29,7 +29,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
         
     def getChildAt(self, pos):
         
-        ## we don't want to return any child 
+        ## we do not want to return any child 
         ## objects like labels or icons.
         ## If the position is inside the button,
         ## the button is the last element in the DOM.
@@ -50,7 +50,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
         return self
     
     ### Returns the embedded label instance
-    ##  to make it's properties accessible.
+    ##  to make it i's properties accessible.
     ##
     ##
     @property

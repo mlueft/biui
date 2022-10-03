@@ -6,7 +6,7 @@ import biui
 
 biui.init()
 
-themePath = "./../themes/default/"
+themePath = "./../../themes/default/"
 
 lib = biui.ImageLibrary()
 

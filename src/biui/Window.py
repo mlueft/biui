@@ -15,7 +15,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         self._id = biui.DL.getWindowId(self._window)
         self._title = ""
         self._renderer = biui.DL.createRenderer(self._window)
-        biui._addWindow(self)
+
         ##
         self.onWindowClose = biui.EventManager()
         ##
@@ -68,7 +68,10 @@ class Window(biui.ContainerWidget.ContainerWidget):
         ## '__sizeof__', '__str__', '__subclasshook__', '__weakref__',
         ## '_b_base_', '_b_needsfree_', '_objects', '_type_', 'from_param',
         ## 'value']
-
+        
+        self.onWindowClose.add(self.__onClose)
+        
+        biui._addWindow(self)
         
         
     
@@ -157,6 +160,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
             self._invalidate()
         biui.DL.setWindowSize(self._window,self.width,value)
 
+
     ## Returns the title of the window.
     ##
     ##  @return            An string value.
@@ -174,7 +178,16 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def title(self, value):
         biui.DL.setWindowTitle(self._window,value)
         self._title = value
-            
+    
+    ###
+    ##
+    ##
+    def __onClose(self,ev):
+        ## TODO: clean up all eventmanagers
+        
+        biui.DL.free(self._window)
+        biui._removeWindow(self)
+    
     ###
     ##
     ##
@@ -297,17 +310,18 @@ class Window(biui.ContainerWidget.ContainerWidget):
                     
         theme.drawWindowAfterChildren(self.renderer,self,self._texture)
         
-        ##print("-------------------")
-        ##dr = self._getDirtyRectangles()
-        ##dr = [*set(dr)]
-        ##for r in dr:
-        ##    print(r)
-        ##    biui.DL.renderCopy(
-        ##        self.renderer,
-        ##        self._texture,
-        ##        r,
-        ##        r
-        ##   )
+        if False:
+            print("-------------------")
+            dr = self._getDirtyRectangles()
+            dr = [*set(dr)]
+            for r in dr:
+                ##print(r)
+                biui.DL.renderCopy(
+                    self.renderer,
+                    self._texture,
+                    r,
+                    r
+               )
         
         biui.DL.renderCopy(
             self.renderer,
@@ -315,6 +329,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
             (0,0,self.width,self.height),
             (0,0,self.width,self.height)
         )
+            
         biui.DL.present(self.renderer)
         
         self._isInvalide = False

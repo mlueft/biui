@@ -9,11 +9,11 @@ class ContainerWidgetTestCase(unittest.TestCase):
     
     def setUp(self):
         biui.init()
-        biui.setThemeFolder("../themes")
+        biui.setThemeFolder("../../themes")
  
     def tearDown(self):
         ##biui.quit()
-        assert 1==1, ""
+        pass
     
     def testGetChildren(self):
         assert 1==1, ""

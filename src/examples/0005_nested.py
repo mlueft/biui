@@ -9,7 +9,7 @@ import time
 def init():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder("../../themes")
     
     ###############################################
     ##                                       WINDOW
@@ -17,7 +17,7 @@ def init():
     wnd = biui.Window(1024,768)
 
     ##
-    ## Buttons
+    ## Panes
     ##
     startX = 100
     startY = 100

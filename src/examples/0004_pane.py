@@ -13,7 +13,7 @@ def paneResize(ev):
 def init():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder("../../themes")
     
     ###############################################
     ##                                       WINDOW

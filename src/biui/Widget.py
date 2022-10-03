@@ -79,7 +79,7 @@ class Widget:
     ##
     @property
     def size(self):
-        return (self._width, self._height)
+        return (self.width, self.height)
     
     ### Returns the x position of the GUI element.
     ##
@@ -140,7 +140,7 @@ class Widget:
         self.width = r-self.x
     
     ### Set/Get the top border of the widget.
-    ##  Setting this value doesn't change 
+    ##  Setting this value does not change 
     ##  any other border of the widget.
     ##  Incrementing top decreses the height.
     ##  The bottom border stays the same.
@@ -159,7 +159,7 @@ class Widget:
         self.height = b-self.y
     
     ### Set/Get the right border of the widget.
-    ##  Setting this value doesn't change 
+    ##  Setting this value does not change 
     ##  any other border of the widget.
     ##  Incrementing right increments width.
     ##  The left border stays the same.
@@ -176,7 +176,7 @@ class Widget:
         self.width = value-self.x
     
     ### Set/Get the bottom border of the widget.
-    ##  Setting this value doesn't change 
+    ##  Setting this value does not change 
     ##  any other border of the widget.
     ##  Incrementing bottom increments height.
     ##  top stays the same.
@@ -455,7 +455,7 @@ class Widget:
     ##
     ##  @return            None
     ##
-    def _redraw(self,texture, forceRedraw=False):
+    def _redraw(self, texture, forceRedraw=False):
         if not self.isInvalide():
             if not forceRedraw:
                 return 

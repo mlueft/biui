@@ -4,9 +4,7 @@ from time import time
 import sdl2
 import sdl2.ext
 
-##import pygame
-##from pygame import surface
-
+import biui.Color
 import biui.EventPhase
 import biui.Event
 import biui.DOMEvent
@@ -15,6 +13,7 @@ import biui.KeyEvent
 import biui.EventTypes
 import biui.EventManager
 import biui.Theme
+import biui.DevTheme
 import biui.Keys
 import biui.KeyModifiers
 import biui.Widget
@@ -38,9 +37,11 @@ import biui.Spacer
 import biui.Progressbar
 import biui.Checkbox
 import biui.DL
+
 from sdl2.surface import SDL_CreateRGBSurface
 from sdl2.mouse import SDL_BUTTON_LMASK, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_LEFT, SDL_BUTTON_X1, SDL_BUTTON_X2
 
+Color = biui.Color.Color
 EventPhase = biui.EventPhase.EventPhase
 DOMEvent = biui.DOMEvent.DOMEvent
 Event = biui.Event.Event
@@ -110,23 +111,30 @@ __mouseDownTime = None
 ##
 def init():
     global __initialized__
-    if __initialized__ == True:
+    if __initialized__:
         return 
     
     sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
     sdl2.ext.init()
     biui.DL.init()
-    ##pygame.init()
     __initialized__ = True
  
 ###
 ##
 ##
 def quit():
-    __theme.quit();
-    IMG_Quit();
-    SDL_Quit();
+    __theme.quit()
+    biui.DL.quit()
+    sdl2.ext.quit()
+    sdl2.SDL_Quit()
+    __initialized__ = False
 
+###
+##
+##
+def _removeWindow(window):
+    __windows.remove(window)
+    
 ###
 ##
 ##
@@ -187,13 +195,15 @@ def getTheme():
     global __theme
     ##print( os.getcwd())
     if __theme == None:
-        __theme = biui.Theme.Theme( os.path.join(os.getcwd(),__themeFolder) )
+        __theme = biui.DevTheme.DevTheme( os.path.join(os.getcwd(),__themeFolder) )
         selectTheme()
     return __theme
 
  
 ### The biui main loop.
 ##  Cares about event distribution and drawing of the GUI.
+##
+##  @return        True as long as a window is open.
 ##
 def _main():
     global __windows, __hoverWidget, __mouseDownTime, __clickTime
@@ -763,6 +773,6 @@ def main():
         ##    for r in dr:
         ##        DL.drawRect(w._getSurface(),(255,0,0),r,1)
         
-    return 0
+    return len(__windows) > 0
 
 

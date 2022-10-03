@@ -15,6 +15,9 @@ class DL:
     def init():
         sdl2.ext.init()
     
+    def quit():
+        pass
+    
     def getWindowId(window):
         return sdl2.SDL_GetWindowID(window)
     
@@ -32,8 +35,10 @@ class DL:
     
     def drawRect(renderer,texture,color,rect,fill=0):
         
+        tmpT = sdl2.SDL_GetRenderTarget(renderer)
+
         sdl2.SDL_SetRenderTarget(renderer,texture)
-        sdl2.render.SDL_SetRenderDrawColor(renderer, color[0], color[1], color[2], 0)
+        sdl2.render.SDL_SetRenderDrawColor(renderer, color[0], color[1], color[2], color[3])
         
         _rect = sdl2.SDL_Rect(
             int(rect[0]),
@@ -46,13 +51,14 @@ class DL:
         else:
             sdl2.SDL_RenderFillRect(renderer,_rect)
     
-        sdl2.SDL_SetRenderTarget(renderer,None)
+        sdl2.SDL_SetRenderTarget(renderer,tmpT)
         
     def fill(renderer,texture,color):
+        tmpT = sdl2.SDL_GetRenderTarget(renderer)
         sdl2.SDL_SetRenderTarget(renderer,texture)
         sdl2.render.SDL_SetRenderDrawColor(renderer, color[0], color[1], color[2], color[3])
         sdl2.render.SDL_RenderClear(renderer)
-        sdl2.SDL_SetRenderTarget(renderer,None)
+        sdl2.SDL_SetRenderTarget(renderer,tmpT)
         
     def present(renderer):
         sdl2.SDL_RenderPresent(renderer)

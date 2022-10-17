@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append('./../')
+
 import biui
 
 
@@ -24,6 +28,7 @@ def p3Click(ev):
 def init():
 
     biui.init()
+    biui.setThemeFolder("../../themes")
     
     ################################################
     ###                                       WINDOW
@@ -248,9 +253,8 @@ def init():
                 
 def main():
     init()
-    ### Temporary main loop
-    while True:
-        biui.main()
+
+    while biui.main():
         pass
         
 

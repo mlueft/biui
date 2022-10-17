@@ -2,10 +2,6 @@ import biui
 import os
 import sdl2
 
-
-##debug
-from random import random
-
 ### Does all the drawing stuff.
 ##
 ##
@@ -173,7 +169,6 @@ class Theme:
         biui.DL.drawRect(
             renderer,
             texture,
-            #(int(50+random()*205),0,0,255),
             biui.Color(0,0,0,255).rgba,
             (
                 widget.x,
@@ -293,7 +288,7 @@ class Theme:
     ##  So it's used to draw everything that has to be
     ##  top most like border
     ##
-    def drawButtonGroupChildren(self, renderer, widget, texture):
+    def drawButtonGroupAfterChildren(self, renderer, widget, texture):
         return
         
     ########################################################
@@ -316,7 +311,8 @@ class Theme:
                 0,
                 widget.width,
                 widget.height
-            )
+            ),
+            1
         )
         
         ## bar
@@ -334,24 +330,25 @@ class Theme:
                 0,
                 int(width),
                 widget.height
-            )
+            ),
+            1
         )
         
     ### Is called after the child objects are drawn.
     ##  So it's used to draw everything that has to be
     ##  top most like border
     ##
-    def drawProgressbarChildren(self, renderer, widget, texture):
+    def drawProgressbarAfterChildren(self, renderer, widget, texture):
         biui.DL.drawRect(
             renderer,
             texture,
-            biui.Color.rgba(0,0,0,255),
+            biui.Color(0,0,0,255).rgba,
             (
                 0,
                 0,
                 widget.width,
                 widget.height
-            ),1
+            )
         )
         
     ########################################################

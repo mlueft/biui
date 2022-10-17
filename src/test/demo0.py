@@ -1,4 +1,7 @@
-import pygame
+import sys
+
+sys.path.append('./../')
+
 import math
 import biui
 
@@ -41,6 +44,9 @@ def stopMousePropagation(ev):
 def main():
 	global wnd, pane3, b0, b1
 	
+	biui.init()
+	biui.setThemeFolder("../../themes")
+		
 	################################################
 	###                                       WINDOW
 	################################################
@@ -196,18 +202,12 @@ def main():
 	wnd.addChild(grid)
 		
 			
-	###
-	### Temporary main loop
-	###
-	clock = pygame.time.Clock()
-	
 	radius = 100
 	angle = 0
 	speed = 0.01
 	pos = [80.0,100.0]
 	
 	while biui.main():
-		clock.tick(1000)
 		
 		### movement
 		if False:

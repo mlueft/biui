@@ -9,7 +9,7 @@ class ButtonGroup(biui.ContainerWidget.ContainerWidget):
         super().__init__()
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawButtonGroupBeforeChildren
-        self._themeForegroundfunction = theme.drawButtonGroupChildren
+        self._themeForegroundfunction = theme.drawButtonGroupAfterChildren
         
     def addChild(self, child):
         super().addChild(child)

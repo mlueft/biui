@@ -13,7 +13,6 @@ import biui.KeyEvent
 import biui.EventTypes
 import biui.EventManager
 import biui.Theme
-import biui.DevTheme
 import biui.Keys
 import biui.KeyModifiers
 import biui.Widget
@@ -195,7 +194,7 @@ def getTheme():
     global __theme
     ##print( os.getcwd())
     if __theme == None:
-        __theme = biui.DevTheme.DevTheme( os.path.join(os.getcwd(),__themeFolder) )
+        __theme = biui.Theme.Theme( os.path.join(os.getcwd(),__themeFolder) )
         selectTheme()
     return __theme
 

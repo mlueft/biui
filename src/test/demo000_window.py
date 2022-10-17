@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append('./../')
+
 import math
 import biui
 
@@ -10,6 +14,9 @@ localPos = None
 def main():
 	global wnd, pane3, widget
 	
+	biui.init()
+	biui.setThemeFolder("../../themes")
+		
 	################################################
 	###                                       WINDOW
 	################################################
@@ -29,7 +36,7 @@ def main():
 	angle = 0
 	speed = 0.01
 	
-	while True:
+	while biui.main():
 		
 		### movement
 		angle += speed
@@ -39,7 +46,7 @@ def main():
 		widget.x = 300 + math.cos(angle)*200 - widget.width/2
 		widget.y = 300 + math.sin(angle)*200 - widget.height/2
 
-		biui.main()
+		
 		###print( biui.getTheme().getImageLibrary().getSize())
 		###biui.getTheme().getImageLibrary().clearCache()
 		

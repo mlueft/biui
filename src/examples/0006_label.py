@@ -1,10 +1,12 @@
-import pygame
 import math
 import biui
 import time
 
 def main():
     
+    biui.init()
+    biui.setThemeFolder("../themes")
+        
     ################################################
     ###                                       WINDOW
     ################################################
@@ -16,21 +18,14 @@ def main():
     lbl.alignment = biui.Alignment.CENTER_CENTER
     lbl.font.size = 50
     lbl.font.name = "Courier"
-    lbl.color = (255,255,255)
+    lbl.color = biui.Color(255,255,255,0)
     lbl.anialiased = True
     
     wnd.addChild(lbl)
         
-        
-    
-    ###
-    ### Temporary main loop
-    ###
-    clock = pygame.time.Clock()
-    
-    while biui.main():
-        ###sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
-        pygame.display.flip()
 
+    while biui.main():
+        pass
+    
 if __name__ == "__main__":
     main()

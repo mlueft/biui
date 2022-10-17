@@ -6,7 +6,7 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
         super().__init__()
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawProgressbarBeforeChildren
-        self._themeForegroundfunction = theme.drawProgressbarChildren
+        self._themeForegroundfunction = theme.drawProgressbarAfterChildren
         ## 
         self._minValue = -1024
         ##
@@ -93,7 +93,7 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
     ##
     @value.setter
     def value(self,value):
-        value = max(min(value,self._maxValue),self._minValue)
+        value = max(min(value,self.maxValue),self.minValue)
         if self.value != value:
             self._invalidate()
         self._value = value

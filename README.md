@@ -40,3 +40,9 @@ TODO:
 ```python
 
 ```
+## License:
+
+### Font:
+The font 'ostrich sans' is delivered with biui. The font is an open source font provided by
+'The League of Moveable Type'. For more information please take a look at: https://github.com/theleagueof/ostrich-sans/
+

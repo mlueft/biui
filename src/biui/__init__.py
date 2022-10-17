@@ -105,6 +105,9 @@ __windows = []
 ## Stores the time of the mouseDown event.
 __mouseDownTime = None
 
+## Folders in which biui is  looking for font files
+__fontFolders = []
+
 ### Initializes biui and sub systems. Can be called more than once.
 ##  It takes care about multiple calls.
 ##
@@ -117,6 +120,11 @@ def init():
     sdl2.ext.init()
     biui.DL.init()
     __initialized__ = True
+    
+    ##
+    ## TODO: Look for platform specific font folders
+    ##       and add them to __fontFolders.
+    ##
  
 ###
 ##
@@ -127,6 +135,18 @@ def quit():
     sdl2.ext.quit()
     sdl2.SDL_Quit()
     __initialized__ = False
+
+###
+##
+##
+def addFontFolder(path):
+    __fontFolders.append(path)
+    
+###
+##
+##
+def getFontFolders():
+    return __fontFolders
 
 ###
 ##

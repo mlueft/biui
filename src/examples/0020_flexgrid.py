@@ -18,10 +18,7 @@ def main():
     grid.alignment = biui.Alignment.FILL
     
     pane = biui.FlexPane()
-    pane.x = 0
-    pane.y = 0
-    pane.width = 1024
-    pane.height = 768
+
       
     grid.addFlexPane(pane)
     

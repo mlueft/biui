@@ -10,6 +10,10 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         self._minWidth = 40
         self._minHeight = 40
         
+        theme = biui.getTheme()
+        self._themeBackgroundfunction = theme.drawFlexPaneBeforeChildren
+        self._themeForegroundfunction = theme.drawFlexPaneAfterChildren
+                
         ##
         self.onJoinUp = biui.EventManager()
         ##
@@ -160,7 +164,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         
         self._acBottomRight.onMouseLeave.remove(self.onActiveCornerBottomRightLeave)
         
-    def _redraw(self, texture, forceRedraw=False):
+    def _redraw1(self, texture, forceRedraw=False):
         
         if not self.isInvalide():
             if not forceRedraw:
@@ -185,7 +189,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         ## Now we copy the visible area 
         ## of our own texture
         ## on the parent's texture
-        #texture.blit(_texture,pos,(0,0,self.width,self.height))
+        ##texture.blit(_texture,pos,(0,0,self.width,self.height))
         biui.DL.blit(
             self.window.renderer,
             texture,

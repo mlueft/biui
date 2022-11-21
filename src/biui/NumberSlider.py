@@ -14,13 +14,16 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         ##
         self._value = 0
         ##
-        self._step = 0
+        self._step = 5
+        ##
+        self._microStep = 1
         ##
         self._showNavigation = True
         ##
         self._barDownPosition = None
         ##
         self._decButton = biui.Button()
+        self._decButton.name = "buttonDec"
         self._decButton.minWidth=1
         self._decButton.minHeight=1
         self._decButton.value = "-"
@@ -30,6 +33,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         
         ##
         self._incButton = biui.Button()
+        self._incButton.name = "buttonInc"
         self._incButton.minWidth=1
         self._incButton.minHeight=1
         self._incButton.value = "+"
@@ -39,6 +43,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         
         ##
         self._bar = biui.Progressbar()
+        self._bar.name = "progressbar"
         self._bar.alignment = biui.Alignment.FILL
         self._bar.onMouseDown.add(self._barMouseDown)
         self.addChild(self._bar,1,0)
@@ -59,100 +64,6 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self.step = 0.5
         self.showNavigation = True
         
-    ### Handles the mouse up event of the inc-Button.
-    ##
-    ##
-    def _onIncUp(self,ev):
-        self.value += self.step
-
-    ### Handles the up mouse event of the dec-Button.
-    ##
-    ##
-    def _onDecUp(self,ev):
-        self.value -= self.step
-        
-    ### Get the label object.
-    ##
-    ##
-    @property
-    def label(self):
-        return self._bar
-    
-    ### Set/Get the minimum value.
-    ##
-    ##
-    @property
-    def minValue(self):
-        return self._minValue
-    
-    ### 
-    ##
-    ##
-    @minValue.setter
-    def minValue(self,value):
-        if self.value < value:
-            self.value = max(self.value,value)
-        self._minValue = value
-        self._bar.minValue = value
-    
-    ### Set/Get the maximum value.
-    ##
-    ##
-    @property
-    def maxValue(self):
-        return self._maxValue
-    
-    ###
-    ##
-    ##
-    @maxValue.setter
-    def maxValue(self,value):
-        if self.value > value:
-            self.value = min(self.value,value)
-        self._maxValue = value
-        self._bar.maxValue = value
-
-        
-    ### Set/Get the current value.
-    ##
-    ##
-    @property
-    def value(self):
-        return self._value
-    
-    ###
-    ##
-    ##
-    @value.setter
-    def value(self,value):
-        value = max(min(value,self._maxValue),self._minValue)
-        if self.value != value:
-            self._invalidate()
-        self._value = value
-        self._bar.value = value
-
-    ### Set/Get the value by which the sliders value is incremented
-    ##  or decrimented by clicking a the navigation button.
-    ##
-    ##
-    @property
-    def step(self):
-        return self._step
-    
-    ###
-    ##
-    ##
-    @step.setter
-    def step(self,value):
-        self._step = value
-        
-    ### Set/Get if the navigation buttons are visible.
-    ##
-    ##
-    @property
-    def showNavigation(self):
-        return self._showNavigation
-    
     def _barMouseDown(self,ev):
         self._barDownPosition = ev.position
         self.window.onMouseMove.add(self._wndMouseMove)
@@ -174,24 +85,146 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self.window.onMouseMove.remove(self._wndMouseMove)
         self.window.onMouseUp.remove(self._wndMouseUp)
     
+    ### Handles the mouse up event of the inc-Button.
+    ##
+    ##
+    def _onIncUp(self,ev):
+        self.value += self.microStep
+
+    ### Handles the up mouse event of the dec-Button.
+    ##
+    ##
+    def _onDecUp(self,ev):
+        self.value -= self.microStep
+        
+    ### Get the label object.
+    ##
+    ##
+    @property
+    def label(self):
+        return self._bar.label
+    
+    ### Set/Get the minimum value.
+    ##
+    ##
+    @property
+    def minValue(self):
+        return self._minValue
+    
+    ### 
+    ##
+    ##
+    @minValue.setter
+    def minValue(self,value):
+        if value == self.minValue:
+            return
+
+        self.maxValue = max(self.maxValue,value)
+        self.value = max(self.minValue,value)
+        self._minValue = value
+        self._bar.minValue = value
+    
+    ### Set/Get the maximum value.
+    ##
+    ##
+    @property
+    def maxValue(self):
+        return self._maxValue
+    
+    ###
+    ##
+    ##
+    @maxValue.setter
+    def maxValue(self,value):
+        if value == self._maxValue:
+            return
+
+        self.minValue = min(self.minValue,value)
+        self.value = min(self.value,value)
+        self._maxValue = value
+        self._bar.maxValue = value
+
+        
+    ### Set/Get the current value.
+    ##
+    ##
+    @property
+    def value(self):
+        return self._value
+    
+    ###
+    ##
+    ##
+    @value.setter
+    def value(self,value):
+        
+        if value == self._value:
+            return
+        value = max(
+            min(value,self._maxValue),
+            self._minValue
+        )
+        
+        self._value = value
+        self._bar.value = value
+        self._invalidate()
+
+    ### Set/Get the value by which the sliders value is incremented
+    ##  or decrimented by clicking a the navigation button.
+    ##
+    ##
+    @property
+    def step(self):
+        return self._step
+    
+    ###
+    ##
+    ##
+    @step.setter
+    def step(self,value):
+        self._step = value
+        
+    ### 
+    ##
+    ##
+    @property
+    def microStep(self):
+        return self._microStep
+    
+    ###
+    ##
+    ##
+    @microStep.setter
+    def microStep(self,value):
+        self._microStep = value
+        
+    ### Set/Get if the navigation buttons are visible.
+    ##
+    ##
+    @property
+    def showNavigation(self):
+        return self._showNavigation
+    
     ###
     ##
     ##
     @showNavigation.setter
     def showNavigation(self,value):
+        if self._showNavigation == value:
+            return
         
-        if self._showNavigation != value:
-            lm = self.layoutManager
-            if value:
-                self.addChild(self._decButton,0,0)
-                self.addChild(self._incButton,2,0)
-                lm.columnWidths = [self.height,0,self.height]
-            else:
-                self.removeChild(self._decButton)
-                self.removeChild(self._incButton)
-                lm.columnWidths = [1,0,1]
-            self._invalidate()
+        lm = self.layoutManager
+        if value:
+            self.addChild(self._decButton,0,0)
+            self.addChild(self._incButton,2,0)
+            lm.columnWidths = [self.height,0,self.height]
+        else:
+            self.removeChild(self._decButton)
+            self.removeChild(self._incButton)
+            lm.columnWidths = [1,0,1]
         
         self._showNavigation = value
+        self._invalidate()        
         
-        
+    def _calculateLayout(self):
+        super()._calculateLayout()

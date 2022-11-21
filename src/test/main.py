@@ -1,8 +1,10 @@
 import sys
+from reportlab.graphics.barcode.qrencoder import QRFNC1Second
 
 sys.path.append('./../')
 
 import biui
+import time
 
 
 def p0Click(ev):
@@ -33,7 +35,8 @@ def init():
     ################################################
     ###                                       WINDOW
     ################################################
-    wnd = biui.Window(1024,800)
+    wnd = biui.Window(1300,500)
+    wnd.y = 0
     
     if True:
         ################################################
@@ -58,6 +61,7 @@ def init():
             button0.y = 10+i*35
             button0.width = 100
             button0.height = 30
+            button0.id = "test"
             pane0.addChild(button0)
                 
         ###
@@ -250,13 +254,16 @@ def init():
         grid.addFlexPane(pane)
         
         wnd.addChild(grid)
-                
+        
 def main():
     init()
 
     while biui.main():
+        time.sleep(0.05)
         pass
-        
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
+    
+
+print("fertig")   

@@ -17,6 +17,7 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
         self._showValue = True
         ##
         self._label = biui.Label()
+        self._label.name = "label"
         self._label.alignment = biui.Alignment.CENTER_CENTER
         self._label.value = ""
         self.addChild(self._label,0,0)
@@ -33,8 +34,10 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
     ##
     @showValue.setter
     def showValue(self,value):
-        if self._showValue != value:
-            self._invalidate()
+        if value == self._showValue:
+            return
+
+        self._invalidate()
         if not value:
             self.label.value = ""
         else:
@@ -93,9 +96,10 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
     ##
     @value.setter
     def value(self,value):
+        if value == self._value:
+            return
         value = max(min(value,self.maxValue),self.minValue)
-        if self.value != value:
-            self._invalidate()
+        self._invalidate()
         self._value = value
         if self._showValue:
             self._label.value = value

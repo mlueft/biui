@@ -289,7 +289,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
 
             spacer.right = stayPane.left-FlexGrid._spacerWidth
             
-            ## the spacer is removed where it's a left neighbour
+            ## the spacer is removed where it is a left neighbour
             self.__removeSpacerRight(spacer)
                             
             ## the spacer is becomming a left neighbour
@@ -367,7 +367,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
             ##spacer.height = spacer.height-stayPane.height-FlexGrid._spacerWidth
             spacer.bottom = stayPane.top-FlexGrid._spacerWidth
             
-            ## the spacer is removed where it's a top neighbour
+            ## the spacer is removed where it is a top neighbour
             self.__removeSpacerBottom(spacer)
             
             ## the spacer is becomming a left neighbour
@@ -610,6 +610,7 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
         child.onMouseUp.add( self.__myPaneMouseUp )
 
         self._panes.append(child)
+        ##self._invalidate()
         
     ### Just a debug function during development.
     ##
@@ -1026,8 +1027,10 @@ class FlexGrid(biui.ContainerWidget.ContainerWidget):
     def _calculateLayout(self):
         
         if not self.isInvalide():
+            print("grid::calculateLayout quit.")
             return 
 
+        print("grid::calculateLayout.")
         ## the first pane is set up to fill the whole grid.
         if len(self._panes) == 1:
             self._panes[0].x = 0

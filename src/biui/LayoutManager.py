@@ -183,7 +183,7 @@ class LayoutManager():
         
     ### Calculates the absolute values of cols
     ##  in relation to size.
-    ##  TODO: A column width of 0 on purpose isn't possible.
+    ##  TODO: A column width of 0 on purpose is not possible.
     ##        It will be interpretes as a filler.
     ##  TODO: If abolute values are in sum bigger than size
     ##        filler will be negative. :-(

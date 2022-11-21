@@ -33,6 +33,8 @@ class Widget:
         ##
         self._isInvalide = True
         ##
+        self._name = ""
+        ##
         self._alignment = biui.Alignment.ABSOLUTE
         ## A reference to the theme function which is used to draw the widget.
         ## On Containerwidgets it's used to draw the widget's background.
@@ -64,6 +66,7 @@ class Widget:
         self._resized = False
         ##
         self.onResized = biui.EventManager()
+
         
     ### Sets the x/y position of the GUI element.
     ##
@@ -80,7 +83,24 @@ class Widget:
     @property
     def size(self):
         return (self.width, self.height)
+
+    ### 
+    ##
+    ##  @return            An integer value.
+    ##
+    @property
+    def name(self):
+        return self._name
     
+    ### Sets the x position of the GUI element.
+    ##
+    ##  @param value       An integer value.
+    ##  @return            None
+    ##
+    @name.setter
+    def name(self, value):
+        self._name = value
+            
     ### Returns the x position of the GUI element.
     ##
     ##  @return            An integer value.
@@ -97,6 +117,8 @@ class Widget:
     @x.setter
     def x(self, value):
         value = int(value)
+        if value == self._x:
+            return
         ## record old dirty rect for the old position
         self._recordDirtyRect()
         self._x = value
@@ -118,6 +140,8 @@ class Widget:
     @y.setter
     def y(self, value):
         value = int(value)
+        if value == self._y:
+            return
         ## record old dirty rect
         self._recordDirtyRect()
         self._y = value
@@ -208,16 +232,20 @@ class Widget:
     @width.setter     
     def width(self, value):
         value = int(value)
+        
+        if value == self._width:
+            return
+        
         ## record old dirty rect
         if self._alignment != biui.Alignment.FILL:
             value = min(value, self._maxWidth)
             value = max(value, self._minWidth)
         
-        if value != self._width:
-            self._recordDirtyRect()
-            self._width = max(1,value)
-            self._invalidate()
-            self._resized = True
+        self._recordDirtyRect()
+        self._width = max(1,value)
+        self._invalidate()
+        self.onResized.provoke(biui.Event(self))
+        self._resized = True
             
     ### 
     ##
@@ -275,16 +303,20 @@ class Widget:
     @height.setter
     def height(self, value):
         value = int(value)
+        
+        if value == self._height:
+            return
+        
         ## record old dirty rect
         if self._alignment != biui.Alignment.FILL:
             value = min(value, self._maxWidth)
             value = max(value, self._minWidth)
             
-        if value != self._height:
-            self._recordDirtyRect()
-            self._height = max(1,value)
-            self._invalidate()
-            self._resized = True
+        self._recordDirtyRect()
+        self._height = max(1,value)
+        self.onResized.provoke(biui.Event(self))
+        self._invalidate()
+        self._resized = True
             
     ### Returns the min width of the widget.
     ##
@@ -353,6 +385,8 @@ class Widget:
     ##  @return            None
     ##
     def _recordDirtyRect(self):
+        if self.parent == None:
+            return
         pos = self.toGlobal((0,0))
         self._dirtyRects.append((
             pos[0],
@@ -370,7 +404,7 @@ class Widget:
         return self._isInvalide
      
     ### Does some enecassary work if the GUI element
-    ##  became invalide. For example after changing it's size.
+    ##  became invalide. For example after changing its size.
     ##
     ##  @return            None
     ##
@@ -443,10 +477,21 @@ class Widget:
             self.onResized.provoke(biui.Event(self))
             self._resized = False
             
+    ###
+    ##
+    ##
+    def _beforeDraw(self):
+        pass
+    
+    ###
+    ##
+    ##
+    def _afterDraw(self):
+        pass
     
     ### Redraws the GUI element. This is for internal use.
     ##  Just use this function if you know what you are doing.
-    ##  Don't call super()._redraw().
+    ##  Do not call super()._redraw().
     ##  Copy the guard to your _redraw()-version
     ##  and set _isInvalide to False at the end!
     ##  If you derive from a widget and call super(),
@@ -456,15 +501,20 @@ class Widget:
     ##  @return            None
     ##
     def _redraw(self, texture, forceRedraw=False):
+        
         if not self.isInvalide():
             if not forceRedraw:
                 return 
                 
+
+        ##print( "redraw:{} {}x{}".format(self.name,self.x,self.y))
+        
         theme = biui.getTheme()
         self._themeBackgroundfunction(self.window.renderer,self,texture)
         
         self._isInvalide = False
-
+        
+        
     ### Is called if a mouse button got pressed and the
     ##  mouse pointer is over the GUI element.
     ##
@@ -528,7 +578,7 @@ class Widget:
         self.onMouseMove.provoke(ev)
     
     ### Is called key got pressed.
-    ##  It's necassry to call super().onKeyDown(ev)
+    ##  It is necassry to call super().onKeyDown(ev)
     ##  at the end.
     ##
     ##  @param ev                 A KeyEvent.
@@ -538,7 +588,7 @@ class Widget:
         self.onKeyDown.provoke(ev)
     
     ### Is called if a key got released.
-    ##  It's necassry to call super().onKeyUp(ev)
+    ##  It is necassry to call super().onKeyUp(ev)
     ##  at the end.
     ##
     ##  @param ev                 A KeyEvent.
@@ -548,7 +598,7 @@ class Widget:
         self.onKeyUp.provoke(ev)
     
     ### Is called if a key press ends in a entered character.
-    ##  It's necassry to call super().onTextInput(ev)
+    ##  It is necassry to call super().onTextInput(ev)
     ##  at the end.
     ##
     ##  @param ev                 A KeyEvent.
@@ -571,7 +621,7 @@ class Widget:
         
         return result
     
-    ### Converts local coordinates to global coordinates
+    ### Converts local coordinates to the top window's coordinates
     ##
     ##  @param coordinate         A Tuple with x and y coordinates.
     ##  @return                   A tuple. 

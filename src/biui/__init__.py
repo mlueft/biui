@@ -1,3 +1,4 @@
+
 import os
 from time import time
 
@@ -36,9 +37,13 @@ import biui.Spacer
 import biui.Progressbar
 import biui.Checkbox
 import biui.DL
+import biui.Hinting
+import biui.Style
+import biui.Direction
 
 from sdl2.surface import SDL_CreateRGBSurface
 from sdl2.mouse import SDL_BUTTON_LMASK, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_LEFT, SDL_BUTTON_X1, SDL_BUTTON_X2
+
 
 Color = biui.Color.Color
 EventPhase = biui.EventPhase.EventPhase
@@ -70,6 +75,10 @@ Spacer = biui.Spacer.Spacer
 Progressbar = biui.Progressbar.Progressbar
 Checkbox = biui.Checkbox.Checkbox
 DL = biui.DL.DL
+Hinting = biui.Hinting.Hinting
+Style = biui.Style.Style
+Direction = biui.Direction.Direction
+
 ##
 ##_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )
 
@@ -84,7 +93,7 @@ __theme = None
 
 ## Defines if all directy rects are drawn on screen.
 ## For debug use. This makes everything slower.
-__SHOWUPDATEBOXES = False
+__SHOWUPDATEBOXES = True
 
 ## Stores if pygame is initialized.
 __initialized__ = False
@@ -108,6 +117,21 @@ __mouseDownTime = None
 ## Folders in which biui is  looking for font files
 __fontFolders = []
 
+##
+__fonts = []
+
+##
+themeDebug = False
+
+##def profile(fnc):
+##    import cProfile, pstats
+##    profiler = cProfile.Profile()
+##    profiler.enable()
+##    fnc()
+##    profiler.disable()
+##    stats = pstats.Stats(profiler).sort_stats('tottime')
+##    stats.print_stats()
+    
 ### Initializes biui and sub systems. Can be called more than once.
 ##  It takes care about multiple calls.
 ##
@@ -118,7 +142,10 @@ def init():
     
     sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
     sdl2.ext.init()
+    sdl2.sdlttf.TTF_Init()
     biui.DL.init()
+    biui.__fillFontFolders()
+    biui.scanFonts()
     __initialized__ = True
     
     ##
@@ -140,14 +167,82 @@ def quit():
 ##
 ##
 def addFontFolder(path):
-    __fontFolders.append(path)
     
+    if not os.path.exists(path):
+        return False
+    
+    if path not in __fontFolders:
+        __fontFolders.append(path)
+    
+    return True
+
 ###
 ##
 ##
 def getFontFolders():
     return __fontFolders
 
+###
+##
+##
+def getFonts():
+    return __fonts
+
+###
+##
+##
+def scanFonts():
+    global __fonts
+    __fonts = []
+    
+    for f in __fontFolders:
+        for file in os.listdir(f):
+            subject = os.path.join(f,file)
+            if os.path.isfile(subject):
+                if subject[-4:].lower() == ".ttf":
+                    __fonts.append( [file,subject] )
+                    
+    return __fonts
+
+###
+##
+##
+def getFontPath(fontName):
+    
+    for f  in __fonts:
+        if f[0] == fontName:
+            return f[1]
+
+    ## TODO: react if no font is found.
+    pass
+    
+###
+##
+##
+def getDefaultFont():
+    return biui.getFontPath("padmaa.ttf")
+    return biui.getFontPath("GlacialIndifference-Regular.ttf")
+
+###
+##
+##
+def __fillFontFolders():
+    
+    ## DEFAULT
+    biui.addFontFolder( os.path.abspath("./../../fonts") )
+    
+    ## UBUNTU
+    base = "/usr/share/fonts/truetype"
+    for path in os.listdir(base):
+        subject = os.path.join(base,path)
+        if os.path.isdir(subject):
+            biui.addFontFolder( subject )
+    
+    ## WINDOWS
+    biui.addFontFolder( "c:\windows\fonts" )
+    
+    ## MACOS
+    
 ###
 ##
 ##
@@ -787,10 +882,6 @@ def main():
     ##print("--------------------------------")
     for w in __windows:
         w._redraw()
-        
-        ##if __SHOWUPDATEBOXES:
-        ##    for r in dr:
-        ##        DL.drawRect(w._getSurface(),(255,0,0),r,1)
         
     return len(__windows) > 0
 

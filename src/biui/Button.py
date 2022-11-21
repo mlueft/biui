@@ -14,6 +14,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
         self.height = 30
         self._state = biui.ButtonStates.NORMAL
         self._icon = None
+        self.name = "Button"
         
         self._label = biui.Label()
         self._label.alignment = biui.Alignment.CENTER_CENTER
@@ -50,7 +51,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
         return self
     
     ### Returns the embedded label instance
-    ##  to make it i's properties accessible.
+    ##  to make it its properties accessible.
     ##
     ##
     @property
@@ -65,7 +66,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
         return self._state
     
     ### Returns the icon instance of the button
-    ##  to make it's properties accessible. 
+    ##  to make its properties accessible. 
     ##
     ##
     @property
@@ -78,6 +79,8 @@ class Button(biui.ContainerWidget.ContainerWidget):
     ##
     @icon.setter
     def icon(self,icon):
+        if icon == self._icon:
+            return
         self._icon = icon
         self.addChild(icon,0,0)
         self._invalidate()
@@ -116,4 +119,7 @@ class Button(biui.ContainerWidget.ContainerWidget):
         self._recordDirtyRect()
         self._state = biui.ButtonStates.OVER
         self._invalidate()
-               
+                       
+        
+          
+        

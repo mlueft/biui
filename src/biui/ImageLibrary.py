@@ -1,7 +1,7 @@
 import biui
 
 ### TODO: Does a file based cache make sense?
-##        So we don't have to recompose all
+##        So we do not have to recompose all
 ##        images at each program start.
 ##
 class ImageLibrary():
@@ -174,7 +174,7 @@ class ImageLibrary():
             if self.cacheImagesOriginal:
                 self.__images[key] = imageOriginal
             
-            ## if size isn't given the original is ment.
+            ## if size is not given the original is ment.
             if width < 1 and height < 1:
                 return imageOriginal
             

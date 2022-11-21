@@ -147,7 +147,18 @@ class DL:
         
         if tgtRect == None:
             tgtRect = srcRect
-                
+            
+        ## If tgtRect is just a position,
+        ## take width and height from
+        ## source
+        if len(tgtRect) == 2:
+            tgtRect = (
+                tgtRect[0],
+                tgtRect[1],
+                srcRect[2],
+                srcRect[3],
+            )
+        
         tmpT = sdl2.SDL_GetRenderTarget(renderer)
         src = sdl2.SDL_Rect(
             int(srcRect[0]),
@@ -162,9 +173,7 @@ class DL:
             int(tgtRect[2]),
             int(tgtRect[3])
         )
-        
-        ##print( srcRect )
-        ##print( tgtRect )
+
         sdl2.SDL_SetRenderTarget(renderer,tTgt)
         sdl2.render.SDL_RenderCopy(renderer,tSrc,src,tgt)
         sdl2.SDL_SetRenderTarget(renderer,tmpT)

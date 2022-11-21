@@ -19,7 +19,7 @@ def init():
     ##
     ## Buttons
     ##
-    for i in range(10):
+    for i in range(2):
         button0 = biui.Button()
         ##button0.onMouseUp.add(_test.upHandler)
         button0.x = 100
@@ -27,7 +27,8 @@ def init():
         button0.width = 150
         button0.height = 40
         button0.label.font.size = 25
-        button0.label.color = (200,200,200)
+        button0.label.color = biui.Color(200,200,200)
+        button0.name = "test"+str(i)
         wnd.addChild(button0)
         
 def main():
@@ -36,9 +37,16 @@ def main():
     ## Temporary main loop
     ##
     while biui.main():
-        
-        ##sf.blit(text,(320 - text.get_width() // 2, 240 - text.get_height() // 2))
+        ##time.sleep(1)
         pass
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    import cProfile, pstats
+    profiler = cProfile.Profile()
+    profiler.enable()
     main()
+    profiler.disable()
+    stats = pstats.Stats(profiler).sort_stats('tottime')
+    stats.print_stats()
+    
+print("fertig")   

@@ -129,30 +129,34 @@ class ContainerWidget(biui.Widget.Widget):
         super()._calculateLayout()
         mySize = self.size
         
+        self._layoutManager._calculateLayout(mySize)
+        
         for c in self._children:
             c._calculateLayout()
         
-        self._layoutManager._calculateLayout(mySize)
 
-    ### This version doesn't work yet, because the subsurface
-    ##  must be completely inside the surface.
+    def _beforeDraw(self):
+        for c in self._children:
+            c._beforeDraw()
+    
+    def _afterDraw(self):
+        for c in self._children:
+            c._afterDraw()
+    
+    ### 
     ##
     ##
-
     def _redraw(self, texture, forceRedraw=False ):
-
+        
         if not self.isInvalide():
             if not forceRedraw:
-                ##return
-                pass
+                return
         
+        ##print( "redraw:{} {}x{} {}".format(self.name,self.x,self.y,forceRedraw))
+
         wnd = self.window
-        if self._texture == None:
-            self._texture = biui.DL.createTexture(
-                wnd.renderer,
-                self.width,
-                self.height
-            )
+##        if self._texture == None:
+        self._texture = biui.DL.createTexture(wnd.renderer,self.width,self.height)
             
         pos = self.position
         
@@ -162,9 +166,9 @@ class ContainerWidget(biui.Widget.Widget):
         theme = biui.getTheme()
         self._themeBackgroundfunction(self.window.renderer,self,_texture)
 
-        forceRedraw = self.isInvalide() or forceRedraw
         ## We draw all Children on our own surface        
         for c in self._children:
+            forceRedraw = self._isInvalide or forceRedraw
             c._redraw(_texture,forceRedraw)
                     
         self._themeForegroundfunction(self.window.renderer,self,_texture)
@@ -472,8 +476,8 @@ class ContainerWidget(biui.Widget.Widget):
             super()._onTextInput(ev)
                             
     def _invalidate(self):
-        for c in self._children:
-            c._invalidate()
+        ##for c in self._children:
+        ##    c._invalidate()
         biui.DL.free(self._texture)
         self._texture = None
         super()._invalidate()

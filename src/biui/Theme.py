@@ -1,6 +1,7 @@
 import biui
 import os
 import sdl2
+import random
 
 ### Does all the drawing stuff.
 ##
@@ -33,30 +34,50 @@ class Theme:
         
     ########################################################
     ##
+    ##
+    ##
+    ########################################################
+    def blinkBox(self, renderer, widget, texture):
+        r = random.randint(50,100)
+        g,b = r,r
+        color = biui.Color(r,g,b,255)
+        
+        biui.DL.drawRect(
+            renderer,
+            texture,
+            color.rgba,
+            (
+                widget.x,
+                widget.y,
+                widget.width,
+                widget.height
+            ),
+            1
+        )
+    
+    def blinkBox1(self, renderer, widget, texture):
+        r = random.randint(50,100)
+        g,b = r,r
+        color = biui.Color(r,g,b,255)
+        
+        biui.DL.drawRect(
+            renderer,
+            texture,
+            color.rgba,
+            (
+                0,
+                0,
+                widget.width,
+                widget.height
+            ),
+            1
+        )             
+    ########################################################
+    ##
     ##   MISC
     ##
     ########################################################
     
-    ### Returns the graphical size of the rendered text
-    ##  of the widget.
-    ##
-    ##
-    def getTextSize(self,widget):
-        return (10,10)
-        ## TODO: resolve Pygame dependency
-        font = pygame.font.SysFont(
-            widget.font.name,
-            widget.font.size
-        )
-        
-        sf = font.render(
-            widget.format.format(widget.value),
-            widget.antialiased,
-            widget.color
-        )
-        
-        return ( sf.contents.w,sf.contents.h)        
-        
     ### Draws nothing.
     ## 
     def drawEmpty(self, renderer, widget, texture):
@@ -69,13 +90,18 @@ class Theme:
     ########################################################
     
     ### Is called before the child objects are drawn.
-    ##  So, it's useed to draw the background.
+    ##  So, it is used to draw the background.
     ##
     def drawWindowBeforeChildren(self, renderer, widget, texture):
-        biui.DL.fill( renderer,texture, biui.Color(66,66,66,255).rgba )
+        
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return
+        
+        biui.DL.fill( renderer,texture, biui.Color(50,50,50,255).rgba )
 
     ### Is called after the child objects are drawn.
-    ##  So it's used to draw everything that has to be
+    ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawWindowAfterChildren(self, renderer, widget, texture):
@@ -88,23 +114,29 @@ class Theme:
     ########################################################
         
     ### Is called before the window child objects are drawn.
-    ##  So, it's useed to draw the background.
+    ##  So, it is used to draw the background.
     ## 
     def drawFlexGridBeforeChildren(self, renderer, widget, texture):
+        
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return
+        
         biui.DL.drawRect(
             renderer,
             texture,
-            biui.Color(53,53,53,255).rgba,
+            biui.Color(0,0,0,255).rgba,
             (
                 0,
                 0,
                 widget.width,
                 widget.height
-            )  
+            ),
+            1
         )
     
     ### Is called after the child objects are drawn.
-    ##  So it's used to draw everything that has to be
+    ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawFlexGridAfterChildren(self, renderer, widget, texture):
@@ -120,36 +152,42 @@ class Theme:
     ########################################################
         
     ### Is called before the child objects are drawn.
-    ##  So, it's useed to draw the background.
+    ##  So, it is used to draw the background.
     ## 
     def drawFlexPaneBeforeChildren(self, renderer, widget, texture):
+        
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return
+        
         biui.DL.drawRect(
             renderer,
             texture,
-            biui.Color(55,55,55,255).rgba,
+            biui.Color(155,155,155,255).rgba,
             (
                 0,
                 0,
                 widget.width,
                 widget.height
-            )  
+            ),
+            1  
         )
     
     ### Is called after the child objects are drawn.
-    ##  So it's used to draw everything that has to be
+    ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawFlexPaneAfterChildren(self, renderer, widget, texture):
         biui.DL.drawRect(
             renderer,
             texture,
-            biui.Color(80,80,80,255).rgba,
+            biui.Color(255,255,255,255).rgba,
             (
                 0,
                 0,
                 widget.width,
                 widget.height
-            ),1
+            ),0
         )
         
     ########################################################
@@ -165,11 +203,15 @@ class Theme:
     ##
     ##
     def drawFlexSpacer(self, renderer, widget, texture):
-        #return
+        
+        if biui.themeDebug:
+            self.blinkBox(renderer, widget, texture)
+            return
+
         biui.DL.drawRect(
             renderer,
             texture,
-            biui.Color(0,0,0,255).rgba,
+            biui.Color(0,0,255,255).rgba,
             (
                 widget.x,
                 widget.y,
@@ -186,9 +228,14 @@ class Theme:
     ########################################################
         
     ### Is called before the child objects are drawn.
-    ##  So, it's useed to draw the background.
+    ##  So, it is used to draw the background.
     ## 
     def drawPaneBeforeChildren(self, renderer, widget, texture):
+        
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return 
+        
         name = os.path.join(self.__themeFolder ,"pane_bg")
         img = self.__lib.getI9(renderer,name,widget.width,widget.height)
         ##img = self.__lib.getImage(renderer,name,widget.width,widget.height)
@@ -201,7 +248,7 @@ class Theme:
         )
     
     ### Is called after the child objects are drawn.
-    ##  So it's used to draw everything that has to be
+    ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawPaneAfterChildren(self, renderer, widget, texture):
@@ -227,6 +274,10 @@ class Theme:
     ##
     def drawButtonBeforeChildren(self, renderer, widget, texture):
         
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return 
+                
         state = widget.state
 
         if state == biui.ButtonStates.OVER:
@@ -279,13 +330,15 @@ class Theme:
     ########################################################
         
     ### Is called before the child objects are drawn.
-    ##  So, it's useed to draw the background.
+    ##  So, it is used to draw the background.
     ## 
     def drawButtonGroupBeforeChildren(self, renderer, widget, texture):
-        return
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return 
     
     ### Is called after the child objects are drawn.
-    ##  So it's used to draw everything that has to be
+    ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawButtonGroupAfterChildren(self, renderer, widget, texture):
@@ -298,9 +351,13 @@ class Theme:
     ########################################################
 
     ### Is called before the child objects are drawn.
-    ##  So, it's useed to draw the background.
+    ##  So, it is used to draw the background.
     ## 
     def drawProgressbarBeforeChildren(self, renderer, widget, texture):
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return 
+                
         ## background
         biui.DL.drawRect(
             renderer,
@@ -335,7 +392,7 @@ class Theme:
         )
         
     ### Is called after the child objects are drawn.
-    ##  So it's used to draw everything that has to be
+    ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawProgressbarAfterChildren(self, renderer, widget, texture):
@@ -369,25 +426,21 @@ class Theme:
     ##  
     ##  
     def drawLabel(self, renderer, widget, texture):
-        return
-        font = pygame.font.SysFont(
-            widget.font.name,
-            widget.font.size
-        )
         
-        sf = font.render(
+        tx = widget.font.render(
+            renderer,
             widget.format.format(widget.value),
-            widget.antialiased,
             widget.color
         )
         
         biui.DL.blit(
             renderer,
             texture,
-            sf,
-            widget.position,
-            (0,0,widget.width,widget.height)
+            tx,
+            widget.position
         )
+        
+        sdl2.SDL_DestroyTexture( tx )
 
     ########################################################
     ##
@@ -396,9 +449,14 @@ class Theme:
     ########################################################
         
     ### Is called before the child objects are drawn.
-    ##  So, it's useed to draw the background.
+    ##  So, it is used to draw the background.
     ## 
     def drawCheckboxBeforeChildren(self, renderer, widget, texture):
+        
+        if biui.themeDebug:
+            self.blinkBox1(renderer, widget, texture)
+            return 
+                
         state = widget.state
 
         if state == biui.ButtonStates.OVER:

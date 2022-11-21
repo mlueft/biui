@@ -46,6 +46,10 @@ class Window(biui.ContainerWidget.ContainerWidget):
         self.onWindowFocusLost = biui.EventManager()
         ##
         self.onWindowFocus = biui.EventManager()
+        ##
+        self._SHOWUPDATEBOXES = False
+        ##
+        self.__guiTexture = None
         
         ##print(dir(self._window))
         ## '__bool__', '__class__', '__ctypes_from_outparam__',
@@ -260,9 +264,10 @@ class Window(biui.ContainerWidget.ContainerWidget):
             print("SDL_WINDOWEVENT_FOCUS_LOST")
             self.onWindowFocusLost.provoke(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_TAKE_FOCUS:
-            print("SDL_WINDOWEVENT_TAKE_FOCUS")
-            self.onWindowFocus.provoke(ev)
-            self._invalidate()
+            #print("SDL_WINDOWEVENT_TAKE_FOCUS")
+            #self.onWindowFocus.provoke(ev)
+            #self._invalidate()
+            pass
         else:
             print("*Unknown Windowevent.")
             pass
@@ -289,51 +294,81 @@ class Window(biui.ContainerWidget.ContainerWidget):
 
 
     def _redraw(self, forceRedraw=False):
-
+        if self._SHOWUPDATEBOXES:
+            if self.__guiTexture != None:
+                ##print("cleargreen")
+                r = (0,0,self.width,self.height)
+                biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
+                biui.DL.free(self.__guiTexture)
+                self.__guiTexture = None
+                biui.DL.present(self.renderer)
+                return 
+        
         if not self.isInvalide():
             if not forceRedraw:
-                ##return
-                pass
+                ##print("cancle redraw")
+                return
         
-        if self._texture == None:
-            self._texture = biui.DL.createTexture(self.renderer,self.width,self.height)
-         
+        ##print("window::redraw----------------------------------------",forceRedraw)
+        
+        for c in self._children:
+            c._beforeDraw()
+        
         self._calculateLayout()
         
         theme = biui.getTheme()
-        theme.drawWindowBeforeChildren(self.renderer,self,self._texture)
         
-        forceRedraw = self.isInvalide()
+        if self._texture == None:
+            ##print("windows new texture")
+            self._texture = biui.DL.createTexture(self.renderer,self.width,self.height)
+            self.__guiTexture = self._texture
+            forceRedraw = True
+        
+        if self._SHOWUPDATEBOXES:
+            self.__guiTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
+            forceRedraw = True
+            
+        theme.drawWindowBeforeChildren(self.renderer,self,self.__guiTexture)
         
         for c in self._children:
-            c._redraw(self._texture,forceRedraw)
+            c._redraw(self.__guiTexture,forceRedraw)
                     
-        theme.drawWindowAfterChildren(self.renderer,self,self._texture)
+        theme.drawWindowAfterChildren(self.renderer,self,self.__guiTexture)
         
-        if False:
-            print("-------------------")
-            dr = self._getDirtyRectangles()
-            dr = [*set(dr)]
+        dr = self._getDirtyRectangles()
+        ## remove double rects
+        dr = set(dr)
+        
+        ## Draw update boxes
+        if self._SHOWUPDATEBOXES:
+            boxTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
             for r in dr:
-                ##print(r)
-                biui.DL.renderCopy(
-                    self.renderer,
-                    self._texture,
-                    r,
-                    r
-               )
-        
-        biui.DL.renderCopy(
-            self.renderer,
-            self._texture,
-            (0,0,self.width,self.height),
-            (0,0,self.width,self.height)
-        )
+                biui.DL.drawRect(self.renderer,boxTexture,(0,255,0,255),r,0)
+                
+            r = (0,0,self.width,self.height)
+            biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
+            biui.DL.renderCopy(self.renderer,boxTexture,r,r)
+            biui.DL.free(boxTexture)
+            ##print("render boxes")
+        else:
+            ## just render dirty rectangles
+            for r in dr:
+                r = list(r)
+                ## r must not reach over the widow's texture
+                r[0] = max(0,r[0])
+                r[1] = max(0,r[1])
+                r[2] = min(r[2],self.width-r[0])
+                r[3] = min(r[3],self.height-r[1])
+                
+                biui.DL.renderCopy(self.renderer,self._texture,r,r)
             
         biui.DL.present(self.renderer)
         
         self._isInvalide = False
         
+        for c in self._children:
+            c._afterDraw()
+                    
     def getChildAt(self, pos):
         for c in reversed(self._children):
             cPos = c.toGlobal((0,0))
@@ -348,8 +383,6 @@ class Window(biui.ContainerWidget.ContainerWidget):
         return self
     
     def _recordDirtyRect(self):
-        ##print("Window::_recordDirtyRect")
-        ##return
         self._dirtyRects = [(
             0,
             0,

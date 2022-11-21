@@ -56,7 +56,7 @@ def main():
             pane[0].width = pane[3]+math.sin(i/pane[5])*50
             pane[0].height = pane[4]-math.cos(i/pane[6])*50
             pane[0].x = pane[1]+pane[0].width/2
-            pane[0].y = pane[2]+pane[0].height/2
+            pane[0].y = pane[2]+pane[0].height/2+math.cos(i/10)*150
             
         time.sleep(0.005)
         i +=1

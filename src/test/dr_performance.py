@@ -58,7 +58,7 @@ def main():
             pane[0].x = pane[1]+pane[0].width/2
             pane[0].y = pane[2]+pane[0].height/2+math.cos(i/10)*150
             
-        time.sleep(0.1)
+        time.sleep(0.01)
         i +=1
         
         biui.main()

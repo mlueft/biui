@@ -40,6 +40,8 @@ import biui.DL
 import biui.Hinting
 import biui.Style
 import biui.Direction
+import biui.DirtyRectangleManager
+
 
 from sdl2.surface import SDL_CreateRGBSurface
 from sdl2.mouse import SDL_BUTTON_LMASK, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_LEFT, SDL_BUTTON_X1, SDL_BUTTON_X2
@@ -78,6 +80,7 @@ DL = biui.DL.DL
 Hinting = biui.Hinting.Hinting
 Style = biui.Style.Style
 Direction = biui.Direction.Direction
+DirtyRectangleManager = biui.DirtyRectangleManager.DirtyRectangleManager
 
 ##
 ##_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )

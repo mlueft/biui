@@ -388,7 +388,7 @@ class Widget:
         if self.parent == None:
             return
         pos = self.toGlobal((0,0))
-        self._dirtyRects.append((
+        self.window.recortDirtyRectangle((
             pos[0],
             pos[1],
             self._width,

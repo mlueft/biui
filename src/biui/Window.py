@@ -47,7 +47,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         ##
         self.onWindowFocus = biui.EventManager()
         ##
-        self._SHOWUPDATEBOXES = True
+        self._SHOWUPDATEBOXES = False
         ##
         self.__guiTexture = None
         

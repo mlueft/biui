@@ -50,6 +50,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
         self._SHOWUPDATEBOXES = False
         ##
         self.__guiTexture = None
+        ##
+        self.__dr = biui.DirtyRectangleManager()
         
         ##print(dir(self._window))
         ## '__bool__', '__class__', '__ctypes_from_outparam__',
@@ -98,6 +100,12 @@ class Window(biui.ContainerWidget.ContainerWidget):
     ## SDL_RaiseWindow
     ## SDL_RestoreWindow
     
+    ###
+    ##
+    ##
+    def recortDirtyRectangle(self,rect):
+        self.__dr.add(rect)
+        
     ### Returns the x position of the GUI element.
     ##
     ##  @return            An integer value.
@@ -335,15 +343,16 @@ class Window(biui.ContainerWidget.ContainerWidget):
                     
         theme.drawWindowAfterChildren(self.renderer,self,self.__guiTexture)
         
-        dr = self._getDirtyRectangles()
+        dr = self.__dr.getRectangles()
         ## remove double rects
-        dr = set(dr)
+        ##dr = set(dr)
         
         ## Draw update boxes
         if self._SHOWUPDATEBOXES:
             boxTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
             for r in dr:
-                biui.DL.drawRect(self.renderer,boxTexture,(0,255,0,255),r,0)
+                _r = [r[0],r[1],r[2]-r[0],r[3]-r[1]]
+                biui.DL.drawRect(self.renderer,boxTexture,(0,255,0,255),_r,0)
                 
             r = (0,0,self.width,self.height)
             biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
@@ -383,9 +392,10 @@ class Window(biui.ContainerWidget.ContainerWidget):
         return self
     
     def _recordDirtyRect(self):
-        self._dirtyRects = [(
+        self.recortDirtyRectangle((
             0,
             0,
             self.width,
             self.height
-        )]
+        ))
+            

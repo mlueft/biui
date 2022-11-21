@@ -50,7 +50,7 @@ def main():
     init()
     i = 0
     start = time.time()
-    while i < 200:
+    while i < 5000:
         
         for pane in panes:
             pane[0].width = pane[3]+math.sin(i/pane[5])*50

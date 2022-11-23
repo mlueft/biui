@@ -21,49 +21,49 @@ class FlexSpacer(biui.Widget.Widget):
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawFlexSpacer
      
-    ###
+    ### Indicates if the spacer is vertical.
     ##
     ##
     @property
     def isVertical(self):
         return self._isVertical
 
-    ###
+    ### Indicates if the spacer is horizontal.
     ##
     ##
     @property
     def isHorizontal(self):
         return not self._isVertical
         
-    ###
+    ### Returns all right/up neighbours.
     ##
     ##   
     @property 
     def leftNeighbours(self):
         return self._leftNeibours
     
-    ###
+    ### Sets all right/up neighbours.
     ##
     ##
     @leftNeighbours.setter
     def leftNeighbours(self,value):
         self._leftNeibours = value
     
-    ###
+    ### Returns all right/down neighbours.
     ##
     ##
     @property
     def rightNeighbours(self):
         return self._rightNeighbours
     
-    ###
+    ### Sets all right/down neighbours.
     ##
     ##
     @rightNeighbours.setter
     def rightNeighbours(self,value):
         self._rightNeighbours = value
             
-    ###
+    ### Adds a left/up neighbour.
     ##
     ##
     def addLeftNeighbour(self,pane):
@@ -73,7 +73,7 @@ class FlexSpacer(biui.Widget.Widget):
         
         self._leftNeibours.append(pane)
     
-    ###
+    ### Adds a right/down neighbour.
     ##
     ##
     def addRightNeighbour(self,pane):
@@ -83,21 +83,21 @@ class FlexSpacer(biui.Widget.Widget):
         
         self._rightNeighbours.append(pane)
     
-    ###
+    ### Adds one or more left/up neighbours.
     ##
     ##
     def addLeftNeighbours(self,panes):
         for p in panes:
             self.addLeftNeighbour(p)
     
-    ###
+    ### Adds one or more right/down neighbours.
     ##
     ##
     def addRightNeighbours(self,panes):
         for p in panes:
             self.addRightNeighbour(p)
             
-    ###
+    ### Removes the neighbour, if it is found as a neighbour.
     ##
     ##
     def removeNeighbour(self,pane):
@@ -107,7 +107,7 @@ class FlexSpacer(biui.Widget.Widget):
         if pane in self._rightNeighbours:
             self._rightNeighbours.remove(pane)
 
-    ###
+    ### Removes one or more neighbours if they are found as neighbours.
     ##
     ##
     def removeNeighbours(self,panes):
@@ -115,19 +115,19 @@ class FlexSpacer(biui.Widget.Widget):
             self.removePane(pane)
 
 
-    ###
+    ### Checks if pane is a left/up neighbour.
     ##
     ##
     def isLeftNeighbour(self,pane):
         return pane in self._leftNeibours
     
-    ###
+    ### Checks id pane is a right/down neighbour.
     ##
     ##
     def isRightNeighbour(self,pane):
         return pane in self._rightNeighbours
     
-    ###
+    ### Aligns all neighbour acording to the current left/right borders.
     ##
     ##
     def alignNeighbours(self):

@@ -14,7 +14,8 @@ class DL:
 
     def init():
         sdl2.ext.init()
-    
+        ##PYSDL2_INIT()
+        
     def quit():
         pass
     

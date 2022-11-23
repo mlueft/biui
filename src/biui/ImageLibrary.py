@@ -7,13 +7,21 @@ import biui
 class ImageLibrary():
     
     def __init__(self):
+        ## Stores all loaded or processed images.
         self.__images = {}
+        ## Controls if resized images are cached.
         self.cacheImagesScaled = True
+        ## Controls if original images are cached.
         self.cacheImagesOriginal = True
+        ## Controls if I9 images are cached.
         self.cacheImagesI9 = True
         
     ### Returns an I9 of the given width and height.
     ##
+    ##  @param renderer
+    ##  @param name        Filename as string.
+    ##  @param width       Width of the resulting image.
+    ##  @param height      Height of the resulting image.
     ##
     def getI9(self,renderer,name,width,height):
 
@@ -201,7 +209,7 @@ class ImageLibrary():
         
         return imageScaled
     
-    ###
+    ### Releases all chached images.
     ##
     ##
     def clearCache(self):
@@ -210,7 +218,7 @@ class ImageLibrary():
             biui.DL.free(img)
         self.__images.clear()
         
-    ###
+    ### Returns the number of cached images.
     ##
     ##
     def getSize(self):
@@ -224,7 +232,7 @@ class ImageLibrary():
         for i  in self.__images.keys():
             print(i)
     
-    ###
+    ### Releases all resources.
     ##
     ##
     def quit(self):

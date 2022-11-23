@@ -18,9 +18,17 @@ class DOMEvent(biui.Event.Event):
     def stopPropagation(self):
         self._stopPropagation = True
 
+    ### Returns the event phase.
+    ##
+    ## @return      An integer value representing an
+    ##              enum value of biui.EventPhase
+    ##
     @property
     def phase(self):
         return self._phase
     
+    ### Switches the eventto the P phase.
+    ##
+    ##
     def _nextPhase(self):
         self._phase = biui.EventPhase.UP

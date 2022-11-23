@@ -100,7 +100,6 @@ class ContainerWidget(biui.Widget.Widget):
     
         return super().isInvalide()
     
-        
     ### Returns the layout manager.
     ##
     ##  @return            A biui.LayoutManager.

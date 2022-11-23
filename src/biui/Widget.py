@@ -150,12 +150,17 @@ class Widget:
     ### Set/Get the left border of the widget.
     ##  Is equqalent to x.
     ##
+    ##  @return            An integer value.
+    ##
     @property
     def left(self):
         return self.x
     
-    ###
+    ### Sets the left border.
+    ##  Its the distance of the parent'sleft border to
+    ##  the own left border.
     ##
+    ##  @param value       An integer value.
     ##
     @left.setter
     def left(self,value):
@@ -169,12 +174,17 @@ class Widget:
     ##  Incrementing top decreses the height.
     ##  The bottom border stays the same.
     ##
+    ##  @return            An integer value.
+    ##
     @property
     def top(self):
         return self.y
     
-    ###
+    ### Sets the top border.
+    ##  Its the distance of the parents top 
+    ##  border to the own top border.
     ##
+    ##  @param value       An integer value.
     ##
     @top.setter
     def top(self,value):
@@ -188,12 +198,17 @@ class Widget:
     ##  Incrementing right increments width.
     ##  The left border stays the same.
     ##
+    ##  @return            An integer value.
+    ##
     @property
     def right(self):
         return self.x+self.width
     
-    ###
+    ### Sets the right border of the widget.
+    ##  It is the distance of the parent left border
+    ##  to the own right border.
     ##
+    ##  @param value       An integer value.
     ##
     @right.setter
     def right(self,value):
@@ -205,12 +220,18 @@ class Widget:
     ##  Incrementing bottom increments height.
     ##  top stays the same.
     ##
+    ##  @return            An integer value.
+    ##
     @property
     def bottom(self):
         return self.y+self.height
     
-    ###
+    ### Sets the bottom border of the widget.
+    ##  Its value is the distance of the top
+    ##  border of the parent widget to the own bottom
+    ##  border-
     ##
+    ##  @param value       An integer value.
     ##
     @bottom.setter
     def bottom(self,value):
@@ -247,7 +268,7 @@ class Widget:
         self.onResized.provoke(biui.Event(self))
         self._resized = True
             
-    ### 
+    ### Returns the min widt value of the widget.
     ##
     ##  @return            An integer value.
     ##
@@ -255,7 +276,7 @@ class Widget:
     def minWidth(self):
         return self._minWidth
     
-    ### 
+    ### Sets the min width value of the widget.
     ##
     ##  @param value       An integer value.
     ##  @return            None
@@ -267,7 +288,7 @@ class Widget:
         if self._minWidth > self._width:
             self.width = self._minWidth
 
-    ### 
+    ### Returns the max width value of the widget.
     ##
     ##  @return            An integer value.
     ##
@@ -275,7 +296,7 @@ class Widget:
     def maxWidth(self):
         return self._maxWidth
 
-    ### 
+    ### Sets the max width value of the widget.
     ##
     ##  @param value       An integer value.
     ##  @return            None
@@ -387,6 +408,8 @@ class Widget:
     def _recordDirtyRect(self):
         if self.parent == None:
             return
+        if self.window == None:
+            return
         pos = self.toGlobal((0,0))
         self.window.recortDirtyRectangle((
             pos[0],
@@ -435,6 +458,8 @@ class Widget:
         while True:
             if type(parent) == biui.Window:
                 return parent
+            if parent == None:
+                return
             parent = parent.parent 
 
     ### Returns the parent GUI element of the GUI element.
@@ -477,13 +502,13 @@ class Widget:
             self.onResized.provoke(biui.Event(self))
             self._resized = False
             
-    ###
-    ##
+    ### Is called before the drawing procedure ist starting
+    ##  to calculate the layout and before _redraw is called.
     ##
     def _beforeDraw(self):
         pass
     
-    ###
+    ### Is called after all redwaing is done.
     ##
     ##
     def _afterDraw(self):
@@ -506,9 +531,6 @@ class Widget:
             if not forceRedraw:
                 return 
                 
-
-        ##print( "redraw:{} {}x{}".format(self.name,self.x,self.y))
-        
         theme = biui.getTheme()
         self._themeBackgroundfunction(self.window.renderer,self,texture)
         

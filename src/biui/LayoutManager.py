@@ -21,6 +21,8 @@ class LayoutManager():
         
     ### Just adds columns or Rows at the end
     ##
+    ##  @param width
+    ##  @param height
     ##
     def _resizeChildList(self,width,height):
         if width == 0:
@@ -78,13 +80,17 @@ class LayoutManager():
     
     ### Set/Get all column widths.
     ##
+    ##  @return      A List with the column widths.
     ##
     @property
     def columnWidths(self):
         return self._columnWidths
         
-    ###
+    ### Sets the column widths.
     ##
+    ##  @param values    A list with column. 
+    ##                   Integer values are are absolut values.
+    ##                   Float values are procentual values. 
     ##
     @columnWidths.setter
     def columnWidths(self,values):
@@ -98,13 +104,17 @@ class LayoutManager():
     
     ### Set/Get all row heights.
     ##
+    ##  @return      A List with the row heights.
     ##
     @property
     def rowHeights(self):
         return self._rowHeights
     
-    ###
+    ### Sets the row heights.
     ##
+    ##  @param values    A list row heights. 
+    ##                   Integer values are are absolut values.
+    ##                   Float values are procentual values. 
     ##
     @rowHeights.setter
     def rowHeights(self,values):
@@ -118,6 +128,8 @@ class LayoutManager():
     
     ### Sets the width of the given column.
     ##
+    ##  @param column   The index of the column.
+    ##  @param value    The width of the column.
     ##
     def setColumnWidth(self,column,value):
         self._resizeChildList(column,0)
@@ -128,6 +140,8 @@ class LayoutManager():
             
     ### Sets the height of the given row.
     ##
+    ##  @param row      The index of the row.
+    ##  @param values   The height of the row
     ##
     def setRowHeight(self,row,values):
         self._resizeChildList(0,row)
@@ -140,6 +154,7 @@ class LayoutManager():
     
     ### Returns the (column,row) of the given child.
     ##
+    ##  @param child      A wifget instance.
     ##
     def getPositionOfChild(self,child):
         for i,column in enumerate(self._children):
@@ -152,6 +167,8 @@ class LayoutManager():
     ### Adds a column at the given position.
     ##  Columns are moved to right.
     ##
+    ##  @param index    The index of the column after that the column is inserted.
+    ##  @param width    The width of the inserted column.
     ##
     def insertColumnAt(self,index,width = 0):
         self._children.insert(index,[])
@@ -163,6 +180,8 @@ class LayoutManager():
     ### Adds a Row at the given position.
     ##  Rows are moved down.
     ##
+    ##  @param index   The indexof the row after that the row is inserted.
+    ##  @param height  The height of the inserted row.
     ##
     def insertRowAt(self,index,height=0):
 
@@ -173,6 +192,7 @@ class LayoutManager():
         
     ### Returns the width value of the given column.
     ##
+    ##  @param index     The index of the column.
     ##
     def getColumnWidth(self,index):
         return self._columnWidths[index]

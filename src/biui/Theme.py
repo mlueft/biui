@@ -27,6 +27,7 @@ class Theme:
     
     ### Sets the current used theme name.
     ##
+    ##  @param name   The folder name of the Theme.
     ##
     def selectTheme(self,name):
         self.__themeFolder = name
@@ -79,6 +80,7 @@ class Theme:
     ########################################################
     
     ### Draws nothing.
+    ##
     ## 
     def drawEmpty(self, renderer, widget, texture):
         return

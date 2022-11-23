@@ -43,8 +43,9 @@ class Label(biui.Widget.Widget):
     def format(self):
         return self._format
     
-    ###
+    ### Sets the label's format.
     ##
+    ## @param value  
     ##   
     @format.setter
     def format(self,value):
@@ -59,8 +60,9 @@ class Label(biui.Widget.Widget):
     def value(self):
         return self._value
     
-    ###
+    ###  Sets the shown text.
     ##
+    ##   @param value   The text that should be shown.
     ##   
     @value.setter
     def value(self,value):
@@ -69,13 +71,15 @@ class Label(biui.Widget.Widget):
         
     ### Set/Get the text color.
     ##
+    ##  @return  The color orject.
     ##
     @property
     def color(self):
         return self._color
     
-    ###
+    ### Sets the color of the text.
     ##
+    ##  @param value
     ##
     @color.setter
     def color(self,value):
@@ -84,13 +88,15 @@ class Label(biui.Widget.Widget):
     
     ### Set/Get the font object.
     ##
+    ##  @return
     ##
     @property   
     def font(self):
         return self._font
         
-    ###
+    ### Sets the font object.
     ##
+    ##  @param value 
     ##
     @font.setter
     def font(self,value):

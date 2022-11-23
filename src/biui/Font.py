@@ -11,6 +11,9 @@ from sdl2.pixels import SDL_Color
 ##
 class Font():
     
+    ###
+    ##
+    ##
     def __init__(self,fileName = None, size = 20 ):
         
         if fileName == None:
@@ -26,7 +29,7 @@ class Font():
         ##
         self.onSizeChanged = biui.EventManager()
         
-    ###
+    ### Closes the loadedFont.
     ##
     ##    
     def close(self):
@@ -71,6 +74,7 @@ class Font():
     ### Set the font size.
     ##
     ##   @param  value   (bool)
+    ##
     @size.setter   
     def size(self, value):
         sdl2.sdlttf.TTF_SetFontSize(
@@ -96,6 +100,7 @@ class Font():
     
     ### Sets the font hinting.
     ##
+    ##  @param value       An integer value.
     ##
     @hinting.setter
     def hinting(self, value):
@@ -114,6 +119,7 @@ class Font():
     ### Sets the font kerning.
     ##
     ##   @param  value   (bool)
+    ##
     @kerning.setter
     def kerning(self, value):
         sdl2.sdlttf.TTF_SetFontKerning(
@@ -132,6 +138,7 @@ class Font():
     ### Sets the font style.
     ##
     ##   @param  value   (bool)
+    ##
     @style.setter
     def style(self, value):
         sdl2.sdlttf.TTF_SetFontStyle(
@@ -141,6 +148,8 @@ class Font():
     
     ### Gets the font outline.
     ##
+    ##
+    ##
     @property
     def outline(self):
         return sdl2.sdlttf.TTF_GetFontOutline(self._font)
@@ -148,6 +157,7 @@ class Font():
     ### Sets the font outline.
     ##
     ##   @param  value   (int)
+    ##
     @outline.setter
     def outline(self, value):
         sdl2.sdlttf.TTF_SetFontOutline(
@@ -157,12 +167,15 @@ class Font():
 
     ### Gets the font alignment.
     ##
+    ##
+    ##
     @property
     def alignment(self):
         return sdl2.sdlttf.TTF_GetFontWrappedAlign(self._font)
     
     ### Sets the font alignment.
     ##  TODO: Build ENUM-Class
+    ##
     ##   @param  value
     ##
     @alignment.setter
@@ -179,7 +192,9 @@ class Font():
         return self._direction
         
     ### Sets the font direction.
+    ##
     ##   @param  value   (int)
+    ##
     @direction.setter
     def direction(self, value):
         self._direction = value
@@ -190,6 +205,8 @@ class Font():
 
     ### Gets width and height of the given text
     ##  in pixels.
+    ##
+    ##   @param text
     ##
     def getRenderSize(self,text):
         
@@ -225,6 +242,10 @@ class Font():
     ### Renders the given text and returns a new texture
     ##  width the rendered text.
     ##
+    ##   @param renderer
+    ##   @param text
+    ##   @param color
+    ##   @param wrapLength
     ##
     def render(self,renderer,text,color,wrapLength=0):
         

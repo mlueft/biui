@@ -47,7 +47,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         ##
         self.onWindowFocus = biui.EventManager()
         ##
-        self._SHOWUPDATEBOXES = False
+        self._SHOWUPDATEBOXES = True
         ##
         self.__guiTexture = None
         ##
@@ -106,40 +106,22 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def recortDirtyRectangle(self,rect):
         self.__dr.add(rect)
         
-    ### Returns the x position of the GUI element.
-    ##
-    ##  @return            An integer value.
-    ##
     @property
     def x(self):
         x,y = biui.DL.getWindowPos(self._window)
         return x
     
-    ### Sets the x position of the GUI element.
-    ##
-    ##  @param value       An integer value.
-    ##  @return            None
-    ##
     @x.setter
     def x(self, value):
         if value == self.x:
             return
         biui.DL.setWindowPos(self._window,value,self.y)
     
-    ## Returns the y position of the GUI element.
-    ##
-    ##  @return            An integer value.
-    ##
     @property
     def y(self):
         x,y = biui.DL.getWindowPos(self._window)
         return y
 
-    ### Sets the y position of the GUI element.
-    ##
-    ##  @param value       An integer value.
-    ##  @return            None    
-    ##
     @y.setter
     def y(self, value):
         if value == self.y:
@@ -280,12 +262,17 @@ class Window(biui.ContainerWidget.ContainerWidget):
             print("*Unknown Windowevent.")
             pass
 
-    ###
+    ### Returns the current mouse position on the window.
     ##
+    ##  @return         A tuple with x andy position of the
+    ##                  mouse pointer.
     ##
     def getMousePosition(self):
         return biui.getMousePosition()
     
+    ### Returns the windows internal id.
+    ##
+    ##
     @property
     def id(self):
         return self._id 
@@ -296,6 +283,9 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def _onQuit(self):
         pass
 
+    ### Returns the window's renderer.
+    ##
+    ##
     @property
     def renderer(self):
         return self._renderer
@@ -314,7 +304,6 @@ class Window(biui.ContainerWidget.ContainerWidget):
         
         if not self.isInvalide():
             if not forceRedraw:
-                ##print("cancle redraw")
                 return
         
         ##print("window::redraw----------------------------------------",forceRedraw)

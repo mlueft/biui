@@ -147,6 +147,8 @@ def init():
     sdl2.ext.init()
     sdl2.sdlttf.TTF_Init()
     biui.DL.init()
+    
+
     biui.__fillFontFolders()
     biui.scanFonts()
     __initialized__ = True

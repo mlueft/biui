@@ -64,11 +64,17 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self.step = 0.5
         self.showNavigation = True
         
+    ###
+    ##
+    ##
     def _barMouseDown(self,ev):
         self._barDownPosition = ev.position
         self.window.onMouseMove.add(self._wndMouseMove)
         self.window.onMouseUp.add(self._wndMouseUp)
-        
+      
+    ###
+    ##
+    ##  
     def _wndMouseMove(self,ev):
         ev.stopPropagation()
         delta = ev.x-self._barDownPosition[0]
@@ -126,13 +132,15 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     
     ### Set/Get the maximum value.
     ##
+    ##  @return    The max value of the slider.
     ##
     @property
     def maxValue(self):
         return self._maxValue
     
-    ###
+    ### Sets teh max value of the slider.
     ##
+    ##  @param value    The max value of the slider.
     ##
     @maxValue.setter
     def maxValue(self,value):
@@ -147,13 +155,15 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         
     ### Set/Get the current value.
     ##
+    ##  @return    The current value of the slider.
     ##
     @property
     def value(self):
         return self._value
     
-    ###
+    ### Sets the current value of the slider.
     ##
+    ##  @param value   The value of the slider.
     ##
     @value.setter
     def value(self,value):
@@ -170,21 +180,25 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self._invalidate()
 
     ### Set/Get the value by which the sliders value is incremented
-    ##  or decrimented by clicking a the navigation button.
+    ##  or decrimented by dragging with the mouse.
     ##
+    ##  @return
     ##
     @property
     def step(self):
         return self._step
     
-    ###
+    ### Sets the step value of the slider.
     ##
+    ##  @param value  
     ##
     @step.setter
     def step(self,value):
         self._step = value
         
-    ### 
+    ### Set/Get the value by which the sliders value is incremented
+    ##  or decrimented by clicking a the navigation button.
+    ##
     ##
     ##
     @property

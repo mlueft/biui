@@ -1,5 +1,8 @@
+#include "pysdl2.inc"
+
 import biui
 import sdl2
+import ctypes
 
 ###
 ##
@@ -12,7 +15,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def __init__(self,width,height):
         super().__init__()
         self._window = biui.DL.createWindow( "",(width,height))
-        self._id = biui.DL.getWindowId(self._window)
+        ##self._id = biui.DL.getWindowId(self._window)
+        self._id = PYSDL2_GET_WINDOW_ID(self._window)
         self._title = ""
         self._renderer = biui.DL.createRenderer(self._window)
 
@@ -47,7 +51,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         ##
         self.onWindowFocus = biui.EventManager()
         ##
-        self._SHOWUPDATEBOXES = True
+        self._SHOWUPDATEBOXES = False
         ##
         self.__guiTexture = None
         ##
@@ -115,7 +119,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def x(self, value):
         if value == self.x:
             return
-        biui.DL.setWindowPos(self._window,value,self.y)
+        ##biui.DL.setWindowPos(self._window,value,self.y)
+        PYSDL2_SETWINDOWPOS(self._window,value,self.y)
     
     @property
     def y(self):
@@ -126,11 +131,12 @@ class Window(biui.ContainerWidget.ContainerWidget):
     def y(self, value):
         if value == self.y:
             return
-        biui.DL.setWindowPos(self._window,self.x,value)
+        ##biui.DL.setWindowPos(self._window,self.x,value)
+        PYSDL2_SETWINDOWPOS(self._window,self.x,value)
 
     @property
     def width(self):
-        w,h = biui.DL.getWindowSize(self._window)
+        PYSDL2_GETWINDOWSIZE(self._window,w,h)
         return w
     
     @width.setter
@@ -139,11 +145,11 @@ class Window(biui.ContainerWidget.ContainerWidget):
             return
         if value > self.width:
             self._invalidate()
-        biui.DL.setWindowSize(self._window,value,self.height)
+        PYSDL2_SETWINDOWSIZE(self._window,value,self.height)
     
     @property    
     def height(self):
-        w,h = biui.DL.getWindowSize(self._window)
+        PYSDL2_GETWINDOWSIZE(self._window,w,h)
         return h
     
     @height.setter
@@ -152,7 +158,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
             return
         if value > self.height:
             self._invalidate()
-        biui.DL.setWindowSize(self._window,self.width,value)
+        PYSDL2_SETWINDOWSIZE(self._window,self.width,value)
 
 
     ## Returns the title of the window.
@@ -170,7 +176,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
     ##
     @title.setter
     def title(self, value):
-        biui.DL.setWindowTitle(self._window,value)
+        ##biui.DL.setWindowTitle(self._window,value)
+        PYSDL2_SETWINDOWTITLE(self._window,value)
         self._title = value
     
     ###
@@ -205,7 +212,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         elif event.window.event == sdl2.SDL_WINDOWEVENT_MOVED:
             ##print("SDL_WINDOWEVENT_MOVED")
             if self.x != event.window.data1 or self.y != event.window.data2:
-                biui.DL.setWindowSize(
+                bPYSDL2_SETWINDOWSIZE(
                     self._window,
                     event.window.data1,
                     event.window.data2
@@ -214,7 +221,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         elif event.window.event == sdl2.SDL_WINDOWEVENT_RESIZED:
             ##print("SDL_WINDOWEVENT_RESIZED")
             if self.width != event.window.data1 or self.height != event.window.data2:
-                biui.DL.setWindowSize(
+                PYSDL2_SETWINDOWSIZE(
                     self._window,
                     event.window.data1,
                     event.window.data2
@@ -224,11 +231,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         elif event.window.event == sdl2.SDL_WINDOWEVENT_SIZE_CHANGED:
             ##print("SDL_WINDOWEVENT_SIZE_CHANGED(%s,%s)",event.window.data1,event.window.data2)
             if self.width != event.window.data1 or self.height != event.window.data2:
-                biui.DL.setWindowSize(
-                    self._window,
-                    event.window.data1,
-                    event.window.data2
-                )
+                PYSDL2_SETWINDOWSIZE(self._window,event.window.data1,event.window.data2)
                 self.onWindowSizeChanged.provoke(ev)
                 self._invalidate()
         elif event.window.event == sdl2.SDL_WINDOWEVENT_MINIMIZED:
@@ -254,9 +257,9 @@ class Window(biui.ContainerWidget.ContainerWidget):
             print("SDL_WINDOWEVENT_FOCUS_LOST")
             self.onWindowFocusLost.provoke(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_TAKE_FOCUS:
-            #print("SDL_WINDOWEVENT_TAKE_FOCUS")
-            #self.onWindowFocus.provoke(ev)
-            #self._invalidate()
+            ##print("SDL_WINDOWEVENT_TAKE_FOCUS")
+            ##self.onWindowFocus.provoke(ev)
+            ##self._invalidate()
             pass
         else:
             print("*Unknown Windowevent.")
@@ -296,10 +299,12 @@ class Window(biui.ContainerWidget.ContainerWidget):
             if self.__guiTexture != None:
                 ##print("cleargreen")
                 r = (0,0,self.width,self.height)
-                biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
+                ##biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
+                PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
                 biui.DL.free(self.__guiTexture)
                 self.__guiTexture = None
-                biui.DL.present(self.renderer)
+                ##biui.DL.present(self.renderer)
+                PYSDL2_PRESENT(self.renderer)
                 return 
         
         if not self.isInvalide():
@@ -344,8 +349,10 @@ class Window(biui.ContainerWidget.ContainerWidget):
                 biui.DL.drawRect(self.renderer,boxTexture,(0,255,0,255),_r,0)
                 
             r = (0,0,self.width,self.height)
-            biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
-            biui.DL.renderCopy(self.renderer,boxTexture,r,r)
+            ##biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
+            PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
+            ##biui.DL.renderCopy(self.renderer,boxTexture,r,r)
+            PYSDL2_RENDER_COPY(self.renderer,boxTexture,r,r)
             biui.DL.free(boxTexture)
             ##print("render boxes")
         else:
@@ -358,9 +365,11 @@ class Window(biui.ContainerWidget.ContainerWidget):
                 r[2] = min(r[2],self.width-r[0])
                 r[3] = min(r[3],self.height-r[1])
                 
-                biui.DL.renderCopy(self.renderer,self._texture,r,r)
+                ##biui.DL.renderCopy(self.renderer,self._texture,r,r)
+                PYSDL2_RENDER_COPY(self.renderer,self._texture,r,r)
             
-        biui.DL.present(self.renderer)
+        ##biui.DL.present(self.renderer)
+        PYSDL2_PRESENT(self.renderer)
         
         self._isInvalide = False
         

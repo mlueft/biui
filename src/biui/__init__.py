@@ -1,3 +1,4 @@
+#include "pysdl2.inc"
 
 import os
 from time import time
@@ -143,12 +144,8 @@ def init():
     if __initialized__:
         return 
     
-    sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
-    sdl2.ext.init()
-    sdl2.sdlttf.TTF_Init()
+    PYSDL2_INIT
     biui.DL.init()
-    
-
     biui.__fillFontFolders()
     biui.scanFonts()
     __initialized__ = True

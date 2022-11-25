@@ -1,13 +1,13 @@
 import sys
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import biui
 
 def main():
     
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder("../themes")
     
     ################################################
     ###                                       WINDOW

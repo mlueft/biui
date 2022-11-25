@@ -1,7 +1,7 @@
 import sys
 from reportlab.graphics.barcode.qrencoder import QRFNC1Second
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import biui
 import time
@@ -16,7 +16,7 @@ def init():
     global pane0,eifth,height, panes
     
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder("../themes")
     
     ################################################
     ###                                       WINDOW

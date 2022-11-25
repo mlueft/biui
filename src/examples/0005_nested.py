@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import math
 import biui
@@ -9,7 +9,7 @@ import time
 def init():
     
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder("../themes")
     
     ###############################################
     ##                                       WINDOW

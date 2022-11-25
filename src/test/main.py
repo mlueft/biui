@@ -1,7 +1,6 @@
 import sys
-from reportlab.graphics.barcode.qrencoder import QRFNC1Second
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import biui
 import time
@@ -30,12 +29,14 @@ def p3Click(ev):
 def init():
 
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder("./../themes")
     
     ################################################
     ###                                       WINDOW
     ################################################
     wnd = biui.Window(1300,500)
+    wnd.title = "title"
+    wnd.x = 0
     wnd.y = 0
     
     if True:

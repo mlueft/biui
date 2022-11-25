@@ -1,3 +1,5 @@
+#include "pysdl2.inc"
+
 import sdl2
 import ctypes
 
@@ -13,19 +15,18 @@ class DL:
         pass
 
     def init():
-        sdl2.ext.init()
-        ##PYSDL2_INIT()
-        
+        pass
+    
     def quit():
         pass
     
-    def getWindowId(window):
-        return sdl2.SDL_GetWindowID(window)
+    ##def getWindowId(window):
+    ##    return sdl2.SDL_GetWindowID(window)
     
-    def renderCopy(renderer,texture,srect,trect):
-            src = sdl2.SDL_Rect(int(srect[0]),int(srect[1]),int(srect[2]),int(srect[3]))
-            tgt = sdl2.SDL_Rect(int(trect[0]),int(trect[1]),int(trect[2]),int(trect[3]))
-            sdl2.render.SDL_RenderCopy(renderer,texture,src,tgt)
+    ##def renderCopy(renderer,texture,srect,trect):
+    ##        src = sdl2.SDL_Rect(int(srect[0]),int(srect[1]),int(srect[2]),int(srect[3]))
+    ##        tgt = sdl2.SDL_Rect(int(trect[0]),int(trect[1]),int(trect[2]),int(trect[3]))
+    ##        sdl2.render.SDL_RenderCopy(renderer,texture,src,tgt)
     
     def createWindow(title = "", size=(800,600), flags = None):
         if flags == None:
@@ -54,15 +55,15 @@ class DL:
     
         sdl2.SDL_SetRenderTarget(renderer,tmpT)
         
-    def fill(renderer,texture,color):
-        tmpT = sdl2.SDL_GetRenderTarget(renderer)
-        sdl2.SDL_SetRenderTarget(renderer,texture)
-        sdl2.render.SDL_SetRenderDrawColor(renderer, color[0], color[1], color[2], color[3])
-        sdl2.render.SDL_RenderClear(renderer)
-        sdl2.SDL_SetRenderTarget(renderer,tmpT)
+    ##def fill(renderer,texture,color):
+    ##    tmpT = sdl2.SDL_GetRenderTarget(renderer)
+    ##    sdl2.SDL_SetRenderTarget(renderer,texture)
+    ##    sdl2.render.SDL_SetRenderDrawColor(renderer, color[0], color[1], color[2], color[3])
+    ##    sdl2.render.SDL_RenderClear(renderer)
+    ##    sdl2.SDL_SetRenderTarget(renderer,tmpT)
         
-    def present(renderer):
-        sdl2.SDL_RenderPresent(renderer)
+    ##def present(renderer):
+    ##    sdl2.SDL_RenderPresent(renderer)
         
     def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_ACCELERATED):
     ##def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_SOFTWARE):
@@ -70,14 +71,14 @@ class DL:
         sdl2.SDL_SetRenderDrawBlendMode(result, sdl2.SDL_BLENDMODE_BLEND)
         return result
     
-    def setRenderColor(renderer,r,g,b,a):
-        return sdl2.render.SDL_SetRenderDrawColor(renderer, r, g, b, a)
+    ##def setRenderColor(renderer,r,g,b,a):
+    ##    return sdl2.render.SDL_SetRenderDrawColor(renderer, r, g, b, a)
     
-    def clear(renderer):
-        return sdl2.render.SDL_RenderClear(renderer);
+    ##def clear(renderer):
+    ##    return sdl2.render.SDL_RenderClear(renderer);
     
-    def renderPresent(renderer):
-        return sdl2.SDL_RenderPresent(renderer)
+    ##def renderPresent(renderer):
+    ##    return sdl2.SDL_RenderPresent(renderer)
     
     def createTexture(renderer,w,h):
         res = sdl2.SDL_CreateTexture(
@@ -88,7 +89,8 @@ class DL:
             int(h)
         )
         sdl2.SDL_SetTextureBlendMode(res,sdl2.SDL_BLENDMODE_BLEND)
-        DL.fill(renderer,res,(0,0,0,0))
+        ##DL.fill(renderer,res,(0,0,0,0))
+        PYSDL2_FILL(renderer,res,(0,0,0,0))
         return res
     
     def getTextureSize(texture):
@@ -102,27 +104,17 @@ class DL:
         left = ctypes.c_int()
         bottom = ctypes.c_int()
         right = ctypes.c_int()
-        sdl2.SDL_GetWindowBordersSize(
-            window,
-            ctypes.byref(top),
-            ctypes.byref(left),
-            ctypes.byref(bottom),
-            ctypes.byref(right)
-        )
+        sdl2.SDL_GetWindowBordersSize(window,ctypes.byref(top),ctypes.byref(left),ctypes.byref(bottom),ctypes.byref(right))
         return top.value,left.value,bottom.value,right.value
     
     def getWindowPos(window):
         x = ctypes.c_int()
         y = ctypes.c_int()
-        sdl2.SDL_GetWindowPosition(
-            window,
-            ctypes.byref(x),
-            ctypes.byref(y)
-        )
+        sdl2.SDL_GetWindowPosition(window,ctypes.byref(x),ctypes.byref(y))
         return x.value,y.value
     
-    def setWindowPos(window,x,y):
-        sdl2.SDL_SetWindowPosition(window,x,y)
+    ##def setWindowPos(window,x,y):
+    ##    sdl2.SDL_SetWindowPosition(window,x,y)
 
     def getWindowSize(window):
         width = ctypes.c_int()
@@ -134,12 +126,12 @@ class DL:
         )
         return width.value,height.value
     
-    def setWindowSize(window,width,height):
-        sdl2.SDL_SetWindowSize(
-            window,
-            width,
-            height
-        )
+    ##def setWindowSize(window,width,height):
+    ##    sdl2.SDL_SetWindowSize(
+    ##        window,
+    ##        width,
+    ##        height
+    ##    )
             
     def blit(renderer,tTgt,tSrc,tgtRect=None,srcRect=None):
 
@@ -179,9 +171,9 @@ class DL:
         sdl2.render.SDL_RenderCopy(renderer,tSrc,src,tgt)
         sdl2.SDL_SetRenderTarget(renderer,tmpT)
     
-    def setWindowTitle(window,title):
-        bTitle = title.encode('utf-8')
-        sdl2.SDL_SetWindowTitle(window,bTitle)
+    ##def setWindowTitle(window,title):
+    ##    bTitle = title.encode('utf-8')
+    ##    sdl2.SDL_SetWindowTitle(window,bTitle)
         
     def loadImage(fileName,renderer):
         img = sdl2.ext.load_img(fileName)

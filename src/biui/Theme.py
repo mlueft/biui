@@ -1,3 +1,5 @@
+#include "pysdl2.inc"
+
 import biui
 import os
 import sdl2
@@ -100,7 +102,7 @@ class Theme:
             self.blinkBox1(renderer, widget, texture)
             return
         
-        biui.DL.fill( renderer,texture, biui.Color(50,50,50,255).rgba )
+        PYSDL2_FILL( renderer,texture, biui.Color(50,50,50,255).rgba )
 
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be

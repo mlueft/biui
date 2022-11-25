@@ -47,7 +47,7 @@ class Window(biui.ContainerWidget.ContainerWidget):
         ##
         self.onWindowFocus = biui.EventManager()
         ##
-        self._SHOWUPDATEBOXES = True
+        self._SHOWUPDATEBOXES = False
         ##
         self.__guiTexture = None
         ##
@@ -254,9 +254,9 @@ class Window(biui.ContainerWidget.ContainerWidget):
             print("SDL_WINDOWEVENT_FOCUS_LOST")
             self.onWindowFocusLost.provoke(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_TAKE_FOCUS:
-            #print("SDL_WINDOWEVENT_TAKE_FOCUS")
-            #self.onWindowFocus.provoke(ev)
-            #self._invalidate()
+            ##print("SDL_WINDOWEVENT_TAKE_FOCUS")
+            ##self.onWindowFocus.provoke(ev)
+            ##self._invalidate()
             pass
         else:
             print("*Unknown Windowevent.")

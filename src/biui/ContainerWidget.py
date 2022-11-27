@@ -1,4 +1,6 @@
+#include "pysdl2.inc"
 import biui
+import sdl2 
 
 ### Base class for all container widgets.
 ##
@@ -155,8 +157,9 @@ class ContainerWidget(biui.Widget.Widget):
 
         wnd = self.window
 ##        if self._texture == None:
-        self._texture = biui.DL.createTexture(wnd.renderer,self.width,self.height)
-            
+        ##self._texture = biui.DL.createTexture(wnd.renderer,self.width,self.height)
+        PYSDL2_CREATETEXTURE(wnd.renderer,self.width,self.height,self._texture)
+              
         pos = self.position
         
         ## we paint on our own surface
@@ -175,13 +178,7 @@ class ContainerWidget(biui.Widget.Widget):
         ## Now we copy the visible area 
         ## of our own surface
         ## on the parent's surface
-        biui.DL.blit(
-            self.window.renderer,
-            texture,
-            _texture,
-            (pos[0],pos[1],self.width,self.height),
-            (0,0,self.width,self.height)
-        )
+        PYSDL2_BLIT(self.window.renderer,texture,_texture,(pos[0],pos[1],self.width,self.height),(0,0,self.width,self.height))
         
         self._isInvalide = False
         

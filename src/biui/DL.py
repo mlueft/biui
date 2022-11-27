@@ -80,24 +80,24 @@ class DL:
     ##def renderPresent(renderer):
     ##    return sdl2.SDL_RenderPresent(renderer)
     
-    def createTexture(renderer,w,h):
-        res = sdl2.SDL_CreateTexture(
-            renderer,
-            DL._pixelFormat,
-            sdl2.SDL_TEXTUREACCESS_TARGET,
-            int(w),
-            int(h)
-        )
-        sdl2.SDL_SetTextureBlendMode(res,sdl2.SDL_BLENDMODE_BLEND)
-        ##DL.fill(renderer,res,(0,0,0,0))
-        PYSDL2_FILL(renderer,res,(0,0,0,0))
-        return res
+    ##def createTexture(renderer,w,h):
+    ##    res = sdl2.SDL_CreateTexture(
+    ##        renderer,
+    ##        DL._pixelFormat,
+    ##        sdl2.SDL_TEXTUREACCESS_TARGET,
+    ##        int(w),
+    ##        int(h)
+    ##    )
+    ##    sdl2.SDL_SetTextureBlendMode(res,sdl2.SDL_BLENDMODE_BLEND)
+    ##    ##DL.fill(renderer,res,(0,0,0,0))
+    ##    PYSDL2_FILL(renderer,res,(0,0,0,0))
+    ##    return res
     
-    def getTextureSize(texture):
-        oWidth = ctypes.c_int()
-        oHeight = ctypes.c_int()
-        sdl2.SDL_QueryTexture(texture,None,None,oWidth,oHeight)
-        return (0,0,oWidth.value,oHeight.value)
+    ##def getTextureSize(texture):
+    ##    oWidth = ctypes.c_int()
+    ##    oHeight = ctypes.c_int()
+    ##    sdl2.SDL_QueryTexture(texture,None,None,oWidth,oHeight)
+    ##    return (0,0,oWidth.value,oHeight.value)
                 
     def getWindowBorderSize(window):
         top = ctypes.c_int()
@@ -107,11 +107,11 @@ class DL:
         sdl2.SDL_GetWindowBordersSize(window,ctypes.byref(top),ctypes.byref(left),ctypes.byref(bottom),ctypes.byref(right))
         return top.value,left.value,bottom.value,right.value
     
-    def getWindowPos(window):
-        x = ctypes.c_int()
-        y = ctypes.c_int()
-        sdl2.SDL_GetWindowPosition(window,ctypes.byref(x),ctypes.byref(y))
-        return x.value,y.value
+    ##def getWindowPos(window):
+    ##    x = ctypes.c_int()
+    ##    y = ctypes.c_int()
+    ##    sdl2.SDL_GetWindowPosition(window,ctypes.byref(x),ctypes.byref(y))
+    ##    return x.value,y.value
     
     ##def setWindowPos(window,x,y):
     ##    sdl2.SDL_SetWindowPosition(window,x,y)
@@ -133,43 +133,13 @@ class DL:
     ##        height
     ##    )
             
-    def blit(renderer,tTgt,tSrc,tgtRect=None,srcRect=None):
-
-        if srcRect == None:
-            srcRect = DL.getTextureSize(tSrc)
-        
-        if tgtRect == None:
-            tgtRect = srcRect
-            
-        ## If tgtRect is just a position,
-        ## take width and height from
-        ## source
-        if len(tgtRect) == 2:
-            tgtRect = (
-                tgtRect[0],
-                tgtRect[1],
-                srcRect[2],
-                srcRect[3],
-            )
-        
-        tmpT = sdl2.SDL_GetRenderTarget(renderer)
-        src = sdl2.SDL_Rect(
-            int(srcRect[0]),
-            int(srcRect[1]),
-            int(srcRect[2]),
-            int(srcRect[3])
-        )
-        
-        tgt = sdl2.SDL_Rect(
-            int(tgtRect[0]),
-            int(tgtRect[1]),
-            int(tgtRect[2]),
-            int(tgtRect[3])
-        )
-
-        sdl2.SDL_SetRenderTarget(renderer,tTgt)
-        sdl2.render.SDL_RenderCopy(renderer,tSrc,src,tgt)
-        sdl2.SDL_SetRenderTarget(renderer,tmpT)
+    ##def blit(renderer,tTgt,tSrc,tgtRect,srcRect):
+    ##    tmpT = sdl2.SDL_GetRenderTarget(renderer)
+    ##    src = sdl2.SDL_Rect(int(srcRect[0]),int(srcRect[1]),int(srcRect[2]),int(srcRect[3]))
+    ##    tgt = sdl2.SDL_Rect(int(tgtRect[0]),int(tgtRect[1]),int(tgtRect[2]),int(tgtRect[3]))
+    ##    sdl2.SDL_SetRenderTarget(renderer,tTgt)
+    ##    sdl2.render.SDL_RenderCopy(renderer,tSrc,src,tgt)
+    ##    sdl2.SDL_SetRenderTarget(renderer,tmpT)
     
     ##def setWindowTitle(window,title):
     ##    bTitle = title.encode('utf-8')

@@ -1,4 +1,7 @@
+#include "pysdl2.inc"
 import biui
+import sdl2
+import ctypes
 
 ### TODO: Does a file based cache make sense?
 ##        So we do not have to recompose all
@@ -44,97 +47,44 @@ class ImageLibrary():
             name + "_br.png"
         ]
     
-        tgt = biui.DL.createTexture(renderer,width,height)
+        ##tgt = biui.DL.createTexture(renderer,width,height)
+        PYSDL2_CREATETEXTURE(renderer,width,height,tgt)
         
         tl = self.getImage(renderer,names[0])
-        sizeTL = biui.DL.getTextureSize(tl)
-        biui.DL.blit(
-            renderer,
-            tgt,
-            tl,
-            sizeTL,
-            sizeTL         
-        )
+        PYSDL2_GETTEXTURESIZE(tl,sizeTL)
+        PYSDL2_BLIT(renderer,tgt,tl,sizeTL,sizeTL)
         
         tr = self.getImage(renderer,names[2])
-        sizeTR = biui.DL.getTextureSize(tr)
-        biui.DL.blit(
-            renderer,
-            tgt,
-            tr,
-            (width-sizeTR[2],0,sizeTR[2],sizeTR[3])
-        )
+        PYSDL2_GETTEXTURESIZE(tr,sizeTR)
+        PYSDL2_BLIT(renderer,tgt,tr,(width-sizeTR[2],0,sizeTR[2],sizeTR[3]),sizeTR)
         
         sizeTC = (0,0,width-sizeTL[2]-sizeTR[2],sizeTL[3])
         tc = self.getImage(renderer,names[1],sizeTC[2],sizeTC[3])
-        biui.DL.blit(
-            renderer,
-            tgt,
-            tc,
-            (sizeTL[2],0,sizeTC[2],sizeTC[3]),
-            sizeTC
-        )
+        PYSDL2_BLIT(renderer,tgt,tc,(sizeTL[2],0,sizeTC[2],sizeTC[3]),sizeTC)
         
         bl = self.getImage(renderer,names[6])
-        sizeBL = biui.DL.getTextureSize(bl)
-        biui.DL.blit(
-            renderer,
-            tgt,
-            bl,
-            (0,height-sizeBL[3],sizeBL[2],sizeBL[3]),
-            sizeBL
-        )
+        PYSDL2_GETTEXTURESIZE(bl,sizeBL)
+        PYSDL2_BLIT(renderer,tgt,bl,(0,height-sizeBL[3],sizeBL[2],sizeBL[3]),sizeBL)
         
         br = self.getImage(renderer,names[8])
-        sizeBR = biui.DL.getTextureSize(br)
-        biui.DL.blit(
-            renderer,
-            tgt,
-            br,
-            (width-sizeBR[2],height-sizeBR[3],sizeBR[2],sizeBR[3]),
-            sizeBR
-            
-        )
+        PYSDL2_GETTEXTURESIZE(br,sizeBR)
+        PYSDL2_BLIT(renderer,tgt,br,(width-sizeBR[2],height-sizeBR[3],sizeBR[2],sizeBR[3]),sizeBR)
         
         sizeBR = (0,0,width-sizeBL[2]-sizeBR[2],sizeBL[3])
         bc = self.getImage(renderer,names[7],sizeBR[2],sizeBR[3])
-        biui.DL.blit(
-            renderer,
-            tgt,
-            bc,
-            (sizeBL[2],height-sizeBR[3],sizeBR[2],sizeBR[3]),
-            sizeBR
-        )
+        PYSDL2_BLIT(renderer,tgt,bc,(sizeBL[2],height-sizeBR[3],sizeBR[2],sizeBR[3]),sizeBR)
 
         sizeCL = (0,0,sizeTL[2],height-sizeTL[3]-sizeBL[3])
         cl = self.getImage(renderer,names[3],sizeCL[2],sizeCL[3])
-        biui.DL.blit(
-            renderer,
-            tgt,
-            cl,
-            (0,sizeTL[3],sizeCL[2],sizeCL[3]),
-            sizeCL
-        )
+        PYSDL2_BLIT(renderer,tgt,cl,(0,sizeTL[3],sizeCL[2],sizeCL[3]),sizeCL)
         
         sizeCR = (0,0,sizeTR[2],height-sizeTR[3]-sizeBR[3])
         cr = self.getImage(renderer,names[5],sizeCR[2],sizeCR[3])
-        biui.DL.blit(
-            renderer,
-            tgt,
-            cr,
-            (width-sizeCR[2],sizeTR[3],sizeCR[2],sizeCR[3]),
-            sizeCR
-        )
+        PYSDL2_BLIT(renderer,tgt,cr,(width-sizeCR[2],sizeTR[3],sizeCR[2],sizeCR[3]),sizeCR)
         
         sizeCC = (0,0,width-sizeTL[2]-sizeTR[2],height-sizeTL[3]-sizeBL[3])
         cc = self.getImage(renderer,names[4],sizeCC[2],sizeCC[3])
-        biui.DL.blit(
-            renderer,
-            tgt,
-            cc,
-            (sizeTL[2],sizeTL[3],sizeCC[2],sizeCC[3]),
-            sizeCC
-        )
+        PYSDL2_BLIT(renderer,tgt,cc,(sizeTL[2],sizeTL[3],sizeCC[2],sizeCC[3]),sizeCC)
         
         ## store original
         if self.cacheImagesI9:
@@ -190,14 +140,10 @@ class ImageLibrary():
         key = hashName+"_"+str(width)+"x"+str(height)
         
         ## resize a copy of  the original
-        imageScaled = biui.DL.createTexture(renderer,width,height)
-        
-        biui.DL.blit(
-            renderer,
-            imageScaled,
-            imageOriginal,
-            (0,0,width,height)
-        )
+        ##imageScaled = biui.DL.createTexture(renderer,width,height)
+        PYSDL2_CREATETEXTURE(renderer,width,height,imageScaled)
+        r = (0,0,width,height)
+        PYSDL2_BLIT(renderer,imageScaled,imageOriginal,r,r)
         
         ##if error < 0:
         ##    print(sdl2.SDL_GetError())

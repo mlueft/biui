@@ -112,7 +112,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
         
     @property
     def x(self):
-        x,y = biui.DL.getWindowPos(self._window)
+        ##x,y = biui.DL.getWindowPos(self._window)
+        PYSDL2_GETWINDOWPOS(self._window,x,y)
         return x
     
     @x.setter
@@ -124,7 +125,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
     
     @property
     def y(self):
-        x,y = biui.DL.getWindowPos(self._window)
+        ##x,y = biui.DL.getWindowPos(self._window)
+        PYSDL2_GETWINDOWPOS(self._window,x,y)
         return y
 
     @y.setter
@@ -300,8 +302,11 @@ class Window(biui.ContainerWidget.ContainerWidget):
                 ##print("cleargreen")
                 r = (0,0,self.width,self.height)
                 ##biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
+                
                 PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
+                
                 biui.DL.free(self.__guiTexture)
+                
                 self.__guiTexture = None
                 ##biui.DL.present(self.renderer)
                 PYSDL2_PRESENT(self.renderer)
@@ -322,12 +327,13 @@ class Window(biui.ContainerWidget.ContainerWidget):
         
         if self._texture == None:
             ##print("windows new texture")
-            self._texture = biui.DL.createTexture(self.renderer,self.width,self.height)
+            ##self._texture = biui.DL.createTexture(self.renderer,self.width,self.height)
+            PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height, self._texture)
             self.__guiTexture = self._texture
             forceRedraw = True
         
         if self._SHOWUPDATEBOXES:
-            self.__guiTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
+            PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height, self.__guiTexture)
             forceRedraw = True
             
         theme.drawWindowBeforeChildren(self.renderer,self,self.__guiTexture)
@@ -343,7 +349,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
         
         ## Draw update boxes
         if self._SHOWUPDATEBOXES:
-            boxTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
+            ##boxTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
+            PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height,boxTexture)
             for r in dr:
                 _r = [r[0],r[1],r[2]-r[0],r[3]-r[1]]
                 biui.DL.drawRect(self.renderer,boxTexture,(0,255,0,255),_r,0)

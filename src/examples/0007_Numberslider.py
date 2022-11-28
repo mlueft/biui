@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import math
 import biui
@@ -9,7 +9,7 @@ import time
 def init():
     
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder("./../themes/")
     
     ###############################################
     ##                                       WINDOW
@@ -77,7 +77,7 @@ def main():
     ## Temporary main loop
     ##
     while biui.main():
-        time.sleep(1)
+        time.sleep(0.1)
         pass
 
 if __name__ == '__main__':

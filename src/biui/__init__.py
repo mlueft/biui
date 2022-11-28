@@ -41,6 +41,7 @@ import biui.Hinting
 import biui.Style
 import biui.Direction
 import biui.DirtyRectangleManager
+import biui.Mouse
 
 
 from sdl2.surface import SDL_CreateRGBSurface
@@ -81,6 +82,7 @@ Hinting = biui.Hinting.Hinting
 Style = biui.Style.Style
 Direction = biui.Direction.Direction
 DirtyRectangleManager = biui.DirtyRectangleManager.DirtyRectangleManager
+Mouse = biui.Mouse.Mouse
 
 ##
 ##_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )

@@ -104,3 +104,24 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
         if self._showValue:
             self._label.value = value
 
+    def getChildAt(self, pos):
+        
+        ## we do not want to return any child 
+        ## objects like labels or icons.
+        ## If the position is inside the widget,
+        ## the widget is the last element in the DOM.
+        
+        cPos = self.toGlobal((0,0))
+        if cPos[0] > pos[0]:
+            return None
+        
+        if cPos[0]+self.width < pos[0]:
+            return None
+         
+        if cPos[1] > pos[1]:
+            return None
+        
+        if cPos[1]+self.height < pos[1]:
+            return None
+                
+        return self

@@ -37,14 +37,6 @@ def init():
     slider.label.color = biui.Color(200,200,200)
     wnd.addChild(slider)
     
-    print(biui.Mouse.getPosition())
-    biui.Mouse.hide()
-    time.sleep(5)
-    biui.Mouse.setPosition(500,500)
-    biui.Mouse.show()
-    
-    print("fertig")
-    
     if False:
         slider = biui.NumberSlider()
         ##button0.onMouseUp.add(_test.upHandler)

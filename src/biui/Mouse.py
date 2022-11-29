@@ -2,15 +2,21 @@ import ctypes
 import sdl2
 from sdl2.events import SDL_DISABLE, SDL_ENABLE
 
-class Mouse:
+class SingletonMouse(object):
     
-    def __init__(self):
-        pass
-    
+    ###
+    ##
+    ##
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(SingletonMouse, cls).__new__(cls)
+        return cls.instance
+
     ### Returns the mouse position on screen.
     ##
     ##
-    def getPosition():
+    @property
+    def position(self):
         x = ctypes.c_int()
         y = ctypes.c_int()
         sdl2.SDL_GetGlobalMouseState(ctypes.byref(x),ctypes.byref(y));
@@ -19,18 +25,19 @@ class Mouse:
     ###
     ##
     ##
-    def setPosition(x,y):
-        sdl2.SDL_WarpMouseGlobal(x,y)
+    @position.setter
+    def position(self,position):
+        sdl2.SDL_WarpMouseGlobal(position[0],position[1])
 
     ###
     ##
     ##
-    def hide():
+    def hide(self):
         sdl2.SDL_ShowCursor(SDL_DISABLE)
     ###
     ##
     ##
-    def show():
+    def show(self):
         sdl2.SDL_ShowCursor(SDL_ENABLE)
         
         

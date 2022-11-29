@@ -82,7 +82,7 @@ Hinting = biui.Hinting.Hinting
 Style = biui.Style.Style
 Direction = biui.Direction.Direction
 DirtyRectangleManager = biui.DirtyRectangleManager.DirtyRectangleManager
-Mouse = biui.Mouse.Mouse
+Mouse = biui.Mouse.SingletonMouse()
 
 ##
 ##_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )
@@ -102,9 +102,6 @@ __SHOWUPDATEBOXES = True
 
 ## Stores if pygame is initialized.
 __initialized__ = False
-
-## Stores the last known mouse position
-__lastMousePos = None
 
 ### Stored a reference to the Widget the mouse is over.
 __hoverWidget = None
@@ -291,12 +288,6 @@ def default(value,default):
 ###
 ##
 ##
-def getMousePosition():
-    return biui.__lastMousePos
-
-###
-##
-##
 def setThemeFolder(folder):
     global __themeFolder
     __themeFolder = folder
@@ -342,7 +333,6 @@ def _main():
         ## Mouse events are send directly to the widget.
         ##
         if event.type == pygame.MOUSEMOTION:
-            biui.__lastMousePos = event.pos
             bStates = pygame.mouse.get_pressed(num_buttons=5)
             receiver = biui.__getChildAt(event.pos)
             ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
@@ -567,7 +557,6 @@ def main():
             mevent = event.motion
             pos = (mevent.x,mevent.y)
             
-            biui.__lastMousePos = pos
             bStates = [
                 (mevent.state & SDL_BUTTON_LEFT) != 0,
                 (mevent.state & SDL_BUTTON_MIDDLE) != 0,

@@ -22,6 +22,8 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         ##
         self._barDownPosition = None
         ##
+        self._screenDownPosition = None
+        ##
         self._decButton = biui.Button()
         self._decButton.name = "buttonDec"
         self._decButton.minWidth=1
@@ -69,27 +71,31 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     ##
     def _barMouseDown(self,ev):
         self._barDownPosition = ev.position
-        self.window.onMouseMove.add(self._wndMouseMove)
-        self.window.onMouseUp.add(self._wndMouseUp)
+        self._screenDownPosition = biui.Mouse.position
+        self._bar.onMouseMove.add(self._wndMouseMove)
+        self._bar.onMouseUp.add(self._wndMouseUp)
+        biui.Mouse.hide()
       
     ###
     ##
     ##  
     def _wndMouseMove(self,ev):
         ev.stopPropagation()
-        delta = ev.x-self._barDownPosition[0]
+        lpos = self._barDownPosition
+        delta = ev.x-lpos[0]
         treshold = 1
         if delta < -treshold:
             self.value -= self.step
-            self._barDownPosition = ev.position
         elif delta > treshold:
             self.value += self.step
-            self._barDownPosition = ev.position
+            
+        biui.Mouse.position = self._screenDownPosition
     
     def _wndMouseUp(self,ev):
         ev.stopPropagation()
-        self.window.onMouseMove.remove(self._wndMouseMove)
-        self.window.onMouseUp.remove(self._wndMouseUp)
+        self._bar.onMouseMove.remove(self._wndMouseMove)
+        self._bar.onMouseUp.remove(self._wndMouseUp)
+        biui.Mouse.show()
     
     ### Handles the mouse up event of the inc-Button.
     ##

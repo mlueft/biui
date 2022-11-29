@@ -267,8 +267,8 @@ class Window(biui.ContainerWidget.ContainerWidget):
     ##  @return         A tuple with x andy position of the
     ##                  mouse pointer.
     ##
-    def getMousePosition(self):
-        return biui.getMousePosition()
+    ##def getMousePosition(self):
+    ##    return biui.Mouse.getPosition()
     
     ### Returns the windows internal id.
     ##
@@ -387,4 +387,16 @@ class Window(biui.ContainerWidget.ContainerWidget):
             self.width,
             self.height
         ))
+        
+    ### Transforms a screen position to a window position.
+    ##
+    ##
+    def toWindow(self,coordinates):
+        return (coordinates[0]-self.x,coordinates[1]-self.y)
+    
+    ### Transformsa window position to a screen position.
+    ##
+    ##
+    def toScreen(self,coordinates):
+        return (coordinates[0]+self.x,coordinates[1]+self.y)
             

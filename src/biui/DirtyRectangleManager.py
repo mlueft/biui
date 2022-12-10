@@ -17,7 +17,7 @@ class DirtyRectangleManager():
         self._ymax = 0
         self._recs = []
 
-        v = 2
+        v = 3
         if v == 0:
             self.add = self.add0
             self.getRectangles = self.getRectangles0
@@ -60,7 +60,7 @@ class DirtyRectangleManager():
     def add2(self,rect):
         self._recs.append(rect)
 
-    def add(self,rect):
+    def add3(self,rect):
         
         extended = False
         for e in self._recs:

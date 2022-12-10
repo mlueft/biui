@@ -1,18 +1,20 @@
 import sys
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import biui
 
 def main():
     
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder("./../themes")
     
     ################################################
     ###                                       WINDOW
     ################################################
     wnd = biui.Window(1024,768)
+    wnd.y = 0
+    wnd.x = 20
     
     grid = biui.FlexGrid()
     grid.alignment = biui.Alignment.FILL

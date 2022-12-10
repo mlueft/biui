@@ -20,8 +20,6 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         ##
         self._showNavigation = True
         ##
-        self._barDownPosition = None
-        ##
         self._screenDownPosition = None
         ##
         self._decButton = biui.Button()
@@ -70,7 +68,6 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     ##
     ##
     def _barMouseDown(self,ev):
-        self._barDownPosition = ev.position
         self._screenDownPosition = biui.Mouse.position
         self._bar.onMouseMove.add(self._wndMouseMove)
         self._bar.onMouseUp.add(self._wndMouseUp)
@@ -81,8 +78,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     ##  
     def _wndMouseMove(self,ev):
         ev.stopPropagation()
-        lpos = self._barDownPosition
-        delta = ev.x-lpos[0]
+        delta = biui.Mouse.position[0]-self._screenDownPosition[0]
         treshold = 1
         if delta < -treshold:
             self.value -= self.step

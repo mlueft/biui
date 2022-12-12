@@ -340,8 +340,13 @@ class Window(biui.ContainerWidget.ContainerWidget):
         if self._SHOWUPDATEBOXES:
             boxTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
             for r in dr:
-                _r = [r[0],r[1],r[2]-r[0],r[3]-r[1]]
-                biui.DL.drawRect(self.renderer,boxTexture,(0,255,0,255),_r,0)
+                r = list(r)
+                ## r must not reach over the widow's texture
+                r[0] = max(0,r[0])
+                r[1] = max(0,r[1])
+                r[2] = min(r[2],self.width-r[0])
+                r[3] = min(r[3],self.height-r[1])                
+                biui.DL.drawRect(self.renderer,boxTexture,(255,255,0,255),r,0)
                 
             r = (0,0,self.width,self.height)
             biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)

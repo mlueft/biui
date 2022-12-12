@@ -37,16 +37,10 @@ def main():
     ## Temporary main loop
     ##
     while biui.main():
-        ##time.sleep(1)
+        time.sleep(0.3)
         pass
 
 if __name__ == '__main__':
-    import cProfile, pstats
-    profiler = cProfile.Profile()
-    profiler.enable()
     main()
-    profiler.disable()
-    stats = pstats.Stats(profiler).sort_stats('tottime')
-    stats.print_stats()
     
 print("fertig")   

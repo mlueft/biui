@@ -76,8 +76,9 @@ def init():
         pb.value = 0
         pb.step = 1
         pb.showValue = False
+        pb.label.format = "{}"
         pane0.addChild(pb)
-        
+        ##return 
         ###
         ### NumberSlider
         ###
@@ -254,11 +255,12 @@ def init():
         
         wnd.addChild(grid)
         
+@biui.profile
 def main():
     init()
 
     while biui.main():
-        time.sleep(0.05)
+        time.sleep(0.01)
         pass
 
 if __name__ == '__main__':

@@ -263,7 +263,7 @@ class Widget:
             value = max(value, self._minWidth)
         
         self._recordDirtyRect()
-        self._width = max(1,value)
+        self._width = max(0,value)
         self._invalidate()
         self.onResized.provoke(biui.Event(self))
         self._resized = True
@@ -284,7 +284,7 @@ class Widget:
     @minWidth.setter   
     def minWidth(self, value):
         value = int(value)
-        self._minWidth = max(1,value)
+        self._minWidth = max(0,value)
         if self._minWidth > self._width:
             self.width = self._minWidth
 
@@ -304,7 +304,7 @@ class Widget:
     @maxWidth.setter   
     def maxWidth(self, value):
         value = int(value)
-        self._maxWidth = max(1,value)
+        self._maxWidth = max(0,value)
         if self._maxWidth < self._width:
             self.width = self._maxWidth
     
@@ -355,7 +355,7 @@ class Widget:
     @minHeight.setter   
     def minHeight(self, value):
         value = int(value)
-        self._minHeight = max(1,value)
+        self._minHeight = max(0,value)
         if self._minHeight > self._height:
             self.height = self._minHeight
 
@@ -375,7 +375,7 @@ class Widget:
     @maxHeight.setter   
     def maxHeight(self, value):
         value = int(value)
-        self._maxHeight = max(1,value)
+        self._maxHeight = max(0,value)
         if self._maxHeight < self._height:
             self.height = self._maxHeight
         

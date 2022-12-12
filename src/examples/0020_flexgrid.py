@@ -1,5 +1,5 @@
 import sys
-
+import time
 sys.path.append('./')
 
 import biui
@@ -27,6 +27,7 @@ def main():
     wnd.addChild(grid)
         
     while biui.main():
+        time.sleep(0.1)
         pass
 
 if __name__ == "__main__":

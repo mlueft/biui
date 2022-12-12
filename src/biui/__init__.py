@@ -125,14 +125,14 @@ __fonts = []
 ##
 themeDebug = False
 
-##def profile(fnc):
-##    import cProfile, pstats
-##    profiler = cProfile.Profile()
-##    profiler.enable()
-##    fnc()
-##    profiler.disable()
-##    stats = pstats.Stats(profiler).sort_stats('tottime')
-##    stats.print_stats()
+def profile(fnc):
+    import cProfile, pstats
+    profiler = cProfile.Profile()
+    profiler.enable()
+    fnc()
+    profiler.disable()
+    stats = pstats.Stats(profiler).sort_stats('tottime')
+    stats.print_stats()
     
 ### Initializes biui and sub systems. Can be called more than once.
 ##  It takes care about multiple calls.

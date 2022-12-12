@@ -68,6 +68,10 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     ##
     ##
     def _barMouseDown(self,ev):
+        ## if old handler are still there
+        self._bar.onMouseMove.remove(self._wndMouseMove)
+        self._bar.onMouseUp.remove(self._wndMouseUp)
+        
         self._screenDownPosition = biui.Mouse.position
         self._bar.onMouseMove.add(self._wndMouseMove)
         self._bar.onMouseUp.add(self._wndMouseUp)

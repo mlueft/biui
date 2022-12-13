@@ -35,6 +35,8 @@ def init():
     ###                                       WINDOW
     ################################################
     wnd = biui.Window(1300,500)
+    wnd.title = "title"
+    wnd.x = 0
     wnd.y = 0
     
     if True:

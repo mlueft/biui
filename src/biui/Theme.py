@@ -1,7 +1,10 @@
+#include "pysdl2.inc"
+
 import biui
 import os
 import sdl2
 import random
+import ctypes
 
 ### Does all the drawing stuff.
 ##
@@ -100,7 +103,7 @@ class Theme:
             self.blinkBox1(renderer, widget, texture)
             return
         
-        biui.DL.fill( renderer,texture, biui.Color(50,50,50,255).rgba )
+        PYSDL2_FILL( renderer,texture, biui.Color(50,50,50,255).rgba )
 
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
@@ -241,13 +244,8 @@ class Theme:
         name = os.path.join(self.__themeFolder ,"pane_bg")
         img = self.__lib.getI9(renderer,name,widget.width,widget.height)
         ##img = self.__lib.getImage(renderer,name,widget.width,widget.height)
-        biui.DL.blit(
-            renderer,
-            texture,
-            img,
-            (0,0,widget.width,widget.height),
-            (0,0,widget.width,widget.height)
-        )
+        r = (0,0,widget.width,widget.height)
+        PYSDL2_BLIT(renderer,texture,img,r,r)
     
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
@@ -257,13 +255,8 @@ class Theme:
         
         name = os.path.join(self.__themeFolder ,"pane_fg")
         img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        biui.DL.blit(
-            renderer,
-            texture,
-            img,
-            (0,0,widget.width,widget.height),
-            (0,0,widget.width,widget.height)
-        )
+        r = (0,0,widget.width,widget.height)
+        PYSDL2_BLIT(renderer,texture,img,r,r)
     
     ########################################################
     ##
@@ -293,13 +286,8 @@ class Theme:
                     
         name = os.path.join(self.__themeFolder ,name)
         img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        biui.DL.blit(
-            renderer,
-            texture,
-            img,
-            (0,0,widget.width,widget.height),
-            (0,0,widget.width,widget.height)
-        )
+        r = (0,0,widget.width,widget.height)
+        PYSDL2_BLIT(renderer,texture,img,r,r)
 
     ###
     ##
@@ -319,11 +307,8 @@ class Theme:
                     
         name = os.path.join(self.__themeFolder ,name)
         img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        biui.DL.blit(
-            renderer,
-            texture,
-            img
-        )
+        r = (0,0,widget.width,widget.height)
+        PYSDL2_BLIT(renderer,texture,img,r,r)
     
     ########################################################
     ##
@@ -435,13 +420,9 @@ class Theme:
             widget.color
         )
         
-        biui.DL.blit(
-            renderer,
-            texture,
-            tx,
-            widget.position
-        )
-        
+        PYSDL2_GETTEXTURESIZE(tx,r)
+        p = widget.position
+        PYSDL2_BLIT(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
         sdl2.SDL_DestroyTexture( tx )
 
     ########################################################
@@ -472,24 +453,9 @@ class Theme:
                     
         name = os.path.join(self.__themeFolder ,name)
         img = self.__lib.getImage(renderer,name)
-        sizeIMG = biui.DL.getTextureSize(img)
-        biui.DL.blit(
-            renderer,
-            texture,
-            img,
-            (
-                0,
-                widget.height/2-sizeIMG[3]/2,
-                sizeIMG[2],
-                sizeIMG[3]
-            ),
-            (
-                0,
-                widget.height/2-sizeIMG[3]/2,
-                sizeIMG[2],
-                sizeIMG[3]
-            )
-        )
+        PYSDL2_GETTEXTURESIZE(img,sizeIMG)
+        r = (0,widget.height/2-sizeIMG[3]/2,sizeIMG[2],sizeIMG[3])
+        PYSDL2_BLIT(renderer,texture,img,r,r)
         
         ## TODO: If checked we draw a symbol on it
     

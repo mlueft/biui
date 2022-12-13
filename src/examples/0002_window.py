@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import math
 import biui
@@ -20,6 +20,10 @@ def init():
     wnd.y = 0
     wnd.width = 640
     wnd.height = 100
+    
+    print( "Window title: {}".format(wnd.title) )
+    print( "windowposiion : {}x{}".format(wnd.x,wnd.y))
+    print( "windowsize : {}x{}".format(wnd.width,wnd.height))
     
     ##wnd.left = 10
     ##wnd.bottom = 10

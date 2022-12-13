@@ -9,7 +9,7 @@ import time
 def init():
     
     biui.init()
-    biui.setThemeFolder("./../themes/")
+    biui.setThemeFolder("../themes")
     
     ###############################################
     ##                                       WINDOW

@@ -1,7 +1,7 @@
 import sys
 from _cffi_backend import typeof
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import biui
 

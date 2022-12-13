@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('./../')
+sys.path.append('./')
 
 import math
 import biui
@@ -13,7 +13,7 @@ def paneResize(ev):
 def init():
     
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder("../themes")
     
     ###############################################
     ##                                       WINDOW

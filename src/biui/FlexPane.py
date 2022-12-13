@@ -190,13 +190,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         ## of our own texture
         ## on the parent's texture
         ##texture.blit(_texture,pos,(0,0,self.width,self.height))
-        biui.DL.blit(
-            self.window.renderer,
-            texture,
-            _texture,
-            (pos[0],pos[1],self.width,self.height),
-            (0,0,self.width,self.height)
-        )
+        PYSDL2_BLIT(self.window.renderer,texture,_texture,(pos[0],pos[1],self.width,self.height),(0,0,self.width,self.height))
         
         self._isInvalide = False        
                 

@@ -1,5 +1,9 @@
 import sys
+<<<<<<< HEAD
 import time
+=======
+
+>>>>>>> macros
 sys.path.append('./')
 
 import biui
@@ -7,7 +11,7 @@ import biui
 def main():
     
     biui.init()
-    biui.setThemeFolder("./../themes")
+    biui.setThemeFolder("../themes")
     
     ################################################
     ###                                       WINDOW

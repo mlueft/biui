@@ -16,7 +16,7 @@ def init():
     global pane0,eifth,height, panes
     
     biui.init()
-    biui.setThemeFolder("./../themes/")
+    biui.setThemeFolder("../themes")
     
     ################################################
     ###                                       WINDOW

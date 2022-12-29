@@ -89,7 +89,7 @@ Mouse = biui.Mouse.SingletonMouse()
 ##_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )
 
 ##
-__clickTime = 0.25
+clickTime = 0.25
 
 ##
 __themeFolder = "themes"
@@ -105,17 +105,22 @@ __SHOWUPDATEBOXES = True
 __initialized__ = False
 
 ### Stored a reference to the Widget the mouse is over.
-__hoverWidget = None
+##__hoverWidget = None
 
 ### Stored a reference to the Widget with the focus.
+## TODO: Shouldn't this be a member of the window?
 __focusedWidget = None
 
 ### Stores all window objects.
 ##  Pygame allows just one window.
 __windows = []
 
+### Stors a reference to the focused window
+##
+__focusedWindow = None
+
 ## Stores the time of the mouseDown event.
-__mouseDownTime = None
+mouseDownTime = None
 
 ## Folders in which biui is  looking for font files
 __fontFolders = []
@@ -248,14 +253,27 @@ def __fillFontFolders():
 ##
 ##
 def _removeWindow(window):
+    print("removeWindow")
+    global __windows
     __windows.remove(window)
+    window.onWindowFocusGained.remove(__hdlWindowGainFocus)
     
 ###
 ##
 ##
 def _addWindow(window):
+    global __windows, __focusedWindow
     __windows.insert(0,window)
+    window.onWindowFocusGained.add(__hdlWindowGainFocus)
+    __focusedWindow = window
 
+###
+##
+##
+def __hdlWindowGainFocus(ev):
+    global __focusedWindow
+    __focusedWindow = ev.eventSource
+    
 ### Returns the Widget at the given position.
 ##  Currently the function doesn't care about
 ##  the window, beecause there is just one.
@@ -263,11 +281,11 @@ def _addWindow(window):
 ##  @param pos               A tuple representing a position.
 ##  @return                  A Widget object
 ##
-def __getChildAt(pos):
-    global __windows
-    
-    for w in __windows:
-        return w.getChildAt(pos)
+##def __getChildAt(pos):
+##    global __windows
+##    
+##    for w in __windows:
+##        return w.getChildAt(pos)
 
 ### Returns a defaault value if value is None
 ##  If value is not None value is returned.
@@ -315,7 +333,7 @@ def getTheme():
 ##  @return        True as long as a window is open.
 ##
 def _main():
-    global __windows, __hoverWidget, __mouseDownTime, __clickTime
+    global __windows, __hoverWidget, mouseDownTime, clickTime
         
     ## ++++++++++++++++++++++++++++++++++++++++++++++
     ##                                 Event handling
@@ -348,7 +366,7 @@ def _main():
         elif event.type == pygame.MOUSEBUTTONDOWN:
             ## Filter wheel action.
             if event.button not in [4,5]:
-                __mouseDownTime = time()
+                mouseDownTime = time()
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
                 receiver = biui.__getChildAt(event.pos)
                 ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
@@ -358,11 +376,11 @@ def _main():
         elif event.type == pygame.MOUSEBUTTONUP:
             ## Filter wheel action.
             if event.button not in [4,5]:
-                ##print(time()-__mouseDownTime)                
+                ##print(time()-mouseDownTime)                
                 bStates = pygame.mouse.get_pressed(num_buttons=5)
                 receiver = biui.__getChildAt(event.pos)
                 ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
-                if time()-__mouseDownTime < __clickTime:
+                if time()-mouseDownTime < clickTime:
                     for w in __windows:
                         w._onMouseClick(ev)
 
@@ -516,10 +534,7 @@ def _main():
     return True
 
 def main():
-    global __windows, __hoverWidget, __mouseDownTime, __clickTime
-    
-    running = True
-    ##while running:
+    global __windows, mouseDownTime, __focusedWindow
     
     events = sdl2.ext.get_events()
     for event in events:
@@ -549,96 +564,34 @@ def main():
         ###############################################################
         ##                                                        MOUSE
         ###############################################################
-        elif event.type == sdl2.SDL_MOUSEMOTION:
-            ##print("SDL_MOUSEMOTION")
-            mevent = event.motion
-            pos = (mevent.x,mevent.y)
-            
-            bStates = [
-                (mevent.state & SDL_BUTTON_LEFT) != 0,
-                (mevent.state & SDL_BUTTON_MIDDLE) != 0,
-                (mevent.state & SDL_BUTTON_RIGHT) != 0,
-                (mevent.state & SDL_BUTTON_X1) != 0,
-                (mevent.state & SDL_BUTTON_X2) != 0
-            ]
-            receiver = biui.__getChildAt( pos )
-            
-            ev = biui.MouseEvent(receiver,bStates,pos,0,0)
-            
-            if receiver != __hoverWidget:
-                if __hoverWidget != None:
-                    evLeave = biui.MouseEvent(__hoverWidget,bStates,pos,0,0)
-                    for w in __windows:
-                        w._onMouseLeave(evLeave)
-                __hoverWidget = receiver
-                __hoverWidget._onMouseEnter(ev)
-            else:
-                for w in __windows:
-                    w._onMouseMove(ev)
-        
         elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
             ##print("SDL_MOUSEBUTTONDOWN")
-            
-            mevent = event.motion
-            pos = (mevent.x,mevent.y)
-            
-            __mouseDownTime = time()
-            
-            bStates = [
-                (mevent.state & SDL_BUTTON_LEFT) != 0,
-                (mevent.state & SDL_BUTTON_MIDDLE) != 0,
-                (mevent.state & SDL_BUTTON_RIGHT) != 0,
-                (mevent.state & SDL_BUTTON_X1) != 0,
-                (mevent.state & SDL_BUTTON_X2) != 0
-            ]
-            
-            receiver = biui.__getChildAt(pos)
-            ev = biui.MouseEvent(receiver,bStates,pos,0,0)
             for w in __windows:
-                w._onMouseDown(ev)
-            
+                if w.id ==  event.window.windowID:
+                    w.sdlOnMouseDown(event)
+                    break
+
         elif event.type == sdl2.SDL_MOUSEBUTTONUP:
             ##print("SDL_MOUSEBUTTONUP")
-
-            mevent = event.motion
-            pos = (mevent.x,mevent.y)
-            
-            bStates = [
-                (mevent.state & SDL_BUTTON_LEFT) != 0,
-                (mevent.state & SDL_BUTTON_MIDDLE) != 0,
-                (mevent.state & SDL_BUTTON_RIGHT) != 0,
-                (mevent.state & SDL_BUTTON_X1) != 0,
-                (mevent.state & SDL_BUTTON_X2) != 0
-            ]
-            
-            receiver = biui.__getChildAt(pos)
-            ev = biui.MouseEvent(receiver,bStates,pos,0,0)
-            if time()-__mouseDownTime < __clickTime:
-                for w in __windows:
-                    w._onMouseClick(ev)
-
             for w in __windows:
-                w._onMouseUp(ev)
+                if w.id ==  event.window.windowID:
+                    w.sdlOnMouseUp(event)
+                    break
                                 
         elif event.type == sdl2.SDL_MOUSEWHEEL:
             ##print("SDL_MOUSEWHEEL")
-            
-            mevent = event.motion
-            pos = (mevent.x,mevent.y)                
-
-            bStates = [
-                (mevent.state & SDL_BUTTON_LEFT) != 0,
-                (mevent.state & SDL_BUTTON_MIDDLE) != 0,
-                (mevent.state & SDL_BUTTON_RIGHT) != 0,
-                (mevent.state & SDL_BUTTON_X1) != 0,
-                (mevent.state & SDL_BUTTON_X2) != 0
-            ]
-            
-            receiver = biui.__getChildAt(pos)
-            ev = biui.MouseEvent(receiver,bStates,pos,event.x,event.y)
             for w in __windows:
-                w._onMouseWheel(ev)
-        
+                if w.id ==  event.window.windowID:
+                    w.sdlOnMouseWheel(event)
+                    break
+
+        elif event.type == sdl2.SDL_MOUSEMOTION:
+            ##print("SDL_MOUSEMOTION")
+            for w in __windows:
+                if w.id ==  event.window.windowID:
+                    w.sdlOnMouseMotion(event)
+                    break
+
         ###############################################################
         ##                                                     KEYBOARD
         ###############################################################
@@ -739,13 +692,12 @@ def main():
             ## 'data2', 'event', 'padding1', 'padding2', 'padding3',
             ## 'timestamp', 'type', 'windowID']
             
-            ##print(event.window.windowID)
-            window = None
+            ##print("windowEvent::"+str(event.window.windowID))
             for w in __windows:
                 if w.id ==  event.window.windowID:
-                    window = w
+                    w.sdlOnWindowEvent(event)
+                    break
             
-            window._onWindowEvent(event)
             
         elif event.type == sdl2.SDL_SYSWMEVENT:
             ##print("SDL_SYSWMEVENT")
@@ -829,7 +781,6 @@ def main():
             ##print("")
             pass
         elif event.type == sdl2.SDL_QUIT:
-            running = False
             break
         
         ###############################################################
@@ -872,7 +823,6 @@ def main():
     ##                                                  DRAWING GUI
     ###############################################################
     
-    ##print("--------------------------------")
     for w in __windows:
         w._redraw()
         

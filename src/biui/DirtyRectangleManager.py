@@ -17,7 +17,7 @@ class DirtyRectangleManager():
         self._ymax = 0
         self._recs = []
 
-        v = 0
+        v = 3
         if v == 0:
             self.add = self.add0
             self.getRectangles = self.getRectangles0

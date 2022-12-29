@@ -1,8 +1,11 @@
 #include "pysdl2.inc"
+#include "Configuration.inc"
 
 import biui
 import sdl2
+from sdl2.mouse import SDL_BUTTON_LMASK, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_LEFT, SDL_BUTTON_X1, SDL_BUTTON_X2
 import ctypes
+from time import time
 
 ###
 ##
@@ -18,8 +21,10 @@ class Window(biui.ContainerWidget.ContainerWidget):
         ##self._id = biui.DL.getWindowId(self._window)
         self._id = PYSDL2_GET_WINDOW_ID(self._window)
         self._title = ""
-        self._renderer = biui.DL.createRenderer(self._window)
+        PYSDL2_CREATERENDERER(self._window,-1,sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_ACCELERATED,self._renderer)
 
+        print(self._renderer.contents)
+        
         ##
         self.onWindowClose = biui.EventManager()
         ##
@@ -50,12 +55,17 @@ class Window(biui.ContainerWidget.ContainerWidget):
         self.onWindowFocusLost = biui.EventManager()
         ##
         self.onWindowFocus = biui.EventManager()
-        ##
-        self._SHOWUPDATEBOXES = False
+
+        #ifdef SHOW_UPDATE_BOX
         ##
         self.__guiTexture = None
+        #endif
+        
         ##
         self.__dr = biui.DirtyRectangleManager()
+        
+        ### Stored a reference to the Widget the mouse is over.
+        self.__hoverWidget = None
         
         ##print(dir(self._window))
         ## '__bool__', '__class__', '__ctypes_from_outparam__',
@@ -191,10 +201,109 @@ class Window(biui.ContainerWidget.ContainerWidget):
         biui.DL.free(self._window)
         biui._removeWindow(self)
     
-    ###
+    ### Handles the SDL mouse event for this window
     ##
     ##
-    def _onWindowEvent(self,event):
+    def sdlOnMouseDown(self,event):
+        mevent = event.motion
+        pos = (mevent.x,mevent.y)
+        
+        biui.mouseDownTime = time()
+        
+        bStates = [
+            (mevent.state & SDL_BUTTON_LEFT) != 0,
+            (mevent.state & SDL_BUTTON_MIDDLE) != 0,
+            (mevent.state & SDL_BUTTON_RIGHT) != 0,
+            (mevent.state & SDL_BUTTON_X1) != 0,
+            (mevent.state & SDL_BUTTON_X2) != 0
+        ]
+        
+        receiver = self.getChildAt(pos)
+        ev = biui.MouseEvent(receiver,bStates,pos,0,0)
+        self._onMouseDown(ev)
+
+    ### Handles the SDL mouse event for this window
+    ##
+    ##
+    def sdlOnMouseUp(self,event):
+        mevent = event.motion
+        pos = (mevent.x,mevent.y)
+        
+        bStates = [
+            (mevent.state & SDL_BUTTON_LEFT) != 0,
+            (mevent.state & SDL_BUTTON_MIDDLE) != 0,
+            (mevent.state & SDL_BUTTON_RIGHT) != 0,
+            (mevent.state & SDL_BUTTON_X1) != 0,
+            (mevent.state & SDL_BUTTON_X2) != 0
+        ]
+        
+        receiver = self.getChildAt(pos)
+        ev = biui.MouseEvent(receiver,bStates,pos,0,0)
+        if time()-biui.mouseDownTime < biui.clickTime:
+            self._onMouseClick(ev)
+
+        self._onMouseUp(ev)
+            
+    ### Handles the SDL mouse event for this window
+    ##
+    ##
+    def sdlOnMouseWheel(self,event):
+        mevent = event.motion
+        ##print(event.wheel.direction)
+        ##print(event.wheel.preciseX)
+        ##print(event.wheel.preciseY)
+        ##print(event.wheel.timestamp)
+        ##print(event.wheel.type)
+        ##print(event.wheel.which)
+        ##print(event.wheel.windowID)
+        ##print(event.wheel.x)
+        ##print(event.wheel.y)
+        ##print("--------------------")
+        pos = (mevent.x,mevent.y)                
+
+        bStates = [
+            (mevent.state & SDL_BUTTON_LEFT) != 0,
+            (mevent.state & SDL_BUTTON_MIDDLE) != 0,
+            (mevent.state & SDL_BUTTON_RIGHT) != 0,
+            (mevent.state & SDL_BUTTON_X1) != 0,
+            (mevent.state & SDL_BUTTON_X2) != 0
+        ]
+        
+        receiver = self.getChildAt(pos)
+        ev = biui.MouseEvent(receiver,bStates,pos,event.wheel.x,event.wheel.y)
+        self._onMouseWheel(ev)
+    
+    ### Handles the SDL mouse event for this window
+    ##
+    ##
+    def sdlOnMouseMotion(self,event):
+        mevent = event.motion
+        pos = (mevent.x,mevent.y)
+        
+        bStates = [
+            (mevent.state & SDL_BUTTON_LEFT) != 0,
+            (mevent.state & SDL_BUTTON_MIDDLE) != 0,
+            (mevent.state & SDL_BUTTON_RIGHT) != 0,
+            (mevent.state & SDL_BUTTON_X1) != 0,
+            (mevent.state & SDL_BUTTON_X2) != 0
+        ]
+        receiver = self.getChildAt(pos)
+        
+        ev = biui.MouseEvent(receiver,bStates,pos,0,0)
+        
+        if receiver != self.__hoverWidget:
+            if self.__hoverWidget != None:
+                evLeave = biui.MouseEvent(self.__hoverWidget,bStates,pos,0,0)
+                self._onMouseLeave(evLeave)
+            self.__hoverWidget = receiver
+            self.__hoverWidget._onMouseEnter(ev)
+        else:
+            self._onMouseMove(ev)
+
+    ### Handles the sdl window event for this window
+    ##
+    ##
+    def sdlOnWindowEvent(self,event):
         ev = biui.Event(self)
         
         if event.window.event == sdl2.SDL_WINDOWEVENT_CLOSE:
@@ -297,20 +406,19 @@ class Window(biui.ContainerWidget.ContainerWidget):
 
 
     def _redraw(self, forceRedraw=False):
-        if self._SHOWUPDATEBOXES:
-            if self.__guiTexture != None:
-                ##print("cleargreen")
-                r = (0,0,self.width,self.height)
-                ##biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
-                
-                PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
-                
-                biui.DL.free(self.__guiTexture)
-                
-                self.__guiTexture = None
-                ##biui.DL.present(self.renderer)
-                PYSDL2_PRESENT(self.renderer)
-                return 
+        
+        #ifdef SHOW_UPDATE_BOX
+        if self.__guiTexture != None:
+            r = (0,0,self.width,self.height)
+            
+            PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
+            
+            biui.DL.free(self.__guiTexture)
+            
+            self.__guiTexture = None
+            PYSDL2_PRESENT(self.renderer)
+            return 
+        #endif
         
         if not self.isInvalide():
             if not forceRedraw:
@@ -326,16 +434,17 @@ class Window(biui.ContainerWidget.ContainerWidget):
         theme = biui.getTheme()
         
         if self._texture == None:
-            ##print("windows new texture")
-            ##self._texture = biui.DL.createTexture(self.renderer,self.width,self.height)
             PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height, self._texture)
             self.__guiTexture = self._texture
             forceRedraw = True
         
-        if self._SHOWUPDATEBOXES:
-            PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height, self.__guiTexture)
-            forceRedraw = True
-            
+        #ifdef SHOW_UPDATE_BOX
+        PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height, self.__guiTexture)
+        forceRedraw = True
+        #endif
+        
+        ##PYSDL2_SETRENDERCONTEXT(self.renderer,self.__guiTexture)
+        
         theme.drawWindowBeforeChildren(self.renderer,self,self.__guiTexture)
         
         for c in self._children:
@@ -344,43 +453,36 @@ class Window(biui.ContainerWidget.ContainerWidget):
         theme.drawWindowAfterChildren(self.renderer,self,self.__guiTexture)
         
         dr = self.__dr.getRectangles()
-        ## remove double rects
-        ##dr = set(dr)
         
-        ## Draw update boxes
-        if self._SHOWUPDATEBOXES:
-            ##boxTexture = biui.DL.createTexture(self.renderer,self.width,self.height)
-            PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height,boxTexture)
-            for r in dr:
-                r = list(r)
-                ## r must not reach over the widow's texture
-                r[0] = max(0,r[0])
-                r[1] = max(0,r[1])
-                r[2] = min(r[2],self.width-r[0])
-                r[3] = min(r[3],self.height-r[1])                
-                biui.DL.drawRect(self.renderer,boxTexture,(255,255,0,255),r,0)
-                
-            r = (0,0,self.width,self.height)
-            ##biui.DL.renderCopy(self.renderer,self.__guiTexture,r,r)
-            PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
-            ##biui.DL.renderCopy(self.renderer,boxTexture,r,r)
-            PYSDL2_RENDER_COPY(self.renderer,boxTexture,r,r)
-            biui.DL.free(boxTexture)
-            ##print("render boxes")
-        else:
-            ## just render dirty rectangles
-            for r in dr:
-                r = list(r)
-                ## r must not reach over the widow's texture
-                r[0] = max(0,r[0])
-                r[1] = max(0,r[1])
-                r[2] = min(r[2],self.width-r[0])
-                r[3] = min(r[3],self.height-r[1])
-                
-                ##biui.DL.renderCopy(self.renderer,self._texture,r,r)
-                PYSDL2_RENDER_COPY(self.renderer,self._texture,r,r)
+        #ifdef SHOW_UPDATE_BOX
+        ## Draw update boxes        
+        PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height,boxTexture)
+        for r in dr:
+            r = list(r)
+            ## r must not reach over the widow's texture
+            r[0] = max(0,r[0])
+            r[1] = max(0,r[1])
+            r[2] = min(r[2],self.width-r[0])
+            r[3] = min(r[3],self.height-r[1])                
+            biui.DL.drawRect(self.renderer,boxTexture,(255,255,0,255),r,0)
             
-        ##biui.DL.present(self.renderer)
+        r = (0,0,self.width,self.height)
+        PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
+        PYSDL2_RENDER_COPY(self.renderer,boxTexture,r,r)
+        biui.DL.free(boxTexture)
+        #else
+        ## just render dirty rectangles
+        for r in dr:
+            r = list(r)
+            ## r must not reach over the widow's texture
+            r[0] = max(0,r[0])
+            r[1] = max(0,r[1])
+            r[2] = min(r[2],self.width-r[0])
+            r[3] = min(r[3],self.height-r[1])
+            
+            PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
+        #endif
+            
         PYSDL2_PRESENT(self.renderer)
         
         self._isInvalide = False
@@ -420,4 +522,11 @@ class Window(biui.ContainerWidget.ContainerWidget):
     ##
     def toScreen(self,coordinates):
         return (coordinates[0]+self.x,coordinates[1]+self.y)
+    
+    def _onMouseDown(self,ev):
+        print("window::mouseDown: "+self.title)
+        super()._onMouseDown(ev)
             
+    def _onMouseUp(self,ev):
+        print("window::mouseUp: "+self.title)
+        super()._onMouseUp(ev)

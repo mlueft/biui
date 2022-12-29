@@ -26,11 +26,15 @@ def p2Click(ev):
 def p3Click(ev):
     print("p3.click:"+str(ev.phase))
     
+    
 def init():
 
     biui.init()
     biui.setThemeFolder("./../themes")
+    createGUI()
+    createGUI()
     
+def createGUI():
     ################################################
     ###                                       WINDOW
     ################################################

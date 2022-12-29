@@ -63,12 +63,11 @@
 	PYSDL2_FILL(renderer,texture,(0,0,0,0))
 
 #define PYSDL2_BLIT(renderer,tTgt,tSrc,tgtRect,srcRect) \
-	_tmpT = sdl2.SDL_GetRenderTarget(renderer); \
 	_src = sdl2.SDL_Rect(int(srcRect[0]),int(srcRect[1]),int(srcRect[2]),int(srcRect[3])); \
 	_tgt = sdl2.SDL_Rect(int(tgtRect[0]),int(tgtRect[1]),int(tgtRect[2]),int(tgtRect[3])); \
 	sdl2.SDL_SetRenderTarget(renderer,tTgt); \
-	sdl2.render.SDL_RenderCopy(renderer,tSrc,_src,_tgt); \
-	sdl2.SDL_SetRenderTarget(renderer,_tmpT);
+	sdl2.SDL_RenderCopy(renderer,tSrc,_src,_tgt); \
+	sdl2.SDL_SetRenderTarget(renderer,None);
 
 #define PYSDL2_GETTEXTURESIZE(texture,size) \
     _Width = ctypes.c_int(); \
@@ -76,7 +75,11 @@
     sdl2.SDL_QueryTexture(texture,None,None,_Width,_Height); \
     size = (0,0,_Width.value,_Height.value);
 
+#define PYSDL2_CREATERENDERER(window,index,flags,renderer) \
+	renderer = sdl2.SDL_CreateRenderer(window,index,flags); \
+    sdl2.SDL_SetRenderDrawBlendMode(renderer, sdl2.SDL_BLENDMODE_BLEND);
 
-
+#define PYSDL2_SETRENDERCONTEXT(renderer, tTgt) \
+	sdl2.SDL_SetRenderTarget(renderer,tTgt);
 
 #endif

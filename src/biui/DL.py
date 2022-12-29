@@ -65,11 +65,11 @@ class DL:
     ##def present(renderer):
     ##    sdl2.SDL_RenderPresent(renderer)
         
-    def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_ACCELERATED):
+    ##def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_ACCELERATED):
     ##def createRenderer(window,index=-1,flags=sdl2.SDL_RENDERER_SOFTWARE):
-        result = sdl2.SDL_CreateRenderer(window,index,flags)
-        sdl2.SDL_SetRenderDrawBlendMode(result, sdl2.SDL_BLENDMODE_BLEND)
-        return result
+    ##    result = sdl2.SDL_CreateRenderer(window,index,flags)
+    ##    sdl2.SDL_SetRenderDrawBlendMode(result, sdl2.SDL_BLENDMODE_BLEND)
+    ##    return result
     
     ##def setRenderColor(renderer,r,g,b,a):
     ##    return sdl2.render.SDL_SetRenderDrawColor(renderer, r, g, b, a)
@@ -147,6 +147,9 @@ class DL:
         
     def loadImage(fileName,renderer):
         img = sdl2.ext.load_img(fileName)
+        
+        return img
+        
         texture = sdl2.SDL_CreateTextureFromSurface(renderer,img)
         sdl2.SDL_SetTextureBlendMode(texture,sdl2.SDL_BLENDMODE_BLEND)
         sdl2.SDL_FreeSurface(img)

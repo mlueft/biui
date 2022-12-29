@@ -10,19 +10,25 @@ def init():
     
     biui.init()
     biui.setThemeFolder("../themes")
+    initWindow(10)
+    initWindow(190)
+    initWindow(190+180)
     
+def initWindow(x = 0):
     ###############################################
     ##                                       WINDOW
     ###############################################
-    wnd = biui.Window(640,480)
-
+    wnd = biui.Window(170,480)
+    wnd.x = x
+    wnd.y = 200
+    
     ##
     ## Buttons
     ##
-    for i in range(2):
+    for i in range(1):
         button0 = biui.Button()
         ##button0.onMouseUp.add(_test.upHandler)
-        button0.x = 100
+        button0.x = 10
         button0.y = 100+i*45
         button0.width = 150
         button0.height = 40
@@ -37,7 +43,7 @@ def main():
     ## Temporary main loop
     ##
     while biui.main():
-        time.sleep(0.3)
+        time.sleep(0.1)
         pass
 
 if __name__ == '__main__':

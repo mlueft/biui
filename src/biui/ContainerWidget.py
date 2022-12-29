@@ -178,7 +178,13 @@ class ContainerWidget(biui.Widget.Widget):
         ## Now we copy the visible area 
         ## of our own surface
         ## on the parent's surface
-        PYSDL2_BLIT(self.window.renderer,texture,_texture,(pos[0],pos[1],self.width,self.height),(0,0,self.width,self.height))
+        PYSDL2_BLIT(
+            self.window.renderer,
+            texture,
+            _texture,
+            (pos[0],pos[1],self.width,self.height),
+            (0,0,self.width,self.height)
+        )
         
         self._isInvalide = False
         

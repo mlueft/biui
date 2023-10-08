@@ -457,7 +457,7 @@ def createGUI0():
         
         img = biui.Image()
         pane4.addChild(img)
-        img.file = "../test.jpeg"
+        img.file = "../test.jpg"
         img.x = 10
         img.y = 10
         img.alignment = biui.Alignment.FILL
@@ -556,7 +556,7 @@ def main():
     init()
     
     while biui.main():
-        time.sleep(0.05)
+        time.sleep(0.1)
         pass
 
 if __name__ == '__main__':

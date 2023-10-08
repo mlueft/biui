@@ -30,9 +30,7 @@
 	"""MACROEND:PYSDL2_CREATEWINDOW""";
 
 #define PYSDL2_GET_WINDOW_ID(window) \
-	"""MACROSTART:PYSDL2_GET_WINDOW_ID"""; \
-	sdl2.SDL_GetWindowID(window); \
-	"""MACROEND:PYSDL2_GET_WINDOW_ID""";
+	sdl2.SDL_GetWindowID(window);
 
 #define PYSDL2_SETWINDOWPOS(window,x,y) \
 	"""MACROSTART:PYSDL2_SETWINDOWPOS"""; \

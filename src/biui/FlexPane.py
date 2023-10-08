@@ -1,18 +1,20 @@
 import biui
-
+from biui.ContainerWidget import ContainerWidget
+ 
 ###
 ##
 ##
-class FlexPane(biui.ContainerWidget.ContainerWidget):
+class FlexPane(ContainerWidget):
     
     def __init__(self):
         super().__init__()
-        self._minWidth = 40
-        self._minHeight = 40
-        
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawFlexPaneBeforeChildren
         self._themeForegroundfunction = theme.drawFlexPaneAfterChildren
+        
+        self._minWidth = 40
+        self._minHeight = 40
+        
                 
         ##
         self.onJoinUp = biui.EventManager()
@@ -28,54 +30,55 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         self.onHorizontalSplit = biui.EventManager()
         
         self._acTopLeft = self._createActiveCorner()
-        self._acTopLeft.onMouseDown.add(self._onActiveCornerTopLeftMouseDown)
-        self._acTopLeft.onMouseUp.add(self._onActiveCornerTopLeftMouseUp)
+        self._acTopLeft.onMouseDown.add(self.__hndOnActiveCornerTopLeftMouseDown)
+        self._acTopLeft.onMouseUp.add(self.__hndOnActiveCornerTopLeftMouseUp)
         self._acTopLeft.alignment = biui.Alignment.TOP_LEFT
         self.addChild(self._acTopLeft)
         
         self._acTopRight = self._createActiveCorner()
-        self._acTopRight.onMouseDown.add(self._onActiveCornerTopRightMouseDown)
-        self._acTopRight.onMouseUp.add(self._onActiveCornerTopRightMouseUp)
+        self._acTopRight.onMouseDown.add(self.__hndOnActiveCornerTopRightMouseDown)
+        self._acTopRight.onMouseUp.add(self.__hndOnActiveCornerTopRightMouseUp)
         self._acTopRight.alignment = biui.Alignment.TOP_RIGHT
         self.addChild(self._acTopRight)
 
         self._acBottomLeft = self._createActiveCorner()
-        self._acBottomLeft.onMouseDown.add(self._onActiveCornerBottomLeftMouseDown)
-        self._acBottomLeft.onMouseUp.add(self._onActiveCornerBottomLeftMouseUp)
+        self._acBottomLeft.onMouseDown.add(self.__hndOnActiveCornerBottomLeftMouseDown)
+        self._acBottomLeft.onMouseUp.add(self.__hndOnActiveCornerBottomLeftMouseUp)
         self._acBottomLeft.alignment = biui.Alignment.BOTTOM_LEFT
         self.addChild(self._acBottomLeft)
         
         self._acBottomRight = self._createActiveCorner()
-        self._acBottomRight.onMouseDown.add(self._onActiveCornerBottomRightMouseDown)
-        self._acBottomRight.onMouseUp.add(self._onActiveCornerBottomRightMouseUp)
+        self._acBottomRight.onMouseDown.add(self.__hndOnActiveCornerBottomRightMouseDown)
+        self._acBottomRight.onMouseUp.add(self.__hndOnActiveCornerBottomRightMouseUp)
         self._acBottomRight.alignment = biui.Alignment.BOTTOM_RIGHT
         self.addChild(self._acBottomRight)
         
         
-    def _onActiveCornerTopLeftMouseDown(self,ev):
-        self._acTopLeft.onMouseLeave.add(self.onActiveCornerTopLeftLeave)
+    ## TODO: Those four functions could be removed?
+    def __hndOnActiveCornerTopLeftMouseDown(self,ev):
+        self._acTopLeft.onMouseLeave.add(self.__hndOnActiveCornerTopLeftLeave)
     
-    def _onActiveCornerTopRightMouseDown(self,ev):
-        self._acTopRight.onMouseLeave.add(self.onActiveCornerTopRightLeave)
+    def __hndOnActiveCornerTopRightMouseDown(self,ev):
+        self._acTopRight.onMouseLeave.add(self.__hndOnActiveCornerTopRightLeave)
     
-    def _onActiveCornerBottomLeftMouseDown(self,ev):
-        self._acBottomLeft.onMouseLeave.add(self.onActiveCornerBottomLeftLeave)
+    def __hndOnActiveCornerBottomLeftMouseDown(self,ev):
+        self._acBottomLeft.onMouseLeave.add(self.__hndOnActiveCornerBottomLeftLeave)
     
-    def _onActiveCornerBottomRightMouseDown(self,ev):
-        self._acBottomRight.onMouseLeave.add(self.onActiveCornerBottomRightLeave)
+    def __hndOnActiveCornerBottomRightMouseDown(self,ev):
+        self._acBottomRight.onMouseLeave.add(self.__hndOnActiveCornerBottomRightLeave)
 
 
-    def _onActiveCornerTopLeftMouseUp(self,ev):
-        self._acTopLeft.onMouseLeave.remove(self.onActiveCornerTopLeftLeave)
+    def __hndOnActiveCornerTopLeftMouseUp(self,ev):
+        self._acTopLeft.onMouseLeave.remove(self.__hndOnActiveCornerTopLeftLeave)
     
-    def _onActiveCornerTopRightMouseUp(self,ev):
-        self._acTopRight.onMouseLeave.remove(self.onActiveCornerTopRightLeave)
+    def __hndOnActiveCornerTopRightMouseUp(self,ev):
+        self._acTopRight.onMouseLeave.remove(self.__hndOnActiveCornerTopRightLeave)
     
-    def _onActiveCornerBottomLeftMouseUp(self,ev):
-        self._acBottomLeft.onMouseLeave.remove(self.onActiveCornerBottomLeftLeave)
+    def __hndOnActiveCornerBottomLeftMouseUp(self,ev):
+        self._acBottomLeft.onMouseLeave.remove(self.__hndOnActiveCornerBottomLeftLeave)
     
-    def _onActiveCornerBottomRightMouseUp(self,ev):
-        self._acBottomRight.onMouseLeave.remove(self.onActiveCornerBottomRightLeave)
+    def __hndOnActiveCornerBottomRightMouseUp(self,ev):
+        self._acBottomRight.onMouseLeave.remove(self.__hndOnActiveCornerBottomRightLeave)
         
     ### Returns a widget used as a active corner.
     ##
@@ -84,14 +87,14 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         ## We use a Spacer to get
         ## an invisible corner
         ac = biui.Spacer()
-        ac.width = 25
-        ac.height = 25
+        ac.width = 15
+        ac.height = 15
         return ac
         
     ### Handles mouse leave event of the top left active corner.
     ##  It provokes split or join events if necessary.
     ##
-    def onActiveCornerTopLeftLeave(self,ev):
+    def __hndOnActiveCornerTopLeftLeave(self,ev):
 
         ac = ev.eventSource
         pos = ac.toLocal(ev.position)
@@ -105,12 +108,12 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
      
-        self._acTopLeft.onMouseLeave.remove(self.onActiveCornerTopLeftLeave)
+        self._acTopLeft.onMouseLeave.remove(self.__hndOnActiveCornerTopLeftLeave)
         
     ### Handles mouse leave event of the top right active corner.
     ##  It provokes split or join events if necessary.
     ##
-    def onActiveCornerTopRightLeave(self,ev):
+    def __hndOnActiveCornerTopRightLeave(self,ev):
 
         ac = ev.eventSource
         pos = ac.toLocal(ev.position)
@@ -124,12 +127,12 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         else:
             self.onJoinUp.provoke(biui.Event(self))
 
-        self._acTopRight.onMouseLeave.remove(self.onActiveCornerTopRightLeave)
+        self._acTopRight.onMouseLeave.remove(self.__hndOnActiveCornerTopRightLeave)
         
     ### Handles mouse leave event of the bottom left active corner.
     ##  It provokes split or join events if necessary.
     ##
-    def onActiveCornerBottomLeftLeave(self,ev):
+    def __hndOnActiveCornerBottomLeftLeave(self,ev):
 
         ac = ev.eventSource
         pos = ac.toLocal(ev.position)
@@ -143,12 +146,12 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
             
-        self._acBottomLeft.onMouseLeave.remove(self.onActiveCornerBottomLeftLeave)
+        self._acBottomLeft.onMouseLeave.remove(self.__hndOnActiveCornerBottomLeftLeave)
         
     ### Handles mouse leave event of the bottom right active corner.
     ##  It provokes split or join events if necessary.
     ##
-    def onActiveCornerBottomRightLeave(self,ev):
+    def __hndOnActiveCornerBottomRightLeave(self,ev):
 
         ac = ev.eventSource
         pos = ac.toLocal(ev.position)
@@ -162,7 +165,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         else:
             self.onHorizontalSplit.provoke(biui.Event(self))
         
-        self._acBottomRight.onMouseLeave.remove(self.onActiveCornerBottomRightLeave)
+        self._acBottomRight.onMouseLeave.remove(self.__hndOnActiveCornerBottomRightLeave)
         
     def _redraw1(self, texture, forceRedraw=False):
         
@@ -174,7 +177,7 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         pos = self.position
         
         ## we paint on our own texture
-        ## not on the parent's texture
+        ## not on the parent´s texture
         _texture = self._texture
         theme = biui.getTheme()
         theme.drawFlexPaneBeforeChildren(self.window.renderer,self,_texture)
@@ -188,9 +191,9 @@ class FlexPane(biui.ContainerWidget.ContainerWidget):
         
         ## Now we copy the visible area 
         ## of our own texture
-        ## on the parent's texture
+        ## on the parent´s texture
         ##texture.blit(_texture,pos,(0,0,self.width,self.height))
-        PYSDL2_BLIT(self.window.renderer,texture,_texture,(pos[0],pos[1],self.width,self.height),(0,0,self.width,self.height))
+        PYSDL2_RENDER_COPY1(self.window.renderer,texture,_texture,(pos[0],pos[1],self.width,self.height),(0,0,self.width,self.height))
         
         self._isInvalide = False        
                 

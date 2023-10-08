@@ -8,14 +8,8 @@ class ButtonStates():
     def __init__(self):
         raise Exception( Messages.ERR_CLASS_NOT_INIT )
     
-    ## normal button. Mouse is not over it.
-    NORMAL = 0
+    NORMAL:int = 0      ## normal button. Mouse is not over it.
+    OVER:int   = 1      ## Mouse is over the button
+    DOWN:int   = 2      ## Mousebutton is pressed
+    CHECKED:int = 3     ## Toggle button is checked
     
-    ## Mouse is over the button
-    OVER   = 1
-    
-    ## Mousebutton is pressed
-    DOWN   = 2
-    
-    ## Toggle button is checked
-    CHECKED = 3

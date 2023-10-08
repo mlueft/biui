@@ -1,12 +1,16 @@
 import biui
+from biui.Widget import Widget
 
 ###
 ##
 ##
-class FlexSpacer(biui.Widget.Widget):
+class FlexSpacer(Widget):
     
     def __init__(self,isVertical):
         super().__init__()
+        theme = biui.getTheme()
+        self._themeBackgroundfunction = theme.drawFlexSpacer
+        
         self._minWidth = 2
         self._minHeight = 2
         
@@ -18,8 +22,6 @@ class FlexSpacer(biui.Widget.Widget):
         ## Panes which are touching with the TOP/LEFT border.
         self._rightNeighbours = []
                 
-        theme = biui.getTheme()
-        self._themeBackgroundfunction = theme.drawFlexSpacer
      
     ### Indicates if the spacer is vertical.
     ##

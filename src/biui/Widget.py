@@ -1,95 +1,177 @@
-import biui
+#include "biui.inc"
 
+from typing import List,Callable
+import biui
+from biui.Color import Color
+from biui.Event import Event
+from biui.KeyEvent import KeyEvent
+from biui.MouseEvent import MouseEvent
+from biui.EventManager import EventManager
+from biui.Alignment import Alignment
+from biui.EventManager import EventManager
+from biui.LayoutManager import LayoutManager
+
+##from biui.Window import Window
 
 ### Base class for all GUI elements.
 ##
 ##
-class Widget:
+class Widget():
     
     ###
     ##
     ##
     def __init__(self):
         ## Stores the width of the GUI element.
-        self._width = 100
+        self._width:int = 100
         ##Stores the height of the GUI element.
-        self._height = 100
+        self._height:int = 100
         ## 
-        self._minWidth = 0
+        self._minWidth:int = 0
         ## 
-        self._minHeight = 0
+        self._minHeight:int  = 0
         ## 
-        self._maxWidth = 10000
+        self._maxWidth:int  = 10000
         ## 
-        self._maxHeight = 10000
+        self._maxHeight:int  = 10000
         ## stores the x position of the GUI element
-        self._x = 0
+        self._x:int  = 0
         ## Stores the y position of the GUI element
-        self._y = 0
+        self._y:int  = 0
         ## Stores the collected "dirty rect" for GUI repainting
-        self._dirtyRects = []
+        self._dirtyRects:List = []
         ## Stores a reference the parent GUI element
-        self._parent = None
+        self._parent:ContainerWidget = None
         ##
-        self._isInvalide = True
+        self._isInvalide:bool = True
         ##
-        self._name = ""
+        self._name:str = ""
         ##
-        self._alignment = biui.Alignment.ABSOLUTE
+        self._tooltip:str = None
+        ##
+        self._alignment:int = Alignment.ABSOLUTE
         ## A reference to the theme function which is used to draw the widget.
-        ## On Containerwidgets it's used to draw the widget's background.
+        ## On Containerwidgets it´s used to draw the widget´s background.
         theme = biui.getTheme()
-        self._themeBackgroundfunction = theme.drawEmpty        
+        self._themeBackgroundfunction:Callable = theme.drawEmpty        
         ##
-        self.onMouseUp = biui.EventManager()
+        self.onMouseUp:EventManager = EventManager()
         ##
-        self.onTextInput = biui.EventManager()
+        self.onTextInput:EventManager = EventManager()
         ##
-        self.onKeyUp = biui.EventManager()
+        self.onKeyUp:EventManager = EventManager()
         ##
-        self.onKeyDown = biui.EventManager()
+        self.onKeyDown:EventManager = EventManager()
         ##
-        self.onMouseMove = biui.EventManager()
+        self.onMouseMove:EventManager = EventManager()
         ##
-        self.onMouseLeave = biui.EventManager()
+        self.onMouseLeave:EventManager = EventManager()
         ##
-        self.onMouseEnter = biui.EventManager()
+        self.onMouseEnter:EventManager = EventManager()
         ##
-        self.onMouseWheel = biui.EventManager()
+        self.onMouseWheel:EventManager = EventManager()
         ##
-        self.onMouseUp = biui.EventManager()
+        self.onMouseUp:EventManager = EventManager()
         ##
-        self.onMouseDown = biui.EventManager()
+        self.onMouseDown:EventManager = EventManager()
         ##
-        self.onMouseClick = biui.EventManager()
+        self.onMouseClick:EventManager = EventManager()
         ##
-        self._resized = False
+        self.onBeforeDraw:EventManager = EventManager()
         ##
-        self.onResized = biui.EventManager()
+        self.onAfterDraw:EventManager = EventManager()        
+        ##
+        self._resized:bool = False
+        ##
+        self.onResized:EventManager = EventManager()
+        ## Is triggered when the widget got added to a parent
+        self.onGotAdded:EventManager = EventManager()
+        ## Is triggered when the widget got removed from a parent
+        self.onGotRemoved:EventManager = EventManager()
 
+        ##
+        self.__borderColor:Color = None
+        self.__backColor:Color = None
         
-    ### Sets the x/y position of the GUI element.
+    ### @see Widget._invalidate
+    ##
+    ##   TODO: hinting return type
+    def getChildAt(self, pos:tuple[int,int]):# pylint: disable=unused-argument
+        return self
+    
+    ### Returns the x/y position of the GUI element.
     ##
     ##  @return            A tuple representing the position.
     ##
     @property
-    def position(self):
+    def position(self)->tuple[int,int]:
         return (self._x, self._y)
     
-    ### Returns the x/y position of the GUI element.
+    ### Returns the width/height position of the GUI element.
     ##
     ##  @return            A tuple representing the size.
     ##
     @property
-    def size(self):
+    def size(self)->tuple[int,int]:
         return (self.width, self.height)
 
+    ### 
+    ##
+    ##  @return            
+    ##
+    @property
+    def backColor(self)->Color:
+        return self.__backColor
+    
+    ### Sets the backcolor for this widget.
+    ##
+    ##  @param value       
+    ##  @return            None
+    ##
+    @backColor.setter
+    def backColor(self, value:Color)->None:
+        self.__backColor = value
+        
+    ### 
+    ##
+    ##  @return            
+    ##
+    @property
+    def borderColor(self)->Color:
+        return self.__borderColor
+    
+    ### Sets the borderColor for this widget.
+    ##
+    ##  @param value       
+    ##  @return            None
+    ##
+    @borderColor.setter
+    def borderColor(self, value:Color)->None:
+        self.__borderColor = value
+        
     ### 
     ##
     ##  @return            An integer value.
     ##
     @property
-    def name(self):
+    def tooltip(self)->str:
+        return self._tooltip
+    
+    ### Sets the tooltip text for this widget.
+    ##
+    ##  @param value       The text to show as tooltp
+    ##  @return            None
+    ##
+    @tooltip.setter
+    def tooltip(self, value:str)->None:
+        self._tooltip = value
+        
+    ### 
+    ##
+    ##  @return            An integer value.
+    ##
+    @property
+    def name(self)->str:
         return self._name
     
     ### Sets the x position of the GUI element.
@@ -98,7 +180,7 @@ class Widget:
     ##  @return            None
     ##
     @name.setter
-    def name(self, value):
+    def name(self, value:str)->None:
         self._name = value
             
     ### Returns the x position of the GUI element.
@@ -106,7 +188,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def x(self):
+    def x(self)->int:
         return self._x
     
     ### Sets the x position of the GUI element.
@@ -115,12 +197,12 @@ class Widget:
     ##  @return            None
     ##
     @x.setter
-    def x(self, value):
+    def x(self, value:int)->None:
         value = int(value)
         if value == self._x:
             return
         ## record old dirty rect for the old position
-        self._recordDirtyRect()
+        self._invalidate()
         self._x = value
         self._invalidate()
     
@@ -129,7 +211,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def y(self):
+    def y(self)->int:
         return self._y
 
     ### Sets the y position of the GUI element.
@@ -138,12 +220,12 @@ class Widget:
     ##  @return            None    
     ##
     @y.setter
-    def y(self, value):
+    def y(self, value:int)->None:
         value = int(value)
         if value == self._y:
             return
         ## record old dirty rect
-        self._recordDirtyRect()
+        self._invalidate()
         self._y = value
         self._invalidate()
     
@@ -153,20 +235,23 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def left(self):
+    def left(self)->int:
         return self.x
     
     ### Sets the left border.
-    ##  Its the distance of the parent'sleft border to
+    ##  Its the distance of the parent´sleft border to
     ##  the own left border.
     ##
     ##  @param value       An integer value.
     ##
     @left.setter
-    def left(self,value):
+    def left(self,value:int)->None:
+        ##r = self.x+self.width
+        ##self.x = value
+        ##self.width = r-self.x
         r = self.x+self.width
+        self.width = r-value
         self.x = value
-        self.width = r-self.x
     
     ### Set/Get the top border of the widget.
     ##  Setting this value does not change 
@@ -177,7 +262,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def top(self):
+    def top(self)->int:
         return self.y
     
     ### Sets the top border.
@@ -187,10 +272,14 @@ class Widget:
     ##  @param value       An integer value.
     ##
     @top.setter
-    def top(self,value):
+    def top(self,value:int)->None:
+        ##b = self.y+self.height
+        ##self.y = value
+        ##self.height = b-self.y
         b = self.y+self.height
+        self.height = b-value
         self.y = value
-        self.height = b-self.y
+        
     
     ### Set/Get the right border of the widget.
     ##  Setting this value does not change 
@@ -201,7 +290,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def right(self):
+    def right(self)->int:
         return self.x+self.width
     
     ### Sets the right border of the widget.
@@ -211,7 +300,7 @@ class Widget:
     ##  @param value       An integer value.
     ##
     @right.setter
-    def right(self,value):
+    def right(self,value:int)->None:
         self.width = value-self.x
     
     ### Set/Get the bottom border of the widget.
@@ -223,7 +312,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def bottom(self):
+    def bottom(self)->int:
         return self.y+self.height
     
     ### Sets the bottom border of the widget.
@@ -234,7 +323,7 @@ class Widget:
     ##  @param value       An integer value.
     ##
     @bottom.setter
-    def bottom(self,value):
+    def bottom(self,value:int)->None:
         self.height = value-self.y
     
     ### Return the width of the GUI element.
@@ -242,7 +331,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def width(self):
+    def width(self)->int:
         return self._width
     
     ### Sets the width of the GUI element.
@@ -251,21 +340,21 @@ class Widget:
     ##  @return            None
     ##
     @width.setter     
-    def width(self, value):
+    def width(self, value:int)->None:
         value = int(value)
         
         if value == self._width:
             return
         
         ## record old dirty rect
-        if self._alignment != biui.Alignment.FILL:
+        if self._alignment != Alignment.FILL:
             value = min(value, self._maxWidth)
             value = max(value, self._minWidth)
         
-        self._recordDirtyRect()
+        self._invalidate()
         self._width = max(0,value)
         self._invalidate()
-        self.onResized.provoke(biui.Event(self))
+        self.onResized.provoke(Event(self))
         self._resized = True
             
     ### Returns the min widt value of the widget.
@@ -273,7 +362,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def minWidth(self):
+    def minWidth(self)->int:
         return self._minWidth
     
     ### Sets the min width value of the widget.
@@ -282,7 +371,7 @@ class Widget:
     ##  @return            None
     ##    
     @minWidth.setter   
-    def minWidth(self, value):
+    def minWidth(self, value:int)->None:
         value = int(value)
         self._minWidth = max(0,value)
         if self._minWidth > self._width:
@@ -293,7 +382,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def maxWidth(self):
+    def maxWidth(self)->int:
         return self._maxWidth
 
     ### Sets the max width value of the widget.
@@ -302,7 +391,7 @@ class Widget:
     ##  @return            None
     ##    
     @maxWidth.setter   
-    def maxWidth(self, value):
+    def maxWidth(self, value:int)->None:
         value = int(value)
         self._maxWidth = max(0,value)
         if self._maxWidth < self._width:
@@ -313,7 +402,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def height(self):
+    def height(self)->int:
         return self._height
             
     ### Sets the height of the GUI element.
@@ -322,20 +411,20 @@ class Widget:
     ##  @return            None
     ##
     @height.setter
-    def height(self, value):
+    def height(self, value:int)->None:
         value = int(value)
         
         if value == self._height:
             return
         
         ## record old dirty rect
-        if self._alignment != biui.Alignment.FILL:
+        if self._alignment != Alignment.FILL:
             value = min(value, self._maxWidth)
             value = max(value, self._minWidth)
             
-        self._recordDirtyRect()
+        self._invalidate()
         self._height = max(1,value)
-        self.onResized.provoke(biui.Event(self))
+        self.onResized.provoke(Event(self))
         self._invalidate()
         self._resized = True
             
@@ -344,7 +433,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def minHeight(self):
+    def minHeight(self)->int:
         return self._minHeight
     
     ### Sets the min width of the widget.
@@ -353,7 +442,7 @@ class Widget:
     ##  @return            None
     ##    
     @minHeight.setter   
-    def minHeight(self, value):
+    def minHeight(self, value:int)->None:
         value = int(value)
         self._minHeight = max(0,value)
         if self._minHeight > self._height:
@@ -364,7 +453,7 @@ class Widget:
     ##  @return            An integer value.
     ##
     @property
-    def maxHeight(self):
+    def maxHeight(self)->int:
         return self._maxHeight
 
     ### Sets the max. height of the widget.
@@ -373,7 +462,7 @@ class Widget:
     ##  @return            None
     ##    
     @maxHeight.setter   
-    def maxHeight(self, value):
+    def maxHeight(self, value:int)->None:
         value = int(value)
         self._maxHeight = max(0,value)
         if self._maxHeight < self._height:
@@ -382,48 +471,43 @@ class Widget:
     ### Checks if the given child is a child object or
     ##  if it is the current widget.
     ##
-    ##
-    def hasChild(self,child):
+    ## todo: hinting
+    def hasChild(self,child)->bool:
         return child == self
     
     ### Returns the alignment setting.
     ##
     ##
     @property
-    def alignment(self):
+    def alignment(self)->int:
         return self._alignment
             
     ### Serts the alignment setting.
     ##
     ##
     @alignment.setter
-    def alignment(self,value):
+    def alignment(self,value:int)->None:
         self._alignment = value
     
     ### Records the current Rect of the GUI element
-    ##  in the parent's coordinate system.
+    ##  in the parent´s coordinate system.
     ##
     ##  @return            None
     ##
-    def _recordDirtyRect(self):
-        if self.parent == None:
+    def _recordDirtyRect(self,box:tuple[int,int,int,int])->None:
+        if self.parent is None:
             return
-        if self.window == None:
+        if self.window is None:
             return
-        pos = self.toGlobal((0,0))
-        self.window.recortDirtyRectangle((
-            pos[0],
-            pos[1],
-            self._width,
-            self._height
-        ))
+
+        self.parent._recordDirtyRect(box)
         
     ### Checks if the widget is invalide.
     ##  If it is invalide, it has to bee redrawn
     ##  at the next refresh.
     ##
     ##
-    def isInvalide(self):
+    def isInvalide(self)->bool:
         return self._isInvalide
      
     ### Does some enecassary work if the GUI element
@@ -431,9 +515,10 @@ class Widget:
     ##
     ##  @return            None
     ##
-    def _invalidate(self):
+    def _invalidate(self)->None:
         ## record new dirty rect
-        self._recordDirtyRect()
+        box = self.position+self.size
+        self._recordDirtyRect(box)
         ## set flag to recalculate the layout.
         ## set flag to redraw widget
         self._isInvalide = True
@@ -444,21 +529,22 @@ class Widget:
     ##
     ##  @return            A list with tuples.
     ##    
-    def _getDirtyRectangles(self):
+    ## OBSOLET
+    def _getDirtyRectangles(self)->list[tuple[int,int,int,int]]:
         result = self._dirtyRects.copy()
         self._dirtyRects.clear()
         return result
     
     ### Returns the parent window of the widget.
     ##
-    ##
+    ## todo: hinting
     @property
-    def window(self):
+    def window(self):#pylint: disable=inconsistent-return-statements
         parent = self.parent
         while True:
-            if type(parent) == biui.Window:
+            if isinstance(parent,biui.Window):#pylint: disable=no-else-return
                 return parent
-            if parent == None:
+            elif parent is None:
                 return
             parent = parent.parent 
 
@@ -467,7 +553,7 @@ class Widget:
     ##  that contains the GUI element.
     ##
     ##  @return            A Widget instance.
-    ##
+    ##  todo: hinting
     @property
     def parent(self):
         return self._parent
@@ -477,10 +563,10 @@ class Widget:
     ##  @param parent      A Window or ContainerWidget
     ##
     ##  @return            None
-    ##
+    ##  todo: hinting
     @parent.setter
-    def parent(self,parent):
-        if self._parent != None:
+    def parent(self,parent)->None:
+        if self._parent is not None:
             self._parent.removeChild(self)
         
         self._parent = parent
@@ -490,30 +576,41 @@ class Widget:
     ##  if you know what you are doing.
     ##
     ##  @return            The drawing texture
-    ##
+    ##  todo: hinting
     def _getTexture(self):
         return self._parent._getTexture()
     
     ### Recalculates the layout of the widget.
     ##
     ##
-    def _calculateLayout(self):
+    def _calculateLayout(self)->None:
         if self._resized:
-            self.onResized.provoke(biui.Event(self))
+            self.onResized.provoke(Event(self))
             self._resized = False
             
     ### Is called before the drawing procedure ist starting
     ##  to calculate the layout and before _redraw is called.
     ##
-    def _beforeDraw(self):
-        pass
+    def _onBeforeDraw(self)->None:
+        self.onBeforeDraw.provoke(Event(self))
     
     ### Is called after all redwaing is done.
     ##
     ##
-    def _afterDraw(self):
-        pass
+    def _onAfterDraw(self)->None:
+        self.onAfterDraw.provoke(Event(self))
+
+    ### Is called when the widget got added to a parent.
+    ##
+    def _onGotAdded(self)->None:
+        self.onGotAdded.provoke(Event(self))
     
+    ### Is called when the widget got removed from a parent.
+    ##
+    ##
+    def _onGotRemoved(self)->None:
+        self.onGotRemoved.provoke(Event(self))
+            
     ### Redraws the GUI element. This is for internal use.
     ##  Just use this function if you know what you are doing.
     ##  Do not call super()._redraw().
@@ -524,14 +621,13 @@ class Widget:
     ##  @param surface            The drawing surface.
     ##
     ##  @return            None
-    ##
-    def _redraw(self, texture, forceRedraw=False):
+    ##  todo: hinting
+    def _redraw(self, texture, forceRedraw:bool=False)->None:
         
         if not self.isInvalide():
             if not forceRedraw:
                 return 
                 
-        theme = biui.getTheme()
         self._themeBackgroundfunction(self.window.renderer,self,texture)
         
         self._isInvalide = False
@@ -543,7 +639,7 @@ class Widget:
     ##  @param ev                 A MouseEvent
     ##  @return            None
     ##
-    def _onMouseDown(self,ev):
+    def _onMouseDown(self,ev:MouseEvent)->None:
         self.onMouseDown.provoke(ev)
         
     ### Is called if a mouse button got released and the
@@ -552,7 +648,7 @@ class Widget:
     ##  @param ev                 A MouseEvent
     ##  @return                   None
     ##
-    def _onMouseUp(self,ev):
+    def _onMouseUp(self,ev:MouseEvent)->None:
         self.onMouseUp.provoke(ev)
 
     ### Is called if a mouse had a click release and the
@@ -561,17 +657,17 @@ class Widget:
     ##  @param ev                 A MouseEvent
     ##  @return                   None
     ##
-    def _onMouseClick(self,ev):
+    def _onMouseClick(self,ev:MouseEvent)->None:
         self.onMouseClick.provoke(ev)
              
     ### Is called if a mouse wheel got turned and the
     ##  mouse pointer is over the GUI element.
-    ##  @param ev   biui.MouseEvent.MouseEvent
+    ##  @param ev   MouseEvent.MouseEvent
     ##
     ##  @param ev                 A MouseEvent
     ##  @return                   None
     ##
-    def _onMouseWheel(self,ev):
+    def _onMouseWheel(self,ev:MouseEvent)->None:
         self.onMouseWheel.provoke(ev)
     
     ### Is called if the mouse pointer enters the GUI element.
@@ -579,7 +675,7 @@ class Widget:
     ##  @param ev                 A MouseEvent
     ##  @return                   None
     ##
-    def _onMouseEnter(self,ev):
+    def _onMouseEnter(self,ev:MouseEvent)->None:
         self.onMouseEnter.provoke(ev)
     
     ### Is called if the mouse pointer leaves the GUI element.
@@ -587,7 +683,7 @@ class Widget:
     ##  @param ev                 A MouseEvent
     ##  @return                   None
     ##
-    def _onMouseLeave(self,ev):
+    def _onMouseLeave(self,ev:MouseEvent)->None:
         self.onMouseLeave.provoke(ev)
     
     ### Is called if the mouse pointer is over the GUI element
@@ -596,7 +692,7 @@ class Widget:
     ##  @param ev                 A MouseEvent
     ##  @return                   None
     ##
-    def _onMouseMove(self,ev):
+    def _onMouseMove(self,ev:MouseEvent)->None:
         self.onMouseMove.provoke(ev)
     
     ### Is called key got pressed.
@@ -606,7 +702,7 @@ class Widget:
     ##  @param ev                 A KeyEvent.
     ##  @return                   None
     ##
-    def _onKeyDown(self,ev):
+    def _onKeyDown(self,ev:KeyEvent)->None:
         self.onKeyDown.provoke(ev)
     
     ### Is called if a key got released.
@@ -616,7 +712,7 @@ class Widget:
     ##  @param ev                 A KeyEvent.
     ##  @return                   None
     ##
-    def _onKeyUp(self,ev):
+    def _onKeyUp(self,ev:KeyEvent)->None:
         self.onKeyUp.provoke(ev)
     
     ### Is called if a key press ends in a entered character.
@@ -626,7 +722,7 @@ class Widget:
     ##  @param ev                 A KeyEvent.
     ##  @return                   None
     ##    
-    def _onTextInput(self,ev):
+    def _onTextInput(self,ev:KeyEvent)->None:
         self.onTextInput.provoke(ev)
 
     ### Converts global coordinates to local coordinates
@@ -635,23 +731,31 @@ class Widget:
     ##  @return                   A tuple.
     ##
     ##
-    def toLocal(self, coordinates):
+    def toLocal(self, coordinates:tuple[int,int])->tuple[int,int]:
         result = ( coordinates[0]-self._x,coordinates[1]-self._y)
         
-        if self._parent != None:
+        if self._parent is not None:
             result = self._parent.toLocal(result)
         
         return result
     
-    ### Converts local coordinates to the top window's coordinates
+    ### Converts local coordinates to the top window´s coordinates
     ##
     ##  @param coordinate         A Tuple with x and y coordinates.
     ##  @return                   A tuple. 
     ##
-    def toGlobal(self,coordinates):
+    def toGlobal(self,coordinates:tuple[int,int])->tuple[int,int]:
         result = ( self._x+coordinates[0],self._y+coordinates[1])
         
-        if self._parent != None:
+        if self._parent is not None:
             result = self._parent.toGlobal(result)
         
         return result
+    
+    ### Sets the focus the the widget.
+    ##  @return                    None
+    ##
+    def focus(self):
+        biui.setFocus(self)
+        
+        

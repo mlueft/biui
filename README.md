@@ -23,7 +23,7 @@ TODO:
 * stopPropagation() for keyboardevents? Should it have it?
 * Protect setter from unnecassary invalidate() calles.
 * Label
-  + format für pre/postfix
+  + format for pre/postfix
 * Checkbox
 * Progressbar
 * NumberSlider
@@ -37,6 +37,14 @@ TODO:
 * LayoutManager
 * Scrollbar
 
+Bugs:
+ * Menuitems are not resized to text length
+ * Tool tips are not resized to text length
+ * Sometimes the Layoutmanagemant doesn't redraw everything
+   This comes from the DirtyRectangleManager and overlapped widgets
+   doen't redraw
+   
+ 
 ```python
 
 ```

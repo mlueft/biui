@@ -1,9 +1,6 @@
 import sys
-<<<<<<< HEAD
 import time
-=======
 
->>>>>>> macros
 sys.path.append('./')
 
 import biui

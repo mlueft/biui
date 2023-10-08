@@ -1,74 +1,114 @@
+from typing import Callable
+
 import biui
+from biui.ButtonStates import ButtonStates
+from biui.Color import Color
+from biui.Widget import Widget
+from biui.ContainerWidget import ContainerWidget
+from biui.Event import Event
+from biui.Label import Label
+from biui.Alignment import Alignment
+
 
 ###
 ##
 ##
-class Button(biui.ContainerWidget.ContainerWidget):
+class Button(ContainerWidget):
     
     def __init__(self):
         super().__init__()
+        self._state:int = ButtonStates.NORMAL
+        ## todo: hinting
+        self._icon = None
+        self.name:str = "Button"
+        
+        self.__backColorDown:Color = None
+        self.__backColorOver:Color = None
+        
+        self._label:Label = Label()
+        self._label.alignment = Alignment.CENTER_CENTER
+        
+
+        
         theme = biui.getTheme()
-        self._themeBackgroundfunction = theme.drawButtonBeforeChildren
-        self._themeForegroundfunction = theme.drawButtonAfterChildren
+        self._themeBackgroundfunction:Callable = theme.drawButtonBeforeChildren
+        self._themeForegroundfunction:Callable = theme.drawButtonAfterChildren
         self.width = 150
         self.height = 30
-        self._state = biui.ButtonStates.NORMAL
-        self._icon = None
-        self.name = "Button"
-        
-        self._label = biui.Label()
-        self._label.alignment = biui.Alignment.CENTER_CENTER
         self.addChild(self._label,1,0)
         
-        self._layoutManager.columnWidths = [1,0,1]
+        self._layoutManager.columnWidths = [1,0]
         self._layoutManager.rowHeights = [0]
         
-        self.onMouseEnter.add(self.__onMouseEnter)
-        self.onMouseLeave.add(self.__onMouseLeave)
-        self.onMouseDown.add(self.__onMouseDown)
-        self.onMouseUp.add(self.__onMouseUp)
+        self.onMouseEnter.add(self.__hndOnMouseEnter)
+        self.onMouseLeave.add(self.__hndOnMouseLeave)
+        self.onMouseDown.add(self.__hndOnMouseDown)
+        self.onMouseUp.add(self.__hndOnMouseUp)
         
-    def getChildAt(self, pos):
+    ### 
+    ##
+    ##  @return            A Color instance.
+    ##
+    @property
+    def backColorOver(self)->Color:
+        return self.__backColorOver
+    
+    ### Sets the backcolor for this widget.
+    ##
+    ##  @param value       A Color instance.
+    ##  @return            None
+    ##
+    @backColorOver.setter
+    def backColorOver(self, value:Color):
+        self.__backColorOver = value
+                
+    ### 
+    ##
+    ##  @return            A Color instance.
+    ##
+    @property
+    def backColorDown(self)->Color:
+        return self.__backColorDown
+    
+    ### Sets the backcolor for this widget.
+    ##
+    ##  @param value       A Color instance.
+    ##  @return            None
+    ##
+    @backColorDown.setter
+    def backColorDown(self, value:Color):
+        self.__backColorDown = value
         
+    ### @see ContainerWidget.getChildAt
+    ##
+    ##   
+    def getChildAt(self, pos:tuple[int,int])->Widget:
         ## we do not want to return any child 
         ## objects like labels or icons.
         ## If the position is inside the button,
         ## the button is the last element in the DOM.
-        
-        cPos = self.toGlobal((0,0))
-        if cPos[0] > pos[0]:
-            return None
-        
-        if cPos[0]+self.width < pos[0]:
-            return None
-         
-        if cPos[1] > pos[1]:
-            return None
-        
-        if cPos[1]+self.height < pos[1]:
-            return None
-                
         return self
+
     
     ### Returns the embedded label instance
-    ##  to make it its properties accessible.
+    ##  to make its properties accessible.
     ##
-    ##
+    ## todo: hinting
     @property
     def label(self):
         return self._label
     
     ### Returns the current state of the button.
-    ##  See: biui.ButtonStates
+    ##  See: ButtonStates
     ##  
     @property
-    def state(self):
+    def state(self)->int:
         return self._state
     
     ### Returns the icon instance of the button
     ##  to make its properties accessible. 
     ##
-    ##
+    ##todo:hinting
     @property
     def icon(self):
         return self._icon
@@ -76,9 +116,9 @@ class Button(biui.ContainerWidget.ContainerWidget):
     ### Sets the icon instance.
     ##  TODO: Impliment the icon class.
     ##
-    ##
+    ## todo: hinting
     @icon.setter
-    def icon(self,icon):
+    def icon(self,icon)->None:
         if icon == self._icon:
             return
         self._icon = icon
@@ -90,34 +130,48 @@ class Button(biui.ContainerWidget.ContainerWidget):
     ##
     ##
     @property
-    def value(self):
+    def value(self)->str:
         return self._label.value
     
     ### Sets the value of the button.
     ##  The value is the shown text.
     ##
+    ##  @param value       The string value of the label.
+    ##    
     @value.setter
-    def value(self,value):
+    def value(self,value:str)->None:
         self._label.value = value
 
-    def __onMouseEnter(self,ev):
-        self._recordDirtyRect()
-        self._state = biui.ButtonStates.OVER
+    ###
+    ##
+    ##
+    def __hndOnMouseEnter(self,ev:Event)->None:
         self._invalidate()
-        
-    def __onMouseLeave(self,ev):
-        self._recordDirtyRect()
-        self._state = biui.ButtonStates.NORMAL
+        self._state = ButtonStates.OVER
         self._invalidate()
-        
-    def __onMouseDown(self,ev):
-        self._recordDirtyRect()
-        self._state = biui.ButtonStates.DOWN
+    
+    ###
+    ##
+    ##
+    def __hndOnMouseLeave(self,ev:Event)->None:
+        self._invalidate()
+        self._state = ButtonStates.NORMAL
+        self._invalidate()
+
+    ###
+    ##
+    ##
+    def __hndOnMouseDown(self,ev:Event)->None:
+        self._invalidate()
+        self._state = ButtonStates.DOWN
         self._invalidate()
                 
-    def __onMouseUp(self,ev):
-        self._recordDirtyRect()
-        self._state = biui.ButtonStates.OVER
+    ###
+    ##
+    ##
+    def __hndOnMouseUp(self,ev:Event)->None:
+        self._invalidate()
+        self._state = ButtonStates.OVER
         self._invalidate()
                        
         

@@ -23,7 +23,6 @@ class EventManager():
 	def remove(self, handler):
 		if handler not in self.__handlers:
 			return
-		 
 		self.__handlers.remove(handler)
 
 	### Checks if a handler has been added.

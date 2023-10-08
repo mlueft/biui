@@ -1,9 +1,4 @@
-importt sys
 import unittest
-##import sdl2
-
-sys.path.append('./../') ## needed if the file is tested.
-sys.path.append('./')    ## needed if the folder is tested.
 import biui
 
 

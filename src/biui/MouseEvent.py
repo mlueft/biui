@@ -1,9 +1,10 @@
 import biui
 
+from biui.DOMEvent import DOMEvent
 ### Represents a mouse event for onMouseDown and so on.
 ##
 ##
-class MouseEvent(biui.DOMEvent.DOMEvent):
+class MouseEvent(DOMEvent):
     
     ###
     ##
@@ -53,35 +54,35 @@ class MouseEvent(biui.DOMEvent.DOMEvent):
         return self.__wheelY
         
     ### State of button 0 at action time.
-    ##  @return         A boolean value representing the button's state.
+    ##  @return         A boolean value representing the button´s state.
     ##
     @property
     def pressed0(self):
         return self.__buttonStates[0]
     
     ### State of button 1 at action time.
-    ##  @return         A boolean value representing the button's state.
+    ##  @return         A boolean value representing the button´s state.
     ##
     @property
     def pressed1(self):
         return self.__buttonStates[1]
     
     ### State of button 2 at action time.
-    ##  @return         A boolean value representing the button's state.
+    ##  @return         A boolean value representing the button´s state.
     ##
     @property
     def pressed2(self):
         return self.__buttonStates[2]
     
     ### State of button 3 at action time.
-    ##  @return         A boolean value representing the button's state.
+    ##  @return         A boolean value representing the button´s state.
     ##
     @property
     def pressed3(self):
         return self.__buttonStates[3]
     
     ### State of button 4 at action time.
-    ##  @return         A boolean value representing the button's state.
+    ##  @return         A boolean value representing the button´s state.
     ##
     @property
     def pressed4(self):

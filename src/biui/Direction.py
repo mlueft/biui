@@ -1,4 +1,4 @@
-from biui.Messages import Messages
+#include "biui.inc"
 
 ###
 ##
@@ -6,9 +6,9 @@ from biui.Messages import Messages
 class Direction():
 
     def __init__(self):
-        raise Exception( Messages.ERR_CLASS_NOT_INIT )
+        raise Exception( BIUI_ERR_CLASS_NOT_INIT )
 
-    LTR = 0
-    RTL = 1
-    TTB = 2
-    BTT = 3
+    LTR = 0      ## Left to right.
+    RTL = 1      ## Right to left.
+    TTB = 2      ## Top to bottom.
+    BTT = 3      ## Bottom to top. 

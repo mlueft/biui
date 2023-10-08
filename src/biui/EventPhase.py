@@ -1,4 +1,4 @@
-from biui.Messages import Messages
+#include "biui.inc"
 
 ###
 ##
@@ -6,7 +6,7 @@ from biui.Messages import Messages
 class EventPhase():
     
     def __init__(self):
-        raise Exception( Messages.ERR_CLASS_NOT_INIT )
+        raise Exception( BIUI_ERR_CLASS_NOT_INIT )
     
-    DOWN = 0
-    UP   = 1
+    DOWN = 0      ## In the down phase the event is walking down the DOM.
+    UP   = 1      ## In the up phase the event is walking back up to the root(window).

@@ -219,13 +219,13 @@ def main():
 			b0.x = end[0]		
 			b0.y = end[1]
 		
-	"""
-	em = biui.EventManager()
-	em.register(biui.EventTypes.MISC, eventHandler0 )
-	em.register(biui.EventTypes.MISC, eventHandler1 )
-	em.unregister(biui.EventTypes.MISC, eventHandler1 )
-	em.pour( biui.EventTypes.MISC )
-	"""
+	
+	##em = biui.EventManager()
+	##em.register(biui.EventTypes.MISC, eventHandler0 )
+	##em.register(biui.EventTypes.MISC, eventHandler1 )
+	##em.unregister(biui.EventTypes.MISC, eventHandler1 )
+	##em.pour( biui.EventTypes.MISC )
+	
 
 if __name__ == "__main__":
 	main()

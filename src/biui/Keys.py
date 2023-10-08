@@ -1,4 +1,4 @@
-from biui.Messages import Messages
+#include "biui.inc"
 
 ###
 ##
@@ -6,7 +6,7 @@ from biui.Messages import Messages
 class Keys():
     
     def __init__(self):
-        raise Exception( Messages.ERR_CLASS_NOT_INIT )
+        raise Exception( BIUI_ERR_CLASS_NOT_INIT )
     
     K_BACKSPACE    = 8
     K_TAB          = 9

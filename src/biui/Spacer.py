@@ -1,11 +1,12 @@
 import biui
+from biui.Widget import Widget
 
 ### General spacer object.
 ##  It can be used in the layoutmanager
 ##  to get visual seperation between
 ##  elements.
 ##
-class Spacer(biui.Widget.Widget):
+class Spacer(Widget):
     
     def __init__(self):
         super().__init__()

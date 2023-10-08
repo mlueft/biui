@@ -1,4 +1,4 @@
-from biui.Messages import Messages
+#include "biui.inc"
 
 ###
 ##
@@ -6,16 +6,20 @@ from biui.Messages import Messages
 class Alignment():
 
     def __init__(self):
-        raise Exception( Messages.ERR_CLASS_NOT_INIT )
+        raise Exception( BIUI_ERR_CLASS_NOT_INIT )
 
-    ABSOLUTE      = 0   ## position is x and y
-    FILL          = 1   ## All available space is used
-    TOP_LEFT      = 2
-    TOP_CENTER    = 3
-    TOP_RIGHT     = 4
-    CENTER_LEFT   = 5
-    CENTER_CENTER = 6
-    CENTER_RIGHT  = 7
-    BOTTOM_LEFT   = 8
-    BOTTOM_CENTER = 9
-    BOTTOM_RIGHT  = 10
+    ABSOLUTE      :int = 0   ## position is x and y
+    FILL          :int = 1   ## All available space is used
+    TOP_LEFT      :int = 2
+    TOP_CENTER    :int = 3
+    TOP_RIGHT     :int = 4
+    CENTER_LEFT   :int = 5
+    CENTER_CENTER :int = 6
+    CENTER_RIGHT  :int = 7
+    BOTTOM_LEFT   :int = 8
+    BOTTOM_CENTER :int = 9
+    BOTTOM_RIGHT  :int = 10
+    DOCK_TOP      :int = 11
+    DOCK_LEFT     :int = 12
+    DOCK_BOTTOM   :int = 13
+    DOCK_RIGHT    :int = 14

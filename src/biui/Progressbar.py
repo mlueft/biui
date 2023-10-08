@@ -1,12 +1,14 @@
 import biui
+from biui.ContainerWidget import ContainerWidget
 
-class Progressbar(biui.ContainerWidget.ContainerWidget):
+class Progressbar(ContainerWidget):
     
     def __init__(self):
         super().__init__()
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawProgressbarBeforeChildren
         self._themeForegroundfunction = theme.drawProgressbarAfterChildren
+        
         ## 
         self._minValue = -1024
         ##
@@ -21,7 +23,7 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
         self._label.alignment = biui.Alignment.CENTER_CENTER
         self._label.value = ""
         self.addChild(self._label,0,0)
-
+        
     ### Get the label object.
     ##
     ##
@@ -104,6 +106,9 @@ class Progressbar(biui.ContainerWidget.ContainerWidget):
         if self._showValue:
             self._label.value = value
 
+    ### @see biui.ContainerWidget.getChildAt
+    ##
+    ##    
     def getChildAt(self, pos):
         
         ## we do not want to return any child 

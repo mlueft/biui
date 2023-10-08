@@ -1,9 +1,10 @@
 import biui
+from biui.Event import Event
 
 ### Represents a KeyEvent. 
 ##
 ##
-class DOMEvent(biui.Event.Event):
+class DOMEvent(Event):
     
     def __init__(self,eventSource):
         super().__init__(eventSource)
@@ -18,6 +19,13 @@ class DOMEvent(biui.Event.Event):
     def stopPropagation(self):
         self._stopPropagation = True
 
+    ###
+    ##
+    ##
+    @property
+    def propagationStopped(self)->bool:
+        return self._stopPropagation
+    
     ### Returns the event phase.
     ##
     ## @return      An integer value representing an

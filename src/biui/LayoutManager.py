@@ -5,19 +5,19 @@ import biui
 ##
 class LayoutManager():
     
-    def __init__(self,width=1,height=1):
+    def __init__(self,x=0,y=0):
         ##        
         self._children = [[[]]]
         ##
         self._columnWidths = [0]
         ##
         self._rowHeights = [0]
-        ##
+        ## Files when a child is added
         self.onChildAdded = biui.EventManager()
-        ##
+        ## Fires when a child is removed
         self.onChildRemoved = biui.EventManager()
         
-        self._resizeChildList(width,height)
+        self._resizeChildList(x+1,y+1)
         
     ### Just adds columns or Rows at the end
     ##
@@ -25,18 +25,19 @@ class LayoutManager():
     ##  @param height
     ##
     def _resizeChildList(self,width,height):
-        if width == 0:
-            width = len(self._children)
-            
-        if height == 0:
-            _max = 0
-            for i in self._children:
-                _max = max(_max,len(i))
-            height = _max
-             
+        if False:
+            if width == 0:
+                width = len(self._children)
+                
+            if height == 0:
+                height = max(_max,len(self._children[0]))
+        
+        width = max(width,len(self._children))
+        height = max(height,len(self._children[0]))
+        
         for i in range(width):
         
-            ## add column    
+            ## add column
             if i >= len(self._children):
                 self._children.append([])
                 
@@ -65,7 +66,7 @@ class LayoutManager():
         self._width = len(self._children)
         self._height = len(self._children[0])
         self._children[x][y].append(child)
-        self.onChildAdded.provoke(biui.Event(self))
+        self.onChildAdded.provoke(biui.Event(child))
      
     ### Removes the given child element.
     ##
@@ -76,7 +77,7 @@ class LayoutManager():
             for j,row in enumerate(column):
                 if child in self._children[i][j]:
                     self._children[i][j].remove(child)
-        self.onChildRemoved.provoke(biui.Event(self))
+                    self.onChildRemoved.provoke(biui.Event(child))
     
     ### Set/Get all column widths.
     ##
@@ -244,27 +245,65 @@ class LayoutManager():
     ##   in the grid defines by children, widths and heights
     ##   of Columns and rows.
     ##
-    ##   @param            The parent's size.
+    ##   @param            The parent´s size.
     ##
     def _calculateLayout(self, size):
-        widths  = self.__calculatePixelWidths(self._columnWidths,size[0])
-        heights = self.__calculatePixelWidths(self._rowHeights,size[1])
-        cellX = 0
+        size = [0,0,size[0],size[1]]
+        
+        ## Calculate docked children
+        ## and apat size for cell calculation
+        for i,tmp in enumerate(self._columnWidths):
+            for j,tmp in enumerate(self._rowHeights):
+                ##print(i,j)
+                ##print(self._children[i])
+                ##print(self._children[i][j])
+                for child in self._children[i][j]:
+                    alignment = child.alignment
+                    if alignment == biui.Alignment.DOCK_TOP:
+                        child.x = size[0]
+                        child.y = size[1]
+                        child.width = size[2]
+                        size[1] += child.height 
+                        size[3] -= child.height
+                    elif alignment == biui.Alignment.DOCK_LEFT:
+                        child.x = size[0]
+                        child.y = size[1]
+                        child.height = size[3]
+                        size[0] += child.width
+                        size[2] -= child.width
+                    elif alignment == biui.Alignment.DOCK_BOTTOM:
+                        child.x = size[0]
+                        child.y = size[1]+size[3]-child.height
+                        child.width = size[2]
+                        size[3] -= child.height
+                    elif alignment == biui.Alignment.DOCK_RIGHT:
+                        child.x = size[0]+size[2]-child.width
+                        child.y = size[1]
+                        child.height = size[3]
+                        size[2]-= child.width
+
+        widths  = self.__calculatePixelWidths(self._columnWidths,size[2])
+        heights = self.__calculatePixelWidths(self._rowHeights,size[3])
+        cellX = size[0]
         for i,cellWidth in enumerate(widths):
-            cellY = 0
+            cellY = size[1]
             for j,cellHeight in enumerate(heights):
                 for child in self._children[i][j]:
                     if child != None:
                         alignment = child.alignment
                         if alignment == biui.Alignment.ABSOLUTE:
                             pass
+                            ## TODO: How to we get the child
+                            ##       to the new origin of size?
                         
                         elif alignment == biui.Alignment.FILL:
                             child.x = cellX
                             child.y = cellY
                             child.width = cellWidth
                             child.height = cellHeight
-                        else:
+                            
+                        ## exclude dockings
+                        elif alignment not in (11,12,13,14):
                             
                             childX = 0
                             childY = 0

@@ -1,44 +1,43 @@
 #include "pysdl2.inc"
-import sdl2 
-
+import sdl2
 import biui
-from biui.ContainerWidget import ContainerWidget
- 
+
 ###
 ##
 ##
-class Pane(ContainerWidget):
+class ScrollPane(biui.ContainerWidget.ContainerWidget):
     
     ###
     ##
     ##
     def __init__(self):
-        
         super().__init__()
-        self.__contentPane = biui.ContainerWidget()
+
+        self.layoutManager.columnWidths = [0,1]
+        self.layoutManager.rowHeights = [0,1]
+        
+        self.__contentPane = biui.Pane()
         self.__contentPane.alignment = biui.Alignment.FILL
+        self.__contentPane.onScrollPositionChanged.add(self.__hndOnScrollPositionChanged)
         super().addChild(self.__contentPane,0,0)
         
+        ##
+        self.onScrollPositionChanged = biui.EventManager()
         ##
         self.__verticalScrollbar = None
         ##
         self.__horizontalScrollbar = None
         
-        self.layoutManager.columnWidths = [0,1]
-        self.layoutManager.rowHeights = [0,1]
+    def __hndOnScrollPositionChanged(self,ev):
+        self.onScrollPositionChanged.provoke(biui.Event(self))
         
-        theme = biui.getTheme()
-        self._themeBackgroundfunction = theme.drawPaneBeforeChildren
-        self._themeForegroundfunction = theme.drawPaneAfterChildren
-        
-              
     ###
     ##
     ##
     def connectScrollNavigator(self,navigator):
-    ##    if navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
-    ##        return
-    ##    
+        if navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
+            return
+        
         navigator.connectPane(self.__contentPane)
 
     ###
@@ -189,48 +188,3 @@ class Pane(ContainerWidget):
     def scrollY(self, value):
         self.__contentPane.scrollY = value
         
-    def _redraw(self, texture, forceRedraw=False ):
-        
-        if not self.isInvalide():
-            if not forceRedraw:
-                return
-        
-        ##print( "redraw:{} {}x{} {}".format(self.name,self.x,self.y,forceRedraw))
- 
-        wnd = self.window
-        sw = self.width
-        sh = self.height
-        ##for child in self._children:
-        ##    sw = max(sw,child.right)
-        ##    sh = max(sh,child.bottom)
-        self._scrollWidth = sw
-        self._scrollHeight = sh
-        PYSDL2_CREATETEXTURE(wnd.renderer,sw,sh,self._texture)
-              
-        pos = self.position
-        
-        ## we paint on our own surface
-        ## not on the parent´s surface
-        _texture = self._texture
-        theme = biui.getTheme()
-        self._themeBackgroundfunction(self.window.renderer,self,_texture)
- 
-        ## We draw all Children on our own surface        
-        for c in self._children:
-            forceRedraw = self._isInvalide or forceRedraw
-            c._redraw(_texture,forceRedraw)
-                    
-        self._themeForegroundfunction(self.window.renderer,self,_texture)
-        
-        ## Now we copy the visible area 
-        ## of our own surface
-        ## on the parent´s surface
-        PYSDL2_RENDER_COPY1(
-            self.window.renderer,
-            texture,
-            _texture,
-            (pos[0],pos[1],self.width,self.height),
-            (0,0,self.width,self.height)
-        )
-        
-        self._isInvalide = False

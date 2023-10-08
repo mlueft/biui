@@ -1,81 +1,115 @@
+#include "biui.inc"
 #include "pysdl2.inc"
 
-import biui
 import os
 import sdl2
 import random
 import ctypes
+import json
 
+import biui
+from biui.Color import Color
 ### Does all the drawing stuff.
 ##
 ##
-class Theme:
+class Theme():
     
     def __init__(self, baseFolder):
-        self.__lib = biui.ImageLibrary()
-        self.__baseFolder = baseFolder
-        self.__themeFolder = None
-      
-    ###
-    ##
-    ##
-    def quit(self):
-        self.__lib.quit()
+        self._lib = biui.ImageLibrary()
+        self._baseFolder = baseFolder
+        self._themeFolder = None
+        self._shema = {
+            "TOOLTIP_BACKGROUND":[150,150,150,255],
+            "TOOLTIP_BORDER":[10,10,10,255],
+            "TOOLTIP_TEXT":[0,0,0,255],
+            
+            "WINDOW_BACKGROUND":[50,50,50,255],
+            "WINDOW_BORDER":[0,0,0,0],
+            "FLEXBOX_BACKGROUND":[0,0,0,255],
+            "FLEXBOX_BORDER":[0,0,0,255],
+            "FLEXPANE_BACKGROUND":[0,0,0,255],
+            "FLEXPANE_BORDER":[0,0,0,255],
+            "FLEXSPACER":[0,0,0,255],
+            "MENUBAR_BACKGROUND":[70,70,70,255],
+            "MENUBAR_BORDER":[0,0,0,255],
+            "MENUPANE_BACKGROUND":[0,0,0,255],
+            "MENUPANE_BORDER":[0,0,0,255],
+            
+            "MENUBUTTON_NORMAL_BACKGROUND":[90,90,90,255],
+            "MENUBUTTON_OVER_BACKGROUND":[120,120,120,255],
+            "MENUBUTTON_DOWN_BACKGROUND":[120,120,120,255],
+            "MENUBUTTON_CHECKED_BACKGROUND":[0,0,0,255],
+            "MENUBUTTON_BORDER":[0,0,0,0],
+            
+            "PANE_BACKGROUND":[40,40,40,255],
+            "PANE_BORDER":[30,30,30,255],
+            
+            "BUTTON_NORMAL_BACKGROUND":[70,70,70,255],
+            "BUTTON_OVER_BACKGROUND":[90,90,90,255],
+            "BUTTON_DOWN_BACKGROUND":[55,55,55,255],
+            "BUTTON_CHECKED_BACKGROUND":[60,90,60,255],
+            "BUTTON_BORDER":[0,0,0,255],
+                        
+            "BUTTONGROUP_BACKGROUND":[0,0,0,0],
+            "BUTTONGROUP_BORDER":[0,0,0,0],
+            
+            "PROGRESSBAR_BACKGROUND":[70,70,70,255],
+            "PROGRESSBAR_BAR":[60,90,60,255],
+            "PROGRESSBAR_BORDER":[0,0,0,255],
+            
+            "LABEL_BACKGROUND":[0,0,0,0],
+            "LABEL_BORDER":[0,0,0,0],
+            
+            "CHECKBOX_BACKGROUND":[0,0,0,0],
+            "CHECKBOX_BORDER":[0,0,0,0],
+            "CHECKBOX_CHECKBOX_NORMAL_BACKGROUND":[70,70,70,255],
+            "CHECKBOX_CHECKBOX_OVER_BACKGROUND":[90,90,90,255],
+            "CHECKBOX_CHECKBOX_DOWN_BACKGROUND":[55,55,55,255],
+            "CHECKBOX_CHECKBOX_CHECKED_BACKGROUND":[60,90,60,255],
+            "CHECKBOX_CHECKBOX_BORDER":[0,0,0,255],
+            
+            "SPACER_BACKGROUND":[50,70,50,255],
+            
+            "SCROLLNAVIGATOR_BACKGROUND":[50,50,50,255],
+            "SCROLLNAVIGATOR_BORDER":[0,0,0,255],
+            
+            "IMAGE_BACKGROUND":[0,0,0,0],
+            "IMAGE_BORDER":[0,0,0,0]
+            
+            
+        }
+        for k,v in self._shema.items():
+            self._shema[k] = Color(v[0],v[1],v[2],v[3])
             
     ###
     ##
     ##
+    def quit(self):
+        self._lib.quit()
+
+    ###
+    ##
+    ##
     def getImageLibrary(self):
-        return self.__lib
+        return self._lib
     
     ### Sets the current used theme name.
     ##
     ##  @param name   The folder name of the Theme.
     ##
     def selectTheme(self,name):
-        self.__themeFolder = name
-        self.__themeFolder = os.path.join(self.__baseFolder ,self.__themeFolder)
         
-    ########################################################
-    ##
-    ##
-    ##
-    ########################################################
-    def blinkBox(self, renderer, widget, texture):
-        r = random.randint(50,100)
-        g,b = r,r
-        color = biui.Color(r,g,b,255)
+        self._themeFolder = os.path.join(self._baseFolder ,name)
         
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            color.rgba,
-            (
-                widget.x,
-                widget.y,
-                widget.width,
-                widget.height
-            ),
-            1
-        )
-    
-    def blinkBox1(self, renderer, widget, texture):
-        r = random.randint(50,100)
-        g,b = r,r
-        color = biui.Color(r,g,b,255)
+        shemaFile = os.path.join(self._themeFolder, "shema.json")
+        if os.path.exists(shemaFile):
+            with open( shemaFile) as sFile:
+                shema = sFile.read()
+            self._shema = json.loads(shema)
         
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            color.rgba,
-            (
-                0,
-                0,
-                widget.width,
-                widget.height
-            ),
-            1
-        )             
+            for k,v in self._shema.items():
+                self._shema[k] = Color(v[0],v[1],v[2],v[3])
+
     ########################################################
     ##
     ##   MISC
@@ -90,6 +124,22 @@ class Theme:
     
     ########################################################
     ##
+    ##   TOOLTIP
+    ##
+    ########################################################
+    
+    ###
+    ##
+    ##
+    def getTooltip(self, widget):
+        tt = biui.Label()
+        tt.backColor = self._shema["TOOLTIP_BACKGROUND"]
+        tt.borderColor = self._shema["TOOLTIP_BORDER"]
+        tt.color = self._shema["TOOLTIP_TEXT"]
+        return tt
+
+    ########################################################
+    ##
     ##   WINDOW
     ##
     ########################################################
@@ -98,20 +148,31 @@ class Theme:
     ##  So, it is used to draw the background.
     ##
     def drawWindowBeforeChildren(self, renderer, widget, texture):
-        
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return
-        
-        PYSDL2_FILL( renderer,texture, biui.Color(50,50,50,255).rgba )
+        if widget.backColor:
+            result = True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["WINDOW_BACKGROUND"]
+            
+        PYSDL2_FILL( renderer,texture, color.rgba )
+        return result
 
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawWindowAfterChildren(self, renderer, widget, texture):
-        return
-    
+        if widget.borderColor:
+            result = True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["WINDOW_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+        
     ########################################################
     ##
     ##   FLEXGRID
@@ -122,31 +183,30 @@ class Theme:
     ##  So, it is used to draw the background.
     ## 
     def drawFlexGridBeforeChildren(self, renderer, widget, texture):
-        
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return
-        
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            biui.Color(0,0,0,255).rgba,
-            (
-                0,
-                0,
-                widget.width,
-                widget.height
-            ),
-            1
-        )
+        if widget.backColor:
+            result = True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["FLEXBOX_BACKGROUND"]
+            
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
     
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawFlexGridAfterChildren(self, renderer, widget, texture):
-        return
+        if widget.borderColor:
+            result = True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["FLEXBOX_BORDER"]
         
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
     ########################################################
     ##
     ##   FLEXPANE
@@ -160,41 +220,31 @@ class Theme:
     ##  So, it is used to draw the background.
     ## 
     def drawFlexPaneBeforeChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result = True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["FLEXPANE_BACKGROUND"]
         
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return
-        
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            biui.Color(155,155,155,255).rgba,
-            (
-                0,
-                0,
-                widget.width,
-                widget.height
-            ),
-            1  
-        )
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
     
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawFlexPaneAfterChildren(self, renderer, widget, texture):
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            biui.Color(255,255,255,255).rgba,
-            (
-                0,
-                0,
-                widget.width,
-                widget.height
-            ),0
-        )
+        if widget.borderColor:
+            result = True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["FLEXPANE_BORDER"]
         
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+    
     ########################################################
     ##
     ##   FLEXSPACER
@@ -208,24 +258,146 @@ class Theme:
     ##
     ##
     def drawFlexSpacer(self, renderer, widget, texture):
+        if widget.backColor:
+            result = True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["FLEXSPACER"]
         
-        if biui.themeDebug:
-            self.blinkBox(renderer, widget, texture)
-            return
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        return result
+    
+    ########################################################
+    ##
+    ##   Menubar
+    ##
+    ########################################################
+        
+    ### Is called before the child objects are drawn.
+    ##  So, it is used to draw the background.
+    ## 
+    def drawMenubarBeforeChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result = True
+            color = widget.backColor
+        else:
+            result = False
+            color= self._shema["MENUBAR_BACKGROUND"]
+        
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+    
+    ### Is called after the child objects are drawn.
+    ##  So it is used to draw everything that has to be
+    ##  top most like border
+    ##
+    def drawMenubarAfterChildren(self, renderer, widget, texture):
+        if widget.borderColor:
+            result = True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["MENUBAR_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
 
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            biui.Color(0,0,255,255).rgba,
-            (
-                widget.x,
-                widget.y,
-                widget.width,
-                widget.height
-            ),
-            1
-        )
+    ########################################################
+    ##
+    ##   MenuPane
+    ##
+    ########################################################
+        
+    ### Is called before the child objects are drawn.
+    ##  So, it is used to draw the background.
+    ## 
+    def drawMenuPaneBeforeChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["MENUPANE_BACKGROUND"]
             
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+    
+    ### Is called after the child objects are drawn.
+    ##  So it is used to draw everything that has to be
+    ##  top most like border
+    ##
+    def drawMenuPaneAfterChildren(self, renderer, widget, texture):
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["MENUPANE_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+                
+    ########################################################
+    ##
+    ##   Menubutton
+    ##
+    ########################################################
+        
+    ### Is called before the child objects are drawn.
+    ##  So, it is used to draw the background.
+    ## 
+    def drawMenubuttonBeforeChildren(self, renderer, widget, texture):
+        
+        state = widget.state
+
+        if state == biui.ButtonStates.OVER:
+            if widget.backColorOver:
+                result= True
+                color = widget.backColorOver
+            else:
+                result = False
+                color = self._shema["MENUBUTTON_OVER_BACKGROUND"]
+        elif state == biui.ButtonStates.DOWN:
+            if widget.backColorDown:
+                result= True
+                color = widget.backColorDown
+            else:
+                result = False
+                color = self._shema["MENUBUTTON_DOWN_BACKGROUND"]
+        elif state == biui.ButtonStates.CHECKED:
+            if widget.backColorChecked:
+                result= True
+                color = widget.backColorChecked
+            else:
+                result = False
+                color = self._shema["MENUBUTTON_CHECKED_BACKGROUND"]
+        else:
+            if widget.backColor:
+                result= True
+                color = widget.backColor
+            else:
+                result = False
+                color = self._shema["MENUBUTTON_NORMAL_BACKGROUND"]
+                    
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+    
+    ### Is called after the child objects are drawn.
+    ##  So it is used to draw everything that has to be
+    ##  top most like border
+    ##
+    def drawMenubuttonAfterChildren(self, renderer, widget, texture):
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["MENUBUTTON_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+    
     ########################################################
     ##
     ##   PANE
@@ -236,27 +408,32 @@ class Theme:
     ##  So, it is used to draw the background.
     ## 
     def drawPaneBeforeChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["PANE_BACKGROUND"]
         
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return 
-        
-        name = os.path.join(self.__themeFolder ,"pane_bg")
-        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        ##img = self.__lib.getImage(renderer,name,widget.width,widget.height)
-        r = (0,0,widget.width,widget.height)
-        PYSDL2_BLIT(renderer,texture,img,r,r)
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget._scrollWidth+widget.width,widget._scrollHeight+widget.height))
+        return result
     
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawPaneAfterChildren(self, renderer, widget, texture):
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["PANE_BORDER"]
         
-        name = os.path.join(self.__themeFolder ,"pane_fg")
-        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        r = (0,0,widget.width,widget.height)
-        PYSDL2_BLIT(renderer,texture,img,r,r)
+        ## The widget is a container for the actual scrollcontainer.
+        ## it´s scrollposition is ever 0,0!
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
     
     ########################################################
     ##
@@ -268,47 +445,52 @@ class Theme:
     ##
     ##
     def drawButtonBeforeChildren(self, renderer, widget, texture):
-        
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return 
-                
         state = widget.state
-
         if state == biui.ButtonStates.OVER:
-            name = "button_hover_bg"
+            if widget.backColorOver:
+                result= True
+                color = widget.backColorOver
+            else:
+                result = False
+                color = self._shema["BUTTON_OVER_BACKGROUND"]
         elif state == biui.ButtonStates.DOWN:
-            name = "button_down_bg"
+            if widget.backColorDown:
+                result= True
+                color = widget.backColorDown
+            else:
+                result = False
+                color = self._shema["BUTTON_DOWN_BACKGROUND"]
         elif state == biui.ButtonStates.CHECKED:
-            name = "button_checked_bg"
+            if widget.backColorChecked:
+                result= True
+                color = widget.backColorChecked
+            else:
+                result = False
+                color = self._shema["BUTTON_CHECKED_BACKGROUND"]
         else:
-            name = "button_normal_bg"
-                    
-        name = os.path.join(self.__themeFolder ,name)
-        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        r = (0,0,widget.width,widget.height)
-        PYSDL2_BLIT(renderer,texture,img,r,r)
+            if widget.backColor:
+                result= True
+                color = widget.backColor
+            else:
+                result = False
+                color = self._shema["BUTTON_NORMAL_BACKGROUND"]
+       
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
 
     ###
     ##
     ##
     def drawButtonAfterChildren(self, renderer, widget, texture):
-
-        state = widget.state
-        
-        if state == biui.ButtonStates.OVER:
-            name = "button_hover_fg"
-        elif state == biui.ButtonStates.DOWN:
-            name = "button_down_fg"
-        elif state == biui.ButtonStates.CHECKED:
-            name = "button_checked_fg"
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
         else:
-            name = "button_normal_fg"
-                    
-        name = os.path.join(self.__themeFolder ,name)
-        img = self.__lib.getI9(renderer,name,widget.width,widget.height)
-        r = (0,0,widget.width,widget.height)
-        PYSDL2_BLIT(renderer,texture,img,r,r)
+            result = False
+            color = self._shema["BUTTON_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
     
     ########################################################
     ##
@@ -320,16 +502,30 @@ class Theme:
     ##  So, it is used to draw the background.
     ## 
     def drawButtonGroupBeforeChildren(self, renderer, widget, texture):
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return 
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["BUTTONGROUP_BACKGROUND"]
+        
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
     
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawButtonGroupAfterChildren(self, renderer, widget, texture):
-        return
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["BUTTONGROUP_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
         
     ########################################################
     ##
@@ -341,59 +537,44 @@ class Theme:
     ##  So, it is used to draw the background.
     ## 
     def drawProgressbarBeforeChildren(self, renderer, widget, texture):
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return 
-                
-        ## background
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            biui.Color(80,80,80,255).rgba,
-            (
-                0,
-                0,
-                widget.width,
-                widget.height
-            ),
-            1
-        )
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["PROGRESSBAR_BACKGROUND"]
+        
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
         
         ## bar
         if widget.value == widget.minValue:
             return
 
         width = widget.width*(1/((widget.maxValue-widget.minValue)/(widget.value-widget.minValue)))
-            
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            biui.Color(100,100,100,255).rgba,
-            (
-                0,
-                0,
-                int(width),
-                widget.height
-            ),
-            1
-        )
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["PROGRESSBAR_BAR"]
+        
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,int(width),widget.height))
+        return result
         
     ### Is called after the child objects are drawn.
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
     def drawProgressbarAfterChildren(self, renderer, widget, texture):
-        biui.DL.drawRect(
-            renderer,
-            texture,
-            biui.Color(0,0,0,255).rgba,
-            (
-                0,
-                0,
-                widget.width,
-                widget.height
-            )
-        )
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["PROGRESSBAR_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
         
     ########################################################
     ##
@@ -413,7 +594,18 @@ class Theme:
     ##  
     ##  
     def drawLabel(self, renderer, widget, texture):
+
+        p = widget.position
         
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["LABEL_BACKGROUND"]
+    
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
+                
         tx = widget.font.render(
             renderer,
             widget.format.format(widget.value),
@@ -421,10 +613,19 @@ class Theme:
         )
         
         PYSDL2_GETTEXTURESIZE(tx,r)
-        p = widget.position
-        PYSDL2_BLIT(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
+        PYSDL2_RENDER_COPY1(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
         sdl2.SDL_DestroyTexture( tx )
 
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["LABEL_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
+        return result
+            
     ########################################################
     ##
     ##   CHECKBOX
@@ -435,29 +636,74 @@ class Theme:
     ##  So, it is used to draw the background.
     ## 
     def drawCheckboxBeforeChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["CHECKBOX_BACKGROUND"]
         
-        if biui.themeDebug:
-            self.blinkBox1(renderer, widget, texture)
-            return 
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
                 
         state = widget.state
 
         if state == biui.ButtonStates.OVER:
-            name = "checkbox_hover_bg.png"
+            if widget.checkboxBackColorCheckedOver:
+                result= True
+                color = widget.checkboxBackColorCheckedOver
+            else:
+                result = False
+                color = self._shema["CHECKBOX_CHECKBOX_OVER_BACKGROUND"] 
         elif state == biui.ButtonStates.DOWN:
-            name = "checkbox_hover_bg.png"
+            if widget.checkboxBackColorCheckedDown:
+                result= True
+                color = widget.checkboxBackColorCheckedDown
+            else:
+                result = False
+                color = self._shema["CHECKBOX_CHECKBOX_DOWN_BACKGROUND"] 
         elif state == biui.ButtonStates.CHECKED:
-            name = "checkbox_checked_bg.png"
+            if widget.checkboxBackColorCheckedChecked:
+                result= True
+                color = widget.checkboxBackColorCheckedChecked
+            else:
+                result = False
+                color = self._shema["CHECKBOX_CHECKBOX_CHECKED_BACKGROUND"] 
         else:
-            name = "checkbox_normal_bg.png"
+            if widget.checkboxBackColorCheckedNormal:
+                result= True
+                color = widget.checkboxBackColorCheckedNormal
+            else:
+                result = False
+                color = self._shema["CHECKBOX_CHECKBOX_NORMAL_BACKGROUND"] 
                     
-        name = os.path.join(self.__themeFolder ,name)
-        img = self.__lib.getImage(renderer,name)
-        PYSDL2_GETTEXTURESIZE(img,sizeIMG)
-        r = (0,widget.height/2-sizeIMG[3]/2,sizeIMG[2],sizeIMG[3])
-        PYSDL2_BLIT(renderer,texture,img,r,r)
+        r = (0,widget.height/2-8,16,16)
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,r)   
         
+        if widget.checkboxBorderColor:
+            result= True
+            color = widget.checkboxBorderColor
+        else:
+            result = False
+            color = self._shema["CHECKBOX_CHECKBOX_BORDER"]
+
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,r)
         ## TODO: If checked we draw a symbol on it
+    
+        return result
+    ### Is called after the child objects are drawn.
+    ##  So it is used to draw everything that has to be
+    ##  top most like border
+    ##
+    def drawCheckboxAfterChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["CHECKBOX_BORDER"]
+
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
     
     ########################################################
     ##
@@ -469,9 +715,83 @@ class Theme:
     ##
     ##
     def drawSpacer(self, renderer, widget, texture):
-        pass
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["SPACER_BACKGROUND"]
+        
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        return result
 
-        
+    ########################################################
+    ##
+    ##   SCROLLNAVIGATOR
+    ##
+    ########################################################        
     
+    ### Is called before the child objects are drawn.
+    ##  So, it is used to draw the background.
+    ## 
+    def drawScrollNavigatorBeforeChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["SCROLLNAVIGATOR_BACKGROUND"]
         
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result
+    
+    ### Is called after the child objects are drawn.
+    ##  So it is used to draw everything that has to be
+    ##  top most like border
+    ##
+    def drawScrollNavigatorAfterChildren(self, renderer, widget, texture):
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["SCROLLNAVIGATOR_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        return result    
+        
+    ########################################################
+    ##
+    ##   IMAGE
+    ##
+    ########################################################        
+    
+    ### Is called before the child objects are drawn.
+    ##  So, it is used to draw the background.
+    ## 
+    def drawImage(self, renderer, widget, texture):
+        
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["IMAGE_BACKGROUND"]
+        
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        
+        ## Draw image
+        img = self._lib.getImage(renderer,widget.file,widget.width,widget.height)
+        r = (widget.x,widget.y,widget.width,widget.height)
+        PYSDL2_RENDER_COPY1(renderer,texture,img,r,r)        
+        
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["IMAGE_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        return result
         

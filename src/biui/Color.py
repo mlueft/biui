@@ -5,8 +5,12 @@ import biui
 ##
 class Color():
     
-    ###
+    ### 
     ##
+    ## @param r   Red - An integer value between 0 and 255.
+    ## @param g   Green - An integer value between 0 and 255.
+    ## @param b   Blue - An integer value between 0 and 255.
+    ## @param a   Alpha - An integer value between 0 and 255.
     ##
     def __init__(self,r=0,g=0,b=0,a=255):
         self._r = r

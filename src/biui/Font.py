@@ -73,7 +73,7 @@ class Font():
          
     ### Set the font size.
     ##
-    ##   @param  value   (bool)
+    ##   @param  value   (float)
     ##
     @size.setter   
     def size(self, value):
@@ -137,7 +137,7 @@ class Font():
     
     ### Sets the font style.
     ##
-    ##   @param  value   (bool)
+    ##   @param  value   (int)
     ##
     @style.setter
     def style(self, value):

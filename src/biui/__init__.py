@@ -1,135 +1,79 @@
 #include "pysdl2.inc"
+#include "biui.inc"
+from typing import TypeAlias
 
 import os
 from time import time
 
 import sdl2
 import sdl2.ext
+import json
 
-import biui.Color
-import biui.EventPhase
-import biui.Event
-import biui.DOMEvent
-import biui.MouseEvent
-import biui.KeyEvent
-import biui.EventTypes
-import biui.EventManager
-import biui.Theme
-import biui.Keys
-import biui.KeyModifiers
-import biui.Widget
-import biui.ContainerWidget
-import biui.Window
-import biui.Pane
-import biui.Button
-import biui.ButtonStates
-import biui.ToggleButton
-import biui.ButtonGroup
-import biui.LayoutManager
-import biui.Alignment
-import biui.FlexPane
-import biui.FlexSpacer
-import biui.FlexGrid
-import biui.Label
-import biui.Font
-import biui.NumberSlider
-import biui.ImageLibrary
-import biui.Spacer
-import biui.Progressbar
-import biui.Checkbox
-import biui.DL
-import biui.Hinting
-import biui.Style
-import biui.Direction
-import biui.DirtyRectangleManager
-import biui.Mouse
+from biui.EventPhase import EventPhase
+from biui.Event import Event
+from biui.DOMEvent import DOMEvent
+from biui.MouseEvent import MouseEvent
+from biui.KeyEvent import KeyEvent
+from biui.EventTypes import EventTypes
+from biui.EventManager import EventManager
+from biui.Theme import Theme
+from biui.ThemeImg import ThemeImg
+from biui.Keys import Keys
+from biui.KeyModifiers import KeyModifiers
+from biui.Widget import Widget
+from biui.ContainerWidget import ContainerWidget
+from biui.Window import Window
+from biui.Pane import Pane
+from biui.Button import Button
+from biui.ButtonStates import ButtonStates
+from biui.ToggleButton import ToggleButton
+from biui.ButtonGroup import ButtonGroup
+from biui.LayoutManager import LayoutManager
+from biui.Alignment import Alignment
+from biui.FlexPane import FlexPane
+from biui.FlexSpacer import FlexSpacer
+from biui.FlexGrid import FlexGrid
+from biui.Label import Label
+from biui.Font import Font
+from biui.NumberSlider import NumberSlider
+from biui.ImageLibrary import ImageLibrary
+from biui.Spacer import Spacer
+from biui.Progressbar import Progressbar
+from biui.Checkbox import Checkbox
+from biui.Hinting import Hinting
+from biui.Style import Style
+from biui.Direction import Direction
+from biui.DirtyRectangleManager import DirtyRectangleManager
+from biui.Mouse import Mouse
+from biui.Menubar import Menubar
+from biui.MenuItem import MenuItem
+from biui.MenuPane import MenuPane
+from biui.ScrollNavigator import ScrollNavigator
+from biui.Image import Image
+from biui.Color import Color
 
 
 from sdl2.surface import SDL_CreateRGBSurface
 from sdl2.mouse import SDL_BUTTON_LMASK, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_LEFT, SDL_BUTTON_X1, SDL_BUTTON_X2
 
-
-Color = biui.Color.Color
-EventPhase = biui.EventPhase.EventPhase
-DOMEvent = biui.DOMEvent.DOMEvent
-Event = biui.Event.Event
-MouseEvent = biui.MouseEvent.MouseEvent
-KeyEvent = biui.KeyEvent.KeyEvent
-EventTypes = biui.EventTypes.EventTypes
-EventManager = biui.EventManager.EventManager
-Widget = biui.Widget.Widget
-Window = biui.Window.Window
-Pane = biui.Pane.Pane
-KeyModifiers = biui.KeyModifiers.KeyMofifiers
-Keys = biui.Keys.Keys
-Button = biui.Button.Button
-ButtonStates = biui.ButtonStates.ButtonStates
-ToggleButton = biui.ToggleButton.ToggleButton
-ButtonGroup = biui.ButtonGroup.ButtonGroup
-LayoutManager = biui.LayoutManager.LayoutManager
-Alignment = biui.Alignment.Alignment
-FlexPane = biui.FlexPane.FlexPane
-FlexSpacer = biui.FlexSpacer.FlexSpacer
-FlexGrid = biui.FlexGrid.FlexGrid
-Label = biui.Label.Label
-Font = biui.Font.Font
-NumberSlider = biui.NumberSlider.NumberSlider
-ImageLibrary = biui.ImageLibrary.ImageLibrary
-Spacer = biui.Spacer.Spacer
-Progressbar = biui.Progressbar.Progressbar
-Checkbox = biui.Checkbox.Checkbox
-DL = biui.DL.DL
-Hinting = biui.Hinting.Hinting
-Style = biui.Style.Style
-Direction = biui.Direction.Direction
-DirtyRectangleManager = biui.DirtyRectangleManager.DirtyRectangleManager
-Mouse = biui.Mouse.SingletonMouse()
-
+Mouse = Mouse()
 ##
-##_pixelFormat = sdl2.SDL_AllocFormat( sdl2.SDL_PIXELFORMAT_RGBA32 )
-
-##
-clickTime = 0.25
-
-##
-__themeFolder = "themes"
+__themeFolder = BIUI_THEMEFOLDER
 
 ## Stores the Instance of Theme.
 __theme = None
 
-## Defines if all directy rects are drawn on screen.
-## For debug use. This makes everything slower.
-__SHOWUPDATEBOXES = True
-
 ## Stores if pygame is initialized.
 __initialized__ = False
 
-### Stored a reference to the Widget the mouse is over.
-##__hoverWidget = None
-
-### Stored a reference to the Widget with the focus.
-## TODO: Shouldn't this be a member of the window?
-__focusedWidget = None
-
 ### Stores all window objects.
-##  Pygame allows just one window.
-__windows = []
-
-### Stors a reference to the focused window
-##
-__focusedWindow = None
-
-## Stores the time of the mouseDown event.
-mouseDownTime = None
+__windows:list[Window] = []
 
 ## Folders in which biui is  looking for font files
 __fontFolders = []
 
 ##
-__fonts = []
-
-##
-themeDebug = False
+__fonts:list[list[str]] = []
 
 def profile(fnc):
     import cProfile, pstats
@@ -140,6 +84,19 @@ def profile(fnc):
     stats = pstats.Stats(profiler).sort_stats('tottime')
     stats.print_stats()
     
+### Returns a defaault value if value is None
+##  If value is not None value is returned.
+##  Otherwise default is returned.
+##
+##  @param value      A python literal.
+##  @param default    A default value.
+##  @return           vValue or default.
+##
+def default(value,default):
+    if value != None:
+        return value
+    return default
+
 ### Initializes biui and sub systems. Can be called more than once.
 ##  It takes care about multiple calls.
 ##
@@ -148,10 +105,9 @@ def init():
     if __initialized__:
         return 
     
-    PYSDL2_INIT
-    biui.DL.init()
-    biui.__fillFontFolders()
-    biui.scanFonts()
+    PYSDL2_INIT()
+    __fillFontFolders()
+    scanFonts()
     __initialized__ = True
     
     ##
@@ -163,17 +119,16 @@ def init():
 ##
 ##
 def quit():
+    global __theme,__initialized__
     __theme.quit()
-    biui.DL.quit()
-    sdl2.ext.quit()
-    sdl2.SDL_Quit()
+    PYSDL2_QUIT()
     __initialized__ = False
 
 ###
 ##
 ##
 def addFontFolder(path):
-    
+    global __fontFolders
     if not os.path.exists(path):
         return False
     
@@ -186,12 +141,14 @@ def addFontFolder(path):
 ##
 ##
 def getFontFolders():
+    global __fontFolders
     return __fontFolders
 
 ###
 ##
 ##
 def getFonts():
+    global __fonts
     return __fonts
 
 ###
@@ -214,7 +171,7 @@ def scanFonts():
 ##
 ##
 def getFontPath(fontName):
-    
+    global __fonts
     for f  in __fonts:
         if f[0] == fontName:
             return f[1]
@@ -226,8 +183,8 @@ def getFontPath(fontName):
 ##
 ##
 def getDefaultFont():
-    return biui.getFontPath("padmaa.ttf")
-    return biui.getFontPath("GlacialIndifference-Regular.ttf")
+    return getFontPath("padmaa.ttf")
+    return getFontPath("GlacialIndifference-Regular.ttf")
 
 ###
 ##
@@ -235,17 +192,17 @@ def getDefaultFont():
 def __fillFontFolders():
     
     ## DEFAULT
-    biui.addFontFolder( os.path.abspath("./../../fonts") )
+    addFontFolder( os.path.abspath("./../../fonts") )
     
     ## UBUNTU
     base = "/usr/share/fonts/truetype"
     for path in os.listdir(base):
         subject = os.path.join(base,path)
         if os.path.isdir(subject):
-            biui.addFontFolder( subject )
+            addFontFolder( subject )
     
     ## WINDOWS
-    biui.addFontFolder( "c:\windows\fonts" )
+    addFontFolder( "c:\windows\fonts" )
     
     ## MACOS
     
@@ -253,53 +210,16 @@ def __fillFontFolders():
 ##
 ##
 def _removeWindow(window):
-    print("removeWindow")
     global __windows
     __windows.remove(window)
-    window.onWindowFocusGained.remove(__hdlWindowGainFocus)
     
 ###
 ##
 ##
 def _addWindow(window):
-    global __windows, __focusedWindow
+    global __windows
     __windows.insert(0,window)
-    window.onWindowFocusGained.add(__hdlWindowGainFocus)
-    __focusedWindow = window
-
-###
-##
-##
-def __hdlWindowGainFocus(ev):
-    global __focusedWindow
-    __focusedWindow = ev.eventSource
     
-### Returns the Widget at the given position.
-##  Currently the function doesn't care about
-##  the window, beecause there is just one.
-##
-##  @param pos               A tuple representing a position.
-##  @return                  A Widget object
-##
-##def __getChildAt(pos):
-##    global __windows
-##    
-##    for w in __windows:
-##        return w.getChildAt(pos)
-
-### Returns a defaault value if value is None
-##  If value is not None value is returned.
-##  Otherwise default is returned.
-##
-##  @param value      A python literal.
-##  @param default    A default value.
-##  @return           vValue or default.
-##
-def default(value,default):
-    if value != None:
-        return value
-    return default
-
 ###
 ##
 ##
@@ -311,230 +231,37 @@ def setThemeFolder(folder):
 ##
 ##
 def selectTheme(name="default"):
-    theme = getTheme()
+    global __themeFolder, __theme
+    themeFile = os.path.join(__themeFolder,name, "theme.json")
+    with open( themeFile) as sFile:
+        themaData = sFile.read()
+    themeData = json.loads(themaData)
+    __theme == None
+    theme = getTheme(themeData)
     theme.selectTheme(name)
 
 ### Returns the Theme instance. If necassary it is created.
 ##
 ##  @return             A Theme object.
 ##
-def getTheme():
-    global __theme
-    ##print( os.getcwd())
+def getTheme(themeData = None):
+    global __theme,__themeFolder
     if __theme == None:
-        __theme = biui.Theme.Theme( os.path.join(os.getcwd(),__themeFolder) )
-        selectTheme()
+        if themeData["class"] == "biui.ThemeImg":
+            print("1")
+            __theme = ThemeImg( __themeFolder )
+        elif themeData["class"] == "biui.Theme":
+            print("2")
+            __theme = Theme( __themeFolder )
     return __theme
 
- 
 ### The biui main loop.
 ##  Cares about event distribution and drawing of the GUI.
 ##
 ##  @return        True as long as a window is open.
 ##
-def _main():
-    global __windows, __hoverWidget, mouseDownTime, clickTime
-        
-    ## ++++++++++++++++++++++++++++++++++++++++++++++
-    ##                                 Event handling
-    ## ++++++++++++++++++++++++++++++++++++++++++++++
-    events =  pygame.event.get()
-
-    for event in events:
-        
-        ##
-        ## Mouse events
-        ##
-        ## Mouse events are send directly to the widget.
-        ##
-        if event.type == pygame.MOUSEMOTION:
-            bStates = pygame.mouse.get_pressed(num_buttons=5)
-            receiver = biui.__getChildAt(event.pos)
-            ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
-            if receiver != __hoverWidget:
-                if __hoverWidget != None:
-                    evLeave = biui.MouseEvent(__hoverWidget,bStates,event.pos,0,0)
-                    for w in __windows:
-                        w._onMouseLeave(evLeave)
-                __hoverWidget = receiver
-                __hoverWidget._onMouseEnter(ev)
-            else:
-                for w in __windows:
-                    w._onMouseMove(ev)
-
-            
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            ## Filter wheel action.
-            if event.button not in [4,5]:
-                mouseDownTime = time()
-                bStates = pygame.mouse.get_pressed(num_buttons=5)
-                receiver = biui.__getChildAt(event.pos)
-                ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
-                for w in __windows:
-                    w._onMouseDown(ev)
-                    
-        elif event.type == pygame.MOUSEBUTTONUP:
-            ## Filter wheel action.
-            if event.button not in [4,5]:
-                ##print(time()-mouseDownTime)                
-                bStates = pygame.mouse.get_pressed(num_buttons=5)
-                receiver = biui.__getChildAt(event.pos)
-                ev = biui.MouseEvent(receiver,bStates,event.pos,0,0)
-                if time()-mouseDownTime < clickTime:
-                    for w in __windows:
-                        w._onMouseClick(ev)
-
-                for w in __windows:
-                    w._onMouseUp(ev)
-                        
-        elif event.type == pygame.MOUSEWHEEL:
-            mpos = pygame.mouse.get_pos()
-            bStates = pygame.mouse.get_pressed(num_buttons=5)
-            receiver = biui.__getChildAt(mpos)
-            ev = biui.MouseEvent(receiver,bStates,mpos,event.x,event.y)
-            for w in __windows:
-                w._onMouseWheel(ev)
-            
-            
-        ##
-        ## Keyboard events
-        ##
-        ## Keyboard events are send throw the DOM structure.
-        ##
-        elif event.type == pygame.KEYDOWN:
-            ##print( "keydown: "+ str(event) )
-            for w in __windows:
-                ev = biui.KeyEvent(
-                    w,
-                    event.unicode,
-                    event.key,
-                    event.scancode,
-                    event.mod
-                )
-                w._onKeyDown(ev)
-        elif event.type == pygame.KEYUP:
-            ##print( "keyup: "+ str(event) )
-            for w in __windows:
-                ev = biui.KeyEvent(
-                    w,
-                    event.unicode,
-                    event.key,
-                    event.scancode,
-                    event.mod
-                )        
-                w._onKeyUp(ev)
-        elif event.type == pygame.TEXTINPUT:
-            ##print( "textinput: "+ str(event) )
-            for w in __windows:
-                ev = biui.KeyEvent(
-                    w,
-                    event.text
-                )            
-                w._onTextInput(ev)
-            
-            
-        ##
-        ## Window events
-        ## We have to find the focused window.
-        ## Currently we have just one!
-        ##
-        ## Window events are send directly to the window.
-        ##
-        elif event.type == pygame.WINDOWLEAVE:
-            for w in __windows:
-                w._onWindowLeave(biui.Event(w))
-        elif event.type == pygame.WINDOWENTER:
-            for w in __windows:
-                w._onWindowEnter(biui.Event(w))
-        elif event.type == pygame.ACTIVEEVENT:
-            for w in __windows:
-                w._onWindowFocus(biui.Event(w))
-        elif event.type == pygame.WINDOWFOCUSLOST:
-            for w in __windows:
-                w._onWindowFocusLost(biui.Event(w))
-        elif event.type == pygame.WINDOWHIDDEN:
-            for w in __windows:
-                w._onWindowHidden(biui.Event(w))
-        elif event.type == pygame.WINDOWMINIMIZED:
-            for w in __windows:
-                w._onWindowMinimized(biui.Event(w))
-        elif event.type == pygame.WINDOWRESTORED:
-            for w in __windows:
-                w._onWindowRestored(biui.Event(w))
-        elif event.type == pygame.WINDOWSHOWN:
-            for w in __windows:
-                w._onWindowShown(biui.Event(w))
-        elif event.type == pygame.WINDOWFOCUSGAINED:
-            for w in __windows:
-                w._onWindowFocusGained(biui.Event(w))
-        elif event.type == pygame.WINDOWTAKEFOCUS:
-            for w in __windows:
-                w._onWindowTakeFocus(biui.Event(w))
-        elif event.type == pygame.WINDOWCLOSE:
-            for w in __windows:
-                w._onWindowClose(biui.Event(w))
-        elif event.type == pygame.WINDOWMAXIMIZED:
-            for w in __windows:
-                w._onWindowMaximized(biui.Event(w))
-        elif event.type == pygame.WINDOWMOVED:
-            for w in __windows:
-                w._onWindowMoved(biui.Event(w))
-        elif event.type == pygame.WINDOWSIZECHANGED:
-            for w in __windows:
-                w.width = event.x
-                w.height = event.y
-                w._onWindowSizeChanged(biui.Event(w))
-        elif event.type == pygame.WINDOWRESIZED:
-            for w in __windows:
-                w.width = event.x
-                w.height = event.y
-                w._onWindowResized(biui.Event(w))
-        elif event.type == pygame.WINDOWEXPOSED:
-            for w in __windows:
-                w._onWindowExposed(biui.Event(w))
-        elif event.type == pygame.VIDEORESIZE:
-            pass
-        elif event.type == pygame.VIDEOEXPOSE:
-            pass
-              
-              
-        ##
-        ## MISC
-        ##
-        elif event.type == pygame.QUIT:
-            for w in __windows:
-                w._onWindowExposed(biui.Event(w))
-            return False
-        
-        
-        ##
-        ## Else
-        ##
-        else:
-            ##print("Event: "+ str(pygame.event.event_name(event.type)))
-            pass
-            
-            
-    ## ++++++++++++++++++++++++++++++++++++++++++++++
-    ##                                     Redraw GUI
-    ## ++++++++++++++++++++++++++++++++++++++++++++++
-    dr = []
-    for w in __windows:
-        w._redraw()
-        dr += w._getDirtyRectangles()
-        
-        if __SHOWUPDATEBOXES:
-            for r in dr:
-                pygame.draw.rect(w._getSurface(),(255,0,0),r,1)
-                ##pygame.display.update()
-    
-    if len(dr) >0:            
-        pygame.display.update(dr)
-    
-    return True
-
 def main():
-    global __windows, mouseDownTime, __focusedWindow
+    global __windows
     
     events = sdl2.ext.get_events()
     for event in events:
@@ -604,7 +331,10 @@ def main():
             ## 'jaxis', 'jball', 'jbutton', 'jdevice', 'jhat', 'key', 'mgesture',
             ## 'motion', 'padding', 'quit', 'sensor', 'syswm', 'text', 'tfinger',
             ## 'type', 'user', 'wheel', 'window'
-            
+            for w in __windows:
+                if w.id ==  event.window.windowID:
+                    w._onKeyDown(event)
+                    break
             pass
         elif event.type == sdl2.SDL_KEYUP:
             ##print("SDL_KEYUP")
@@ -733,7 +463,7 @@ def main():
             pass
         
         ###############################################################
-        ##                                                  Drag'n Drop
+        ##                                                  Drag´n Drop
         ###############################################################
         elif event.type == sdl2.SDL_DROPBEGIN:
             ##print("SDL_DROPBEGIN")

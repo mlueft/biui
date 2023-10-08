@@ -1,4 +1,4 @@
-from biui.Messages import Messages
+#include "biui.inc"
 
 ###
 ##
@@ -6,6 +6,6 @@ from biui.Messages import Messages
 class EventTypes():
 	
 	def __init__(self):
-		raise Exception( Messages.ERR_CLASS_NOT_INIT )
+		raise Exception( BIUI_ERR_CLASS_NOT_INIT )
 	
 	MISC = 0

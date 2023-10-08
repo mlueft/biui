@@ -1,7 +1,4 @@
-import sys
 import unittest
-sys.path.append('./../') ## needed if the file is tested.
-sys.path.append('./')    ## needed if the folder is tested.
 import biui
 
 

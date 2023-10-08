@@ -1,12 +1,15 @@
 import biui
+from biui.ContainerWidget import ContainerWidget
 
 ###
 ##
 ##
-class NumberSlider(biui.ContainerWidget.ContainerWidget):
+class NumberSlider(ContainerWidget):
     
     def __init__(self):
         super().__init__()
+        
+
         ## 
         self._minValue = 0
         ##
@@ -28,7 +31,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self._decButton.minHeight=1
         self._decButton.value = "-"
         self._decButton.alignment = biui.Alignment.FILL
-        self._decButton.onMouseUp.add(self._onDecUp)
+        self._decButton.onMouseUp.add(self.__hndOnDecMouseUp)
         self.addChild(self._decButton,0,0)
         
         ##
@@ -38,14 +41,14 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self._incButton.minHeight=1
         self._incButton.value = "+"
         self._incButton.alignment = biui.Alignment.FILL
-        self._incButton.onMouseUp.add(self._onIncUp)
+        self._incButton.onMouseUp.add(self.__hndIncOnMouseUp)
         self.addChild(self._incButton,2,0)
         
         ##
         self._bar = biui.Progressbar()
         self._bar.name = "progressbar"
         self._bar.alignment = biui.Alignment.FILL
-        self._bar.onMouseDown.add(self._barMouseDown)
+        self._bar.onMouseDown.add(self.__hndBarOnMouseDown)
         self.addChild(self._bar,1,0)
         
         lm = self.layoutManager
@@ -64,23 +67,42 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self.step = 0.5
         self.showNavigation = True
         
+
+    ### @see biui.Widget.tooltip
+    ##
+    ##
+    @property
+    def tooltip(self):
+        return self._tooltip
+    
+
+    ### @see biui.Widget.tooltip
+    ##
+    ##
+    @tooltip.setter
+    def tooltip(self, value):
+        self._decButton.tooltip = value
+        self._incButton.tooltip = value
+        self._bar.tooltip = value
+        self._tooltip = value
+                
     ###
     ##
     ##
-    def _barMouseDown(self,ev):
+    def __hndBarOnMouseDown(self,ev):
         ## if old handler are still there
-        self._bar.onMouseMove.remove(self._wndMouseMove)
-        self._bar.onMouseUp.remove(self._wndMouseUp)
+        self._bar.onMouseMove.remove(self.__hndWndOnMouseMove)
+        self._bar.onMouseUp.remove(self.__hndWndOnMouseUp)
         
         self._screenDownPosition = biui.Mouse.position
-        self._bar.onMouseMove.add(self._wndMouseMove)
-        self._bar.onMouseUp.add(self._wndMouseUp)
+        self._bar.onMouseMove.add(self.__hndWndOnMouseMove)
+        self._bar.onMouseUp.add(self.__hndWndOnMouseUp)
         biui.Mouse.hide()
       
     ###
     ##
     ##  
-    def _wndMouseMove(self,ev):
+    def __hndWndOnMouseMove(self,ev):
         ev.stopPropagation()
         delta = biui.Mouse.position[0]-self._screenDownPosition[0]
         treshold = 1
@@ -91,22 +113,22 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
             
         biui.Mouse.position = self._screenDownPosition
     
-    def _wndMouseUp(self,ev):
+    def __hndWndOnMouseUp(self,ev):
         ev.stopPropagation()
-        self._bar.onMouseMove.remove(self._wndMouseMove)
-        self._bar.onMouseUp.remove(self._wndMouseUp)
+        self._bar.onMouseMove.remove(self.__hndWndOnMouseMove)
+        self._bar.onMouseUp.remove(self.__hndWndOnMouseUp)
         biui.Mouse.show()
     
     ### Handles the mouse up event of the inc-Button.
     ##
     ##
-    def _onIncUp(self,ev):
+    def __hndIncOnMouseUp(self,ev):
         self.value += self.microStep
 
     ### Handles the up mouse event of the dec-Button.
     ##
     ##
-    def _onDecUp(self,ev):
+    def __hndOnDecMouseUp(self,ev):
         self.value -= self.microStep
         
     ### Get the label object.
@@ -116,15 +138,17 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     def label(self):
         return self._bar.label
     
-    ### Set/Get the minimum value.
+    ### Returns the minimum value of the slider.
     ##
+    ##  @return
     ##
     @property
     def minValue(self):
         return self._minValue
     
-    ### 
+    ### Sets the minimum value of the number slider.
     ##
+    ##  @param value         .
     ##
     @minValue.setter
     def minValue(self,value):
@@ -136,7 +160,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self._minValue = value
         self._bar.minValue = value
     
-    ### Set/Get the maximum value.
+    ### Returns the maximum value of the number slider.
     ##
     ##  @return    The max value of the slider.
     ##
@@ -144,7 +168,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     def maxValue(self):
         return self._maxValue
     
-    ### Sets teh max value of the slider.
+    ### Sets teh maximum value of the slider.
     ##
     ##  @param value    The max value of the slider.
     ##
@@ -159,7 +183,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         self._bar.maxValue = value
 
         
-    ### Set/Get the current value.
+    ### Sets the curent value of the slider.
     ##
     ##  @return    The current value of the slider.
     ##
@@ -167,7 +191,7 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     def value(self):
         return self._value
     
-    ### Sets the current value of the slider.
+    ### Returns the current value of the slider.
     ##
     ##  @param value   The value of the slider.
     ##
@@ -218,15 +242,17 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
     def microStep(self,value):
         self._microStep = value
         
-    ### Set/Get if the navigation buttons are visible.
+    ### Returns a booleab value indicating if the
+    ##  navigation buttons are visible.
     ##
     ##
     @property
     def showNavigation(self):
         return self._showNavigation
     
-    ###
+    ### Defines if the navigation buttons are visible.
     ##
+    ##  @param value      A boolean value.
     ##
     @showNavigation.setter
     def showNavigation(self,value):
@@ -248,3 +274,5 @@ class NumberSlider(biui.ContainerWidget.ContainerWidget):
         
     def _calculateLayout(self):
         super()._calculateLayout()
+        
+            

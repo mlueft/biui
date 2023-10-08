@@ -3,16 +3,17 @@ import sys
 sys.path.append('./')
 
 import math
-import biui
 import time
-   
+import biui
+
 def init():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder("./../themes")
+    biui.selectTheme("blocks")
     initWindow(10)
-    initWindow(190)
-    initWindow(190+180)
+    ##initWindow(190)
+    ##initWindow(190+180)
     
 def initWindow(x = 0):
     ###############################################

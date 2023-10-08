@@ -1,11 +1,15 @@
 import biui
+from biui.Widget import Widget
 
-class Label(biui.Widget.Widget):
+class Label(Widget):
     
     def __init__(self):
         super().__init__()
-        self.name = "label"
-        self.value = "label"
+        theme = biui.getTheme()
+        self._themeBackgroundfunction = theme.drawLabel
+        
+        self.onBeforeDraw.add(self.__hndOnBeforeDraw)
+        
         self.color = biui.Color(200,200,200,255)
         self._format = "{}"
         self._font = None
@@ -13,13 +17,13 @@ class Label(biui.Widget.Widget):
         self.font = biui.Font()
         self.font.size = 18
         
-        theme = biui.getTheme()
-        self._themeBackgroundfunction = theme.drawLabel
-
+        self.name = "label"
+        self.value = "label"
         
-    def _beforeDraw(self):
-        
-        theme = biui.getTheme()
+    ###
+    ##
+    ##
+    def __hndOnBeforeDraw(self,ev):
         
         size = self.font.getRenderSize(
             self.format.format(self.value)
@@ -28,12 +32,12 @@ class Label(biui.Widget.Widget):
         self.width = size[0]
         self.height = size[1]
         
-        super()._calculateLayout()
+        ##super()._calculateLayout()
         
     ### Handles the font change of the font element.
     ##
     ##        
-    def _onSizeChanged(self,ev):
+    def __hndFontOnSizeChanged(self,ev):
         self._invalidate()
 
     ### Set/Get the format string of the label.
@@ -43,7 +47,7 @@ class Label(biui.Widget.Widget):
     def format(self):
         return self._format
     
-    ### Sets the label's format.
+    ### Sets the label´s format.
     ##
     ## @param value  
     ##   
@@ -101,8 +105,8 @@ class Label(biui.Widget.Widget):
     @font.setter
     def font(self,value):
         
-        if not value.onSizeChanged.has(self._onSizeChanged):
-            value.onSizeChanged.add(self._onSizeChanged)
+        if not value.onSizeChanged.has(self.__hndFontOnSizeChanged):
+            value.onSizeChanged.add(self.__hndFontOnSizeChanged)
             
         self._font = value
         self._invalidate()

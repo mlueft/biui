@@ -173,18 +173,19 @@ def scanFonts():
 def getFontPath(fontName):
     global __fonts
     for f  in __fonts:
+        print(f)
         if f[0] == fontName:
             return f[1]
 
     ## TODO: react if no font is found.
     pass
+    print("Font not found!")
     
 ###
 ##
 ##
 def getDefaultFont():
-    return getFontPath("padmaa.ttf")
-    return getFontPath("GlacialIndifference-Regular.ttf")
+    return getFontPath("NotoSansMono-Regular.ttf")
 
 ###
 ##
@@ -248,10 +249,8 @@ def getTheme(themeData = None):
     global __theme,__themeFolder
     if __theme == None:
         if themeData["class"] == "biui.ThemeImg":
-            print("1")
             __theme = ThemeImg( __themeFolder )
         elif themeData["class"] == "biui.Theme":
-            print("2")
             __theme = Theme( __themeFolder )
     return __theme
 
@@ -324,27 +323,28 @@ def main():
         ###############################################################
         elif event.type == sdl2.SDL_KEYDOWN:
             ##print("SDL_KEYDOWN")
-
-            ##print(dir(event))
-            ## 'adevice', 'button', 'caxis', 'cbutton', 'cdevice', 'common', 
-            ## 'csensor', 'ctouchpad', 'dgesture', 'display', 'drop', 'edit',
-            ## 'jaxis', 'jball', 'jbutton', 'jdevice', 'jhat', 'key', 'mgesture',
-            ## 'motion', 'padding', 'quit', 'sensor', 'syswm', 'text', 'tfinger',
-            ## 'type', 'user', 'wheel', 'window'
             for w in __windows:
-                if w.id ==  event.window.windowID:
-                    w._onKeyDown(event)
+                if w.id ==  event.key.windowID:
+                    w.sdlOnKeyDown(event)
                     break
             pass
         elif event.type == sdl2.SDL_KEYUP:
             ##print("SDL_KEYUP")
+            for w in __windows:
+                if w.id ==  event.key.windowID:
+                    w.sdlOnKeyUp(event)
+                    break
+            pass
+        elif event.type == sdl2.SDL_TEXTINPUT:
+            ##print("SDL_TEXTINPUT")
+            for w in __windows:
+                if w.id ==  event.key.windowID:
+                    w.sdlOnTextInput(event)
+                    break
             pass
         elif event.type == sdl2.SDL_KEYMAPCHANGED:
             ## strg, alt, ...
             ##print("SDL_KEYMAPCHANGED")
-            pass
-        elif event.type == sdl2.SDL_TEXTINPUT:
-            ##print("SDL_TEXTINPUT")
             pass
         elif event.type == sdl2.SDL_TEXTEDITING:
             ##print("SDL_TEXTEDITING")

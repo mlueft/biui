@@ -11,7 +11,7 @@ import biui
 from biui.Widget import Widget
 from biui.ContainerWidget import ContainerWidget
 from biui.KeyEvent import KeyEvent
-
+from biui.MouseEvent import MouseEvent
 ###
 ##
 ##
@@ -26,7 +26,8 @@ class Window(ContainerWidget):
         PYSDL2_CREATEWINDOW((width,height),self._window)
         super().__init__()
 
-        self._id:str = PYSDL2_GET_WINDOW_ID(self._window)
+        PYSDL2_GET_WINDOW_ID(self._window,self._id:str)
+        
         self._title:str = ""
         ##PYSDL2_CREATERENDERER(self._window,-1,sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_ACCELERATED,self._renderer)
         PYSDL2_CREATERENDERER(self._window,-1,0,self._renderer)
@@ -97,7 +98,9 @@ class Window(ContainerWidget):
         self.onWindowFocusLost.add(self.__hndOnWndFocusLost)
         ##
         self.backColor:biui.Color = biui.Color(50,50,50,255)
-        
+        ##
+        self.__focusedWidget = None
+         
         ##print(dir(self._window))
         ## '__bool__', '__class__', '__ctypes_from_outparam__',
         ## '__delattr__', '__delitem__', '__dict__', '__dir__',
@@ -124,6 +127,8 @@ class Window(ContainerWidget):
         
         biui._addWindow(self)
         
+        ## Added in Widget. But Window does not need it.
+        self.onMouseDown.remove(self.hndMouseDown)
         
     
     ## SDL_GetWindowPosition
@@ -145,6 +150,12 @@ class Window(ContainerWidget):
     ## SDL_RaiseWindow
     ## SDL_RestoreWindow
     
+    ### Sets the currently focused widget.
+    ##
+    ##
+    def setFocus(self,widget):
+        self.__focusedWidget = widget
+            
     ###
     ##
     ##
@@ -325,7 +336,7 @@ class Window(ContainerWidget):
         ]
         
         receiver = self.getChildAt(pos)
-        ev = biui.MouseEvent(receiver,bStates,pos,0,0)
+        ev = MouseEvent(receiver,bStates,pos,0,0)
         self._onMouseDown(ev)
 
     ### Handles the SDL mouse event for this window
@@ -350,7 +361,7 @@ class Window(ContainerWidget):
         ]
         
         receiver = self.getChildAt(pos)
-        ev = biui.MouseEvent(receiver,bStates,pos,0,0)
+        ev = MouseEvent(receiver,bStates,pos,0,0)
         if time()-self.__mouseDownTime < BIUI_CLICKDURATION:
             self._onMouseClick(ev)
 
@@ -388,7 +399,7 @@ class Window(ContainerWidget):
         ]
         
         receiver = self.getChildAt(pos)
-        ev = biui.MouseEvent(receiver,bStates,pos,event.wheel.x,event.wheel.y)
+        ev = MouseEvent(receiver,bStates,pos,event.wheel.x,event.wheel.y)
         self._onMouseWheel(ev)
     
     ### Handles the SDL mouse event for this window
@@ -417,17 +428,53 @@ class Window(ContainerWidget):
         ]
         receiver = self.getChildAt(pos)
         
-        ev = biui.MouseEvent(receiver,bStates,pos,0,0)
+        ev = MouseEvent(receiver,bStates,pos,0,0)
         
         if receiver != self.__hoverWidget:
             if self.__hoverWidget is not None:
-                evLeave = biui.MouseEvent(self.__hoverWidget,bStates,pos,0,0)
+                evLeave = MouseEvent(self.__hoverWidget,bStates,pos,0,0)
                 self._onMouseLeave(evLeave)
             self.__hoverWidget = receiver
             self.__hoverWidget._onMouseEnter(ev)
         else:
             self._onMouseMove(ev)
 
+    ### 
+    ##
+    ##
+    def sdlOnKeyDown(self,event)->None:
+        ev = KeyEvent(
+            self.__focusedWidget,
+            event.key.keysym.sym,
+            event.key.keysym.scancode,
+            event.key.keysym.mod,
+            event.key.repeat,
+            event.key.timestamp
+        )
+        self._onKeyDown(ev)
+        
+    ### 
+    ##
+    ##
+    def sdlOnKeyUp(self,event)->None:
+        ev = KeyEvent(
+            self.__focusedWidget,
+            event.key.keysym.sym,
+            event.key.keysym.scancode,
+            event.key.keysym.mod,
+            event.key.repeat,
+            event.key.timestamp
+        )
+        self._onKeyUp(ev)
+    
+    ### 
+    ##
+    ##
+    def sdlOnTextInput(self,event)->None:
+        ##print("sdlOnTextInput")
+        ##self._onTextInput(event)
+        pass
+    
     ### Handles the sdl window event for this window
     ##
     ##  todo: hinting
@@ -654,9 +701,9 @@ class Window(ContainerWidget):
         
     
         
-    def _onKeyDown(self,ev:KeyEvent)->None:
-        print("_onKeyDown")
-        super()._onKeyDown(ev)
+    ##def _onKeyDown(self,ev:KeyEvent)->None:
+    ##    print("_onKeyDown")
+    ##    super()._onKeyDown(ev)
     
     ##def _onKeyUp(self,ev:KeyEvent)->None:
     ##    print("_onKeyUp")

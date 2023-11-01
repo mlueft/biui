@@ -93,6 +93,23 @@ class Widget():
         self.__borderColor:Color = None
         self.__backColor:Color = None
         
+        self.onMouseDown.add(self.hndMouseDown)
+        
+    ### Handels the mouse down event to set the focus on the current widget.
+    ##
+    ##
+    def hndMouseDown(self, ev):
+
+        if self.window is None:
+            return
+
+        ## The event is going down and up the DOM
+        ## We do not process at parents!
+        if ev.eventSource != self:
+            return 
+        
+        self.window.setFocus(self)
+        
     ### @see Widget._invalidate
     ##
     ##   TODO: hinting return type
@@ -130,7 +147,11 @@ class Widget():
     ##
     @backColor.setter
     def backColor(self, value:Color)->None:
+        if self.__backColor == value:
+            return
+        
         self.__backColor = value
+        self._invalidate()
         
     ### 
     ##
@@ -147,7 +168,11 @@ class Widget():
     ##
     @borderColor.setter
     def borderColor(self, value:Color)->None:
+        if self.__borderColor == value:
+            return
+        
         self.__borderColor = value
+        self._invalidate()
         
     ### 
     ##
@@ -519,7 +544,7 @@ class Widget():
         ## record new dirty rect
         box = self.position+self.size
         self._recordDirtyRect(box)
-        ## set flag to recalculate the layout.
+        ## set flag to recalculate thif self.window is None:e layout.
         ## set flag to redraw widget
         self._isInvalide = True
     
@@ -544,7 +569,7 @@ class Widget():
         while True:
             if isinstance(parent,biui.Window):#pylint: disable=no-else-return
                 return parent
-            elif parent is None:
+            elif parent == None:
                 return
             parent = parent.parent 
 
@@ -570,7 +595,7 @@ class Widget():
             self._parent.removeChild(self)
         
         self._parent = parent
-     
+        
     ### Returns the drawing texture of the GUI element.
     ##  This is for internal use. Just use the texture
     ##  if you know what you are doing.
@@ -703,6 +728,7 @@ class Widget():
     ##  @return                   None
     ##
     def _onKeyDown(self,ev:KeyEvent)->None:
+        ##print("{} Widget::sdlOnKeyDown".format(self))
         self.onKeyDown.provoke(ev)
     
     ### Is called if a key got released.

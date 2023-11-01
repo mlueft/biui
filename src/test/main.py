@@ -18,7 +18,11 @@ def p1Click(ev):
         ###ev.stopPropagation()
         pass
 
-        
+def hndKeyDownEvent(ev):
+    ##print("hndKeyDownEvent")
+    print(ev)
+    pass
+    
 def p2Click(ev):
     print("p2.click:"+str(ev.phase))
     
@@ -177,6 +181,7 @@ def createGUI0():
         mnu.tooltip = "menubar"
         mnu.alignment = biui.Alignment.DOCK_TOP
         mnu.menuAlignment = biui.Alignment.DOCK_LEFT
+        mnu.onKeyDown.add(hndKeyDownEvent)
         wnd.addChild(mnu)
 
         if False:

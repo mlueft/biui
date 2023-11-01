@@ -29,8 +29,10 @@
     window = sdl2.SDL_CreateWindow( None, 100, 100, size[0], size[1], sdl2.SDL_WINDOW_RESIZABLE ); \
 	"""MACROEND:PYSDL2_CREATEWINDOW""";
 
-#define PYSDL2_GET_WINDOW_ID(window) \
-	sdl2.SDL_GetWindowID(window);
+#define PYSDL2_GET_WINDOW_ID(window,var) \
+	"""MACROSTART:PYSDL2_GET_WINDOW_ID"""; \
+	var = sdl2.SDL_GetWindowID(window); \
+	"""MACROEND:PYSDL2_GET_WINDOW_ID""";
 
 #define PYSDL2_SETWINDOWPOS(window,x,y) \
 	"""MACROSTART:PYSDL2_SETWINDOWPOS"""; \

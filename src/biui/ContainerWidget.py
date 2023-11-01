@@ -590,7 +590,7 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _onKeyDown(self,ev:KeyEvent)->None:
-        
+        ##print("{} ContainerWidget::sdlOnKeyDown".format(self))
         ##phase down
         super()._onKeyDown(ev)
         if ev.propagationStopped:

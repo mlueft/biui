@@ -3,3 +3,8 @@
 **/__pycache__/
 *.log
 py/**
+fonts/**
+.mypycache/**
+.settings/**
+.mypy.ini
+.pylintrc

@@ -1,20 +1,26 @@
-import sys
+import sys,os
 
 sys.path.append('./')
 
 import math
 import biui
 import time
-   
+from biui.Widgets import Window,Pane
 def init():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
+    
+    biui.selectTheme("blocks")
     
     ###############################################
     ##                                       WINDOW
     ###############################################
-    wnd = biui.Window(1024,768)
+    wnd = Window(1024,768)
 
     ##
     ## Panes
@@ -23,7 +29,7 @@ def init():
     startY = 100
     parent = wnd
     for i in range(10):
-        w = biui.Pane()
+        w = Pane()
         ##button0.onMouseUp.add(_test.upHandler)
         w.x = 30
         w.y = 30

@@ -1,12 +1,18 @@
 import unittest
 import biui
-
+import os
 
 class ContainerWidgetTestCase(unittest.TestCase):
     
     def setUp(self):
         biui.init()
-        biui.setThemeFolder("../../themes")
+        biui.setThemeFolder(
+            os.path.abspath(
+                os.path.join(os.getcwd(),"../themes")
+            )
+        )
+        
+        biui.selectTheme("blocks")
  
     def tearDown(self):
         ##biui.quit()

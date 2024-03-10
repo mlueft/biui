@@ -23,6 +23,7 @@ class Keys():
     K_QUOTE = 39
     K_LEFTPAREN = 40
     K_RIGHTPAREN = 41
+    
     K_ASTERISK = 42
     K_PLUS = 43
     K_COMMA = 44

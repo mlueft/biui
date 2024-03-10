@@ -9,6 +9,9 @@ import json
 
 import biui
 from biui.Color import Color
+from biui.Enum import ButtonStates
+from biui.Widgets import Label
+
 ### Does all the drawing stuff.
 ##
 ##
@@ -72,12 +75,14 @@ class Theme():
             
             "SCROLLNAVIGATOR_BACKGROUND":[50,50,50,255],
             "SCROLLNAVIGATOR_BORDER":[0,0,0,255],
-            
+
+            "TEXTFIELD_BACKGROUND":[250,250,250,255],
+            "TEXTFIELD_BORDER":[255,0,0,255],
+                        
             "IMAGE_BACKGROUND":[0,0,0,0],
             "IMAGE_BORDER":[0,0,0,0]
-            
-            
         }
+        
         for k,v in self._shema.items():
             self._shema[k] = Color(v[0],v[1],v[2],v[3])
             
@@ -132,7 +137,7 @@ class Theme():
     ##
     ##
     def getTooltip(self, widget):
-        tt = biui.Label()
+        tt = Label()
         tt.backColor = self._shema["TOOLTIP_BACKGROUND"]
         tt.borderColor = self._shema["TOOLTIP_BORDER"]
         tt.color = self._shema["TOOLTIP_TEXT"]
@@ -351,21 +356,21 @@ class Theme():
         
         state = widget.state
 
-        if state == biui.ButtonStates.OVER:
+        if state == ButtonStates.OVER:
             if widget.backColorOver:
                 result= True
                 color = widget.backColorOver
             else:
                 result = False
                 color = self._shema["MENUBUTTON_OVER_BACKGROUND"]
-        elif state == biui.ButtonStates.DOWN:
+        elif state == ButtonStates.DOWN:
             if widget.backColorDown:
                 result= True
                 color = widget.backColorDown
             else:
                 result = False
                 color = self._shema["MENUBUTTON_DOWN_BACKGROUND"]
-        elif state == biui.ButtonStates.CHECKED:
+        elif state == ButtonStates.CHECKED:
             if widget.backColorChecked:
                 result= True
                 color = widget.backColorChecked
@@ -431,7 +436,7 @@ class Theme():
             color = self._shema["PANE_BORDER"]
         
         ## The widget is a container for the actual scrollcontainer.
-        ## it´s scrollposition is ever 0,0!
+        ## its scrollposition is ever 0,0!
         PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
         return result
     
@@ -446,21 +451,21 @@ class Theme():
     ##
     def drawButtonBeforeChildren(self, renderer, widget, texture):
         state = widget.state
-        if state == biui.ButtonStates.OVER:
+        if state == ButtonStates.OVER:
             if widget.backColorOver:
                 result= True
                 color = widget.backColorOver
             else:
                 result = False
                 color = self._shema["BUTTON_OVER_BACKGROUND"]
-        elif state == biui.ButtonStates.DOWN:
+        elif state == ButtonStates.DOWN:
             if widget.backColorDown:
                 result= True
                 color = widget.backColorDown
             else:
                 result = False
                 color = self._shema["BUTTON_DOWN_BACKGROUND"]
-        elif state == biui.ButtonStates.CHECKED:
+        elif state == ButtonStates.CHECKED:
             if widget.backColorChecked:
                 result= True
                 color = widget.backColorChecked
@@ -595,6 +600,7 @@ class Theme():
     ##  
     def drawLabel(self, renderer, widget, texture):
 
+        ##p = (0,0)
         p = widget.position
         
         if widget.backColor:
@@ -613,12 +619,18 @@ class Theme():
         )
         
         PYSDL2_GETTEXTURESIZE(tx,r)
+        
+        ## If not autosize just copy the size of the widget
+        ## or of the rendered text, if it is smaller than the widget.
+        if not widget.autoSize:
+            r = (r[0],r[1],min(r[2],widget.width),min(r[3],widget.height))
+            
         PYSDL2_RENDER_COPY1(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
-        sdl2.SDL_DestroyTexture( tx )
+        PYSDL2_DESTROYTEXTURE( tx )
 
-        if widget.backColor:
+        if widget.borderColor:
             result= True
-            color = widget.backColor
+            color = widget.borderColor
         else:
             result = False
             color = self._shema["LABEL_BORDER"]
@@ -647,21 +659,21 @@ class Theme():
                 
         state = widget.state
 
-        if state == biui.ButtonStates.OVER:
+        if state == ButtonStates.OVER:
             if widget.checkboxBackColorCheckedOver:
                 result= True
                 color = widget.checkboxBackColorCheckedOver
             else:
                 result = False
                 color = self._shema["CHECKBOX_CHECKBOX_OVER_BACKGROUND"] 
-        elif state == biui.ButtonStates.DOWN:
+        elif state == ButtonStates.DOWN:
             if widget.checkboxBackColorCheckedDown:
                 result= True
                 color = widget.checkboxBackColorCheckedDown
             else:
                 result = False
                 color = self._shema["CHECKBOX_CHECKBOX_DOWN_BACKGROUND"] 
-        elif state == biui.ButtonStates.CHECKED:
+        elif state == ButtonStates.CHECKED:
             if widget.checkboxBackColorCheckedChecked:
                 result= True
                 color = widget.checkboxBackColorCheckedChecked
@@ -795,3 +807,62 @@ class Theme():
         PYSDL2_DRAWRECT(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
         return result
         
+    ########################################################
+    ##
+    ##   TEXTFIELD
+    ##
+    ########################################################        
+    
+    ### Is called before the child objects are drawn.
+    ##  So, it is used to draw the background.
+    ## 
+    def drawTextFieldBeforeChildren(self, renderer, widget, texture):
+        if widget.backColor:
+            result= True
+            color = widget.backColor
+        else:
+            result = False
+            color = self._shema["TEXTFIELD_BACKGROUND"]
+        
+        p = widget.position
+        
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
+                
+        tx = widget.font.render(
+            renderer,
+            widget.value,
+            widget.color
+        )
+        
+        PYSDL2_GETTEXTURESIZE(tx,r)
+        
+        r = (r[0],r[1],min(r[2],widget.width),min(r[3],widget.height))
+            
+        PYSDL2_RENDER_COPY1(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
+        
+        PYSDL2_DESTROYTEXTURE( tx )  
+
+        ## TODO: Draw the selection box
+        
+        ## TODO: Draw the cursor
+        if widget.cursorVisible:
+            pos = widget.getCursorPosition()
+            cb = (p[0]+pos,p[1],2,widget.height)
+            PYSDL2_DRAWRECTFILLED(renderer,texture,Color(255,0,0,255).rgba,cb)
+
+
+              
+        ## Draw bordertime
+
+
+
+        if widget.borderColor:
+            result= True
+            color = widget.borderColor
+        else:
+            result = False
+            color = self._shema["TEXTFIELD_BORDER"]
+        
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
+        return result
+    

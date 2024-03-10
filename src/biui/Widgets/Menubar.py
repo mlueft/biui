@@ -1,5 +1,9 @@
 import biui
-from biui.ContainerWidget import ContainerWidget
+from biui.Widgets import ContainerWidget
+from biui.Events import EventManager
+from biui.Enum import Alignment
+
+
 ###
 ##
 ##
@@ -9,10 +13,10 @@ class Menubar(ContainerWidget):
     ##
     ##
     def __init__(self):
-        self.alignment = biui.Alignment.DOCK_TOP
-        self._menuAlignment = biui.Alignment.DOCK_LEFT
+        self.alignment = Alignment.DOCK_TOP
+        self._menuAlignment = Alignment.DOCK_LEFT
         self.__currentMenu = []
-        self.onItemClick = biui.EventManager()
+        self.onItemClick = EventManager()
         self.__menuOn = False
         
         super().__init__()
@@ -62,6 +66,7 @@ class Menubar(ContainerWidget):
         child.alignment = self._menuAlignment
         child.onShowSubmenu.add(self.__hndOnShowSubmenu)
         child.onMouseDown.add(self.__hndOnMouseDown)
+        child.onItemClick.add(self.__hndMenuOnItemClick)
         super().addChild(child,0,0)
 
     ### removes a menu item.
@@ -176,13 +181,13 @@ class Menubar(ContainerWidget):
         if firstLevel:
             ## we place the menu below the item
             pos = item.toGlobal((0,0))
-            if self.alignment == biui.Alignment.DOCK_TOP:
+            if self.alignment == Alignment.DOCK_TOP:
                 menu.x = pos[0]
                 menu.y = pos[1]+item.height
-            elif self.alignment == biui.Alignment.DOCK_LEFT:
+            elif self.alignment == Alignment.DOCK_LEFT:
                 menu.x = pos[0]+item.width
                 menu.y = pos[1]
-            elif self.alignment == biui.Alignment.DOCK_BOTTOM:
+            elif self.alignment == Alignment.DOCK_BOTTOM:
                 menu.x = pos[0]
                 menu.y = pos[1]-menu.height
             else:
@@ -191,8 +196,9 @@ class Menubar(ContainerWidget):
         else:
             ## we place the menu next to the item
             ## we place the menu below the item
+            ## -10 for overlapping
             pos = item.toGlobal((0,0))
-            menu.x = pos[0]+item.width
+            menu.x = pos[0]+item.width-10
             menu.y = pos[1]
 
         if menu.right > self.window.width:
@@ -227,6 +233,8 @@ class Menubar(ContainerWidget):
     ##
     ##
     def __hndMenuOnItemClick(self,ev):
-        print("Menubar::__hndMenuOnItemClick")
+        if ev.eventSource.hasSubmenu:
+            return
+        
         self.__closeMenu()
         self.onItemClick.provoke(ev)

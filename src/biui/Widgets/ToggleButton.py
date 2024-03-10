@@ -1,6 +1,6 @@
 
-from biui.ButtonStates import ButtonStates
-from biui.Button import Button
+from biui.Enum import ButtonStates
+from biui.Widgets import Button
 
 ###
 ##

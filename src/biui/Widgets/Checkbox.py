@@ -1,7 +1,7 @@
 from typing import Callable
 
 import biui
-from biui.ToggleButton import ToggleButton
+from biui.Widgets import ToggleButton
 from biui.Color import Color
 ###
 ##

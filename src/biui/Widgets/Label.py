@@ -1,5 +1,6 @@
 import biui
-from biui.Widget import Widget
+
+from biui.Widgets import Widget
 
 class Label(Widget):
     
@@ -16,7 +17,8 @@ class Label(Widget):
         
         self.font = biui.Font()
         self.font.size = 18
-        
+        ##
+        self._autoSize = True        
         self.name = "label"
         self.value = "label"
         
@@ -24,6 +26,9 @@ class Label(Widget):
     ##
     ##
     def __hndOnBeforeDraw(self,ev):
+        
+        if not self._autoSize:
+            return
         
         size = self.font.getRenderSize(
             self.format.format(self.value)
@@ -55,7 +60,24 @@ class Label(Widget):
     def format(self,value):
         self._format = value
         self._invalidate()
-             
+
+    ### Set/Get the value of autoSize.
+    ##
+    ##
+    @property   
+    def autoSize(self):
+        return self._autoSize
+    
+    ###  Sets autoSize.
+    ##
+    ##   @param value   Bool value of autoSize..
+    ##   
+    @autoSize.setter
+    def autoSize(self,value):
+        self._autoSize = value
+        self._invalidate()
+        
+                     
     ### Set/Get the value of the label.
     ##  The value is the shown text.
     ##

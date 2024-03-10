@@ -2,8 +2,9 @@ import time
 import sys
 import os
 import biui
-import biui.Keys as Keys
-import biui.KeyModifiers as KeyModifiers
+import biui.Enum as Keys
+import biui.Enum as KeyModifiers
+from biui.Widgets import Button,Window
 
 KEYS = {}
 
@@ -161,7 +162,7 @@ def createSpecialBlock(x,y,parent):
     
     for key in keys:
         
-        b = biui.Button()
+        b = Button()
         b.x = bx
         b.y = by
         if len(key)>2:
@@ -189,7 +190,7 @@ def createNumBlock(x,y,parent):
     bx = x
     by = y
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -199,7 +200,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_NUMLOCKCLEAR] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -209,7 +210,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_DIVIDE] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -219,7 +220,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_MULTIPLY] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -230,7 +231,7 @@ def createNumBlock(x,y,parent):
     by = b.bottom
     KEYS[Keys.K_KP_MINUS] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -240,7 +241,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_7] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -250,7 +251,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_8] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -260,7 +261,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_9] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -272,7 +273,7 @@ def createNumBlock(x,y,parent):
     b.height = buttonHeight*2
     KEYS[Keys.K_KP_PLUS] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -282,7 +283,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_4] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -292,7 +293,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_5] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -303,7 +304,7 @@ def createNumBlock(x,y,parent):
     by = b.bottom
     KEYS[Keys.K_KP_6] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -313,7 +314,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_1] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -323,7 +324,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_2] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -333,7 +334,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_3] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -345,7 +346,7 @@ def createNumBlock(x,y,parent):
     b.height = buttonHeight*2
     KEYS[Keys.K_KP_ENTER] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth*2
@@ -355,7 +356,7 @@ def createNumBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_KP_0] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -373,7 +374,7 @@ def createCursorBlock(x,y,parent):
     bx = x
     by = y
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -383,7 +384,7 @@ def createCursorBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_INSERT] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -393,7 +394,7 @@ def createCursorBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_HOME] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -404,7 +405,7 @@ def createCursorBlock(x,y,parent):
     by = b.bottom
     KEYS[Keys.K_PAGEUP] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -414,7 +415,7 @@ def createCursorBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_DELETE] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -424,7 +425,7 @@ def createCursorBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_END] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -435,7 +436,7 @@ def createCursorBlock(x,y,parent):
     by = b.bottom+50
     KEYS[Keys.K_PAGEDOWN] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -446,7 +447,7 @@ def createCursorBlock(x,y,parent):
     by = b.bottom
     KEYS[Keys.K_UP] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -456,7 +457,7 @@ def createCursorBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_LEFT] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -466,7 +467,7 @@ def createCursorBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_DOWN] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -484,7 +485,7 @@ def createMainBlock(x,y,parent):
     bx = x
     by = y
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -494,7 +495,7 @@ def createMainBlock(x,y,parent):
     bx = b.right+10
     KEYS[Keys.K_ESCAPE] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -504,7 +505,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F1] = b
 
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -514,7 +515,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F2] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -524,7 +525,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F3] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -534,7 +535,7 @@ def createMainBlock(x,y,parent):
     bx = b.right+10
     KEYS[Keys.K_F4] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -544,7 +545,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F5] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -554,7 +555,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F6] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -564,7 +565,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F7] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -574,7 +575,7 @@ def createMainBlock(x,y,parent):
     bx = b.right+10
     KEYS[Keys.K_F8] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -584,7 +585,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F9] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -594,7 +595,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F10] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -604,7 +605,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F11] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -614,7 +615,7 @@ def createMainBlock(x,y,parent):
     bx = b.right+20
     KEYS[Keys.K_F12] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -624,7 +625,7 @@ def createMainBlock(x,y,parent):
     bx = b.right 
     KEYS[Keys.K_F13] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -634,7 +635,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_F14] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -645,7 +646,7 @@ def createMainBlock(x,y,parent):
     KEYS[Keys.K_F15] = b
     
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -655,7 +656,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_PRINTSCREEN] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -665,7 +666,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_SCROLLLOCK] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth+20
@@ -677,7 +678,7 @@ def createMainBlock(x,y,parent):
     
     bx = x
     by = b.bottom+20
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -687,7 +688,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -697,7 +698,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_1] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -707,7 +708,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_2] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -717,7 +718,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_3] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -727,7 +728,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_4] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -737,7 +738,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_5] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -747,7 +748,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_6] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -757,7 +758,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_7] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -767,7 +768,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_8] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -777,7 +778,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_9] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -787,7 +788,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_0] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -797,7 +798,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_szlig] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -807,7 +808,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth+20
@@ -819,7 +820,7 @@ def createMainBlock(x,y,parent):
     KEYS[Keys.K_BACKSPACE] = b
     
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth+20
@@ -829,7 +830,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_TAB] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -839,7 +840,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_q] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -849,7 +850,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_w] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -859,7 +860,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_e] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -869,7 +870,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_r] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -879,7 +880,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_t] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -889,7 +890,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_z] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -899,7 +900,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_u] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -909,7 +910,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_i] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -919,7 +920,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_o] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -929,7 +930,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_p] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -939,7 +940,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_uuml] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -951,7 +952,7 @@ def createMainBlock(x,y,parent):
     KEYS[Keys.K_PLUS] = b
     
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth+30
@@ -961,7 +962,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_CAPSLOCK] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -971,7 +972,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_a] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -981,7 +982,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_s] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -991,7 +992,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_d] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1001,7 +1002,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_f] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1011,7 +1012,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_g] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1021,7 +1022,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_h] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1031,7 +1032,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_j] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1041,7 +1042,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_k] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1051,7 +1052,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_l] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1061,7 +1062,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_ouml] = b
         
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1071,7 +1072,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_auml] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1081,7 +1082,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_HASH] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1093,7 +1094,7 @@ def createMainBlock(x,y,parent):
     KEYS[Keys.K_RETURN] = b
     
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth+20
@@ -1103,7 +1104,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_LSHIFT] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1113,7 +1114,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_LESS] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1123,7 +1124,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_y] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1133,7 +1134,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_x] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1143,7 +1144,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_c] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1153,7 +1154,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_v] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1163,7 +1164,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_b] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1173,7 +1174,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_n] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1183,7 +1184,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_m] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1193,7 +1194,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_COMMA] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1203,7 +1204,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_PERIOD] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1213,7 +1214,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_MINUS] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth+50
@@ -1226,7 +1227,7 @@ def createMainBlock(x,y,parent):
     
     
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth+20
@@ -1236,7 +1237,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_LCTRL] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1246,7 +1247,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_LGUI] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1256,7 +1257,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_LALT] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth*6
@@ -1266,7 +1267,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_SPACE] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth*2
@@ -1276,7 +1277,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_RALT] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1286,7 +1287,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_RGUI] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1296,7 +1297,7 @@ def createMainBlock(x,y,parent):
     bx = b.right
     KEYS[Keys.K_MENU] = b
     
-    b = biui.Button()
+    b = Button()
     b.x = bx
     b.y = by
     b.width = buttonWidth
@@ -1388,9 +1389,11 @@ def hndKeyUp(ev):
 def init():
 
     biui.init()
-    ##biui.setThemeFolder("~/programming/biui/themes/")
-    biui.setThemeFolder("/home/work/programming/biui/themes/")
-    ##biui.setThemeFolder("/home/daily/programming/biui/themes/")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
     
     biui.selectTheme("blocks")
 
@@ -1398,7 +1401,7 @@ def init():
 def main():
     init()
     
-    wnd = biui.Window(1300,900)
+    wnd = Window(1300,900)
     wnd.title = "title"
     wnd.x = 200
     wnd.y = 10

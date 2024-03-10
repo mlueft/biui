@@ -1,27 +1,34 @@
-import sys
+import sys,os
 
 sys.path.append('./')
 
 import math
 import biui
 import time
-   
+from biui.Widgets import Window
+
 def init():
     
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
+    
+    biui.selectTheme("blocks")
     
     ###############################################
     ##                                       WINDOW
     ###############################################
-    wnd = biui.Window(1024,768)
+    wnd = Window(1024,768)
     wnd.title = "Window title!1"
     wnd.x = 500
     wnd.y = 0
     wnd.width = 640
     wnd.height = 100
 
-    wnd = biui.Window(1024,768)
+    wnd = Window(1024,768)
     wnd.title = "Window title!2"
     wnd.x = 500
     wnd.y = 300

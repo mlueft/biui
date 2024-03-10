@@ -1,13 +1,15 @@
 from typing import Callable
 
 import biui
-from biui.ButtonStates import ButtonStates
+
+from biui.Widgets import Widget
+from biui.Widgets import ContainerWidget
+from biui.Widgets import Label
+
+from biui.Enum import ButtonStates
 from biui.Color import Color
-from biui.Widget import Widget
-from biui.ContainerWidget import ContainerWidget
-from biui.Event import Event
-from biui.Label import Label
-from biui.Alignment import Alignment
+from biui.Events import Event
+from biui.Enum import Alignment
 
 
 ###

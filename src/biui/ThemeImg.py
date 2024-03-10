@@ -7,6 +7,7 @@ import random
 import ctypes
 import biui
 from biui.Theme import Theme
+from biui.Enum import ButtonStates
 
 ### Does all the drawing stuff.
 ##
@@ -211,11 +212,11 @@ class ThemeImg(Theme):
                 
         state = widget.state
 
-        if state == biui.ButtonStates.OVER:
+        if state == ButtonStates.OVER:
             color = biui.Color(150,150,150,255)
-        elif state == biui.ButtonStates.DOWN:
+        elif state == ButtonStates.DOWN:
             color = biui.Color(120,120,120,255)
-        elif state == biui.ButtonStates.CHECKED:
+        elif state == ButtonStates.CHECKED:
             color = biui.Color(128,128,128,255)
         else:
             color = biui.Color(128,128,128,255)
@@ -294,11 +295,11 @@ class ThemeImg(Theme):
                 
         state = widget.state
 
-        if state == biui.ButtonStates.OVER:
+        if state == ButtonStates.OVER:
             name = "button_hover_bg"
-        elif state == biui.ButtonStates.DOWN:
+        elif state == ButtonStates.DOWN:
             name = "button_down_bg"
-        elif state == biui.ButtonStates.CHECKED:
+        elif state == ButtonStates.CHECKED:
             name = "button_checked_bg"
         else:
             name = "button_normal_bg"
@@ -319,11 +320,11 @@ class ThemeImg(Theme):
         
         state = widget.state
         
-        if state == biui.ButtonStates.OVER:
+        if state == ButtonStates.OVER:
             name = "button_hover_fg"
-        elif state == biui.ButtonStates.DOWN:
+        elif state == ButtonStates.DOWN:
             name = "button_down_fg"
-        elif state == biui.ButtonStates.CHECKED:
+        elif state == ButtonStates.CHECKED:
             name = "button_checked_fg"
         else:
             name = "button_normal_fg"
@@ -433,6 +434,10 @@ class ThemeImg(Theme):
         )
         
         PYSDL2_GETTEXTURESIZE(tx,r)
+        ## If not autosize just copy the size of the widget
+        ## or of the rendered text, if it is smaller than the widget.
+        if not widget.autoSize:
+            r = (r[0],r[1],min(r[2],widget.width),min(r[3],widget.height))        
         PYSDL2_RENDER_COPY1(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
         sdl2.SDL_DestroyTexture( tx )
 
@@ -460,11 +465,11 @@ class ThemeImg(Theme):
                 
         state = widget.state
 
-        if state == biui.ButtonStates.OVER:
+        if state == ButtonStates.OVER:
             name = "checkbox_hover_bg.png"
-        elif state == biui.ButtonStates.DOWN:
+        elif state == ButtonStates.DOWN:
             name = "checkbox_hover_bg.png"
-        elif state == biui.ButtonStates.CHECKED:
+        elif state == ButtonStates.CHECKED:
             name = "checkbox_checked_bg.png"
         else:
             name = "checkbox_normal_bg.png"

@@ -2,7 +2,7 @@
 import sdl2
 import ctypes
 import biui
-from biui.Widget import Widget
+from biui.Widgets import Widget
  
 
 ### Base class for all container widgets.

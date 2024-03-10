@@ -1,6 +1,9 @@
 import biui
-from biui.ContainerWidget import ContainerWidget
- 
+from biui.Widgets import ContainerWidget
+from biui.Events import EventManager,Event
+from biui.Widgets import Spacer
+from biui.Enum import Alignment
+
 ###
 ##
 ##
@@ -17,40 +20,40 @@ class FlexPane(ContainerWidget):
         
                 
         ##
-        self.onJoinUp = biui.EventManager()
+        self.onJoinUp = EventManager()
         ##
-        self.onJoinDown = biui.EventManager()
+        self.onJoinDown = EventManager()
         ##
-        self.onJoinLeft = biui.EventManager()
+        self.onJoinLeft = EventManager()
         ##
-        self.onJoinRight = biui.EventManager()
+        self.onJoinRight = EventManager()
         ##
-        self.onVerticalSplit = biui.EventManager()
+        self.onVerticalSplit = EventManager()
         ##
-        self.onHorizontalSplit = biui.EventManager()
+        self.onHorizontalSplit = EventManager()
         
         self._acTopLeft = self._createActiveCorner()
         self._acTopLeft.onMouseDown.add(self.__hndOnActiveCornerTopLeftMouseDown)
         self._acTopLeft.onMouseUp.add(self.__hndOnActiveCornerTopLeftMouseUp)
-        self._acTopLeft.alignment = biui.Alignment.TOP_LEFT
+        self._acTopLeft.alignment = Alignment.TOP_LEFT
         self.addChild(self._acTopLeft)
         
         self._acTopRight = self._createActiveCorner()
         self._acTopRight.onMouseDown.add(self.__hndOnActiveCornerTopRightMouseDown)
         self._acTopRight.onMouseUp.add(self.__hndOnActiveCornerTopRightMouseUp)
-        self._acTopRight.alignment = biui.Alignment.TOP_RIGHT
+        self._acTopRight.alignment = Alignment.TOP_RIGHT
         self.addChild(self._acTopRight)
 
         self._acBottomLeft = self._createActiveCorner()
         self._acBottomLeft.onMouseDown.add(self.__hndOnActiveCornerBottomLeftMouseDown)
         self._acBottomLeft.onMouseUp.add(self.__hndOnActiveCornerBottomLeftMouseUp)
-        self._acBottomLeft.alignment = biui.Alignment.BOTTOM_LEFT
+        self._acBottomLeft.alignment = Alignment.BOTTOM_LEFT
         self.addChild(self._acBottomLeft)
         
         self._acBottomRight = self._createActiveCorner()
         self._acBottomRight.onMouseDown.add(self.__hndOnActiveCornerBottomRightMouseDown)
         self._acBottomRight.onMouseUp.add(self.__hndOnActiveCornerBottomRightMouseUp)
-        self._acBottomRight.alignment = biui.Alignment.BOTTOM_RIGHT
+        self._acBottomRight.alignment = Alignment.BOTTOM_RIGHT
         self.addChild(self._acBottomRight)
         
         
@@ -86,7 +89,7 @@ class FlexPane(ContainerWidget):
     def _createActiveCorner(self):
         ## We use a Spacer to get
         ## an invisible corner
-        ac = biui.Spacer()
+        ac = Spacer()
         ac.width = 15
         ac.height = 15
         return ac
@@ -100,13 +103,13 @@ class FlexPane(ContainerWidget):
         pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
-            self.onJoinLeft.provoke(biui.Event(self))
+            self.onJoinLeft.provoke(Event(self))
         elif pos[1] <= 0:
-            self.onJoinUp.provoke(biui.Event(self)) 
+            self.onJoinUp.provoke(Event(self)) 
         elif pos[0] >= ac.width:
-            self.onVerticalSplit.provoke(biui.Event(self))
+            self.onVerticalSplit.provoke(Event(self))
         else:
-            self.onHorizontalSplit.provoke(biui.Event(self))
+            self.onHorizontalSplit.provoke(Event(self))
      
         self._acTopLeft.onMouseLeave.remove(self.__hndOnActiveCornerTopLeftLeave)
         
@@ -119,13 +122,13 @@ class FlexPane(ContainerWidget):
         pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
-            self.onVerticalSplit.provoke(biui.Event(self))
+            self.onVerticalSplit.provoke(Event(self))
         elif pos[1] >= ac.height:
-            self.onHorizontalSplit.provoke(biui.Event(self))
+            self.onHorizontalSplit.provoke(Event(self))
         elif pos[0] >= ac.width:
-            self.onJoinRight.provoke(biui.Event(self)) 
+            self.onJoinRight.provoke(Event(self)) 
         else:
-            self.onJoinUp.provoke(biui.Event(self))
+            self.onJoinUp.provoke(Event(self))
 
         self._acTopRight.onMouseLeave.remove(self.__hndOnActiveCornerTopRightLeave)
         
@@ -138,13 +141,13 @@ class FlexPane(ContainerWidget):
         pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
-            self.onJoinLeft.provoke(biui.Event(self))
+            self.onJoinLeft.provoke(Event(self))
         elif pos[1] >= ac.height:
-            self.onJoinDown.provoke(biui.Event(self))
+            self.onJoinDown.provoke(Event(self))
         elif pos[0] >= ac.width:
-            self.onVerticalSplit.provoke(biui.Event(self)) 
+            self.onVerticalSplit.provoke(Event(self)) 
         else:
-            self.onHorizontalSplit.provoke(biui.Event(self))
+            self.onHorizontalSplit.provoke(Event(self))
             
         self._acBottomLeft.onMouseLeave.remove(self.__hndOnActiveCornerBottomLeftLeave)
         
@@ -157,13 +160,13 @@ class FlexPane(ContainerWidget):
         pos = ac.toLocal(ev.position)
         
         if pos[0] <= 0:
-            self.onVerticalSplit.provoke(biui.Event(self))
+            self.onVerticalSplit.provoke(Event(self))
         elif pos[1] >= ac.height:
-            self.onJoinDown.provoke(biui.Event(self))
+            self.onJoinDown.provoke(Event(self))
         elif pos[0] >= ac.width:
-            self.onJoinRight.provoke(biui.Event(self)) 
+            self.onJoinRight.provoke(Event(self)) 
         else:
-            self.onHorizontalSplit.provoke(biui.Event(self))
+            self.onHorizontalSplit.provoke(Event(self))
         
         self._acBottomRight.onMouseLeave.remove(self.__hndOnActiveCornerBottomRightLeave)
         

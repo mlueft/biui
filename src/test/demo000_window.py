@@ -1,5 +1,6 @@
 import math
 import biui
+from biui.Widgets import Pane
 
 sub = None
 wnd = None
@@ -18,7 +19,7 @@ def main():
 	################################################
 	wnd = biui.Window(1024,768)
 	
-	widget = biui.Pane()
+	widget = Pane()
 	widget.width = widget.height = 30
 	widget.x = widget.y = 100
 	

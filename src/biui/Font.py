@@ -6,6 +6,10 @@ import sdl2dll
 import sdl2.sdlttf
 from sdl2.pixels import SDL_Color
 
+from biui.Events import EventManager
+from biui.Events import Event
+from biui.Enum import Direction
+
 ###
 ##
 ##
@@ -27,9 +31,9 @@ class Font():
             ctypes.c_int(size)
         )
         self._direction = None
-        self.direction = biui.Direction.LTR
+        self.direction = Direction.LTR
         ##
-        self.onSizeChanged = biui.EventManager()
+        self.onSizeChanged = EventManager()
         
     ### Closes the loadedFont.
     ##
@@ -83,7 +87,7 @@ class Font():
             self._font,
             ctypes.c_int(value)
         )
-        self.onSizeChanged.provoke(biui.Event(self))
+        self.onSizeChanged.provoke(Event(self))
     
     
     ### Get the font line spacing.

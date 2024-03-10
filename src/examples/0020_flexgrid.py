@@ -1,26 +1,34 @@
-import sys
+import sys,os
 import time
 
 sys.path.append('./')
 
 import biui
+from biui.Widgets import Window,FlexGrid,FlexPane
+from biui.Enum import Alignment
 
 def main():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
+    
+    biui.selectTheme("blocks")
     
     ################################################
     ###                                       WINDOW
     ################################################
-    wnd = biui.Window(1024,768)
+    wnd = Window(1024,768)
     wnd.y = 0
     wnd.x = 20
     
-    grid = biui.FlexGrid()
-    grid.alignment = biui.Alignment.FILL
+    grid = FlexGrid()
+    grid.alignment = Alignment.FILL
     
-    pane = biui.FlexPane()
+    pane = FlexPane()
 
       
     grid.addFlexPane(pane)

@@ -8,10 +8,17 @@ import sdl2
 from sdl2.mouse import  SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_LEFT, SDL_BUTTON_X1, SDL_BUTTON_X2
 
 import biui
-from biui.Widget import Widget
-from biui.ContainerWidget import ContainerWidget
-from biui.KeyEvent import KeyEvent
-from biui.MouseEvent import MouseEvent
+from biui.Widgets.Widget import Widget
+from biui.Widgets.ContainerWidget import ContainerWidget
+
+from biui.Events import KeyEvent
+from biui.Events import MouseEvent
+from biui.Events import Event
+from biui.Events import EventManager
+
+from biui.DirtyRectangleManager import DirtyRectangleManager
+from biui.Color import Color
+
 ###
 ##
 ##
@@ -33,35 +40,35 @@ class Window(ContainerWidget):
         PYSDL2_CREATERENDERER(self._window,-1,0,self._renderer)
         
         ##
-        self.onWindowClose:biui.EventManager = biui.EventManager()
+        self.onWindowClose:EventManager = EventManager()
         ##
-        self.onWindowShown:biui.EventManager = biui.EventManager()
+        self.onWindowShown:EventManager = EventManager()
         ##
-        self.onWindowHidden:biui.EventManager = biui.EventManager()
+        self.onWindowHidden:EventManager = EventManager()
         ##
-        self.onWindowExposed:biui.EventManager = biui.EventManager()
+        self.onWindowExposed:EventManager = EventManager()
         ##
-        self.onWindowMoved:biui.EventManager = biui.EventManager()
+        self.onWindowMoved:EventManager = EventManager()
         ##
-        self.onWindowResized:biui.EventManager = biui.EventManager()
+        self.onWindowResized:EventManager = EventManager()
         ##
-        self.onWindowSizeChanged:biui.EventManager = biui.EventManager()
+        self.onWindowSizeChanged:EventManager = EventManager()
         ##
-        self.onWindowMinimized:biui.EventManager = biui.EventManager()
+        self.onWindowMinimized:EventManager = EventManager()
         ##
-        self.onWindowMaximized:biui.EventManager = biui.EventManager()
+        self.onWindowMaximized:EventManager = EventManager()
         ##
-        self.onWindowRestored:biui.EventManager = biui.EventManager()
+        self.onWindowRestored:EventManager = EventManager()
         ##
-        self.onWindowEnter:biui.EventManager = biui.EventManager()
+        self.onWindowEnter:EventManager = EventManager()
         ##
-        self.onWindowLeave:biui.EventManager = biui.EventManager()
+        self.onWindowLeave:EventManager = EventManager()
         ##
-        self.onWindowFocusGained:biui.EventManager = biui.EventManager()
+        self.onWindowFocusGained:EventManager = EventManager()
         ##
-        self.onWindowFocusLost:biui.EventManager = biui.EventManager()
+        self.onWindowFocusLost:EventManager = EventManager()
         ##
-        self.onWindowFocus:biui.EventManager = biui.EventManager()
+        self.onWindowFocus:EventManager = EventManager()
 
         ##
         self.__mouseDownTime:Union(None,float) = None
@@ -78,7 +85,7 @@ class Window(ContainerWidget):
         #endif
         
         ##
-        self.__dr:biui.DirtyRectangleManager = biui.DirtyRectangleManager()
+        self.__dr:biui.DirtyRectangleManager = DirtyRectangleManager()
         
         ### Stored a reference to the Widget the mouse is over.
         self.__hoverWidget:biui.Widget = None
@@ -97,7 +104,7 @@ class Window(ContainerWidget):
         ##
         self.onWindowFocusLost.add(self.__hndOnWndFocusLost)
         ##
-        self.backColor:biui.Color = biui.Color(50,50,50,255)
+        self.backColor:biui.Color = Color(50,50,50,255)
         ##
         self.__focusedWidget = None
          
@@ -154,12 +161,23 @@ class Window(ContainerWidget):
     ##
     ##
     def setFocus(self,widget):
+        
+        if self.__focusedWidget == widget:
+            return
+        
+        ## defocus old widget
+        if self.__focusedWidget:
+            self.__focusedWidget.onFocusLost.provoke(Event(self.__focusedWidget));
+        
         self.__focusedWidget = widget
+        
+        ## focus new widget
+        self.__focusedWidget.onFocus.provoke(Event(self.__focusedWidget));
             
     ###
     ##
     ##
-    def __hndOnWndFocusLost(self,ev:biui.Event)->None:##pylint: disable=unused-argument
+    def __hndOnWndFocusLost(self,ev:Event)->None:##pylint: disable=unused-argument
         ## SNIPPET: REMOVE TOOLTIP
         if self.__tooltipTimerId is None:
             return
@@ -190,7 +208,7 @@ class Window(ContainerWidget):
     ###
     ##
     ##
-    def showOverlay(self, child:biui.Widget, overlayname:str)->None:
+    def showOverlay(self, child:Widget, overlayname:str)->None:
         self.removeOverlay(overlayname)
         self.addOverlay(child, overlayname)
     
@@ -205,7 +223,7 @@ class Window(ContainerWidget):
     ###
     ##
     ##
-    def addOverlay(self, child:biui.Widget, overlayname:str)->None:
+    def addOverlay(self, child:Widget, overlayname:str)->None:
         if not overlayname in self.__overlays:
             self.__overlays[overlayname] = []        
         self.__overlays[overlayname].append(child)
@@ -306,7 +324,7 @@ class Window(ContainerWidget):
     ###
     ##
     ##
-    def __hndOnWndClose(self,ev:biui.Event)->None:##pylint: disable=unused-argument
+    def __hndOnWndClose(self,ev:Event)->None:##pylint: disable=unused-argument
         ## TODO: clean up all eventmanagers
         
         PYSDL2_DESTROYTEXTURE(self._window)
@@ -443,6 +461,7 @@ class Window(ContainerWidget):
     ##
     ##
     def sdlOnKeyDown(self,event)->None:
+        ##print("sdlOnKeyDown")
         ev = KeyEvent(
             self.__focusedWidget,
             event.key.keysym.sym,
@@ -457,6 +476,7 @@ class Window(ContainerWidget):
     ##
     ##
     def sdlOnKeyUp(self,event)->None:
+        ##print("sdlOnKeyUp")
         ev = KeyEvent(
             self.__focusedWidget,
             event.key.keysym.sym,
@@ -471,7 +491,7 @@ class Window(ContainerWidget):
     ##
     ##
     def sdlOnTextInput(self,event)->None:
-        ##print("sdlOnTextInput")
+        ##print( "sdlOnTextInput {}".format(event.text.text) )
         ##self._onTextInput(event)
         pass
     
@@ -479,7 +499,7 @@ class Window(ContainerWidget):
     ##
     ##  todo: hinting
     def sdlOnWindowEvent(self,event)->None:##pylint: disable=too-many-branches,too-many-statements
-        ev = biui.Event(self)
+        ev = Event(self)
         
         if event.window.event == sdl2.SDL_WINDOWEVENT_CLOSE:
             print("SDL_WINDOWEVENT_CLOSE")

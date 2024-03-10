@@ -1,5 +1,7 @@
 import biui
-from biui.ContainerWidget import ContainerWidget
+from biui.Widgets import ContainerWidget
+from biui.Widgets import Label
+from biui.Enum import Alignment
 
 class Progressbar(ContainerWidget):
     
@@ -18,9 +20,9 @@ class Progressbar(ContainerWidget):
         ##
         self._showValue = True
         ##
-        self._label = biui.Label()
+        self._label = Label()
         self._label.name = "label"
-        self._label.alignment = biui.Alignment.CENTER_CENTER
+        self._label.alignment = Alignment.CENTER_CENTER
         self._label.value = ""
         self.addChild(self._label,0,0)
         

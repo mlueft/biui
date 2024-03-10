@@ -1,11 +1,11 @@
-import sys
+import sys,os
 
 sys.path.append('./')
 
 import math
 import biui
 import time
-   
+from biui.Widgets import Window,Pane
 def paneResize(ev):
     ##print("W")
     pass
@@ -13,17 +13,23 @@ def paneResize(ev):
 def init():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
+    
+    biui.selectTheme("blocks")
     
     ###############################################
     ##                                       WINDOW
     ###############################################
-    wnd = biui.Window(640,480)
+    wnd = Window(640,480)
 
     ##
     ## Pane
     ##
-    pane = biui.Pane()
+    pane = Pane()
     pane.x = 100
     pane.y = 100
     pane.width = 200

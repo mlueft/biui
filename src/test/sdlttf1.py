@@ -14,7 +14,12 @@ import biui
 
 def init():
     biui.init()
-    biui.setThemeFolder("../../themes")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
+
     
     sdl2.SDL_Init( sdl2.SDL_INIT_VIDEO )
     sdl2.ext.init(  )

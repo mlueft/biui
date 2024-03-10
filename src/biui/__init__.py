@@ -1,62 +1,34 @@
 #include "pysdl2.inc"
 #include "biui.inc"
-from typing import TypeAlias
 
 import os
+import json
 from time import time
+from typing import TypeAlias
 
 import sdl2
 import sdl2.ext
-import json
-
-from biui.EventPhase import EventPhase
-from biui.Event import Event
-from biui.DOMEvent import DOMEvent
-from biui.MouseEvent import MouseEvent
-from biui.KeyEvent import KeyEvent
-from biui.EventTypes import EventTypes
-from biui.EventManager import EventManager
-from biui.Theme import Theme
-from biui.ThemeImg import ThemeImg
-from biui.Keys import Keys
-from biui.KeyModifiers import KeyModifiers
-from biui.Widget import Widget
-from biui.ContainerWidget import ContainerWidget
-from biui.Window import Window
-from biui.Pane import Pane
-from biui.Button import Button
-from biui.ButtonStates import ButtonStates
-from biui.ToggleButton import ToggleButton
-from biui.ButtonGroup import ButtonGroup
-from biui.LayoutManager import LayoutManager
-from biui.Alignment import Alignment
-from biui.FlexPane import FlexPane
-from biui.FlexSpacer import FlexSpacer
-from biui.FlexGrid import FlexGrid
-from biui.Label import Label
-from biui.Font import Font
-from biui.NumberSlider import NumberSlider
-from biui.ImageLibrary import ImageLibrary
-from biui.Spacer import Spacer
-from biui.Progressbar import Progressbar
-from biui.Checkbox import Checkbox
-from biui.Hinting import Hinting
-from biui.Style import Style
-from biui.Direction import Direction
-from biui.DirtyRectangleManager import DirtyRectangleManager
-from biui.Mouse import Mouse
-from biui.Menubar import Menubar
-from biui.MenuItem import MenuItem
-from biui.MenuPane import MenuPane
-from biui.ScrollNavigator import ScrollNavigator
-from biui.Image import Image
-from biui.Color import Color
-
-
 from sdl2.surface import SDL_CreateRGBSurface
 from sdl2.mouse import SDL_BUTTON_LMASK, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_LEFT, SDL_BUTTON_X1, SDL_BUTTON_X2
 
+from biui.Theme import Theme
+from biui.ThemeImg import ThemeImg
+from biui.LayoutManager import LayoutManager
+from biui.Font import Font
+from biui.ImageLibrary import ImageLibrary
+from biui.DirtyRectangleManager import DirtyRectangleManager
+from biui.Mouse import Mouse
+from biui.ShortcutControl import ShortcutControl
+from biui.Color import Color
+from biui.TextDataEditComponent import TextDataEditComponent
+from biui.DataEditComponent import DataEditComponent
+from biui.Timer import Timer
+
+from biui.Widgets import Window
+
 Mouse = Mouse()
+ShortcutControl = ShortcutControl()
+
 ##
 __themeFolder = BIUI_THEMEFOLDER
 
@@ -75,6 +47,16 @@ __fontFolders = []
 ##
 __fonts:list[list[str]] = []
 
+##
+__timerObjects = []
+
+def addTimer(timer):
+    __timerObjects.append(timer)
+    
+def removeTimer(timer):
+    __timerObjects.remove(timer)
+    
+    
 def profile(fnc):
     import cProfile, pstats
     profiler = cProfile.Profile()
@@ -173,7 +155,6 @@ def scanFonts():
 def getFontPath(fontName):
     global __fonts
     for f  in __fonts:
-        print(f)
         if f[0] == fontName:
             return f[1]
 
@@ -260,7 +241,10 @@ def getTheme(themeData = None):
 ##  @return        True as long as a window is open.
 ##
 def main():
-    global __windows
+    global __windows, __timerObjects
+    
+    for t in __timerObjects:
+        t.main()
     
     events = sdl2.ext.get_events()
     for event in events:

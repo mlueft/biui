@@ -5,6 +5,9 @@ sys.path.append('./../')
 import math
 import biui
 
+from biui.Widgets import Window,Button,Pane,ToggleButton,ButtonGroup,FlexGrid
+from biui.Enum import Alignment
+
 sub = None
 wnd = None
 pane3 = None
@@ -50,13 +53,13 @@ def main():
 	################################################
 	###                                       WINDOW
 	################################################
-	wnd = biui.Window(1900,1024)
+	wnd = Window(1900,1024)
 	
 	
 	################################################
 	###                                      Panel 0
 	################################################
-	pane0 = biui.Pane()
+	pane0 = Pane()
 	pane0.x = 10
 	pane0.y = 10
 	pane0.width = 300
@@ -67,7 +70,7 @@ def main():
 	### Buttons
 	###
 	for i in range(3):
-		button0 = biui.Button()
+		button0 = Button()
 		###button0.onMouseUp.add(_test.upHandler)
 		button0.x = 10
 		button0.y = 10+i*35
@@ -77,7 +80,7 @@ def main():
 	################################################
 	###                                      PANEL 1
 	################################################
-	pane1 = biui.Pane()
+	pane1 = Pane()
 	pane1.x = 320
 	pane1.y = 10
 	pane1.width = 300
@@ -88,7 +91,7 @@ def main():
 	### Creating a ToggleButton
 	###
 	for i in range(3):
-		button0 = biui.ToggleButton()
+		button0 = ToggleButton()
 		button0.x = 10
 		button0.y = 10+i*35
 		pane1.addChild(button0)
@@ -99,7 +102,7 @@ def main():
 	################################################
 	###                                      PANEL 2
 	################################################
-	pane2 = biui.Pane()
+	pane2 = Pane()
 	pane2.x = 630
 	pane2.y = 10
 	pane2.width = 300
@@ -109,7 +112,7 @@ def main():
 	###
 	### ButtonGroup
 	###
-	buttonGroup = biui.ButtonGroup()
+	buttonGroup = ButtonGroup()
 	buttonGroup.onMouseDown.add(stopMousePropagation)
 	buttonGroup.x = 10
 	buttonGroup.y = 10
@@ -121,7 +124,7 @@ def main():
 	### Add Buttons to group
 	###
 	for i in range(5):
-		button0 = biui.ToggleButton()
+		button0 = ToggleButton()
 		button0.x = 10
 		button0.y = 10+i*40
 		buttonGroup.addChild(button0)
@@ -132,7 +135,7 @@ def main():
 	################################################
 	###                                      PANEL 3
 	################################################
-	pane3 = biui.Pane()
+	pane3 = Pane()
 	pane3.x = 630+320
 	pane3.y = 10
 	pane3.width = 300
@@ -140,20 +143,20 @@ def main():
 	wnd.addChild(pane3)
 	
 	### content
-	pane3_1 = biui.Pane()
+	pane3_1 = Pane()
 	pane3_1.x = 10
 	pane3_1.y = 10
 	pane3_1.width = 30
 	pane3_1.height = 30
-	pane3_1.alignment = biui.Alignment.CENTER_CENTER
+	pane3_1.alignment = Alignment.CENTER_CENTER
 	pane3.addChild(pane3_1,0,1)
 
-	pane3_2 = biui.Pane()
+	pane3_2 = Pane()
 	pane3_2.x = 120
 	pane3_2.y = 10
 	pane3_2.width = 100
 	pane3_2.height = 100
-	pane3_2.alignment = biui.Alignment.FILL
+	pane3_2.alignment = Alignment.FILL
 	pane3.addChild(pane3_2,1,1)
 			
 	lm = pane3.layoutManager
@@ -161,7 +164,7 @@ def main():
 	lm.rowHeights = [0,50,0]
 	
 	### Drag buttons
-	b0 = biui.Button()
+	b0 = Button()
 	b0.onMouseDown.add(b0OnDown)
 	b0.onMouseUp.add(b0OnUp)
 	b0.x = pane3.x
@@ -171,7 +174,7 @@ def main():
 	wnd.addChild(b0)
 	
 	
-	b1 = biui.Button()
+	b1 = Button()
 	b1.onMouseDown.add(b0OnDown)
 	b1.onMouseUp.add(b0OnUp)
 	b1.x = pane3.right-15
@@ -185,13 +188,13 @@ def main():
 	###                                      PANEL 4
 	################################################
 		
-	grid = biui.FlexGrid()
+	grid = FlexGrid()
 	grid.x = 10
 	grid.y = 320
 	grid.width = 600
 	grid.height = 600
 		
-	pane = biui.FlexPane()
+	pane = FlexPane()
 	pane.x = 0
 	pane.y = 0
 	pane.width = 600

@@ -1,12 +1,19 @@
+import os
 import math
 import time
 import biui
+from biui.Widgets import Button,Window,ContainerWidget,ScrollNavigator
+from biui.Enum import Alignment
 
 pane = None
 
 def init():
     biui.init()
-    biui.setThemeFolder("./../themes")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
     biui.selectTheme("blocks")
     
 def hndScrollpositionChanged(ev):
@@ -16,63 +23,63 @@ def hndScrollpositionChanged(ev):
 def initWindow(x=0,y=0):
     global pane
 
-    wnd = biui.Window(1024,768)
+    wnd = Window(1024,768)
     wnd.x = x
     wnd.y = y
 
     ##pane = biui.Pane()
-    pane = biui.ContainerWidget()
+    pane = ContainerWidget()
     pane.onScrollPositionChanged.add(hndScrollpositionChanged)
     pane.x = 10
     pane.y = 200
     pane.width = 600
     pane.height = 500
-    pane.alignment = biui.Alignment.FILL
+    pane.alignment = Alignment.FILL
     ##pane.verticalScrollbar = True
     ##pane.horizontalScrollbar = True
     wnd.addChild(pane,0,1)
     
-    sn = biui.ScrollNavigator()
+    sn = ScrollNavigator()
     sn.width = 150
     sn.height = 150
     sn.x = 10
     sn.y = 10
-    sn.alignment = biui.Alignment.FILL
+    sn.alignment = Alignment.FILL
     ##pane.connectScrollNavigator(sn)
     sn.connectPane(pane)
     wnd.addChild(sn,0,0)
 
 
     ##return
-    b = biui.Button()
+    b = Button()
     b.value = "TL"
     b.width = b.height = 50
     b.x = 0
     b.y = 0
     pane.addChild(b)
 
-    b = biui.Button()
+    b = Button()
     b.value = "TR"
     b.width = b.height = 50
     b.x = 1000-50
     b.y = 0
     pane.addChild(b)
     
-    b = biui.Button()
+    b = Button()
     b.value = "BR"
     b.width = b.height = 50
     b.x = 1000-50
     b.y = 1000-50
     pane.addChild(b)
 
-    b = biui.Button()
+    b = Button()
     b.value = "BL"
     b.width = b.height = 50
     b.x = 0
     b.y = 1000-50
     pane.addChild(b)
     
-    b = biui.Button()
+    b = Button()
     b.value = "C"
     b.width = b.height = 50
     b.x = 300

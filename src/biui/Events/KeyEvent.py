@@ -1,7 +1,7 @@
 import biui
-from biui.DOMEvent import DOMEvent
-from biui.KeyModifiers import KeyModifiers
-from biui.Keys import Keys
+from biui.Events import DOMEvent
+from biui.Enum import KeyModifiers
+from biui.Enum import Keys
 
 ### Represents a KeyEvent. 
 ##
@@ -52,6 +52,13 @@ class KeyEvent(DOMEvent):
     @property
     def repeat(self):
         return self.__repeat
+    
+    ###
+    ##
+    ##
+    @property
+    def text(self):
+        return "a"
     
     ###
     ##

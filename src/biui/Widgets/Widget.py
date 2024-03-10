@@ -3,13 +3,16 @@
 from typing import List,Callable
 import biui
 from biui.Color import Color
-from biui.Event import Event
-from biui.KeyEvent import KeyEvent
-from biui.MouseEvent import MouseEvent
-from biui.EventManager import EventManager
-from biui.Alignment import Alignment
-from biui.EventManager import EventManager
+
+from biui.Events import Event
+from biui.Events import KeyEvent
+from biui.Events import MouseEvent
+from biui.Events import EventManager
+
+from biui.Enum import Alignment
 from biui.LayoutManager import LayoutManager
+
+
 
 ##from biui.Window import Window
 
@@ -55,8 +58,6 @@ class Widget():
         theme = biui.getTheme()
         self._themeBackgroundfunction:Callable = theme.drawEmpty        
         ##
-        self.onMouseUp:EventManager = EventManager()
-        ##
         self.onTextInput:EventManager = EventManager()
         ##
         self.onKeyUp:EventManager = EventManager()
@@ -79,7 +80,11 @@ class Widget():
         ##
         self.onBeforeDraw:EventManager = EventManager()
         ##
-        self.onAfterDraw:EventManager = EventManager()        
+        self.onAfterDraw:EventManager = EventManager()
+        ##
+        self.onFocus:EventManager = EventManager()
+        ##
+        self.onFocusLost:EventManager = EventManager()
         ##
         self._resized:bool = False
         ##
@@ -493,6 +498,13 @@ class Widget():
         if self._maxHeight < self._height:
             self.height = self._maxHeight
         
+    ###
+    ##
+    ##
+    @property
+    def hasChildren(self):
+        return False
+    
     ### Checks if the given child is a child object or
     ##  if it is the current widget.
     ##
@@ -528,7 +540,7 @@ class Widget():
         self.parent._recordDirtyRect(box)
         
     ### Checks if the widget is invalide.
-    ##  If it is invalide, it has to bee redrawn
+    ##  If it is invalide, it has to be redrawn
     ##  at the next refresh.
     ##
     ##
@@ -565,9 +577,11 @@ class Widget():
     ## todo: hinting
     @property
     def window(self):#pylint: disable=inconsistent-return-statements
+        ##TODO: Any thowbacks from including here?
+        from biui.Widgets import Window
         parent = self.parent
         while True:
-            if isinstance(parent,biui.Window):#pylint: disable=no-else-return
+            if isinstance(parent,Window):#pylint: disable=no-else-return
                 return parent
             elif parent == None:
                 return
@@ -782,6 +796,6 @@ class Widget():
     ##  @return                    None
     ##
     def focus(self):
-        biui.setFocus(self)
+        self.window.setFocus(self)
         
         

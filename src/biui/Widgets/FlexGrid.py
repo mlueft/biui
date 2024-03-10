@@ -1,10 +1,15 @@
 #include "biui.inc"
 
-from typing import cast,Union
 import biui
-from biui.ContainerWidget import ContainerWidget
-from biui.FlexPane import FlexPane
-from biui.MouseEvent import MouseEvent
+from typing import cast,Union
+
+from biui.Widgets import ContainerWidget
+from biui.Widgets import FlexPane
+from biui.Widgets import FlexSpacer
+
+from biui.Events import MouseEvent,EventManager
+from biui.Events import Event
+from biui.Enum import Alignment
 
 ### 
 ##
@@ -44,7 +49,7 @@ class FlexGrid(ContainerWidget):
     ### Handles a vertical split event of a child FlexPanel.
     ##
     ##   
-    def __hndChildOnVerticalSplit(self,ev:biui.Event)->None:
+    def __hndChildOnVerticalSplit(self,ev:Event)->None:
         
         oldPane = ev.eventSource
         
@@ -52,7 +57,7 @@ class FlexGrid(ContainerWidget):
         if oldPane.width <= 2*oldPane.minWidth:
             return
         
-        newPane = biui.FlexPane()
+        newPane = FlexPane()
         newPane.x = oldPane.x+oldPane.width/2+BIUI_FLEXGRID_SPACER_WIDTH/2
         newPane.y = oldPane.y
         newPane.height = oldPane.height
@@ -91,12 +96,12 @@ class FlexGrid(ContainerWidget):
         self.addHorizontalSpacer(spacer)
         self.__saveLayout()
         
-        self.__onHorizontalSpacerDown(biui.Event(spacer))
+        self.__onHorizontalSpacerDown(Event(spacer))
         
     ### Handles a horicontal split event of a child Flexpanel.
     ##
     ##
-    def __hndChildOnHorizontalSplit(self,ev:biui.Event)->None:
+    def __hndChildOnHorizontalSplit(self,ev:Event)->None:
 
         oldPane = ev.eventSource
 
@@ -104,7 +109,7 @@ class FlexGrid(ContainerWidget):
         if oldPane.height <= 2*oldPane.minHeight:
             return
                 
-        newPane = biui.FlexPane()
+        newPane = FlexPane()
         newPane.x = oldPane.x
         newPane.y = oldPane.y+oldPane.height/2+BIUI_FLEXGRID_SPACER_WIDTH/2
         newPane.width = oldPane.width
@@ -142,16 +147,16 @@ class FlexGrid(ContainerWidget):
         self.addVerticalSpacer(spacer)
         self.__saveLayout()
         
-        self.__onVerticalSpacerDown(biui.Event(spacer))
+        self.__onVerticalSpacerDown(Event(spacer))
 
     ### Returns a new FlexSpacer object.
     ##
     ##
-    def _createSpacer(self, isVertical)->biui.FlexSpacer:
-        spacer = biui.FlexSpacer(isVertical)
+    def _createSpacer(self, isVertical)->FlexSpacer:
+        spacer = FlexSpacer(isVertical)
         spacer.height = BIUI_FLEXGRID_SPACER_WIDTH
         spacer.width = BIUI_FLEXGRID_SPACER_WIDTH
-        spacer.alignment = biui.Alignment.ABSOLUTE
+        spacer.alignment = Alignment.ABSOLUTE
         return spacer  
           
     ### Returns the spacer left to the pane.
@@ -419,7 +424,7 @@ class FlexGrid(ContainerWidget):
     ### Handles a joinUp event of a child FlexPanel.
     ##
     ##
-    def __hndChildOnJoinUp(self,ev:biui.Event)->None:
+    def __hndChildOnJoinUp(self,ev:Event)->None:
         self.__simplifySpacer()
         stayPane:FlexPane = cast(FlexPane,ev.eventSource)
         
@@ -465,7 +470,7 @@ class FlexGrid(ContainerWidget):
     ### Handles a joinDown event of a child FlexPanel.
     ##
     ##
-    def __hndChildOnJoinDown(self,ev:biui.Event)->None:
+    def __hndChildOnJoinDown(self,ev:Event)->None:
         self.__simplifySpacer()
         stayPane = cast(FlexPane,ev.eventSource)
         
@@ -512,7 +517,7 @@ class FlexGrid(ContainerWidget):
     ### Handles a joinLeft event of a child FlexPanel.
     ##
     ##
-    def __hndChildOnJoinLeft(self,ev:biui.Event)->None:
+    def __hndChildOnJoinLeft(self,ev:Event)->None:
         self.__simplifySpacer()
         stayPane = cast(FlexPane,ev.eventSource)
         
@@ -558,7 +563,7 @@ class FlexGrid(ContainerWidget):
     ### Handles a joinRight event of a child FlexPanel.
     ##
     ##
-    def __hndChildOnJoinRight(self,ev:biui.Event)->None:
+    def __hndChildOnJoinRight(self,ev:Event)->None:
         self.__simplifySpacer()
         stayPane = cast(FlexPane,ev.eventSource)
         
@@ -604,8 +609,8 @@ class FlexGrid(ContainerWidget):
     ### Adds a FlexPane to the Layout.
     ##
     ##
-    def addFlexPane(self,child:biui.FlexPane)->None:
-        child.alignment = biui.Alignment.ABSOLUTE
+    def addFlexPane(self,child:FlexPane)->None:
+        child.alignment = Alignment.ABSOLUTE
         super().addChild(child)
         child.onHorizontalSplit.add( self.__hndChildOnHorizontalSplit )
         child.onVerticalSplit.add( self.__hndChildOnVerticalSplit )
@@ -644,7 +649,7 @@ class FlexGrid(ContainerWidget):
     ### Removes a FlexPane object.
     ##
     ##
-    def removeFlexPane(self,child:biui.FlexPane)->None:
+    def removeFlexPane(self,child:FlexPane)->None:
         super().removeChild(child)
         self._panes.remove(child)
         for s in self._spacers:
@@ -659,7 +664,7 @@ class FlexGrid(ContainerWidget):
     ### Adds a horizontal spacer object.
     ##
     ##           
-    def addHorizontalSpacer(self,child:biui.FlexSpacer)->None:
+    def addHorizontalSpacer(self,child:FlexSpacer)->None:
         child.onMouseDown.add(self.__onHorizontalSpacerDown)
         super().addChild(child)
         self._spacers.append(child)
@@ -667,7 +672,7 @@ class FlexGrid(ContainerWidget):
     ### Adds a vertical spacer object.
     ##
     ##           
-    def addVerticalSpacer(self,child:biui.FlexSpacer)->None:
+    def addVerticalSpacer(self,child:FlexSpacer)->None:
         child.onMouseDown.add(self.__onVerticalSpacerDown)
         super().addChild(child)
         self._spacers.append(child)
@@ -675,7 +680,7 @@ class FlexGrid(ContainerWidget):
     ### Removes a vertical spacer object.
     ##
     ##
-    def removeSpacer(self,child:biui.FlexSpacer)->None:
+    def removeSpacer(self,child:FlexSpacer)->None:
         child.onMouseDown.remove(self.__onHorizontalSpacerDown)
         child.onMouseDown.remove(self.__onVerticalSpacerDown)
         super().removeChild(child)
@@ -877,7 +882,7 @@ class FlexGrid(ContainerWidget):
     ### Handles a mouse down event of a horizontal spacer.
     ##
     ##
-    def __onHorizontalSpacerDown(self,ev:biui.Event)->None:
+    def __onHorizontalSpacerDown(self,ev:Event)->None:
         ##print("__onHorizontalSpacerDown")
         
         ## Store dragged spacer.
@@ -894,7 +899,7 @@ class FlexGrid(ContainerWidget):
     ### Handles a mouse down event of a vertical spacer.
     ##
     ##
-    def __onVerticalSpacerDown(self,ev:biui.Event)->None:
+    def __onVerticalSpacerDown(self,ev:Event)->None:
         ##print("__onVerticalSpacerDown")
         
         ## Store dragged spacer.

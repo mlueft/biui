@@ -2,8 +2,11 @@
 import sdl2
 
 import biui
-from biui.ContainerWidget import ContainerWidget
- 
+from biui.Widgets import ContainerWidget
+from biui.Widgets import Spacer
+from biui.Events import EventManager
+from biui.Events import Event
+
 ###
 ##
 ##
@@ -21,7 +24,7 @@ class ScrollNavigator(ContainerWidget):
         self.__isHorizontal = False
         self.__isVertical = False
         
-        self.__dragger = biui.Spacer()
+        self.__dragger = Spacer()
         self.__dragger.width = 30
         self.__dragger.height = 30
         self.__dragger.onMouseDown.add(self.__hndDraggerOnMouseDown)
@@ -30,7 +33,7 @@ class ScrollNavigator(ContainerWidget):
         self.__draggerDownPosition = None
         
         ##
-        self.onScrollPositionChanged = biui.EventManager()
+        self.onScrollPositionChanged = EventManager()
         
         self.onResized.add(self.__hndOnResized)
         
@@ -232,7 +235,7 @@ class ScrollNavigator(ContainerWidget):
         )
         
         if x != self.__dragger.x or y != self.__dragger.y:
-            self.onScrollPositionChanged.provoke(biui.Event(self))
+            self.onScrollPositionChanged.provoke(Event(self))
         
     ### Returns a tuple with x and y of the current scrollposition.
     ##  Values are between 0 and 1 for 0% and 100%.

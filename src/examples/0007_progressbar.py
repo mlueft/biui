@@ -1,27 +1,34 @@
-import sys
+import sys,os
 
 sys.path.append('./')
 
 import math
 import biui
 import time
-   
+from biui.Widgets import Window,Progressbar
+
 def init():
     
     biui.init()
-    biui.setThemeFolder("../themes")
+    biui.setThemeFolder(
+        os.path.abspath(
+            os.path.join(os.getcwd(),"../themes")
+        )
+    )
+    
+    biui.selectTheme("blocks")
     
     ###############################################
     ##                                       WINDOW
     ###############################################
-    wnd = biui.Window(640,480)
+    wnd = Window(640,480)
     wnd.x = 200
     wnd.y = 100
     ##
     ## Buttons
     ##
 
-    slider = biui.Progressbar()
+    slider = Progressbar()
     ##button0.onMouseUp.add(_test.upHandler)
     slider.x = 200
     slider.y = 100
@@ -34,7 +41,7 @@ def init():
     slider.label.color = biui.Color(200,200,200)
     wnd.addChild(slider)
     
-    slider = biui.Progressbar()
+    slider = Progressbar()
     ##button0.onMouseUp.add(_test.upHandler)
     slider.x = 200
     slider.y = 150
@@ -51,7 +58,7 @@ def init():
     slider.showNavigation = False
     wnd.addChild(slider)
     
-    slider = biui.Progressbar()
+    slider = Progressbar()
     ##button0.onMouseUp.add(_test.upHandler)
     slider.x = 200
     slider.y = 200

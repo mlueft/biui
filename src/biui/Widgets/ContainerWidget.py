@@ -2,13 +2,14 @@
 from typing import  List,Callable
 import sdl2
 import biui
-from biui.Event import Event
-from biui.MouseEvent import MouseEvent
-from biui.KeyEvent import KeyEvent
-from biui.EventManager import EventManager
-from biui.Alignment import Alignment 
+from biui.Events import Event
+from biui.Events import MouseEvent
+from biui.Events import KeyEvent
+from biui.Events import EventManager
+from biui.Enum import Alignment 
 from biui.LayoutManager import LayoutManager
-from biui.Widget import Widget
+
+from biui.Widgets import Widget
 
 ### Base class for all container widgets.
 ##
@@ -172,6 +173,13 @@ class ContainerWidget(Widget):
         self._invalidate()
         self.onScrollPositionChanged.provoke(Event(self))
                 
+    ###
+    ##
+    ##
+    @property
+    def hasChildren(self):
+        return len(self._children) > 0
+    
     ### Returns all child elements.
     ##
     ##  @return               A list with Widgets.

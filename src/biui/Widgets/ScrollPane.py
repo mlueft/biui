@@ -2,10 +2,15 @@
 import sdl2
 import biui
 
+from biui.Widgets import ContainerWidget,ScrollNavigator
+from biui.Events import Event
+from biui.Events import EventManager
+from biui.Enum import Alignment
+
 ###
 ##
 ##
-class ScrollPane(biui.ContainerWidget.ContainerWidget):
+class ScrollPane(ContainerWidget):
     
     ###
     ##
@@ -17,19 +22,19 @@ class ScrollPane(biui.ContainerWidget.ContainerWidget):
         self.layoutManager.rowHeights = [0,1]
         
         self.__contentPane = biui.Pane()
-        self.__contentPane.alignment = biui.Alignment.FILL
+        self.__contentPane.alignment = Alignment.FILL
         self.__contentPane.onScrollPositionChanged.add(self.__hndOnScrollPositionChanged)
         super().addChild(self.__contentPane,0,0)
         
         ##
-        self.onScrollPositionChanged = biui.EventManager()
+        self.onScrollPositionChanged = EventManager()
         ##
         self.__verticalScrollbar = None
         ##
         self.__horizontalScrollbar = None
         
     def __hndOnScrollPositionChanged(self,ev):
-        self.onScrollPositionChanged.provoke(biui.Event(self))
+        self.onScrollPositionChanged.provoke(Event(self))
         
     ###
     ##
@@ -71,8 +76,8 @@ class ScrollPane(biui.ContainerWidget.ContainerWidget):
         
         ## add scrollbar
         super().layoutManager.columnWidths = [0,20]
-        sn = biui.ScrollNavigator()
-        sn.alignment = biui.Alignment.FILL
+        sn = ScrollNavigator()
+        sn.alignment = Alignment.FILL
         sn.isVertical = True
         self.__contentPane.connectScrollNavigator(sn)
         super().addChild(sn,1,0)
@@ -103,8 +108,8 @@ class ScrollPane(biui.ContainerWidget.ContainerWidget):
         
         ## add scrollbar
         super().layoutManager.rowHeights = [0,20]
-        sn = biui.ScrollNavigator()
-        sn.alignment = biui.Alignment.FILL
+        sn = ScrollNavigator()
+        sn.alignment = Alignment.FILL
         sn.isHorizontal = True
         self.__contentPane.connectScrollNavigator(sn)
         super().addChild(sn,0,1)

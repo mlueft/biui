@@ -1,5 +1,7 @@
 import biui
-from biui.ContainerWidget import ContainerWidget
+from biui.Widgets import ContainerWidget
+from biui.Events import EventManager
+from biui.Enum import Alignment
 
 ###
 ##
@@ -13,8 +15,23 @@ class MenuPane(ContainerWidget):
         self._themeForegroundfunction = theme.drawMenuPaneAfterChildren        
         
         ##
-        self.onItemClick = biui.EventManager()
+        self.onItemClick = EventManager()
         
+        self.onBeforeDraw.add(self.__hndOnBeforeDraw)
+        
+    ###
+    ##
+    ##
+    def __hndOnBeforeDraw(self,ev):
+        ## We have to find the size of the biggest item
+        ## the pane. Items are resized by layout manager.
+        margin = 10
+        maxWidth = 0
+        for child in self._children:
+            maxWidth = max( maxWidth, child.label.width)
+            
+        self.width = maxWidth+margin
+
 
     ### @see biui.ContainerWidget.addChild
     ##
@@ -34,7 +51,7 @@ class MenuPane(ContainerWidget):
     ##
     def addItem(self,child):
         child.onItemClick.add(self.__hndItemOnItemClick)
-        super().addChild(child)
+        super().addChild(child,0,len(self._children))
         
     ### Removes a menu item from the menu pane.
     ##

@@ -1,6 +1,6 @@
 import biui
 
-from biui.DOMEvent import DOMEvent
+from biui.Events import DOMEvent
 ### Represents a mouse event for onMouseDown and so on.
 ##
 ##

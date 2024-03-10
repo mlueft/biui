@@ -1,5 +1,5 @@
 import biui
-from biui.Widget import Widget
+from biui.Widgets import Widget
 
 ### General spacer object.
 ##  It can be used in the layoutmanager

@@ -31,5 +31,6 @@
 #define BIUI_ERR_MENUBAR_REMOVECHILD "Menubar.removeChild: Use removeItem() instead!"
 #define BIUI_ERR_MENUPANE_ADDCHILD "MenuPane.addChild: Use addItem() instead!"
 #define BIUI_ERR_MENUPANE_REMOVECHILD "MenuPane.removeChild: Use removeItem() instead!"
+#define BIUI_ERR_PROPERTY_NOT_EXISIS "This Property doesn't exisis!"
 
 #endif

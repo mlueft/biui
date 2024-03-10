@@ -1,5 +1,5 @@
 import biui
-from biui.Widget import Widget
+from biui.Widgets import Widget
 
 ###
 ##

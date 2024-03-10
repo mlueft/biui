@@ -1,9 +1,11 @@
 import sys
 from reportlab.graphics.barcode.qrencoder import QRFNC1Second
-
+from biui.Widgets import Window,Pane
 sys.path.append('./')
 
 import biui
+from biui.Enum import Alignment
+
 import time
 import math
 
@@ -22,19 +24,19 @@ def init():
     ###                                       WINDOW
     ################################################
     
-    wnd = biui.Window(width,height)
+    wnd = Window(width,height)
     wnd.y = 0
     
     for i in range(5):
-        pane0 = biui.Pane()
+        pane0 = Pane()
         pane0.x = 10
         pane0.y = 10
         pane0.width = 300
         pane0.height = 300
-        btn = biui.Button()
+        btn = Button()
         btn.x = 10
         btn.y = 10
-        btn.alignment = biui.Alignment.FILL
+        btn.alignment = Alignment.FILL
 
         
         pane0.layoutManager.rowHeights = [10,0,10]

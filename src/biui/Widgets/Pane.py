@@ -2,8 +2,10 @@
 import sdl2 
 
 import biui
-from biui.ContainerWidget import ContainerWidget
- 
+from biui.Widgets import ContainerWidget
+from biui.Widgets import ScrollNavigator
+from biui.Enum import Alignment
+
 ###
 ##
 ##
@@ -15,8 +17,8 @@ class Pane(ContainerWidget):
     def __init__(self):
         
         super().__init__()
-        self.__contentPane = biui.ContainerWidget()
-        self.__contentPane.alignment = biui.Alignment.FILL
+        self.__contentPane = ContainerWidget()
+        self.__contentPane.alignment = Alignment.FILL
         super().addChild(self.__contentPane,0,0)
         
         ##
@@ -72,8 +74,8 @@ class Pane(ContainerWidget):
         
         ## add scrollbar
         super().layoutManager.columnWidths = [0,20]
-        sn = biui.ScrollNavigator()
-        sn.alignment = biui.Alignment.FILL
+        sn = ScrollNavigator()
+        sn.alignment = Alignment.FILL
         sn.isVertical = True
         self.__contentPane.connectScrollNavigator(sn)
         super().addChild(sn,1,0)
@@ -104,8 +106,8 @@ class Pane(ContainerWidget):
         
         ## add scrollbar
         super().layoutManager.rowHeights = [0,20]
-        sn = biui.ScrollNavigator()
-        sn.alignment = biui.Alignment.FILL
+        sn = ScrollNavigator()
+        sn.alignment = Alignment.FILL
         sn.isHorizontal = True
         self.__contentPane.connectScrollNavigator(sn)
         super().addChild(sn,0,1)

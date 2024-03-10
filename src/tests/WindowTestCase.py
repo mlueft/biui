@@ -1,12 +1,19 @@
 import unittest
 import biui
-
+from biui.Widgets import Window
+import os
 
 class WindowTestCase(unittest.TestCase):
     
     def setUp(self):
         biui.init()
-        biui.setThemeFolder("../../themes")
+        biui.setThemeFolder(
+            os.path.abspath(
+                os.path.join(os.getcwd(),"../themes")
+            )
+        )
+    
+        biui.selectTheme("blocks")
  
     def tearDown(self):
         ##biui.quit()
@@ -14,42 +21,42 @@ class WindowTestCase(unittest.TestCase):
     
 
     def testX(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         value = 72
         subject.x = value
         """test Window.x"""
         assert subject.x == value, "Window.x not set correctly."
                 
     def testY(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         value = 75
         subject.y = value
         """test Window.y"""
         assert subject.y == value, "Window.y not set correctly."
         
     def testWidth(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         value = 54
         subject.width = value
         """test Window.width"""
         assert subject.width == value, "Window.width not set correctly."
         
     def testHeight(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         value = 34
         subject.height = value
         """test Window.height"""
         assert subject.height == value, "Window.height not set correctly."
     
     def testTitle(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         value = "Window title!"
         subject.title = value
         """test Window.title"""
         assert subject.title == value, "Window.title not set correctly."
         
     def testRight(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -62,7 +69,7 @@ class WindowTestCase(unittest.TestCase):
         assert subject.height == 200, "Window.right not set correctly."
             
     def testLeft(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -82,7 +89,7 @@ class WindowTestCase(unittest.TestCase):
             
         ##print( dMode.w,dMode.h)
                 
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -95,7 +102,7 @@ class WindowTestCase(unittest.TestCase):
         assert subject.height == 250, "Window.top not set correctly."
         
     def testBottom(self):
-        subject = biui.Window(1024,768)
+        subject = Window(1024,768)
         subject.x = 100
         subject.y = 100
         subject.width = 200

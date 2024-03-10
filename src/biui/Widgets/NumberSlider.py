@@ -1,5 +1,8 @@
 import biui
-from biui.ContainerWidget import ContainerWidget
+from biui.Widgets import ContainerWidget
+from biui.Widgets import Button
+from biui.Widgets import Progressbar
+from biui.Enum import Alignment
 
 ###
 ##
@@ -25,29 +28,29 @@ class NumberSlider(ContainerWidget):
         ##
         self._screenDownPosition = None
         ##
-        self._decButton = biui.Button()
+        self._decButton = Button()
         self._decButton.name = "buttonDec"
         self._decButton.minWidth=1
         self._decButton.minHeight=1
         self._decButton.value = "-"
-        self._decButton.alignment = biui.Alignment.FILL
+        self._decButton.alignment = Alignment.FILL
         self._decButton.onMouseUp.add(self.__hndOnDecMouseUp)
         self.addChild(self._decButton,0,0)
         
         ##
-        self._incButton = biui.Button()
+        self._incButton = Button()
         self._incButton.name = "buttonInc"
         self._incButton.minWidth=1
         self._incButton.minHeight=1
         self._incButton.value = "+"
-        self._incButton.alignment = biui.Alignment.FILL
+        self._incButton.alignment = Alignment.FILL
         self._incButton.onMouseUp.add(self.__hndIncOnMouseUp)
         self.addChild(self._incButton,2,0)
         
         ##
-        self._bar = biui.Progressbar()
+        self._bar = Progressbar()
         self._bar.name = "progressbar"
-        self._bar.alignment = biui.Alignment.FILL
+        self._bar.alignment = Alignment.FILL
         self._bar.onMouseDown.add(self.__hndBarOnMouseDown)
         self.addChild(self._bar,1,0)
         

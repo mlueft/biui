@@ -1,19 +1,27 @@
+import os
 import unittest
 import biui
-
+from biui.Widgets import Widget
+from biui.Enum import Alignment
 
 class WidgetTestCase(unittest.TestCase):
     
     def setUp(self):
         biui.init()
-        biui.setThemeFolder("../../themes")
+        biui.setThemeFolder(
+            os.path.abspath(
+                os.path.join(os.getcwd(),"../themes")
+            )
+        )
+    
+        biui.selectTheme("blocks")
  
     def tearDown(self):
         ## biui.quit()
         pass
     
     def testPos(self):
-        subject = biui.Widget()
+        subject = Widget()
         valueX = 72
         valueY = 100
         subject.x = valueX
@@ -22,7 +30,7 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.position == (valueX, valueY), "Widget.position not set correctly."
         
     def testSize(self):
-        subject = biui.Widget()
+        subject = Widget()
         valueW = 72
         valueH = 100
         subject.width = valueW
@@ -31,21 +39,21 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.size == (valueW, valueH), "Widget.size not set correctly."
     
     def testX(self):
-        subject = biui.Widget()
+        subject = Widget()
         value = 72
         subject.x = value
         """test Widget.x"""
         assert subject.x == value, "Widget.x not set correctly."
                 
     def testY(self):
-        subject = biui.Widget()
+        subject = Widget()
         value = 75
         subject.y = value
         """test Widget.y"""
         assert subject.y == value, "Widget.y not set correctly."
 
     def testLeft(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -65,7 +73,7 @@ class WidgetTestCase(unittest.TestCase):
             
         ##print( dMode.w,dMode.h)
                 
-        subject = biui.Widget()
+        subject = Widget()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -78,7 +86,7 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.height == 250, "Widget.top not set correctly."
         
     def testRight(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -91,7 +99,7 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.height == 200, "Widget.right not set correctly."
             
     def testBottom(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -104,66 +112,66 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.height == 150, "Widget.bottom not set correctly."
 
     def testWidth(self):
-        subject = biui.Widget()
+        subject = Widget()
         value = 54
         subject.width = value
         """test Widget.width"""
         assert subject.width == value, "Widget.width not set correctly."
     
     def testMinWidth0(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.minWidth = 50
         """test Widget.minWidth"""
         assert subject.minWidth == 50, "Widget.minWidth not set correctly."
 
     def testMinWidth1(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.width = 50
         subject.minWidth = 100
         """test Widget.minWidth"""
         assert subject.width == 100, "Widget.width not corrected."
     
     def testmaxWidth0(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.maxWidth = 50
         """test Widget.maxWidth"""
         assert subject.maxWidth == 50, "Widget.maxWidth not set correctly."
         
     def testmaxWidth1(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.width = 150
         subject.maxWidth = 50
         """test Widget.maxWidth"""
         assert subject.width == 50, "Widget.width not corrected."
         
     def testHeight(self):
-        subject = biui.Widget()
+        subject = Widget()
         value = 34
         subject.height = value
         """test Widget.height"""
         assert subject.height == value, "Widget.height not set correctly."
     
     def testMinHeight0(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.minHeight = 50
         """test Widget.minHeight"""
         assert subject.minHeight == 50, "Widget.minHeight not set correctly."
 
     def testMinHeight1(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.height = 50
         subject.minHeight = 150
         """test Widget.minHeight"""
         assert subject.height == 150, "Widget.height not corrected."
             
     def testmaxHeight0(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.maxHeight = 50
         """test Widget.maxHeight"""
         assert subject.maxHeight == 50, "Widget.maxHeight not set correctly."
 
     def testmaxHeight1(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.height=150
         subject.maxHeight = 50
         """test Widget.maxHeight"""
@@ -173,10 +181,10 @@ class WidgetTestCase(unittest.TestCase):
         assert 1==1, ""
     
     def testAlignment(self):
-        subject = biui.Widget()
-        subject.alignment = biui.Alignment.FILL
+        subject = Widget()
+        subject.alignment = Alignment.FILL
         """test Widget.alignment"""
-        assert subject.alignment == biui.Alignment.FILL, "Widget.alignment not set correctly."
+        assert subject.alignment == Alignment.FILL, "Widget.alignment not set correctly."
     
     def testDiretyRect(self):
         assert 1==1, ""
@@ -200,14 +208,14 @@ class WidgetTestCase(unittest.TestCase):
         assert 1==1, ""
     
     def testToLocal0(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.x=150
         subject.y=50
         """test Widget.toLocal"""
         assert subject.toLocal((160,60)) == (10,10), "Widget.toLocal not calculated correctly."
     
     def testToGlobal0(self):
-        subject = biui.Widget()
+        subject = Widget()
         subject.x=150
         subject.y=50
         """test Widget.toGlobal"""

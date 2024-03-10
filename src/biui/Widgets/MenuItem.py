@@ -1,6 +1,9 @@
 
 import biui
-from biui.Button import Button
+from biui.Widgets import Button,MenuItem,MenuPane,Menubar
+from biui.Events import EventManager
+from biui.Events import Event
+from biui.Enum import Alignment
 
 ###
 ##
@@ -15,14 +18,15 @@ class MenuItem(Button):
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawMenubuttonBeforeChildren
         self._themeForegroundfunction = theme.drawMenubuttonAfterChildren
-        self.alignment = biui.Alignment.DOCK_LEFT
+        self.alignment = Alignment.FILL
         self.value = "Menupoint"
         self.label.color = biui.Color(0,0,0,0)
-        
+        self.label.alignment = Alignment.CENTER_LEFT
+        self.layoutManager.columnWidths = [5,0,5]
         ## Is fired when the item is cklicked.
-        self.onItemClick = biui.EventManager()
+        self.onItemClick = EventManager()
         ## Is fired when a child has to show a submenu.
-        self.onShowSubmenu = biui.EventManager()
+        self.onShowSubmenu = EventManager()
 
         self._items = []
         
@@ -70,7 +74,8 @@ class MenuItem(Button):
     ##
     ##
     def __hndOnBeforeDraw(self,ev):
-        self.width = self.label.width+10
+        margin = 10
+        self.width = self.label.width+margin
         
     ### Adds a item to the sub menu.
     ##
@@ -79,6 +84,8 @@ class MenuItem(Button):
     def addItem(self,child):
         child.onShowSubmenu.add(self.__hndChildSubmenu)
         self._items.append(child)
+        if type(self.parent) != Menubar:
+            self.label.format = "{} >"
         
     ### Removes an item from the sub menu.
     ##
@@ -87,6 +94,8 @@ class MenuItem(Button):
     def removeItem(self,child):
         child.onShowSubmenu.remove(self.__hndChildSubmenu)
         self._items.remove(child)
+        if len(self._children) == 0:
+            self.label.format = "{}"
         
     ###
     ##
@@ -100,7 +109,7 @@ class MenuItem(Button):
     def __hndOnMouseEnter(self,ev):
         ##print("MenuItem::__hndOnMouseEnter")
         ##if self.hasSubmenu:
-        self.onShowSubmenu.provoke(biui.Event(self))
+        self.onShowSubmenu.provoke(Event(self))
         
     ### Forwards the event of subitems, so it reaches the menubar
     ##  The menubar handles displaying submenues
@@ -116,15 +125,15 @@ class MenuItem(Button):
         if self.__subMenuWidget != None:
             return self.__subMenuWidget
         
-        container = biui.MenuPane()
+        container = MenuPane()
         
         height = 0
         for item in self._items:
-            item.alignment = biui.Alignment.DOCK_TOP
+            item.alignment = Alignment.DOCK_TOP
             height += item.height
             container.addItem(item)
         
         container.height = height
-        container.alignment = biui.Alignment.ABSOLUTE
+        container.alignment = Alignment.ABSOLUTE
         self.__subMenuWidget = container
         return container

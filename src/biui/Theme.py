@@ -124,7 +124,7 @@ class Theme():
     ### Draws nothing.
     ##
     ## 
-    def drawEmpty(self, renderer, widget, texture):
+    def drawEmpty(self, widget, texture):
         return
     
     ########################################################
@@ -152,7 +152,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ##
-    def drawWindowBeforeChildren(self, renderer, widget, texture):
+    def drawWindowBeforeChildren(self, widget, texture):
+        renderer = widget.renderer
+        
         if widget.backColor:
             result = True
             color = widget.backColor
@@ -167,7 +169,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawWindowAfterChildren(self, renderer, widget, texture):
+    def drawWindowAfterChildren(self, widget, texture):
+        renderer = widget.renderer
+        
         if widget.borderColor:
             result = True
             color = widget.borderColor
@@ -187,7 +191,9 @@ class Theme():
     ### Is called before the window child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawFlexGridBeforeChildren(self, renderer, widget, texture):
+    def drawFlexGridBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result = True
             color = widget.backColor
@@ -202,7 +208,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawFlexGridAfterChildren(self, renderer, widget, texture):
+    def drawFlexGridAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result = True
             color = widget.borderColor
@@ -224,7 +232,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawFlexPaneBeforeChildren(self, renderer, widget, texture):
+    def drawFlexPaneBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result = True
             color = widget.backColor
@@ -239,7 +249,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawFlexPaneAfterChildren(self, renderer, widget, texture):
+    def drawFlexPaneAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result = True
             color = widget.borderColor
@@ -262,7 +274,9 @@ class Theme():
     ### Is called to draw a button.
     ##
     ##
-    def drawFlexSpacer(self, renderer, widget, texture):
+    def drawFlexSpacer(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result = True
             color = widget.backColor
@@ -270,7 +284,7 @@ class Theme():
             result = False
             color = self._shema["FLEXSPACER"]
         
-        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
         return result
     
     ########################################################
@@ -282,7 +296,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawMenubarBeforeChildren(self, renderer, widget, texture):
+    def drawMenubarBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result = True
             color = widget.backColor
@@ -297,7 +313,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawMenubarAfterChildren(self, renderer, widget, texture):
+    def drawMenubarAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result = True
             color = widget.borderColor
@@ -317,7 +335,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawMenuPaneBeforeChildren(self, renderer, widget, texture):
+    def drawMenuPaneBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -332,7 +352,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawMenuPaneAfterChildren(self, renderer, widget, texture):
+    def drawMenuPaneAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result= True
             color = widget.borderColor
@@ -352,7 +374,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawMenubuttonBeforeChildren(self, renderer, widget, texture):
+    def drawMenubuttonBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         
         state = widget.state
 
@@ -392,7 +416,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawMenubuttonAfterChildren(self, renderer, widget, texture):
+    def drawMenubuttonAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result= True
             color = widget.borderColor
@@ -412,7 +438,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawPaneBeforeChildren(self, renderer, widget, texture):
+    def drawPaneBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -427,7 +455,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawPaneAfterChildren(self, renderer, widget, texture):
+    def drawPaneAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result= True
             color = widget.borderColor
@@ -449,7 +479,9 @@ class Theme():
     ### Is called to draw a button.
     ##
     ##
-    def drawButtonBeforeChildren(self, renderer, widget, texture):
+    def drawButtonBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         state = widget.state
         if state == ButtonStates.OVER:
             if widget.backColorOver:
@@ -486,7 +518,9 @@ class Theme():
     ###
     ##
     ##
-    def drawButtonAfterChildren(self, renderer, widget, texture):
+    def drawButtonAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result= True
             color = widget.borderColor
@@ -506,7 +540,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawButtonGroupBeforeChildren(self, renderer, widget, texture):
+    def drawButtonGroupBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -521,7 +557,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawButtonGroupAfterChildren(self, renderer, widget, texture):
+    def drawButtonGroupAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result= True
             color = widget.borderColor
@@ -541,7 +579,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawProgressbarBeforeChildren(self, renderer, widget, texture):
+    def drawProgressbarBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -570,7 +610,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawProgressbarAfterChildren(self, renderer, widget, texture):
+    def drawProgressbarAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result= True
             color = widget.borderColor
@@ -598,10 +640,9 @@ class Theme():
     ### 
     ##  
     ##  
-    def drawLabel(self, renderer, widget, texture):
-
-        ##p = (0,0)
-        p = widget.position
+    def drawLabel(self, widget, texture):
+        renderer = widget.window.renderer
+        
         
         if widget.backColor:
             result= True
@@ -610,8 +651,9 @@ class Theme():
             result = False
             color = self._shema["LABEL_BACKGROUND"]
     
-        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
-                
+        ##PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
+        
+
         tx = widget.font.render(
             renderer,
             widget.format.format(widget.value),
@@ -624,19 +666,24 @@ class Theme():
         ## or of the rendered text, if it is smaller than the widget.
         if not widget.autoSize:
             r = (r[0],r[1],min(r[2],widget.width),min(r[3],widget.height))
-            
-        PYSDL2_RENDER_COPY1(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
+        
+        ## draw background
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,r)
+        
+                
+        PYSDL2_RENDER_COPY1(renderer,texture,tx,r,r)
+        
         PYSDL2_DESTROYTEXTURE( tx )
 
+        ## draw border
         if widget.borderColor:
-            result= True
             color = widget.borderColor
         else:
-            result = False
             color = self._shema["LABEL_BORDER"]
         
-        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
-        return result
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
+        
+        return None
             
     ########################################################
     ##
@@ -647,7 +694,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawCheckboxBeforeChildren(self, renderer, widget, texture):
+    def drawCheckboxBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -706,7 +755,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawCheckboxAfterChildren(self, renderer, widget, texture):
+    def drawCheckboxAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -726,7 +777,9 @@ class Theme():
     ### Is called to draw a spacer.
     ##
     ##
-    def drawSpacer(self, renderer, widget, texture):
+    def drawSpacer(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -734,7 +787,7 @@ class Theme():
             result = False
             color = self._shema["SPACER_BACKGROUND"]
         
-        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
         return result
 
     ########################################################
@@ -746,7 +799,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawScrollNavigatorBeforeChildren(self, renderer, widget, texture):
+    def drawScrollNavigatorBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -761,7 +816,9 @@ class Theme():
     ##  So it is used to draw everything that has to be
     ##  top most like border
     ##
-    def drawScrollNavigatorAfterChildren(self, renderer, widget, texture):
+    def drawScrollNavigatorAfterChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.borderColor:
             result= True
             color = widget.borderColor
@@ -781,7 +838,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawImage(self, renderer, widget, texture):
+    def drawImage(self, widget, texture):
+        renderer = widget.window.renderer
+        
         
         if widget.backColor:
             result= True
@@ -790,11 +849,11 @@ class Theme():
             result = False
             color = self._shema["IMAGE_BACKGROUND"]
         
-        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
         
         ## Draw image
         img = self._lib.getImage(renderer,widget.file,widget.width,widget.height)
-        r = (widget.x,widget.y,widget.width,widget.height)
+        r = (0,0,widget.width,widget.height)
         PYSDL2_RENDER_COPY1(renderer,texture,img,r,r)        
         
         if widget.borderColor:
@@ -804,7 +863,7 @@ class Theme():
             result = False
             color = self._shema["IMAGE_BORDER"]
         
-        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(widget.x,widget.y,widget.width,widget.height))
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
         return result
         
     ########################################################
@@ -816,7 +875,9 @@ class Theme():
     ### Is called before the child objects are drawn.
     ##  So, it is used to draw the background.
     ## 
-    def drawTextFieldBeforeChildren(self, renderer, widget, texture):
+    def drawTextFieldBeforeChildren(self, widget, texture):
+        renderer = widget.window.renderer
+        
         if widget.backColor:
             result= True
             color = widget.backColor
@@ -826,7 +887,7 @@ class Theme():
         
         p = widget.position
         
-        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
                 
         tx = widget.font.render(
             renderer,
@@ -838,7 +899,7 @@ class Theme():
         
         r = (r[0],r[1],min(r[2],widget.width),min(r[3],widget.height))
             
-        PYSDL2_RENDER_COPY1(renderer,texture,tx,(p[0],p[1],r[2],r[3]),r)
+        PYSDL2_RENDER_COPY1(renderer,texture,tx,(0,0,r[2],r[3]),r)
         
         PYSDL2_DESTROYTEXTURE( tx )  
 
@@ -847,7 +908,7 @@ class Theme():
         ## TODO: Draw the cursor
         if widget.cursorVisible:
             pos = widget.getCursorPosition()
-            cb = (p[0]+pos,p[1],2,widget.height)
+            cb = (pos,0,2,widget.height)
             PYSDL2_DRAWRECTFILLED(renderer,texture,Color(255,0,0,255).rgba,cb)
 
 
@@ -863,6 +924,6 @@ class Theme():
             result = False
             color = self._shema["TEXTFIELD_BORDER"]
         
-        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
+        PYSDL2_DRAWRECT(renderer,texture,color.rgba,(0,0,widget.width,widget.height))
         return result
     

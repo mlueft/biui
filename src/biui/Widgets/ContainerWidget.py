@@ -1,4 +1,5 @@
 #include "pysdl2.inc"
+
 from typing import  List,Callable
 import sdl2
 import biui
@@ -8,7 +9,6 @@ from biui.Events import KeyEvent
 from biui.Events import EventManager
 from biui.Enum import Alignment 
 from biui.LayoutManager import LayoutManager
-
 from biui.Widgets import Widget
 
 ### Base class for all container widgets.
@@ -140,7 +140,7 @@ class ContainerWidget(Widget):
         if value == self._scrollX:
             return
         
-        value = min(value,self.scrollWidth+self.width)
+        value = min(value,self.scrollWidth)
         value = max(value,0)
         
         self._scrollX = value
@@ -166,7 +166,7 @@ class ContainerWidget(Widget):
         if value == self._scrollY:
             return
         
-        value = min(value,self.scrollHeight+self.height)
+        value = min(value,self.scrollHeight)
         value = max(value,0)
         
         self._scrollY = value
@@ -322,7 +322,7 @@ class ContainerWidget(Widget):
     ### @see Widget._redraw
     ##
     ##  todo: hinting
-    def _redraw(self, texture, forceRedraw:bool=False )->None:
+    def _redraw(self, forceRedraw:bool=False ):
         
         if not self.isInvalide():
             if not forceRedraw:
@@ -331,6 +331,7 @@ class ContainerWidget(Widget):
         ##print( "redraw:{} {}x{} {}".format(self.name,self.x,self.y,forceRedraw))
  
         wnd = self.window
+        renderer = self.window.renderer
         sw = self.width
         sh = self.height
         ##print(sw,sh)
@@ -342,34 +343,36 @@ class ContainerWidget(Widget):
         self._scrollWidth = sw
         self._scrollHeight = sh
         
-        PYSDL2_CREATETEXTURE(wnd.renderer,sw,sh,self._texture)
+        PYSDL2_CREATETEXTURE(renderer,sw,sh,texture)
               
         pos = self.position
         
-        ## we paint on our own surface
-        ## not on the parent´s surface
-        _texture = self._texture
-        self._themeBackgroundfunction(self.window.renderer,self,_texture)
+        self._themeBackgroundfunction(self,texture)
  
-        ## We draw all Children on our own surface        
-        for c in self._children:
-            forceRedraw = self._isInvalide or forceRedraw
-            c._redraw(_texture,forceRedraw)
-                    
-        self._themeForegroundfunction(self.window.renderer,self,_texture)
+        forceRedraw = self._isInvalide or forceRedraw
         
-        ## Now we copy the visible area 
-        ## of our own surface
-        ## on the parent´s surface
-        PYSDL2_RENDER_COPY1(
-            self.window.renderer,
-            texture,
-            _texture,
-            (pos[0],pos[1],self.width,self.height),
-            (self.scrollX,self.scrollY,self.width,self.height)
-        )
+        ## We draw all Children on our own surface
+        for c in self._children:
+            
+            ## Each child returns a texture where it has drawn itself at (0,0)
+            tx = c._redraw(forceRedraw)
+            
+            ## We copy it at the childs position in the childs size.
+            sp = (0,0)
+            if isinstance(c, ContainerWidget):
+                sp = c.scrollPosition
+            p = c.position
+            tgt = (p[0],p[1],c.width,c.height)
+            src = (sp[0],sp[1],c.width,c.height)
+            PYSDL2_RENDER_COPY1(renderer,texture,tx,tgt,src)
+            ## Finally we have to destroy the texture returned by the child
+            PYSDL2_DESTROYTEXTURE( tx )
+                    
+        self._themeForegroundfunction(self,texture)
         
         self._isInvalide = False# pylint:disable=attribute-defined-outside-init
+        
+        return texture
         
     ### @see Widget._onMouseDown
     ##

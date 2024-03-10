@@ -1,5 +1,7 @@
 #include "biui.inc"
+#include "pysdl2.inc"
 
+import sdl2
 from typing import List,Callable
 import biui
 from biui.Color import Color
@@ -661,16 +663,19 @@ class Widget():
     ##
     ##  @return            None
     ##  todo: hinting
-    def _redraw(self, texture, forceRedraw:bool=False)->None:
+    def _redraw(self, forceRedraw:bool=False):
         
         if not self.isInvalide():
             if not forceRedraw:
-                return 
+                return None
                 
-        self._themeBackgroundfunction(self.window.renderer,self,texture)
+        PYSDL2_CREATETEXTURE(self.window.renderer,self.width,self.height,texture)
+        
+        self._themeBackgroundfunction(self,texture)
         
         self._isInvalide = False
         
+        return texture
         
     ### Is called if a mouse button got pressed and the
     ##  mouse pointer is over the GUI element.

@@ -170,7 +170,7 @@ class FlexPane(ContainerWidget):
         
         self._acBottomRight.onMouseLeave.remove(self.__hndOnActiveCornerBottomRightLeave)
         
-    def _redraw1(self, texture, forceRedraw=False):
+    def __redraw1(self, forceRedraw=False):
         
         if not self.isInvalide():
             if not forceRedraw:

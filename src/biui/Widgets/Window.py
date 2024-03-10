@@ -601,8 +601,8 @@ class Window(ContainerWidget):
     ### @see biui.Widget._redraw
     ##
     ##
-    def _redraw(self, texture:Any = None, forceRedraw:bool=False)->None:
-        
+    def _redraw(self, forceRedraw:bool=False):
+                
         #ifdef SHOW_UPDATE_BOX
         if self.__guiTexture is not None:
             r = (0,0,self.width,self.height)
@@ -642,12 +642,22 @@ class Window(ContainerWidget):
         
         ##PYSDL2_SETRENDERCONTEXT(self.renderer,self.__guiTexture)
         
-        theme.drawWindowBeforeChildren(self.renderer,self,self.__guiTexture)
+        theme.drawWindowBeforeChildren(self,self.__guiTexture)
         
         for c in self._children:
-            c._redraw(self.__guiTexture,forceRedraw)
-                    
-        theme.drawWindowAfterChildren(self.renderer,self,self.__guiTexture)
+            tx = c._redraw(forceRedraw)
+            ## We copy it at the childs position in the childs size.
+            sp = (0,0)
+            if isinstance(c, ContainerWidget):
+                sp = c.scrollPosition
+            p = c.position
+            tgt = (p[0],p[1],c.width,c.height)
+            src = (sp[0],sp[1],c.width,c.height)
+            PYSDL2_RENDER_COPY1(self.renderer,self.__guiTexture,tx,tgt,src)
+            ## Finally we have to destroy the texture returned by the child
+            PYSDL2_DESTROYTEXTURE( tx )
+        
+        theme.drawWindowAfterChildren(self,self.__guiTexture)
         
         dr = self.__dr.getRectangles()
         

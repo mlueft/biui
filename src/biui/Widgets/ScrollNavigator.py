@@ -243,7 +243,7 @@ class ScrollNavigator(ContainerWidget):
     ##  @return
     ##
     @property
-    def scrollPosition(self):
+    def draggerPosition(self):
         
         x = self.__dragger.x
         y = self.__dragger.y

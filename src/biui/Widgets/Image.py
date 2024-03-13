@@ -115,3 +115,11 @@ class Image(Widget):
             value = value*ratio
             super(Image,self.__class__).width.fset(self,value)
             
+    ###
+    ##
+    ##
+    @property
+    def renderRect(self):
+        return (0,0,self._width,self._height)
+    
+    

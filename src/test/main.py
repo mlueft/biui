@@ -177,7 +177,7 @@ def createGUI0():
     ################################################
     ###                                       TOPBAR
     ################################################
-    if True:
+    if False:
         
         mnu = createMenu()
         mnu.tooltip = "menubar"
@@ -463,12 +463,13 @@ def createGUI0():
         wnd.addChild(pane4,1,1)
         
         img = Image()
+        #
         pane4.addChild(img)
         img.file = "../test.jpg"
-        img.x = 10
-        img.y = 10
+        ##img.x = 10
+        ##img.y = 10
         img.alignment = Alignment.FILL
-        ##img.alignment = Alignment.CENTER_CENTER
+        img.alignment = Alignment.CENTER_CENTER
 
         ################################################
         ###                                      PANEL 5

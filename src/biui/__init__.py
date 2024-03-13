@@ -538,7 +538,7 @@ def main():
     ###############################################################
     
     for w in __windows:
-        w._redraw()
+        w._render()
         
     return len(__windows) > 0
 

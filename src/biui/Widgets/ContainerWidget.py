@@ -77,7 +77,7 @@ class ContainerWidget(Widget):
     ##
     ##
     def __hndOnScrollPositionChanged(self,ev:Event)->None:
-        sp = ev.eventSource.scrollPosition
+        sp = ev.eventSource.draggerPosition
         if ev.eventSource.isHorizontal: #pylint: disable=no-else-return
             self.scrollX = self.scrollWidth*sp[0]
             return 
@@ -322,11 +322,19 @@ class ContainerWidget(Widget):
     ### @see Widget._redraw
     ##
     ##  todo: hinting
-    def _redraw(self, forceRedraw:bool=False ):
+    
+    ###
+    ##
+    ##
+    @property
+    def renderRect(self):
+        return (self._scrollX,self._scrollY,self._width,self._height)
         
+    def _render(self, forceRedraw:bool=False ):
         if not self.isInvalide():
             if not forceRedraw:
                 return
+        ##print("ContainerWidget::_render(): {}".format(self))
         
         ##print( "redraw:{} {}x{} {}".format(self.name,self.x,self.y,forceRedraw))
  
@@ -351,19 +359,13 @@ class ContainerWidget(Widget):
  
         forceRedraw = self._isInvalide or forceRedraw
         
-        ## We draw all Children on our own surface
         for c in self._children:
             
             ## Each child returns a texture where it has drawn itself at (0,0)
-            tx = c._redraw(forceRedraw)
-            
-            ## We copy it at the childs position in the childs size.
-            sp = (0,0)
-            if isinstance(c, ContainerWidget):
-                sp = c.scrollPosition
-            p = c.position
-            tgt = (p[0],p[1],c.width,c.height)
-            src = (sp[0],sp[1],c.width,c.height)
+            tx = c._render(forceRedraw)
+            src = c.renderRect
+            tgt = (c.x,c.y,src[2],src[3])
+
             PYSDL2_RENDER_COPY1(renderer,texture,tx,tgt,src)
             ## Finally we have to destroy the texture returned by the child
             PYSDL2_DESTROYTEXTURE( tx )

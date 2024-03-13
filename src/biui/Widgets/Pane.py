@@ -19,6 +19,14 @@ class Pane(ContainerWidget):
         super().__init__()
         self.__contentPane = ContainerWidget()
         self.__contentPane.alignment = Alignment.FILL
+        
+        if False:
+            self.__contentPane.alignment = Alignment.ABSOLUTE
+            self.__contentPane.x = 10
+            self.__contentPane.y = 10
+            self.__contentPane.width = 150
+            self.__contentPane.height = 150
+        
         super().addChild(self.__contentPane,0,0)
         
         ##
@@ -63,7 +71,10 @@ class Pane(ContainerWidget):
     def verticalScrollbar(self,value):
         if value and self.__verticalScrollbar:
             return
-        
+
+        if not value and not self.__verticalScrollbar:
+            return
+                
         if not value:
             ## remove scrollbar
             self.__contentPane.disconnectScrollNavigator(self.__verticalScrollbar)
@@ -96,6 +107,9 @@ class Pane(ContainerWidget):
         if value and self.__horizontalScrollbar:
             return
         
+        if not value and not self.__verticalScrollbar:
+            return
+                
         if not value:
             ## remove scrollbar
             super().layoutManager.rowHeights = [0,1]
@@ -191,48 +205,9 @@ class Pane(ContainerWidget):
     def scrollY(self, value):
         self.__contentPane.scrollY = value
         
-    def _redraw(self, forceRedraw=False ):
-        
-        if not self.isInvalide():
-            if not forceRedraw:
-                return
-        
-        ##print( "redraw:{} {}x{} {}".format(self.name,self.x,self.y,forceRedraw))
- 
-        wnd = self.window
-        renderer = self.window.renderer        
-        sw = self.width
-        sh = self.height
-        ##for child in self._children:
-        ##    sw = max(sw,child.right)
-        ##    sh = max(sh,child.bottom)
-        self._scrollWidth = sw
-        self._scrollHeight = sh
-        PYSDL2_CREATETEXTURE(renderer,sw,sh,texture)
-              
-        pos = self.position
-        
-        ## we paint on our own surface
-        ## not on the parent´s surface
-        self._themeBackgroundfunction(self,texture)
- 
-        ## We draw all Children on our own surface
-        forceRedraw = self._isInvalide or forceRedraw
-        for c in self._children:
-            ## Each child returns a texture where it has drawn itself at (0,0)
-            tx = c._redraw(forceRedraw)
-            
-            ## We copy it at the childs position in the childs size.
-            p = c.position
-            tgt = (p[0],p[1],c.width,c.height)
-            src = (0,0,c.width,c.height)
-            PYSDL2_RENDER_COPY1(renderer,texture,tx,tgt,src)
-            ## Finally we have to destroy the texture returned by the child
-            PYSDL2_DESTROYTEXTURE( tx )
-                    
-        self._themeForegroundfunction(self,texture)
-        
-        
-        self._isInvalide = False
-
-        return texture
+    ###
+    ##
+    ##
+    @property
+    def renderRect(self):
+        return (0,0,self._width,self._height)            

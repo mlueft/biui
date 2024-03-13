@@ -2,7 +2,7 @@ import os
 import math
 import time
 import biui
-from biui.Widgets import Button,Window,ContainerWidget,ScrollNavigator
+from biui.Widgets import Button,Window,ContainerWidget,ScrollNavigator, Pane
 from biui.Enum import Alignment
 
 pane = None
@@ -16,11 +16,37 @@ def init():
     )
     biui.selectTheme("blocks")
     
-def hndScrollpositionChanged(ev):
-    ##print(ev)
-    pass
-
 def initWindow(x=0,y=0):
+    wnd = Window(1024,768)
+    wnd.x = x
+    wnd.y = y
+    
+    pane = Pane()
+    pane.x = 100
+    pane.y = 100
+    pane.width = 400
+    pane.height = 400
+    pane.verticalScrollbar = True
+    pane.horizontalScrollbar = True
+    
+    wnd.addChild(pane)
+    
+    button = Button()
+    button.value = "TL"
+    button.x = 0
+    button.y = 0
+    button.width = 200
+    button.height = 200
+    button.borderColor = biui.Color(255,255,255)
+    pane.addChild(button)
+    
+    button = Button()
+    button.value = "BR"
+    button.x = 380
+    button.y = 460
+    pane.addChild(button)
+    
+def initWindow0(x=0,y=0):
     global pane
 
     wnd = Window(1024,768)
@@ -29,7 +55,6 @@ def initWindow(x=0,y=0):
 
     ##pane = biui.Pane()
     pane = ContainerWidget()
-    pane.onScrollPositionChanged.add(hndScrollpositionChanged)
     pane.x = 10
     pane.y = 200
     pane.width = 600
@@ -61,7 +86,7 @@ def initWindow(x=0,y=0):
     b = Button()
     b.value = "TR"
     b.width = b.height = 50
-    b.x = 1000-50
+    b.x = 3000-50
     b.y = 0
     pane.addChild(b)
     
@@ -86,17 +111,6 @@ def initWindow(x=0,y=0):
     b.y = 300
     pane.addChild(b)
         
-def hndXinc(ev):
-    pane.scrollX += 10
-
-def hndXdec(ev):
-    pane.scrollX -= 10
-
-def hndYinc(ev):
-    pane.scrollY += 10
-
-def hndYdec(ev):
-    pane.scrollY -= 10
 
 def main():
     init()

@@ -29,9 +29,7 @@ class Button(ContainerWidget):
         
         self._label:Label = Label()
         self._label.alignment = Alignment.CENTER_CENTER
-        
-
-        
+       
         theme = biui.getTheme()
         self._themeBackgroundfunction:Callable = theme.drawButtonBeforeChildren
         self._themeForegroundfunction:Callable = theme.drawButtonAfterChildren

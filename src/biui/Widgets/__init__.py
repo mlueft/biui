@@ -18,7 +18,6 @@ from .Progressbar import Progressbar
 from .NumberSlider import NumberSlider
 from .ScrollNavigator import ScrollNavigator
 from .Pane import Pane
-from .ScrollPane import ScrollPane
 from .TextField import TextField
 from .Window import Window
  

@@ -589,6 +589,13 @@ class Widget():
                 return
             parent = parent.parent 
 
+    ### Returns the region of the texture to be rendered on screen.
+    ##  The texture is returned by _render().
+    ##
+    @property
+    def renderRect(self):
+        return (0,0,self._width,self._height)
+    
     ### Returns the parent GUI element of the GUI element.
     ##  Normally it is the main window or a container element
     ##  that contains the GUI element.
@@ -654,8 +661,8 @@ class Widget():
             
     ### Redraws the GUI element. This is for internal use.
     ##  Just use this function if you know what you are doing.
-    ##  Do not call super()._redraw().
-    ##  Copy the guard to your _redraw()-version
+    ##  Do not call super()._render().
+    ##  Copy the guard to your _render()-version
     ##  and set _isInvalide to False at the end!
     ##  If you derive from a widget and call super(),
     ##  The parent would overdraw your widget.
@@ -663,7 +670,7 @@ class Widget():
     ##
     ##  @return            None
     ##  todo: hinting
-    def _redraw(self, forceRedraw:bool=False):
+    def _render(self, forceRedraw:bool=False):
         
         if not self.isInvalide():
             if not forceRedraw:

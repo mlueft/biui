@@ -1,6 +1,7 @@
 import sys,os
 from biui.Color import Color
-
+from biui.Enum import Alignment
+from biui.Widgets import Button
 sys.path.append('./')
 
 import math
@@ -31,25 +32,29 @@ def init():
     wnd.x = 500
     wnd.y = 500
 
-    ##
-    ## Pane
-    ##
-    pane = Pane()
-    pane.name = "Pane"
-    pane.x = 100
-    pane.y = 100
-    pane.width = 200
-    pane.height = 200
-    pane.onResized.add(paneResize)
-    wnd.addChild(pane)
+    pane5 = Pane()
+    pane5.tooltip  = "fiveth pane"
+    pane5.alignment = Alignment.FILL
+    pane5.x = 630+320
+    pane5.y = 10
+    pane5.width = 300
+    pane5.height = 300
+    pane5.verticalScrollbar = True
+    pane5.horizontalScrollbar = True        
+    wnd.addChild(pane5)
     
-    label = Label()
-    label.name = "label"
-    label.x = 00
-    label.y = 100
-    label.text = "HHH"
-    label.borderColor = Color(255,255,255)
-    pane.addChild(label)
+    b = Button()
+    b.value = "TL"
+    b.width = b.height = 50
+    b.x = 0
+    b.y = 0
+    pane5.addChild(b)
+
+    b = Button()
+    b.width = b.height = 50
+    b.x = 500-25
+    b.y = 500-25
+    pane5.addChild(b)
         
 def main():
     init()

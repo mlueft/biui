@@ -188,7 +188,7 @@ class FlexPane(ContainerWidget):
         forceRedraw = self.isInvalide() or forceRedraw
         ## We draw all Children on our own texture        
         for c in self._children:
-            c._redraw(_texture,forceRedraw)
+            c._render(_texture,forceRedraw)
                     
         theme.drawFlexPaneAfterChildren(self.window.renderer,self,_texture)
         

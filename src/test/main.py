@@ -466,10 +466,8 @@ def createGUI0():
         #
         pane4.addChild(img)
         img.file = "../test.jpg"
-        ##img.x = 10
-        ##img.y = 10
         img.alignment = Alignment.FILL
-        img.alignment = Alignment.CENTER_CENTER
+        ##img.alignment = Alignment.CENTER_CENTER
 
         ################################################
         ###                                      PANEL 5

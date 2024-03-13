@@ -122,4 +122,10 @@ class Image(Widget):
     def renderRect(self):
         return (0,0,self._width,self._height)
     
+    ###
+    ##
+    ##
+    def __render(self, forceRedraw:bool=False):
+        pass
+    
     

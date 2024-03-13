@@ -3,7 +3,7 @@
 
 // Shows the update regions in all windows
 // Remove leading underscore to activate
-#define _SHOW_UPDATE_BOX
+#define SHOW_UPDATE_BOX
 
 // Time in seconds
 #define BIUI_CLICKDURATION 0.25

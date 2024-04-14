@@ -1,0 +1,18 @@
+#include "biui.inc"
+
+###
+##
+##
+class ShortCuts():
+    
+    def __init__(self):
+        raise Exception( BIUI_ERR_CLASS_NOT_INIT )
+    
+    SELECT_ALL = "BIUI_SELECT_ALL"
+    COPY = "BIUI_COPY"
+    PASTE = "BIUI_PASTE"
+    CUT = "BIUI_CUT"
+    MOVE_SELECTION_UP = "BIUI_MOVE_SELECTION_UP"
+    MOVE_SELECTION_DOWN = "BIUI_MOVE_SELECTION_DOWN"
+    MOVE_SELECTION_LEFT = "BIUI_MOVE_SELECTION_LEFT"
+    MOVE_SELECTION_RIGHT = "BIUI_MOVE_SELECTION_RIGHT"

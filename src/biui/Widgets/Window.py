@@ -15,6 +15,7 @@ from biui.Events import KeyEvent
 from biui.Events import MouseEvent
 from biui.Events import Event
 from biui.Events import EventManager
+from biui.Events import ShortcutEvent
 
 from biui.DirtyRectangleManager import DirtyRectangleManager
 from biui.Color import Color
@@ -137,6 +138,7 @@ class Window(ContainerWidget):
         ## Added in Widget. But Window does not need it.
         self.onMouseDown.remove(self.hndMouseDown)
         
+        biui.ShortcutControl.onShortcut.add(self.__hndOnShortcut)
     
     ## SDL_GetWindowPosition
     ## SDL_SetWindowPosition
@@ -229,10 +231,13 @@ class Window(ContainerWidget):
         self.__overlays[overlayname].append(child)
         self.addChild(child)
     
-       
     ### @see biui.Widget.x
     ##
     ##    
+    @property
+    def window(self):#pylint: disable=inconsistent-return-statements
+        return self
+    
     @property
     def x(self)->int:
         PYSDL2_GETWINDOWPOS(self._window,x,y)##pylint: disable=unused-variable
@@ -646,8 +651,9 @@ class Window(ContainerWidget):
         
         for c in self._children:
             tx = c._render(forceRedraw)
+            ## We copy it at the childs position in the childs size.
             src = c.renderRect
-            tgt = (c.x,c.y,c.width,c.height)
+            tgt = (c.x,c.y,src[2],src[3])
             PYSDL2_RENDER_COPY1(self.renderer,self.__guiTexture,tx,tgt,src)
             ## Finally we have to destroy the texture returned by the child
             PYSDL2_DESTROYTEXTURE( tx )
@@ -738,5 +744,10 @@ class Window(ContainerWidget):
     ##    print("_onTextInput")
     ##    super()._onTextInput(ev)
         
+    def __hndOnShortcut(self,event)->None:
+        ##print("Window::__hndOnShortCut")
+        event.eventSource = self.__focusedWidget
+        
+        self._onShortcut(event)
         
         

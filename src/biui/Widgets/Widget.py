@@ -88,6 +88,8 @@ class Widget():
         ##
         self.onFocusLost:EventManager = EventManager()
         ##
+        self.onShortcut:EventManager = EventManager()
+        ##
         self._resized:bool = False
         ##
         self.onResized:EventManager = EventManager()
@@ -589,13 +591,6 @@ class Widget():
                 return
             parent = parent.parent 
 
-    ### Returns the region of the texture to be rendered on screen.
-    ##  The texture is returned by _render().
-    ##
-    @property
-    def renderRect(self):
-        return (0,0,self._width,self._height)
-    
     ### Returns the parent GUI element of the GUI element.
     ##  Normally it is the main window or a container element
     ##  that contains the GUI element.
@@ -658,7 +653,14 @@ class Widget():
     ##
     def _onGotRemoved(self)->None:
         self.onGotRemoved.provoke(Event(self))
-            
+
+    ### Returns the region of the texture to be rendered on screen.
+    ##  The texture is returned by _render().
+    ##
+    @property
+    def renderRect(self):
+        return (0,0,self._width,self._height)
+    
     ### Redraws the GUI element. This is for internal use.
     ##  Just use this function if you know what you are doing.
     ##  Do not call super()._render().
@@ -809,5 +811,13 @@ class Widget():
     ##
     def focus(self):
         self.window.setFocus(self)
+    
+    ### 
+    ##
+    ##
+    def _onShortcut(self,ev:Event)->None:
+        ##print("Widget::_onShortcut ({})".format(self.name))
+        self.onShortcut.provoke(ev)
+                    
         
         

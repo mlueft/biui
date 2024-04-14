@@ -772,4 +772,37 @@ class ContainerWidget(Widget):
             bb-by
         )
         self.parent._recordDirtyRect(box)
-                
+
+    ### @see Widget._onShortCut
+    ##
+    ##
+    def _onShortcut(self,ev:Event)->None:
+        ##print("ContainerWidget::_onShortCut ({})".format(self.name))
+        
+        ##phase down
+        super()._onShortcut(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onShortcut(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+            
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onShortcut(ev)
+            

@@ -78,7 +78,10 @@ class Theme():
 
             "TEXTFIELD_BACKGROUND":[250,250,250,255],
             "TEXTFIELD_BORDER":[255,0,0,255],
-                        
+            
+            "TEXT_CURSOR":[255,200,200,255],
+            "TEXT_SELECTION":[100,100,100,255],
+            
             "IMAGE_BACKGROUND":[0,0,0,0],
             "IMAGE_BORDER":[0,0,0,0]
         }
@@ -898,25 +901,23 @@ class Theme():
         PYSDL2_GETTEXTURESIZE(tx,r)
         
         r = (r[0],r[1],min(r[2],widget.width),min(r[3],widget.height))
-            
-        PYSDL2_RENDER_COPY1(renderer,texture,tx,(0,0,r[2],r[3]),r)
         
+        ## Draw the selection box
+        box = widget.selectionBox
+        if box:
+            PYSDL2_DRAWRECTFILLED(renderer,texture,self._shema["TEXT_SELECTION"].rgba,box)
+                
+        ## draw text        
+        PYSDL2_RENDER_COPY1(renderer,texture,tx,(0,0,r[2],r[3]),r)
         PYSDL2_DESTROYTEXTURE( tx )  
 
-        ## TODO: Draw the selection box
-        
-        ## TODO: Draw the cursor
-        if widget.cursorVisible:
-            pos = widget.getCursorPosition()
-            cb = (pos,0,2,widget.height)
-            PYSDL2_DRAWRECTFILLED(renderer,texture,Color(255,0,0,255).rgba,cb)
 
+        ## Draw the cursor
+        box = widget.cursor 
+        if box:
+            PYSDL2_DRAWRECTFILLED(renderer,texture,self._shema["TEXT_CURSOR"].rgba,box)
 
-              
-        ## Draw bordertime
-
-
-
+        ## Draw border
         if widget.borderColor:
             result= True
             color = widget.borderColor

@@ -210,4 +210,6 @@ class Pane(ContainerWidget):
     ##
     @property
     def renderRect(self):
-        return (0,0,self._width,self._height)            
+        return (0,0,self._width,self._height)
+    
+                

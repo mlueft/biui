@@ -177,7 +177,7 @@ def createGUI0():
     ################################################
     ###                                       TOPBAR
     ################################################
-    if False:
+    if True:
         
         mnu = createMenu()
         mnu.tooltip = "menubar"

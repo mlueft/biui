@@ -5,3 +5,5 @@ from biui.Enum.KeyModifiers import KeyModifiers
 from biui.Enum.Keys import Keys
 from biui.Enum.Style import Style
 from biui.Enum.Direction import Direction
+from biui.Enum.ShortCuts import ShortCuts
+from biui.Enum.EditingMode import EditingMode

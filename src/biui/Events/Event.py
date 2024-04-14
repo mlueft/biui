@@ -9,11 +9,18 @@ class Event():
     ##
     ##
     def __init__(self, eventSource):
-        self._eventSource = eventSource
+        self.__eventSource = eventSource
         
     ### Returns the event source object.
     ##
     ##
     @property
     def eventSource(self):
-        return self._eventSource
+        return self.__eventSource
+    
+    ### Just use the setter if your know what you are doing!
+    ##
+    ##
+    @eventSource.setter
+    def eventSource(self,value):
+        self.__eventSource = value

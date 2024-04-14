@@ -18,6 +18,7 @@ from biui.Font import Font
 from biui.ImageLibrary import ImageLibrary
 from biui.DirtyRectangleManager import DirtyRectangleManager
 from biui.Mouse import Mouse
+from biui.Clipboard import Clipboard
 from biui.ShortcutControl import ShortcutControl
 from biui.Color import Color
 from biui.TextDataEditComponent import TextDataEditComponent
@@ -28,6 +29,7 @@ from biui.Widgets import Window
 
 Mouse = Mouse()
 ShortcutControl = ShortcutControl()
+Clipboard = Clipboard()
 
 ##
 __themeFolder = BIUI_THEMEFOLDER
@@ -56,7 +58,7 @@ def addTimer(timer):
 def removeTimer(timer):
     __timerObjects.remove(timer)
     
-    
+
 def profile(fnc):
     import cProfile, pstats
     profiler = cProfile.Profile()
@@ -96,7 +98,7 @@ def init():
     ## TODO: Look for platform specific font folders
     ##       and add them to __fontFolders.
     ##
- 
+    
 ###
 ##
 ##
@@ -307,6 +309,7 @@ def main():
         ###############################################################
         elif event.type == sdl2.SDL_KEYDOWN:
             ##print("SDL_KEYDOWN")
+            ShortcutControl.sdlOnKeyDown(event)
             for w in __windows:
                 if w.id ==  event.key.windowID:
                     w.sdlOnKeyDown(event)
@@ -314,6 +317,7 @@ def main():
             pass
         elif event.type == sdl2.SDL_KEYUP:
             ##print("SDL_KEYUP")
+            ShortcutControl.sdlOnKeyUp(event)
             for w in __windows:
                 if w.id ==  event.key.windowID:
                     w.sdlOnKeyUp(event)

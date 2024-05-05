@@ -42,32 +42,46 @@ class Window(ContainerWidget):
         
         ##
         self.onWindowClose:EventManager = EventManager()
+        
         ##
         self.onWindowShown:EventManager = EventManager()
+        
         ##
         self.onWindowHidden:EventManager = EventManager()
+        
         ##
         self.onWindowExposed:EventManager = EventManager()
+        
         ##
         self.onWindowMoved:EventManager = EventManager()
+        
         ##
         self.onWindowResized:EventManager = EventManager()
+        
         ##
         self.onWindowSizeChanged:EventManager = EventManager()
+        
         ##
         self.onWindowMinimized:EventManager = EventManager()
+        
         ##
         self.onWindowMaximized:EventManager = EventManager()
+        
         ##
         self.onWindowRestored:EventManager = EventManager()
+        
         ##
         self.onWindowEnter:EventManager = EventManager()
+        
         ##
         self.onWindowLeave:EventManager = EventManager()
+        
         ##
         self.onWindowFocusGained:EventManager = EventManager()
+        
         ##
         self.onWindowFocusLost:EventManager = EventManager()
+        
         ##
         self.onWindowFocus:EventManager = EventManager()
 

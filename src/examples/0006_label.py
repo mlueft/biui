@@ -113,8 +113,6 @@ def init():
     lbl.color = biui.Color(255,255,0,255)
     wnd.addChild(lbl)
         
-    return
-
     label = createLabel()
     label.backColor = Color(0,0,0)
     label.value = "hallo"

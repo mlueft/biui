@@ -15,6 +15,13 @@ class MenuItem(Button):
     ##
     def __init__(self):
         super().__init__()
+        
+        ## Is provoked when the item is cklicked.
+        self.onItemClick = EventManager()
+        
+        ## Is provoked when a child has to show a submenu.
+        self.onShowSubmenu = EventManager()
+                
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawMenubuttonBeforeChildren
         self._themeForegroundfunction = theme.drawMenubuttonAfterChildren
@@ -23,10 +30,7 @@ class MenuItem(Button):
         self.label.color = biui.Color(0,0,0,0)
         self.label.alignment = Alignment.CENTER_LEFT
         self.layoutManager.columnWidths = [5,0,5]
-        ## Is fired when the item is cklicked.
-        self.onItemClick = EventManager()
-        ## Is fired when a child has to show a submenu.
-        self.onShowSubmenu = EventManager()
+        
 
         self._items = []
         

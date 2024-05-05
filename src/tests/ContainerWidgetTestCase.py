@@ -1,6 +1,7 @@
 import unittest
-import biui
 import os
+
+import biui
 
 class ContainerWidgetTestCase(unittest.TestCase):
     

@@ -23,8 +23,6 @@ class Font():
         if fileName == None:
             fileName = biui.getDefaultFont()
         
-        print(fileName)
-        
         ##
         self._font = sdl2.sdlttf.TTF_OpenFont(
             ctypes.c_char_p(bytes(fileName, 'utf-8')),

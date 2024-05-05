@@ -21,16 +21,22 @@ class FlexPane(ContainerWidget):
                 
         ##
         self.onJoinUp = EventManager()
+        
         ##
         self.onJoinDown = EventManager()
+        
         ##
         self.onJoinLeft = EventManager()
+        
         ##
         self.onJoinRight = EventManager()
+        
         ##
         self.onVerticalSplit = EventManager()
+        
         ##
         self.onHorizontalSplit = EventManager()
+        
         
         self._acTopLeft = self._createActiveCorner()
         self._acTopLeft.onMouseDown.add(self.__hndOnActiveCornerTopLeftMouseDown)

@@ -55,49 +55,70 @@ class Widget():
         self._tooltip:str = None
         ##
         self._alignment:int = Alignment.ABSOLUTE
+        
         ## A reference to the theme function which is used to draw the widget.
         ## On Containerwidgets it´s used to draw the widget´s background.
         theme = biui.getTheme()
-        self._themeBackgroundfunction:Callable = theme.drawEmpty        
+        self._themeBackgroundfunction:Callable = theme.drawEmpty      
+          
         ##
         self.onTextInput:EventManager = EventManager()
+        
         ##
         self.onKeyUp:EventManager = EventManager()
+        
         ##
         self.onKeyDown:EventManager = EventManager()
+        
         ##
         self.onMouseMove:EventManager = EventManager()
+        
         ##
         self.onMouseLeave:EventManager = EventManager()
+        
         ##
         self.onMouseEnter:EventManager = EventManager()
+        
         ##
         self.onMouseWheel:EventManager = EventManager()
+        
         ##
         self.onMouseUp:EventManager = EventManager()
+        
         ##
         self.onMouseDown:EventManager = EventManager()
+        
         ##
         self.onMouseClick:EventManager = EventManager()
+        
         ##
         self.onBeforeDraw:EventManager = EventManager()
+        
         ##
         self.onAfterDraw:EventManager = EventManager()
+        
         ##
         self.onFocus:EventManager = EventManager()
+        
         ##
         self.onFocusLost:EventManager = EventManager()
-        ##
+        
+        ## Is provoked if a keyboard short cut occured.
         self.onShortcut:EventManager = EventManager()
-        ##
-        self._resized:bool = False
+        
         ##
         self.onResized:EventManager = EventManager()
-        ## Is triggered when the widget got added to a parent
+        
+        ## Is provoked when the widget got added to a parent
+        ## If a parent was added, this event is not provoked.
         self.onGotAdded:EventManager = EventManager()
-        ## Is triggered when the widget got removed from a parent
+        
+        ## Is provoked when the widget got removed from a parent
+        ## If a parent was removed, this event is not provoked.
         self.onGotRemoved:EventManager = EventManager()
 
+        ##
+        self._resized:bool = False
         ##
         self.__borderColor:Color = None
         self.__backColor:Color = None

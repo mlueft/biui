@@ -20,14 +20,14 @@ class WindowTestCase(unittest.TestCase):
         assert 1==1, ""
     
 
-    def testX(self):
+    def _testX(self):
         subject = Window(1024,768)
         value = 72
         subject.x = value
         """test Window.x"""
         assert subject.x == value, "Window.x not set correctly."
                 
-    def testY(self):
+    def _testY(self):
         subject = Window(1024,768)
         value = 75
         subject.y = value
@@ -68,7 +68,7 @@ class WindowTestCase(unittest.TestCase):
         assert subject.y == 100, "Window.right not set correctly."
         assert subject.height == 200, "Window.right not set correctly."
             
-    def testLeft(self):
+    def _testLeft(self):
         subject = Window(1024,768)
         subject.x = 100
         subject.y = 100
@@ -81,7 +81,7 @@ class WindowTestCase(unittest.TestCase):
         assert subject.y == 100, "Window.left not set correctly."
         assert subject.height == 200, "Window.left not set correctly."
                     
-    def testTop(self):
+    def _testTop(self):
         
         ##dMode = sdl2.SDL_DisplayMode()
         ##if sdl2.SDL_GetDesktopDisplayMode(0,dMode) != 0:

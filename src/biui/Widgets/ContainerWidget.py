@@ -20,12 +20,19 @@ class ContainerWidget(Widget):
         super().__init__()
         ##
         self._children:List[Widget] = []
+        
         ##
         self._layoutManager:LayoutManager = LayoutManager()
-        ## Fires when a child is added
+        
+        ## Is provoked when a child is added
         self.onChildAdded:EventManager = EventManager()
-        ## Fires when a child is removed
+        
+        ## Is provoked when a child is removed
         self.onChildRemoved:EventManager = EventManager()
+
+        ## Is provoked when the scroll position is changed.
+        self.onScrollPositionChanged:EventManager = EventManager()
+                
         ##
         ## todo: hinting
         self._texture = None
@@ -41,8 +48,7 @@ class ContainerWidget(Widget):
         self._scrollX:int = 0
         self._scrollY:int = 0
         
-        ##
-        self.onScrollPositionChanged:EventManager = EventManager()        
+        
            
     ###
     ##

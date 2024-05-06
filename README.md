@@ -1,5 +1,6 @@
 # BIUI stands for blender inspired user interface.
 
+## General
 I love blender's UI so much, I have to do this.
 I want to thank all people working on blender,
 it's such a masterpeace!
@@ -7,6 +8,15 @@ it's such a masterpeace!
 This work is based on UX/UI of blender.
 I am not into blender's source code.
 So, i may do thing the "wrong" way in software design.
+
+## Current status
+This project is in early development and structure of the source files is changing
+permanently.
+
+## Development
+This project uses gcc as a preprocessor for python files. See my ppp repository:
+
+https://github.com/mlueft/ppp
 
 This lib depends on pysdl2. I want to keep the lib in 
 python, i hope it's not going to be laggy.

@@ -10,7 +10,7 @@ class WidgetTestCase(unittest.TestCase):
         biui.init()
         biui.setThemeFolder(
             os.path.abspath(
-                os.path.join(os.getcwd(),"../themes")
+                os.path.join(os.getcwd(),"./themes")
             )
         )
     
@@ -206,7 +206,11 @@ class WidgetTestCase(unittest.TestCase):
     
     def testCalculateLayout(self):
         assert 1==1, ""
-    
+
+    def testRenderRect(self):
+        """test Widget.renderRect"""
+        assert 1==1, ""
+        
     def testToLocal0(self):
         subject = Widget()
         subject.x=150
@@ -221,6 +225,34 @@ class WidgetTestCase(unittest.TestCase):
         """test Widget.toGlobal"""
         assert subject.toGlobal((10,10)) == (160,60), "Widget.toGlobal not calculated correctly."
     
+    def testFocus(self):
+        """test Widget.focus"""
+        assert 1==1, ""
+            
+    """
+    backColor
+    borderColor
+    tooltip
+    name
+    onTextInput
+    onKeyUp
+    onKeyDown
+    onMouseMove
+    onMouseLeave
+    onMouseEnter
+    onMouseWheel
+    onMouseUp
+    onMouseDown
+    onMouseClick
+    onBeforeDraw
+    onAfterDraw
+    onFocus
+    onFocusLost
+    onShortcut
+    onResized
+    onGotAdded
+    onGotRemoved
+    """
     
 if __name__ == "__main__":
     unittest.main() ## run all tests

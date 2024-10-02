@@ -12,7 +12,7 @@ def main():
     biui.init()
     biui.setThemeFolder(
         os.path.abspath(
-            os.path.join(os.getcwd(),"../themes")
+            os.path.join(os.getcwd(),"./themes")
         )
     )
     

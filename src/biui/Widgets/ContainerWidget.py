@@ -17,6 +17,9 @@ from biui.Widgets import Widget
 class ContainerWidget(Widget):
     
     def __init__(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::__init__():{}".format(self))
+        #endif
         super().__init__()
         ##
         self._children:List[Widget] = []
@@ -24,13 +27,16 @@ class ContainerWidget(Widget):
         ##
         self._layoutManager:LayoutManager = LayoutManager()
         
-        ## Is provoked when a child is added
+        ### Is provoked when a child is added
+        ##
         self.onChildAdded:EventManager = EventManager()
         
-        ## Is provoked when a child is removed
+        ### Is provoked when a child is removed
+        ##
         self.onChildRemoved:EventManager = EventManager()
 
-        ## Is provoked when the scroll position is changed.
+        ### Is provoked when the scroll position is changed.
+        ##
         self.onScrollPositionChanged:EventManager = EventManager()
                 
         ##
@@ -39,30 +45,26 @@ class ContainerWidget(Widget):
         ## A reference to the theme function which is used to draw the widget forground.
         theme = biui.getTheme()
         self._themeForegroundfunction:Callable = theme.drawEmpty
-        self.onResized.add(self.__hndOnResized)
         
-        
-        
+        ## Contains the size of the scrollarea
+        ## Scrollarea is a boundingbox starting at (0,0)
+        ## containing all children
+        ## Minimum the size of self
         self._scrollWidth:int = self.width
         self._scrollHeight:int = self.height
+        
+        ## Current top left corner of the
+        ## visible area
         self._scrollX:int = 0
         self._scrollY:int = 0
         
-        
-           
-    ###
-    ##
-    ##
-    def __hndOnResized(self,ev:Event)->None:
-        ##self.__dragger.x = (self.width-self.__dragger.width)*self.__scrollPosition[0]
-        ##self.__dragger.y = (self.height-self.__dragger.height)*self.__scrollPosition[1]
-        pass
-    
     
     ###
     ##
-    ## todo: hinting
     def connectScrollNavigator(self,navigator)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::connectScrollNavigation():{}".format(self))
+        #endif
         if navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
             return
         
@@ -71,8 +73,10 @@ class ContainerWidget(Widget):
 
     ###
     ##
-    ##  todo: hinting
     def disconnectScrollNavigator(self,navigator)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::disconnectScrollNavigation():{}".format(self))
+        #endif
         if not navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
             return
         
@@ -83,6 +87,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def __hndOnScrollPositionChanged(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::__hndOnScrollPositionChanged():{}".format(self))
+        #endif
         sp = ev.eventSource.draggerPosition
         if ev.eventSource.isHorizontal: #pylint: disable=no-else-return
             self.scrollX = self.scrollWidth*sp[0]
@@ -93,7 +100,6 @@ class ContainerWidget(Widget):
   
         self.scrollX = self.scrollWidth*sp[0]
         self.scrollY = self.scrollHeight*sp[1]
-        return
         
     ### Returns the current scroll position.
     ##
@@ -101,6 +107,9 @@ class ContainerWidget(Widget):
     ##
     @property
     def scrollPosition(self)->tuple[int,int]:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollPosition_get():{}".format(self))
+        #endif
         return (self._scrollX, self._scrollY)
     
     ### Returns the x/y position of the GUI element.
@@ -109,6 +118,9 @@ class ContainerWidget(Widget):
     ##
     @property
     def scrollSize(self)->tuple[int,int]:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollSize_get():{}".format(self))
+        #endif
         return (self.scrollWidth, self.scrollHeight)
             
     ### Returns the maximum scroll position in x direction.
@@ -117,6 +129,9 @@ class ContainerWidget(Widget):
     ##
     @property
     def scrollWidth(self)->int:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollWidth_get():{}".format(self))
+        #endif
         return self._scrollWidth-self.width
     
     ### Returns the maximum scroll position in y direction.
@@ -125,6 +140,9 @@ class ContainerWidget(Widget):
     ##
     @property
     def scrollHeight(self)->int:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollHeight_get():{}".format(self))
+        #endif
         return self._scrollHeight-self.height
     
     ### Returns the current scroll position in x direction.
@@ -133,6 +151,9 @@ class ContainerWidget(Widget):
     ##
     @property
     def scrollX(self)->int:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollX_get():{}".format(self))
+        #endif
         return self._scrollX
     
     ### Sets the current scroll position in x direction. 
@@ -142,6 +163,9 @@ class ContainerWidget(Widget):
     ##
     @scrollX.setter
     def scrollX(self, value:int)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollX_set():{}".format(self))
+        #endif
         value = int(value)
         if value == self._scrollX:
             return
@@ -159,6 +183,9 @@ class ContainerWidget(Widget):
     ##
     @property
     def scrollY(self)->int:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollY_get():{}".format(self))
+        #endif
         return self._scrollY
     
     ### Sets the current scroll position in y direction. 
@@ -168,6 +195,9 @@ class ContainerWidget(Widget):
     ##
     @scrollY.setter
     def scrollY(self, value:int)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::scrollY_set():{}".format(self))
+        #endif
         value = int(value)
         if value == self._scrollY:
             return
@@ -184,6 +214,9 @@ class ContainerWidget(Widget):
     ##
     @property
     def hasChildren(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::hasChildren():{}".format(self))
+        #endif
         return len(self._children) > 0
     
     ### Returns all child elements.
@@ -191,12 +224,18 @@ class ContainerWidget(Widget):
     ##  @return               A list with Widgets.
     ##
     def getChildren(self)->list[Widget]:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::getChildren():{}".format(self))
+        #endif
         return self._children
      
     ### @see Widget.hasChild
     ##
     ##
     def hasChild(self,child:Widget)->bool:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::hasChild():{}".format(self))
+        #endif
         for c in self._children:
             if c.hasChild(child):
                 return True
@@ -208,6 +247,9 @@ class ContainerWidget(Widget):
     ##  @param child         A Widget instance.
     ##   
     def removeChild(self,child:Widget)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::removeChild():{}".format(self))
+        #endif
         self._layoutManager.removeChild(child)
         if child in self._children:
             self._children.remove(child)
@@ -225,6 +267,9 @@ class ContainerWidget(Widget):
     ##  @param y             Row for layout manager to add the child to.
     ##       
     def addChild(self,child:Widget,x:int=0,y:int=0)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::addChild():{}".format(self))
+        #endif
         child.parent = self
         ##self._children.insert(0,child)
         self._children.append(child)
@@ -240,6 +285,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def __hndChildAdded(self,ev:EventManager)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::__hndChildAdded():{}".format(self))
+        #endif
         self.onChildAdded.provoke(ev)
         ##print("childAdded")
             
@@ -247,6 +295,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def __hndChildRemoved(self,ev:EventManager)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::__hndChildRemoved():{}".format(self))
+        #endif
         self.onChildRemoved.provoke(ev)
         ##print("childAdded")
         
@@ -258,6 +309,9 @@ class ContainerWidget(Widget):
     ##
 
     def getChildAt(self, pos:tuple[int,int])->Widget:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::getChildAt():{}".format(self))
+        #endif
                 
         for c in reversed(self._children):
             cPos = self.toGlobal(c.position)
@@ -273,6 +327,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def isInvalide(self)->bool:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::isInvalide():{}".format(self))
+        #endif
         
         for c in self._children:
             if c.isInvalide():
@@ -286,6 +343,9 @@ class ContainerWidget(Widget):
     ##  todo: hinting
     @property
     def layoutManager(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::layoutManager_get():{}".format(self))
+        #endif
         return self._layoutManager
         
     ###
@@ -295,16 +355,21 @@ class ContainerWidget(Widget):
     ##  todo: hinting
     @layoutManager.setter
     def layoutManager(self, value)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::layoutManager_set():{}".format(self))
+        #endif
         self._layoutManager = value
         
     ### @see Widget._calculateLayout
     ##
     ##
     def _calculateLayout(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_calculateLayout():{}".format(self))
+        #endif
         super()._calculateLayout()
-        mySize = self.size
         
-        self._layoutManager._calculateLayout(mySize)
+        self._layoutManager._calculateLayout(self.size)
         
         for c in self._children:
             c._calculateLayout()
@@ -313,6 +378,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def _onBeforeDraw(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onBeforeDraw():{}".format(self))
+        #endif
         for c in self._children:
             c._onBeforeDraw()
         super()._onBeforeDraw()
@@ -321,6 +389,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def _onAfterDraw(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onAfterDraw():{}".format(self))
+        #endif
         for c in self._children:
             c._onAfterDraw()
         super()._onAfterDraw()
@@ -334,9 +405,15 @@ class ContainerWidget(Widget):
     ##
     @property
     def renderRect(self):
-        return (self._scrollX,self._scrollY,self._width,self._height)
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::renderRect():{}".format(self))
+        #endif
+        return (self._scrollX,self._scrollY,self.width,self.height)
         
     def _render(self, forceRedraw:bool=False ):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_render():{}".format(self))
+        #endif
         if not self.isInvalide():
             if not forceRedraw:
                 return
@@ -386,7 +463,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def _onMouseDown(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseDown():{}".format(self))
+        #endif
         ## phase down
         super()._onMouseDown(ev)
         if ev.propagationStopped:
@@ -418,7 +497,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def _onMouseUp(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseUp():{}".format(self))
+        #endif
         ## phase down
         super()._onMouseUp(ev)
         if ev.propagationStopped:
@@ -450,6 +531,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def _onMouseClick(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseClick():{}".format(self))
+        #endif
         ## phase down
         super()._onMouseClick(ev)
         if ev.propagationStopped:
@@ -481,7 +565,9 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _onMouseWheel(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseSheel():{}".format(self))
+        #endif
         ## phase down
         super()._onMouseWheel(ev)
         if ev.propagationStopped:
@@ -513,7 +599,9 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _onMouseEnter(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseEnter():{}".format(self))
+        #endif
         ## phase down
         super()._onMouseEnter(ev)
         if ev.propagationStopped:
@@ -545,7 +633,9 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _onMouseLeave(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseLeave():{}".format(self))
+        #endif
         ## phase down
         super()._onMouseLeave(ev)
         if ev.propagationStopped:
@@ -577,7 +667,9 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _onMouseMove(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseMove():{}".format(self))
+        #endif
         ## phase down
         super()._onMouseMove(ev)
         if ev.propagationStopped:
@@ -609,6 +701,9 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _onKeyDown(self,ev:KeyEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onKeyDown():{}".format(self))
+        #endif
         ##print("{} ContainerWidget::sdlOnKeyDown".format(self))
         ##phase down
         super()._onKeyDown(ev)
@@ -641,7 +736,9 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _onKeyUp(self,ev:KeyEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onKeyUp():{}".format(self))
+        #endif
         ##phase down
         super()._onKeyUp(ev)
         if ev.propagationStopped:
@@ -673,7 +770,9 @@ class ContainerWidget(Widget):
     ##
     ##   
     def _onTextInput(self,ev:KeyEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onTextInput():{}".format(self))
+        #endif
         ##phase down
         super()._onTextInput(ev)
         if ev.propagationStopped:
@@ -705,6 +804,9 @@ class ContainerWidget(Widget):
     ##
     ##   
     def _invalidate(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_invalidate():{}".format(self))
+        #endif
         PYSDL2_DESTROYTEXTURE(self._texture)
         self._texture = None
         
@@ -712,6 +814,7 @@ class ContainerWidget(Widget):
         ## because super sends the position
         ## here we need (0,0)
         box = (0,0,self._scrollWidth,self._scrollHeight)
+        
         self._recordDirtyRect(box)
         ## set flag to recalculate the layout.
         ## set flag to redraw widget
@@ -721,6 +824,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def toLocal(self, coordinates:tuple[int,int])->tuple[int,int]:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::toLocal():{}".format(self))
+        #endif
         result = ( coordinates[0]-self._x+self._scrollX,coordinates[1]-self._y+self._scrollY)
         if self._parent is not None:
             result = self._parent.toLocal(result)
@@ -731,6 +837,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def toGlobal(self,coordinates:tuple[int,int])->tuple[int,int]:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::toGlobal():{}".format(self))
+        #endif
         result = ( self._x-self._scrollX+coordinates[0],self._y-self._scrollY+coordinates[1])
         if self._parent is not None:
             result = self._parent.toGlobal(result)
@@ -741,7 +850,9 @@ class ContainerWidget(Widget):
     ##
     ##    
     def _recordDirtyRect(self, box:tuple[int,int,int,int])->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_recordDirtyRect():{}".format(self))
+        #endif
         sx = self._scrollX
         sy = self._scrollY
         
@@ -783,6 +894,9 @@ class ContainerWidget(Widget):
     ##
     ##
     def _onShortcut(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onShortcut():{}".format(self))
+        #endif
         ##print("ContainerWidget::_onShortCut ({})".format(self.name))
         
         ##phase down

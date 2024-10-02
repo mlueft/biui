@@ -5,6 +5,10 @@
 // Remove leading underscore to activate
 #define _SHOW_UPDATE_BOX
 
+//
+//
+#define _SHOW_FUNCTIONNAMES
+
 // Time in seconds
 #define BIUI_CLICKDURATION 0.25
 
@@ -31,6 +35,6 @@
 #define BIUI_ERR_MENUBAR_REMOVECHILD "Menubar.removeChild: Use removeItem() instead!"
 #define BIUI_ERR_MENUPANE_ADDCHILD "MenuPane.addChild: Use addItem() instead!"
 #define BIUI_ERR_MENUPANE_REMOVECHILD "MenuPane.removeChild: Use removeItem() instead!"
-#define BIUI_ERR_PROPERTY_NOT_EXISIS "This Property doesn't exisis!"
+#define BIUI_ERR_PROPERTY_NOT_EXISIS "This Property doesn't exist!"
 
 #endif

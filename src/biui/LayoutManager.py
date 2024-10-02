@@ -253,7 +253,6 @@ class LayoutManager():
     ##
     def _calculateLayout(self, size):
         size = [0,0,size[0],size[1]]
-        
         ## Calculate docked children
         ## and apat size for cell calculation
         for i,tmp in enumerate(self._columnWidths):

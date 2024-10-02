@@ -9,7 +9,7 @@ class WindowTestCase(unittest.TestCase):
         biui.init()
         biui.setThemeFolder(
             os.path.abspath(
-                os.path.join(os.getcwd(),"../themes")
+                os.path.join(os.getcwd(),"./themes")
             )
         )
     

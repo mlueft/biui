@@ -225,7 +225,7 @@ class FontTestCase(unittest.TestCase):
         assert subject.alignment == 2, "font.alignment can't be set."
         subject.close()        
         
-    def testdirection0(self):
+    def testDirection0(self):
         
         subject = biui.Font(
             self.__font,
@@ -236,7 +236,7 @@ class FontTestCase(unittest.TestCase):
         assert subject.direction == Direction.LTR, "font.direction can't be read."
         subject.close()
         
-    def testdirection1(self):
+    def testDirection1(self):
         
         subject = biui.Font(
             self.__font,

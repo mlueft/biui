@@ -33,7 +33,7 @@ def init():
     biui.init()
     biui.setThemeFolder(
         os.path.abspath(
-            os.path.join(os.getcwd(),"../themes")
+            os.path.join(os.getcwd(),"./themes")
         )
     )
     
@@ -44,7 +44,8 @@ def init():
     wnd.title = "title"
     wnd.x = 200
     wnd.y = 100
-    
+    wnd.width = 1300
+    wnd.height = 500
     
     mnu = createMenu()
     mnu.tooltip = "menubar"

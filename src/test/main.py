@@ -5,6 +5,7 @@ import biui
 from biui.Widgets import Window,Button,Menubar,MenuItem,Pane,Progressbar,NumberSlider,Checkbox,ToggleButton,Label,Image,ButtonGroup
 from biui.Events import EventPhase
 from biui.Enum import Alignment
+from biui.Color import Color
 
 def p0Click(ev):
     print("p0.click:"+str(ev.phase))
@@ -168,7 +169,7 @@ def createGUI0():
     ################################################
     ###                                       WINDOW
     ################################################
-    wnd = Window(1300,500)
+    wnd = Window(1024,768)
     wnd.title = "title"
     wnd.x = 200
     wnd.y = 100
@@ -237,68 +238,69 @@ def createGUI0():
         pane0.height = 300
         wnd.addChild(pane0,0,0)
         
-        ###
-        ### Buttons
-        ###
-        for i in range(3):
-            button0 = Button()
-            button0.tooltip = "button{}".format(i)
-            button0.label.format = "{:,} mm"
-            button0.value = 1000
-            ###button0.onMouseUp.add(_test.upHandler)
-            button0.x = 10
-            button0.y = 10+i*35
-            button0.width = 100
-            button0.height = 30
-            button0.id = "test"
-            pane0.addChild(button0)
-                
-        ###
-        ### Progressbar
-        ###
-        pb = Progressbar()
-        pb.tooltip = "Progressbar"
-        pb.x = 10
-        pb.y = 120
-        pb.width = 150
-        pb.height = 30    
-        pb.minValue = -30
-        pb.maxValue = 30
-        pb.value = 0
-        pb.step = 1
-        pb.showValue = False
-        pb.label.format = "{}"
-        pane0.addChild(pb)
-        ##return 
-        ###
-        ### NumberSlider
-        ###
-        ns = NumberSlider()
-        ns.tooltip = "number slider"
-        ns.x = 10
-        ns.y = 160
-        ns.width = 150
-        ns.height = 30
-        ns.minValue = 0
-        ns.maxValue = 100
-        ns.value = 50
-        ns.step = 1
-        ns.label.format = "{} %"
-        pane0.addChild(ns)
-                 
-        ###
-        ### Checkbox
-        ###
-        cb = Checkbox()
-        cb.tooltip = "this is a checkbox"
-        cb.backColor = biui.Color(255,255,0)
-        cb.backColorOver = biui.Color(255,255,0)
-        cb.backColorDown = biui.Color(255,255,0)
-        cb.backColorChecked = biui.Color(255,0,0)
-        cb.x = 10
-        cb.y = 200
-        
-        pane0.addChild(cb)
+        if True:
+            ###
+            ### Buttons
+            ###
+            for i in range(3):
+                button0 = Button()
+                button0.tooltip = "button{}".format(i)
+                button0.label.format = "{:,} mm"
+                button0.value = 1000
+                ###button0.onMouseUp.add(_test.upHandler)
+                button0.x = 10
+                button0.y = 10+i*35
+                button0.width = 100
+                button0.height = 30
+                button0.id = "test"
+                pane0.addChild(button0)
+                    
+            ###
+            ### Progressbar
+            ###
+            pb = Progressbar()
+            pb.tooltip = "Progressbar"
+            pb.x = 10
+            pb.y = 120
+            pb.width = 150
+            pb.height = 30    
+            pb.minValue = -30
+            pb.maxValue = 30
+            pb.value = 0
+            pb.step = 1
+            pb.showValue = False
+            pb.label.format = "{}"
+            pane0.addChild(pb)
+            ##return 
+            ###
+            ### NumberSlider
+            ###
+            ns = NumberSlider()
+            ns.tooltip = "number slider"
+            ns.x = 10
+            ns.y = 160
+            ns.width = 150
+            ns.height = 30
+            ns.minValue = 0
+            ns.maxValue = 100
+            ns.value = 50
+            ns.step = 1
+            ns.label.format = "{} %"
+            pane0.addChild(ns)
+                     
+            ###
+            ### Checkbox
+            ###
+            cb = Checkbox()
+            cb.tooltip = "this is a checkbox"
+            cb.backColor = biui.Color(255,255,0)
+            cb.backColorOver = biui.Color(255,255,0)
+            cb.backColorDown = biui.Color(255,255,0)
+            cb.backColorChecked = biui.Color(255,0,0)
+            cb.x = 10
+            cb.y = 200
+            
+            pane0.addChild(cb)
         
         ################################################
         ###                                      PANEL 1
@@ -312,50 +314,51 @@ def createGUI0():
         pane1.height = 300
         wnd.addChild(pane1,1,0)
         
-        ###
-        ### Creating a ToggleButton
-        ###
-        for i in range(3):
-            button0 = ToggleButton()
-            button0.tooltip = "button{}".format(i)
-            button0.x = 10
-            button0.y = 10+i    *35
-            button0.width = 200
-            button0.height = 30        
-            pane1.addChild(button0)
+        if True:
+            ###
+            ### Creating a ToggleButton
+            ###
+            for i in range(3):
+                button0 = ToggleButton()
+                button0.tooltip = "button{}".format(i)
+                button0.x = 10
+                button0.y = 10+i    *35
+                button0.width = 200
+                button0.height = 30        
+                pane1.addChild(button0)
+                
+            ###
+            ### Progressbar
+            ###
+            pb = Progressbar()
+            pb.tooltip = "progress bar"
+            pb.x = 10
+            pb.y = 120
+            pb.width = 150
+            pb.height = 30    
+            pb.minValue = -30
+            pb.maxValue = 30
+            pb.value = 12
+            pb.step = 1
+            pb.label.format = "{} mm"    
+            pane1.addChild(pb)
             
-        ###
-        ### Progressbar
-        ###
-        pb = Progressbar()
-        pb.tooltip = "progress bar"
-        pb.x = 10
-        pb.y = 120
-        pb.width = 150
-        pb.height = 30    
-        pb.minValue = -30
-        pb.maxValue = 30
-        pb.value = 12
-        pb.step = 1
-        pb.label.format = "{} mm"    
-        pane1.addChild(pb)
-        
-        ###
-        ### NumberSlider
-        ###
-        ns = NumberSlider()
-        ns.tooltip = "number slider"
-        ns.showNavigation = False
-        ns.x = 10
-        ns.y = 160
-        ns.width = 150
-        ns.height = 30    
-        ns.minValue = -30
-        ns.maxValue = 30
-        ns.value = 12
-        ns.step = 1
-        ns.label.format = "{} mm"    
-        pane1.addChild(ns)
+            ###
+            ### NumberSlider
+            ###
+            ns = NumberSlider()
+            ns.tooltip = "number slider"
+            ns.showNavigation = False
+            ns.x = 10
+            ns.y = 160
+            ns.width = 150
+            ns.height = 30    
+            ns.minValue = -30
+            ns.maxValue = 30
+            ns.value = 12
+            ns.step = 1
+            ns.label.format = "{} mm"    
+            pane1.addChild(ns)
                 
         ################################################
         ###                                      PANEL 2
@@ -369,31 +372,32 @@ def createGUI0():
         pane2.height = 300
         wnd.addChild(pane2,2,0)
             
-        ###
-        ### ButtonGroup
-        ###
-        buttonGroup = ButtonGroup()
-        buttonGroup.tooltip = "this is a button group"
-        buttonGroup.x = 0
-        buttonGroup.y = 0
-        buttonGroup.width = 180
-        buttonGroup.height = 280
-        pane2.addChild(buttonGroup)
-        
-        ###
-        ### Add Buttons to group
-        ###
-        for i in range(3):
-            button0 = ToggleButton()
-            ##button0.checked = False
-            button0.tooltip = "button{}".format(i)
-            button0.x = 10
-            button0.y = 10+i*35
-            button0.width = 100
-            button0.height = 30        
-            buttonGroup.addChild(button0)
-        
-        
+        if True:
+            ###
+            ### ButtonGroup
+            ###
+            buttonGroup = ButtonGroup()
+            buttonGroup.tooltip = "this is a button group"
+            buttonGroup.x = 0
+            buttonGroup.y = 0
+            buttonGroup.width = 180
+            buttonGroup.height = 350
+            pane2.addChild(buttonGroup)
+            
+            ###
+            ### Add Buttons to group
+            ###
+            for i in range(3):
+                button0 = ToggleButton()
+                ##button0.checked = False
+                button0.tooltip = "button{}".format(i)
+                button0.x = 10
+                button0.y = 10+i*35
+                button0.width = 100
+                button0.height = 30        
+                buttonGroup.addChild(button0)
+            
+            
         
         ################################################
         ###                                      PANEL 3
@@ -413,43 +417,47 @@ def createGUI0():
         pane3_1.tooltip = "nested pane"
         pane3_1.x = 50
         pane3_1.y = 50
-        pane3_1.width = pane3.width-100    
-        pane3_1.height = pane3.height-100
+        pane3_1.width = 100    
+        pane3_1.height = 100
         pane3_1.onMouseClick.add(p1Click)
+        pane3_1.backColor = Color(50,50,50)
         pane3.addChild(pane3_1)
-    
-        pane3_2 = Pane()
-        pane3_2.tooltip = "nested nested pane"
-        pane3_2.x = 50
-        pane3_2.y = 50
-        pane3_2.width = pane3_1.width-100    
-        pane3_2.height = pane3_1.height-100
-        pane3_2.onMouseClick.add(p2Click)
-        pane3_1.addChild(pane3_2)
-            
-        button0 = Label()
-        button0.tooltip = "label"
-        button0.format = "{:,} mm"
-        button0.value = 1000
-        ###button0.onMouseUp.add(_test.upHandler)
-        button0.x = 5
-        button0.y = 10
-        button0.width = 100
-        button0.height = 30
-        button0.onMouseClick.add(p3Click)
-        pane3_1.addChild(button0)
-
-        button0 = Button()
-        button0.format = "{:,} mm"
-        button0.value = 1000
-        ###button0.onMouseUp.add(_test.upHandler)
-        button0.x = 5
-        button0.y = 50
-        button0.width = 100
-        button0.height = 30
-        button0.onMouseClick.add(p3Click)
-        pane3_1.addChild(button0)
         
+        if True:
+            pane3_2 = Pane()
+            pane3_2.tooltip = "nested nested pane"
+            pane3_2.x = 50
+            pane3_2.y = 50
+            pane3_2.width = 50    
+            pane3_2.height = 50
+            pane3_2.onMouseClick.add(p2Click)
+            pane3_2.backColor = Color(70,70,70)
+            pane3_1.addChild(pane3_2)
+            
+        if True:
+            button0 = Label()
+            button0.tooltip = "label"
+            button0.format = "{:,} mm"
+            button0.value = 1000
+            ###button0.onMouseUp.add(_test.upHandler)
+            button0.x = 5
+            button0.y = 10
+            button0.width = 100
+            button0.height = 30
+            button0.onMouseClick.add(p3Click)
+            pane3_1.addChild(button0)
+    
+            button0 = Button()
+            button0.format = "{:,} mm"
+            button0.value = 1000
+            ###button0.onMouseUp.add(_test.upHandler)
+            button0.x = 5
+            button0.y = 50
+            button0.width = 100
+            button0.height = 30
+            button0.onMouseClick.add(p3Click)
+            pane3_1.addChild(button0)
+            
         ################################################
         ###                                      PANEL 4
         ################################################
@@ -462,12 +470,13 @@ def createGUI0():
         pane4.height = 300
         wnd.addChild(pane4,1,1)
         
-        img = Image()
-        #
-        pane4.addChild(img)
-        img.file = "../test.jpg"
-        img.alignment = Alignment.FILL
-        ##img.alignment = Alignment.CENTER_CENTER
+        if True:
+            img = Image()
+            #
+            pane4.addChild(img)
+            img.file = "./test.jpg"
+            img.alignment = Alignment.FILL
+            ##img.alignment = Alignment.CENTER_CENTER
 
         ################################################
         ###                                      PANEL 5
@@ -483,82 +492,53 @@ def createGUI0():
         pane5.horizontalScrollbar = True        
         wnd.addChild(pane5,2,1)
         
-        b = Button()
-        b.value = "TL"
-        b.width = b.height = 50
-        b.x = 0
-        b.y = 0
-        pane5.addChild(b)
-    
-        b = Button()
-        b.value = "TR"
-        b.width = b.height = 50
-        b.x = 1000-50
-        b.y = 0
-        pane5.addChild(b)
+        if True:
+            b = Button()
+            b.value = "TL"
+            b.width = b.height = 50
+            b.x = 0
+            b.y = 0
+            pane5.addChild(b)
         
-        b = Button()
-        b.value = "BR"
-        b.width = b.height = 50
-        b.x = 1000-50
-        b.y = 1000-50
-        pane5.addChild(b)
-    
-        b = Button()
-        b.value = "BL"
-        b.width = b.height = 50
-        b.x = 0
-        b.y = 1000-50
-        pane5.addChild(b)
-        
-        b = Button()
-        b.width = b.height = 50
-        b.x = 500-25
-        b.y = 500-25
-        pane5.addChild(b)
-        
+            b = Button()
+            b.value = "TR"
+            b.width = b.height = 50
+            b.x = 1000-50
+            b.y = 0
+            pane5.addChild(b)
             
-def createGUI1():
-    ################################################
-    ###                                       WINDOW
-    ################################################
-    
-    wnd = Window(1300,500)
-    
-    ##pane0 = biui.Pane()
-    ##pane0.alignment = Alignment.FILL
-    ##wnd.addChild(pane0,0,0)
-    
-    ##pane1 = biui.Pane()
-    ##pane1.alignment = Alignment.FILL
-    ##wnd.addChild(pane1,1,0)
+            b = Button()
+            b.value = "BR"
+            b.width = b.height = 50
+            b.x = 1000-50
+            b.y = 1000-50
+            pane5.addChild(b)
+        
+            b = Button()
+            b.value = "BL"
+            b.width = b.height = 50
+            b.x = 0
+            b.y = 1000-50
+            pane5.addChild(b)
             
-    
-    button0 = Button()
-    button0.x = 10
-    button0.y = 45
-    button0.width = 200
-    button0.height = 30
-    wnd.addChild(button0)
-                
-    ##pane2 = biui.Pane()
-    ##pane2.alignment = Alignment.FILL
-    ##wnd.addChild(pane2,3,2)
+            b = Button()
+            b.width = b.height = 50
+            b.x = 500-25
+            b.y = 500-25
+            pane5.addChild(b)
 
 def init():
 
     biui.init()
     biui.setThemeFolder(
         os.path.abspath(
-            os.path.join(os.getcwd(),"../themes")
+            os.path.join(os.getcwd(),"./themes")
         )
     )
     
     biui.selectTheme("blocks")
     ##biui.selectTheme("default")
     createGUI0()
-    ##createGUI()
-    ##createGUI()
             
 def main():
     init()

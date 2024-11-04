@@ -229,7 +229,7 @@ class WidgetTestCase(unittest.TestCase):
         """test Widget.focus"""
         assert 1==1, ""
             
-    """
+    """ "
     backColor
     borderColor
     tooltip
@@ -244,15 +244,15 @@ class WidgetTestCase(unittest.TestCase):
     onMouseUp
     onMouseDown
     onMouseClick
-    onBeforeDraw
-    onAfterDraw
+    onBeforeRender
+    onAfterRender
     onFocus
     onFocusLost
     onShortcut
     onResized
     onGotAdded
     onGotRemoved
-    """
+    """ #"
     
 if __name__ == "__main__":
     unittest.main() ## run all tests

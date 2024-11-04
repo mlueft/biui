@@ -14,12 +14,11 @@ from biui.Events import EventManager
 from biui.Enum import Alignment
 from biui.LayoutManager import LayoutManager
 
-##from biui.Window import Window
-
 ### Base class for all GUI elements.
 ##
 ##
 class Widget():
+    
     
     ###
     ##
@@ -32,7 +31,7 @@ class Widget():
         ## Stores the width of the GUI element.
         self._width:int = 100
         ##Stores the height of the GUI element.
-        self._height:int = 100
+        self._height:int = 40
         ## 
         self._minWidth:int = 0
         ## 
@@ -105,11 +104,11 @@ class Widget():
         
         ###
         ##
-        self.onBeforeDraw:EventManager = EventManager()
+        self.onBeforeRender:EventManager = EventManager()
         
         ###
         ##
-        self.onAfterDraw:EventManager = EventManager()
+        self.onAfterRender:EventManager = EventManager()
         
         ###
         ##
@@ -143,14 +142,65 @@ class Widget():
         self.__borderColor:Color = None
         self.__backColor:Color = None
         
-        self.onMouseDown.add(self.hndMouseDown)
-        
+        self.onMouseDown.add(self.__hndMouseDown)
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __dir__(self):
+        result = [
+             "onTextInput",  "onKeyUp",      "onKeyDown",    "onMouseMove",
+             "onMouseLeave", "onMouseEnter", "onMouseWheel", "onMouseUp",
+             "onMouseDown",  "onMouseClick", "onBeforeDraw", "onAfterDraw",
+             "onFocus",      "onFocusLost",  "onShortcut",   "onGotAdded",
+             "onResized",    "onGotRemoved",
+             
+             "position",     "size",         "backColor",    "borderColor",
+             "tooltip",      "name",         "x",            "y",
+             "left",         "top",          "right",        "bottom",
+             "width",        "minWidth",     "maxWidth",     "height",
+             "minHeight",    "maxHeight",    "window",       "parent",
+             "renderRect",   "isInvalide",   "alignment",
+             
+             "getChildAt",   "hasChildren",  "hasChild",     "toLocal",
+             "toGlobal",     "focus",
+              
+             "_recordDirtyRect", "_invalidate", "_getDirtyRectangles",
+             "_calculateLayout", "_getTexture", "_render",
+             
+            "_onBeforeRender", "_onAfterRender",  "_onGotAdded",   "_onGotRemoved",
+            "_onMouseDown",  "_onMouseUp",    "_onMouseClick", "_onMouseWheel",
+            "_onMouseEnter", "_onMouseLeave", "_onMouseMove",  "_onKeyDown",
+            "_onKeyUp",      "_onTextInput",  "_onShortcut",   "_onResized",
+            "_onFocus",      "_onFocusLost"
+        ]
+        result.sort()
+        return result
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __delattr__(self, name):
+        raise AttributeError(BIUI_ERR_DEL_ATTR_NOT_ALLOWED)
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def debug(self,prefix=""):
+        print("{}* {} ({})".format(prefix,self, self.name))
+        for i in dir(self):
+            print("{}  {} : {}".format( prefix,i, getattr(self,i,"") ))
+    FUNCTIONEND
+    
     ### Handels the mouse down event to set the focus on the current widget.
     ##
     ##
-    def hndMouseDown(self, ev):
+    def __hndMouseDown(self, ev):
         #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::hndMouseDown():{}".format(self))
+        print("Widget::__hndMouseDown():{}".format(self))
         #endif
         if self.window is None:
             return
@@ -161,7 +211,8 @@ class Widget():
             return 
         
         self.window.setFocus(self)
-    
+    FUNCTIONEND
+
     ### 
     ##
     ##   TODO: hinting return type
@@ -170,7 +221,8 @@ class Widget():
         print("Widget::getChildAt():{}".format(self))
         #endif
         return self
-    
+    FUNCTIONEND
+
     ### Returns the x/y position of the GUI element.
     ##
     ##  @return            A tuple representing the position.
@@ -181,7 +233,8 @@ class Widget():
         print("Widget::position_get():{}".format(self))
         #endif
         return (self._x, self._y)
-    
+    FUNCTIONEND
+
     ### Returns the width/height position of the GUI element.
     ##
     ##  @return            A tuple representing the size.
@@ -192,6 +245,7 @@ class Widget():
         print("Widget::size_get():{}".format(self))
         #endif
         return (self.width, self.height)
+    FUNCTIONEND
 
     ### 
     ##
@@ -203,7 +257,8 @@ class Widget():
         print("Widget::backColor_get():{}".format(self))
         #endif
         return self.__backColor
-    
+    FUNCTIONEND
+
     ### Sets the backcolor for this widget.
     ##
     ##  @param value       
@@ -219,7 +274,8 @@ class Widget():
         
         self.__backColor = value
         self._invalidate()
-        
+    FUNCTIONEND
+
     ### 
     ##
     ##  @return            
@@ -230,7 +286,8 @@ class Widget():
         print("Widget::brderColor_get():{}".format(self))
         #endif
         return self.__borderColor
-    
+    FUNCTIONEND
+
     ### Sets the borderColor for this widget.
     ##
     ##  @param value       
@@ -246,7 +303,8 @@ class Widget():
         
         self.__borderColor = value
         self._invalidate()
-        
+    FUNCTIONEND
+
     ### 
     ##
     ##  @return            An integer value.
@@ -257,7 +315,8 @@ class Widget():
         print("Widget::tooltip_get():{}".format(self))
         #endif
         return self._tooltip
-    
+    FUNCTIONEND
+
     ### Sets the tooltip text for this widget.
     ##
     ##  @param value       The text to show as tooltp
@@ -269,7 +328,8 @@ class Widget():
         print("Widget::tooltip_set():{}".format(self))
         #endif
         self._tooltip = value
-        
+    FUNCTIONEND
+
     ### 
     ##
     ##  @return            An integer value.
@@ -280,7 +340,8 @@ class Widget():
         print("Widget::name_get():{}".format(self))
         #endif
         return self._name
-    
+    FUNCTIONEND
+
     ### Sets the x position of the GUI element.
     ##
     ##  @param value       An integer value.
@@ -292,7 +353,8 @@ class Widget():
         print("Widget::name_set():{}".format(self))
         #endif
         self._name = value
-            
+    FUNCTIONEND
+
     ### Returns the x position of the GUI element.
     ##
     ##  @return            An integer value.
@@ -303,7 +365,8 @@ class Widget():
         print("Widget::x_get():{}".format(self))
         #endif
         return self._x
-    
+    FUNCTIONEND
+
     ### Sets the x position of the GUI element.
     ##
     ##  @param value       An integer value.
@@ -317,11 +380,10 @@ class Widget():
         value = int(value)
         if value == self._x:
             return
-        ## record old dirty rect for the old position
-        self._invalidate()
         self._x = value
         self._invalidate()
-    
+    FUNCTIONEND
+
     ## Returns the y position of the GUI element.
     ##
     ##  @return            An integer value.
@@ -332,6 +394,7 @@ class Widget():
         print("Widget::y_get():{}".format(self))
         #endif
         return self._y
+    FUNCTIONEND
 
     ### Sets the y position of the GUI element.
     ##
@@ -346,11 +409,10 @@ class Widget():
         value = int(value)
         if value == self._y:
             return
-        ## record old dirty rect
-        self._invalidate()
         self._y = value
         self._invalidate()
-    
+    FUNCTIONEND
+
     ### Set/Get the left border of the widget.
     ##  Is equqalent to x.
     ##
@@ -362,7 +424,8 @@ class Widget():
         print("Widget::left_get():{}".format(self))
         #endif
         return self.x
-    
+    FUNCTIONEND
+
     ### Sets the left border.
     ##  Its the distance of the parent´sleft border to
     ##  the own left border.
@@ -380,7 +443,8 @@ class Widget():
         r = self.x+self.width
         self.width = r-value
         self.x = value
-    
+    FUNCTIONEND
+
     ### Set/Get the top border of the widget.
     ##  Setting this value does not change 
     ##  any other border of the widget.
@@ -395,7 +459,8 @@ class Widget():
         print("Widget::top_get():{}".format(self))
         #endif
         return self.y
-    
+    FUNCTIONEND
+
     ### Sets the top border.
     ##  Its the distance of the parents top 
     ##  border to the own top border.
@@ -413,7 +478,7 @@ class Widget():
         b = self.y+self.height
         self.height = b-value
         self.y = value
-        
+    FUNCTIONEND
     
     ### Set/Get the right border of the widget.
     ##  Setting this value does not change 
@@ -429,7 +494,8 @@ class Widget():
         print("Widget::right_get():{}".format(self))
         #endif
         return self.x+self.width
-    
+    FUNCTIONEND
+
     ### Sets the right border of the widget.
     ##  It is the distance of the parent left border
     ##  to the own right border.
@@ -442,7 +508,8 @@ class Widget():
         print("Widget::right_set():{}".format(self))
         #endif
         self.width = value-self.x
-    
+    FUNCTIONEND
+
     ### Set/Get the bottom border of the widget.
     ##  Setting this value does not change 
     ##  any other border of the widget.
@@ -457,7 +524,8 @@ class Widget():
         print("Widget::bottom_get():{}".format(self))
         #endif
         return self.y+self.height
-    
+    FUNCTIONEND
+
     ### Sets the bottom border of the widget.
     ##  Its value is the distance of the top
     ##  border of the parent widget to the own bottom
@@ -471,7 +539,8 @@ class Widget():
         print("Widget::bottom_set():{}".format(self))
         #endif
         self.height = value-self.y
-    
+    FUNCTIONEND
+
     ### Return the width of the GUI element.
     ##
     ##  @return            An integer value.
@@ -482,7 +551,8 @@ class Widget():
         print("Widget::width_get():{}".format(self))
         #endif
         return self._width
-    
+    FUNCTIONEND
+
     ### Sets the width of the GUI element.
     ##
     ##  @param value       An integer value.
@@ -502,12 +572,13 @@ class Widget():
             value = min(value, self._maxWidth)
             value = max(value, self._minWidth)
         
-        self._invalidate()
+        ##self._invalidate()
         self._width = max(0,value)
         self._invalidate()
-        self.onResized.provoke(Event(self))
+        ##self._onResized(Event(self))
         self._resized = True
-            
+    FUNCTIONEND
+
     ### Returns the min widt value of the widget.
     ##
     ##  @return            An integer value.
@@ -518,7 +589,8 @@ class Widget():
         print("Widget::minWidth_get():{}".format(self))
         #endif
         return self._minWidth
-    
+    FUNCTIONEND
+
     ### Sets the min width value of the widget.
     ##
     ##  @param value       An integer value.
@@ -533,6 +605,7 @@ class Widget():
         self._minWidth = max(0,value)
         if self._minWidth > self._width:
             self.width = self._minWidth
+    FUNCTIONEND
 
     ### Returns the max width value of the widget.
     ##
@@ -544,6 +617,7 @@ class Widget():
         print("Widget::maxWidth_get():{}".format(self))
         #endif
         return self._maxWidth
+    FUNCTIONEND
 
     ### Sets the max width value of the widget.
     ##
@@ -559,7 +633,8 @@ class Widget():
         self._maxWidth = max(0,value)
         if self._maxWidth < self._width:
             self.width = self._maxWidth
-    
+    FUNCTIONEND
+
     ## Returns the y position of the GUI element.
     ##
     ##  @return            An integer value.
@@ -570,7 +645,8 @@ class Widget():
         print("Widget::height_get():{}".format(self))
         #endif
         return self._height
-            
+    FUNCTIONEND
+
     ### Sets the height of the GUI element.
     ##
     ##  @param value       An integer value.
@@ -586,17 +662,16 @@ class Widget():
         if value == self._height:
             return
         
-        ## record old dirty rect
         if self._alignment != Alignment.FILL:
             value = min(value, self._maxWidth)
             value = max(value, self._minWidth)
             
-        self._invalidate()
         self._height = max(1,value)
-        self.onResized.provoke(Event(self))
+        ##self._onResized(Event(self))
         self._invalidate()
         self._resized = True
-            
+    FUNCTIONEND
+
     ### Returns the min width of the widget.
     ##
     ##  @return            An integer value.
@@ -607,7 +682,8 @@ class Widget():
         print("Widget::minHeight_get():{}".format(self))
         #endif
         return self._minHeight
-    
+    FUNCTIONEND
+
     ### Sets the min width of the widget.
     ##
     ##  @param value       An integer value.
@@ -622,6 +698,7 @@ class Widget():
         self._minHeight = max(0,value)
         if self._minHeight > self._height:
             self.height = self._minHeight
+    FUNCTIONEND
 
     ### Returns the max. height of the widget.
     ##
@@ -633,6 +710,7 @@ class Widget():
         print("Widget::maxHeight_get():{}".format(self))
         #endif
         return self._maxHeight
+    FUNCTIONEND
 
     ### Sets the max. height of the widget.
     ##
@@ -648,7 +726,8 @@ class Widget():
         self._maxHeight = max(0,value)
         if self._maxHeight < self._height:
             self.height = self._maxHeight
-        
+    FUNCTIONEND
+
     ###
     ##
     ##
@@ -658,17 +737,19 @@ class Widget():
         print("Widget::hasChildren():{}".format(self))
         #endif
         return False
-    
+    FUNCTIONEND
+
     ### Checks if the given child is a child object or
     ##  if it is the current widget.
     ##
     ## todo: hinting
     def hasChild(self,child)->bool:
         #ifdef SHOW_FUNCTIONNAMES
-        //print("Widget::hasChild():{}".format(self))
+        ##print("Widget::hasChild():{}".format(self))
         #endif
         return child == self
-    
+    FUNCTIONEND
+
     ### Returns the alignment setting.
     ##
     ##
@@ -678,7 +759,8 @@ class Widget():
         print("Widget::alignment():{}".format(self))
         #endif
         return self._alignment
-            
+    FUNCTIONEND
+
     ### Serts the alignment setting.
     ##
     ##
@@ -688,7 +770,8 @@ class Widget():
         print("Widget::alignment():{}".format(self))
         #endif
         self._alignment = value
-    
+    FUNCTIONEND
+
     ### Records the current Rect of the GUI element
     ##  in the parent´s coordinate system.
     ##
@@ -698,13 +781,16 @@ class Widget():
         #ifdef SHOW_FUNCTIONNAMES
         print("Widget::_recordDirtyRect():{}".format(self))
         #endif
+        
         if self.parent is None:
             return
+        
         if self.window is None:
             return
 
         self.parent._recordDirtyRect(box)
-        
+    FUNCTIONEND
+
     ### Checks if the widget is invalide.
     ##  If it is invalide, it has to be redrawn
     ##  at the next refresh.
@@ -712,10 +798,11 @@ class Widget():
     ##
     def isInvalide(self)->bool:
         #ifdef SHOW_FUNCTIONNAMES
-        //print("Widget::isInvalide():{}".format(self))
+        ##print("Widget::isInvalide():{}".format(self))
         #endif
         return self._isInvalide
-     
+    FUNCTIONEND
+
     ### Does some enecassary work if the GUI element
     ##  became invalide. For example after changing its size.
     ##
@@ -725,13 +812,12 @@ class Widget():
         #ifdef SHOW_FUNCTIONNAMES
         print("Widget::invalidate():{}".format(self))
         #endif
-        ## record new dirty rect
-        box = self.position+self.size
-        self._recordDirtyRect(box)
-        ## set flag to recalculate thif self.window is None:e layout.
+        
+        ## set flag to recalculate the layout.
         ## set flag to redraw widget
         self._isInvalide = True
-    
+    FUNCTIONEND
+
     ### Returns all dirty rects of the GUI element
     ##  since the last call. Calling this funtion clears
     ##  all recorded rects.
@@ -746,7 +832,8 @@ class Widget():
         result = self._dirtyRects.copy()
         self._dirtyRects.clear()
         return result
-    
+    FUNCTIONEND
+
     ### Returns the parent window of the widget.
     ##
     ## todo: hinting
@@ -764,6 +851,7 @@ class Widget():
             elif parent == None:
                 return
             parent = parent.parent 
+    FUNCTIONEND
 
     ### Returns the parent GUI element of the GUI element.
     ##  Normally it is the main window or a container element
@@ -777,7 +865,8 @@ class Widget():
         print("Widget::parent_get():{}".format(self))
         #endif
         return self._parent
-    
+    FUNCTIONEND
+
     ### Sets the parent GUI element.
     ##
     ##  @param parent      A Window or ContainerWidget
@@ -793,7 +882,8 @@ class Widget():
             self._parent.removeChild(self)
         
         self._parent = parent
-        
+    FUNCTIONEND
+
     ### Returns the drawing texture of the GUI element.
     ##  This is for internal use. Just use the texture
     ##  if you know what you are doing.
@@ -805,7 +895,8 @@ class Widget():
         print("Widget::_getTexture():{}".format(self))
         #endif
         return self._parent._getTexture()
-    
+    FUNCTIONEND
+
     ### Recalculates the layout of the widget.
     ##
     ##
@@ -813,45 +904,19 @@ class Widget():
         #ifdef SHOW_FUNCTIONNAMES
         print("Widget::_calculateLayout():{}".format(self))
         #endif
-        if self._resized:
-            self.onResized.provoke(Event(self))
-            self._resized = False
-            
-    ### Is called before the drawing procedure ist starting
-    ##  to calculate the layout and before _redraw is called.
-    ##
-    def _onBeforeDraw(self)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onBeforeDraw():{}".format(self))
-        #endif
-        self.onBeforeDraw.provoke(Event(self))
-    
-    ### Is called after all redwaing is done.
-    ##
-    ##
-    def _onAfterDraw(self)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onAfterDraw():{}".format(self))
-        #endif
-        self.onAfterDraw.provoke(Event(self))
+        
+        if self._isInvalide:
+            self.recordDirtyRect()
+    FUNCTIONEND
 
-    ### Is called when the widget got added to a parent.
+    ### Records the dirty recangle
     ##
-    def _onGotAdded(self)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onGotAdded():{}".format(self))
-        #endif
-        self.onGotAdded.provoke(Event(self))
+    ##
+    def recordDirtyRect(self):
+        box = self.position+self.size
+        self._recordDirtyRect(box)
+    FUNCTIONEND
     
-    ### Is called when the widget got removed from a parent.
-    ##
-    ##
-    def _onGotRemoved(self)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onGotRemoved():{}".format(self))
-        #endif
-        self.onGotRemoved.provoke(Event(self))
-
     ### Returns the region of the texture to be rendered on screen.
     ##  The texture is returned by _render().
     ##
@@ -861,7 +926,17 @@ class Widget():
         print("Widget::renderRect_get():{}".format(self))
         #endif
         return (0,0,self._width,self._height)
+    FUNCTIONEND
     
+    ###
+    ##
+    ##
+    def _main(self):
+        if self._resized:
+            self._onResized(Event(self))
+            self._resized = False
+    FUNCTIONEND
+        
     ### Redraws the GUI element. This is for internal use.
     ##  Just use this function if you know what you are doing.
     ##  Do not call super()._render().
@@ -875,7 +950,7 @@ class Widget():
     ##  todo: hinting
     def _render(self, forceRedraw:bool=False):
         #ifdef SHOW_FUNCTIONNAMES
-        //print("Widget::_render():{}".format(self))
+        ##print("Widget::_render():{}".format(self))
         #endif
         
         if not self.isInvalide():
@@ -889,129 +964,7 @@ class Widget():
         self._isInvalide = False
         
         return texture
-        
-    ### Is called if a mouse button got pressed and the
-    ##  mouse pointer is over the GUI element.
-    ##
-    ##  @param ev                 A MouseEvent
-    ##  @return            None
-    ##
-    def _onMouseDown(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onMouseDown():{}".format(self))
-        #endif
-        self.onMouseDown.provoke(ev)
-        
-    ### Is called if a mouse button got released and the
-    ##  mouse pointer is over the GUI element.
-    ##
-    ##  @param ev                 A MouseEvent
-    ##  @return                   None
-    ##
-    def _onMouseUp(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onMouseUp():{}".format(self))
-        #endif
-        self.onMouseUp.provoke(ev)
-
-    ### Is called if a mouse had a click release and the
-    ##  mouse pointer is over the GUI element.
-    ##
-    ##  @param ev                 A MouseEvent
-    ##  @return                   None
-    ##
-    def _onMouseClick(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onMouseClick():{}".format(self))
-        #endif
-        self.onMouseClick.provoke(ev)
-             
-    ### Is called if a mouse wheel got turned and the
-    ##  mouse pointer is over the GUI element.
-    ##  @param ev   MouseEvent.MouseEvent
-    ##
-    ##  @param ev                 A MouseEvent
-    ##  @return                   None
-    ##
-    def _onMouseWheel(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onMouseWheel():{}".format(self))
-        #endif
-        self.onMouseWheel.provoke(ev)
-    
-    ### Is called if the mouse pointer enters the GUI element.
-    ##
-    ##  @param ev                 A MouseEvent
-    ##  @return                   None
-    ##
-    def _onMouseEnter(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onMouseEnter():{}".format(self))
-        #endif
-        self.onMouseEnter.provoke(ev)
-    
-    ### Is called if the mouse pointer leaves the GUI element.
-    ##
-    ##  @param ev                 A MouseEvent
-    ##  @return                   None
-    ##
-    def _onMouseLeave(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onMouseLeave():{}".format(self))
-        #endif
-        self.onMouseLeave.provoke(ev)
-    
-    ### Is called if the mouse pointer is over the GUI element
-    ##  and moved.
-    ##
-    ##  @param ev                 A MouseEvent
-    ##  @return                   None
-    ##
-    def _onMouseMove(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        //print("Widget::_onMouseMove():{}".format(self))
-        #endif
-        self.onMouseMove.provoke(ev)
-    
-    ### Is called key got pressed.
-    ##  It is necassry to call super().onKeyDown(ev)
-    ##  at the end.
-    ##
-    ##  @param ev                 A KeyEvent.
-    ##  @return                   None
-    ##
-    def _onKeyDown(self,ev:KeyEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onKeyDown():{}".format(self))
-        #endif
-        ##print("{} Widget::sdlOnKeyDown".format(self))
-        self.onKeyDown.provoke(ev)
-    
-    ### Is called if a key got released.
-    ##  It is necassry to call super().onKeyUp(ev)
-    ##  at the end.
-    ##
-    ##  @param ev                 A KeyEvent.
-    ##  @return                   None
-    ##
-    def _onKeyUp(self,ev:KeyEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onKeyUp():{}".format(self))
-        #endif
-        self.onKeyUp.provoke(ev)
-    
-    ### Is called if a key press ends in a entered character.
-    ##  It is necassry to call super().onTextInput(ev)
-    ##  at the end.
-    ##
-    ##  @param ev                 A KeyEvent.
-    ##  @return                   None
-    ##    
-    def _onTextInput(self,ev:KeyEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Widget::_onTextInput():{}".format(self))
-        #endif
-        self.onTextInput.provoke(ev)
+    FUNCTIONEND
 
     ### Converts global coordinates to local coordinates
     ##
@@ -1029,7 +982,8 @@ class Widget():
             result = self._parent.toLocal(result)
         
         return result
-    
+    FUNCTIONEND
+
     ### Converts local coordinates to the top window´s coordinates
     ##
     ##  @param coordinate         A Tuple with x and y coordinates.
@@ -1045,7 +999,8 @@ class Widget():
             result = self._parent.toGlobal(result)
         
         return result
-    
+    FUNCTIONEND
+
     ### Sets the focus the the widget.
     ##  @return                    None
     ##
@@ -1054,7 +1009,184 @@ class Widget():
         print("Widget::focus():{}".format(self))
         #endif
         self.window.setFocus(self)
-    
+    FUNCTIONEND
+
+    ### Is called before the drawing procedure ist starting
+    ##  to calculate the layout and before _redraw is called.
+    ##
+    def _onBeforeRender(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onBeforeRender():{}".format(self))
+        #endif
+        ##self._onBeforeRender(Event(self))
+        self.onBeforeRender.provoke(Event(self))
+    FUNCTIONEND
+
+    ### Is called after all redwaing is done.
+    ##
+    ##
+    def _onAfterRender(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onAfterRender():{}".format(self))
+        #endif
+        ##self._onAfterDraw(Event(self))
+        self.onAfterRender.provoke(Event(self))
+    FUNCTIONEND
+
+    ### Is called when the widget got added to a parent.
+    ##
+    def _onGotAdded(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onGotAdded():{}".format(self))
+        #endif
+        ##self._onGotAdded(Event(self))
+        self.onGotAdded.provoke(Event(self))
+    FUNCTIONEND
+
+    ### Is called when the widget got removed from a parent.
+    ##
+    ##
+    def _onGotRemoved(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onGotRemoved():{}".format(self))
+        #endif
+        ##self._onGotRemoved(Event(self))
+        self.onGotRemoved.provoke(Event(self))
+    FUNCTIONEND
+
+    ### Is called if a mouse button got pressed and the
+    ##  mouse pointer is over the GUI element.
+    ##
+    ##  @param ev                 A MouseEvent
+    ##  @return            None
+    ##
+    def _onMouseDown(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onMouseDown():{}".format(self))
+        #endif
+        self.onMouseDown.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if a mouse button got released and the
+    ##  mouse pointer is over the GUI element.
+    ##
+    ##  @param ev                 A MouseEvent
+    ##  @return                   None
+    ##
+    def _onMouseUp(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onMouseUp():{}".format(self))
+        #endif
+        self.onMouseUp.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if a mouse had a click release and the
+    ##  mouse pointer is over the GUI element.
+    ##
+    ##  @param ev                 A MouseEvent
+    ##  @return                   None
+    ##
+    def _onMouseClick(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onMouseClick():{}".format(self))
+        #endif
+        self.onMouseClick.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if a mouse wheel got turned and the
+    ##  mouse pointer is over the GUI element.
+    ##  @param ev   MouseEvent.MouseEvent
+    ##
+    ##  @param ev                 A MouseEvent
+    ##  @return                   None
+    ##
+    def _onMouseWheel(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onMouseWheel():{}".format(self))
+        #endif
+        self.onMouseWheel.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if the mouse pointer enters the GUI element.
+    ##
+    ##  @param ev                 A MouseEvent
+    ##  @return                   None
+    ##
+    def _onMouseEnter(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onMouseEnter():{}".format(self))
+        #endif
+        self.onMouseEnter.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if the mouse pointer leaves the GUI element.
+    ##
+    ##  @param ev                 A MouseEvent
+    ##  @return                   None
+    ##
+    def _onMouseLeave(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onMouseLeave():{}".format(self))
+        #endif
+        self.onMouseLeave.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if the mouse pointer is over the GUI element
+    ##  and moved.
+    ##
+    ##  @param ev                 A MouseEvent
+    ##  @return                   None
+    ##
+    def _onMouseMove(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        ##print("Widget::_onMouseMove():{}".format(self))
+        #endif
+        self.onMouseMove.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called key got pressed.
+    ##  It is necassry to call super().onKeyDown(ev)
+    ##  at the end.
+    ##
+    ##  @param ev                 A KeyEvent.
+    ##  @return                   None
+    ##
+    def _onKeyDown(self,ev:KeyEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onKeyDown():{}".format(self))
+        #endif
+        ##print("{} Widget::sdlOnKeyDown".format(self))
+        self.onKeyDown.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if a key got released.
+    ##  It is necassry to call super().onKeyUp(ev)
+    ##  at the end.
+    ##
+    ##  @param ev                 A KeyEvent.
+    ##  @return                   None
+    ##
+    def _onKeyUp(self,ev:KeyEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onKeyUp():{}".format(self))
+        #endif
+        self.onKeyUp.provoke(ev)
+    FUNCTIONEND
+
+    ### Is called if a key press ends in a entered character.
+    ##  It is necassry to call super().onTextInput(ev)
+    ##  at the end.
+    ##
+    ##  @param ev                 A KeyEvent.
+    ##  @return                   None
+    ##    
+    def _onTextInput(self,ev:KeyEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onTextInput():{}".format(self))
+        #endif
+        self.onTextInput.provoke(ev)
+    FUNCTIONEND
+
     ### 
     ##
     ##
@@ -1064,6 +1196,34 @@ class Widget():
         #endif
         ##print("Widget::_onShortcut ({})".format(self.name))
         self.onShortcut.provoke(ev)
-                    
+    FUNCTIONEND
+
+    ### 
+    ##
+    ##
+    def _onResized(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onResized():{}".format(self))
+        #endif
+        self.onResized.provoke(ev)
+    FUNCTIONEND
+
+    def _onFocus(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onFocus():{}".format(self))
+        #endif
+        self.onFocus.provoke(ev)          
+    FUNCTIONEND
+
+    def _onFocusLost(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onFocusLost():{}".format(self))
+        #endif
+        self.onFocusLost.provoke(ev)         
+    FUNCTIONEND
+        
+        
+        
+        
         
         

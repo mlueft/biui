@@ -6,6 +6,7 @@ from typing import cast,Union
 from biui.Widgets import ContainerWidget
 from biui.Widgets import FlexPane
 from biui.Widgets import FlexSpacer
+from biui.Widgets import Spacer
 
 from biui.Events import MouseEvent,EventManager
 from biui.Events import Event
@@ -17,11 +18,14 @@ from biui.Enum import Alignment
 class FlexGrid(ContainerWidget):
     
     def __init__(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__init__():{}".format(self))
+        #endif
         super().__init__()
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawFlexGridBeforeChildren
         self._themeForegroundfunction = theme.drawFlexGridAfterChildren
-        self.onResized.add(self.__onReSized)
+        self.onResized.add(self.__hndOnReSized)
         
         self._spacers = []
         self._panes = []
@@ -33,31 +37,68 @@ class FlexGrid(ContainerWidget):
         ## stores the last recorded layout.
         self._layout = []
         
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def _createFlexPane(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::_createFlexPane():{}".format(self))
+        #endif
+        result = FlexPane()
         
+        return result
+    FUNCTIONEND
+    
+    ### Returns a new FlexSpacer object.
+    ##
+    ##
+    def _createSpacer(self, isVertical)->FlexSpacer:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::_createSpacer():{}".format(self))
+        #endif
+        result = FlexSpacer(isVertical)
+        result.height = BIUI_FLEXGRID_SPACER_WIDTH
+        result.width = BIUI_FLEXGRID_SPACER_WIDTH
+        result.alignment = Alignment.ABSOLUTE
+        return result  
+    FUNCTIONEND
+    
     ### @see biui.ContainerWidget.addChild
     ##
     ##
     def addChild(self,child,x=0,y=0):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::addChild():{}".format(self))
+        #endif
         raise Exception(BIUI_ERR_FLEXGRID_ADDCHILD)
+    FUNCTIONEND
     
     ### @see biui.ContainerWidget.removeChild
     ##
     ##
     def removeChild(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::removeChild():{}".format(self))
+        #endif
         raise Exception(BIUI_ERR_FLEXGRID_REMOVECHILD)
+    FUNCTIONEND
     
     ### Handles a vertical split event of a child FlexPanel.
     ##
     ##   
     def __hndChildOnVerticalSplit(self,ev:Event)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndChildOnVerticalSplit():{}".format(self))
+        #endif
         oldPane = ev.eventSource
         
         ## Area is too small to split
         if oldPane.width <= 2*oldPane.minWidth:
             return
         
-        newPane = FlexPane()
+        newPane = self._createFlexPane()
         newPane.x = oldPane.x+oldPane.width/2+BIUI_FLEXGRID_SPACER_WIDTH/2
         newPane.y = oldPane.y
         newPane.height = oldPane.height
@@ -97,19 +138,22 @@ class FlexGrid(ContainerWidget):
         self.__saveLayout()
         
         self.__onHorizontalSpacerDown(Event(spacer))
-        
+    FUNCTIONEND
+    
     ### Handles a horicontal split event of a child Flexpanel.
     ##
     ##
     def __hndChildOnHorizontalSplit(self,ev:Event)->None:
-
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndChildOnHorizontalSplit():{}".format(self))
+        #endif
         oldPane = ev.eventSource
 
         ## Area is too small to split
         if oldPane.height <= 2*oldPane.minHeight:
             return
                 
-        newPane = FlexPane()
+        newPane = self._createFlexPane()
         newPane.x = oldPane.x
         newPane.y = oldPane.y+oldPane.height/2+BIUI_FLEXGRID_SPACER_WIDTH/2
         newPane.width = oldPane.width
@@ -148,126 +192,167 @@ class FlexGrid(ContainerWidget):
         self.__saveLayout()
         
         self.__onVerticalSpacerDown(Event(spacer))
-
-    ### Returns a new FlexSpacer object.
-    ##
-    ##
-    def _createSpacer(self, isVertical)->FlexSpacer:
-        spacer = FlexSpacer(isVertical)
-        spacer.height = BIUI_FLEXGRID_SPACER_WIDTH
-        spacer.width = BIUI_FLEXGRID_SPACER_WIDTH
-        spacer.alignment = Alignment.ABSOLUTE
-        return spacer  
-          
+    FUNCTIONEND
+    
     ### Returns the spacer left to the pane.
     ##
     ##
     def __getSpacerLeft(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__getSpacerLeft():{}".format(self))
+        #endif
         for s in self._spacers:
             if s.isRightNeighbour(widget) and s.isVertical:
                 return s
+    FUNCTIONEND
     
     ### Returns the spacer above the pane.
     ##
     ##
     def __getSpacerTop(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__getSpacerTop():{}".format(self))
+        #endif
         for s in self._spacers:
             if s.isRightNeighbour(widget) and s.isHorizontal:
                 return s
+    FUNCTIONEND
     
     ### Return the spacer right to the pane.
     ##
     ##
     def __getSpacerRight(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__getSpacerRight():{}".format(self))
+        #endif
         for s in self._spacers:
             if s.isLeftNeighbour(widget) and s.isVertical:
                 return s
+    FUNCTIONEND
     
     ### Returns the spacer below the panee.
     ##
     ##
     def __getSpacerBottom(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__getSpacerBottom():{}".format(self))
+        #endif
         for s in self._spacers:
             if s.isLeftNeighbour(widget) and s.isHorizontal:
                 return s
+    FUNCTIONEND
     
     ### Removed the spacer above.
     ##
     ##
     def __removeSpacerTop(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__removeSpacerTop():{}".format(self))
+        #endif
         spacer = self.__getSpacerTop(widget)
         if not spacer:
             return
         spacer.removeNeighbour(widget)
-        
+    FUNCTIONEND
+    
     ### Removed the spacer right.
     ##
     ##
     def __removeSpacerRight(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__removeSpacerRight():{}".format(self))
+        #endif
         spacer = self.__getSpacerRight(widget)
         if not spacer:
             return
         spacer.removeNeighbour(widget)
-        
+    FUNCTIONEND
+    
     ### Removed the spacer below.
     ##
     ##
     def __removeSpacerBottom(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__removeSpacerBottom():{}".format(self))
+        #endif
         spacer = self.__getSpacerBottom(widget)
         if not spacer:
             return
         spacer.removeNeighbour(widget)
-        
+    FUNCTIONEND
+    
     ### Removed the spacer left.
     ##
     ##
     def __removeSpacerLeft(self,widget):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__removeSpacerLeft():{}".format(self))
+        #endif
         spacer = self.__getSpacerLeft(widget)
         if not spacer:
             return
         spacer.removeNeighbour(widget)
-            
+    FUNCTIONEND
+    
     ### Removed the spacer above and adds the new spacer.
     ##
     ##
     def __addSpacerTop(self,widget,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__addSpacerTop():{}".format(self))
+        #endif
         self.__removeSpacerTop(widget)
         if not spacer:
             return
         spacer.addRightNeighbour(widget)
-        
+    FUNCTIONEND
+    
     ### Removed the spacer right and adds the new spacer.
     ##
     ##
     def __addSpacerRight(self,widget,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__addSpacerRight():{}".format(self))
+        #endif
         self.__removeSpacerRight(widget)
         if not spacer:
             return
         spacer.addLeftNeighbour(widget)
-        
+    FUNCTIONEND
+    
     ### Removed the spacer below and adds the new spacer.
     ##
     ##
     def __addSpacerBottom(self,widget,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__addSpacerBottom():{}".format(self))
+        #endif
         self.__removeSpacerBottom(widget)
         if not spacer:
             return
         spacer.addLeftNeighbour(widget)
-        
+    FUNCTIONEND
+    
     ### Removed the spacer above and adds the new spacer.
     ##
     ##
     def __addSpacerLeft(self,widget,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__addSpacerLeft():{}".format(self))
+        #endif
         self.__removeSpacerLeft(widget)
         if not spacer:
             return
         spacer.addRightNeighbour(widget)
-        
+    FUNCTIONEND
         
     ### 
     ##  
     ##
     def __recreateHorizontalSpacer(self, stayPane,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__recreateHorizontalSpacer():{}".format(self))
+        #endif
 
         ##
         ## we have to differtiate four cases:
@@ -341,11 +426,15 @@ class FlexGrid(ContainerWidget):
             for n in list(spacer.rightNeighbours):
                 if n.left > spacer.right:
                     self.__addSpacerTop(n,newSpacer)
+    FUNCTIONEND
     
     ### 
     ##  
     ##
     def __recreateVerticalSpacer(self, stayPane,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__recreateVerticalSpacer():{}".format(self))
+        #endif
         
         ##
         ## we have to differtiate four cases:
@@ -420,11 +509,15 @@ class FlexGrid(ContainerWidget):
             for n in list(spacer.rightNeighbours):
                 if n.top > spacer.bottom:
                     self.__addSpacerLeft(n,newSpacer)
-                    
+    FUNCTIONEND
+    
     ### Handles a joinUp event of a child FlexPanel.
     ##
     ##
     def __hndChildOnJoinUp(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndChildOnJoinUp():{}".format(self))
+        #endif
         self.__simplifySpacer()
         stayPane:FlexPane = cast(FlexPane,ev.eventSource)
         
@@ -440,6 +533,7 @@ class FlexGrid(ContainerWidget):
                         break
         
         if removePane == None:
+            print("remove pane not found!")
             return
         
         spacer = None
@@ -466,11 +560,15 @@ class FlexGrid(ContainerWidget):
         self.removeFlexPane(removePane)
         self.__recreateHorizontalSpacer(stayPane,spacer)
         self.__saveLayout()
-        
+    FUNCTIONEND
+    
     ### Handles a joinDown event of a child FlexPanel.
     ##
     ##
     def __hndChildOnJoinDown(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndChildOnJoinDown():{}".format(self))
+        #endif
         self.__simplifySpacer()
         stayPane = cast(FlexPane,ev.eventSource)
         
@@ -486,6 +584,7 @@ class FlexGrid(ContainerWidget):
                         break
         
         if removePane == None:
+            print("remove pane not found!")
             return
         
         spacer = None
@@ -513,11 +612,15 @@ class FlexGrid(ContainerWidget):
         self.removeFlexPane(removePane)
         self.__recreateHorizontalSpacer(stayPane,spacer)
         self.__saveLayout()
-           
+    FUNCTIONEND
+    
     ### Handles a joinLeft event of a child FlexPanel.
     ##
     ##
     def __hndChildOnJoinLeft(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndChildOnJoinLeft():{}".format(self))
+        #endif
         self.__simplifySpacer()
         stayPane = cast(FlexPane,ev.eventSource)
         
@@ -533,6 +636,7 @@ class FlexGrid(ContainerWidget):
                         break
                        
         if removePane == None:
+            print("remove pane not found!")
             return
         
         spacer = None
@@ -559,11 +663,15 @@ class FlexGrid(ContainerWidget):
         self.removeFlexPane(removePane)
         self.__recreateVerticalSpacer(stayPane,spacer)
         self.__saveLayout()
-        
+    FUNCTIONEND
+    
     ### Handles a joinRight event of a child FlexPanel.
     ##
     ##
     def __hndChildOnJoinRight(self,ev:Event)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndChildOnJoinRight():{}".format(self))
+        #endif
         self.__simplifySpacer()
         stayPane = cast(FlexPane,ev.eventSource)
         
@@ -579,6 +687,7 @@ class FlexGrid(ContainerWidget):
                         break
         
         if removePane == None:
+            print("remove pane not found!")
             return
         
         spacer = None
@@ -605,11 +714,15 @@ class FlexGrid(ContainerWidget):
         self.removeFlexPane(removePane)
         self.__recreateVerticalSpacer(stayPane,spacer)
         self.__saveLayout()
-            
+    FUNCTIONEND
+     
     ### Adds a FlexPane to the Layout.
     ##
     ##
     def addFlexPane(self,child:FlexPane)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::addFlexPane():{}".format(self))
+        #endif
         child.alignment = Alignment.ABSOLUTE
         super().addChild(child)
         child.onHorizontalSplit.add( self.__hndChildOnHorizontalSplit )
@@ -623,11 +736,15 @@ class FlexGrid(ContainerWidget):
 
         self._panes.append(child)
         ##self._invalidate()
-        
+    FUNCTIONEND
+    
     ### Just a debug function during development.
     ##
     ##  TODO: just for debug
     def __hndChildOnMouseUp(self, ev):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndChildOnMouseUp():{}".format(self))
+        #endif
         
         s = ev.eventSource
         ##print(s)
@@ -645,11 +762,15 @@ class FlexGrid(ContainerWidget):
         print("panes")
         for s in self._panes:
             print( "{},{},{},{}".format(s.left,s.top,s.right,s.left) )
-            
+    FUNCTIONEND
+    
     ### Removes a FlexPane object.
     ##
     ##
     def removeFlexPane(self,child:FlexPane)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::removeFlexPane():{}".format(self))
+        #endif
         super().removeChild(child)
         self._panes.remove(child)
         for s in self._spacers:
@@ -660,39 +781,55 @@ class FlexGrid(ContainerWidget):
         child.onJoinLeft.remove( self.__hndChildOnJoinLeft )
         child.onJoinDown.remove( self.__hndChildOnJoinDown )
         child.onJoinUp.remove( self.__hndChildOnJoinUp )
-        
+    FUNCTIONEND
+    
     ### Adds a horizontal spacer object.
     ##
     ##           
     def addHorizontalSpacer(self,child:FlexSpacer)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::addHorizontalSpacer():{}".format(self))
+        #endif
         child.onMouseDown.add(self.__onHorizontalSpacerDown)
         super().addChild(child)
         self._spacers.append(child)
-        
+    FUNCTIONEND
+    
     ### Adds a vertical spacer object.
     ##
     ##           
     def addVerticalSpacer(self,child:FlexSpacer)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::addVerticalSpacer():{}".format(self))
+        #endif
         child.onMouseDown.add(self.__onVerticalSpacerDown)
         super().addChild(child)
         self._spacers.append(child)
-        
+    FUNCTIONEND
+    
     ### Removes a vertical spacer object.
     ##
     ##
     def removeSpacer(self,child:FlexSpacer)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::removeSpacer():{}".format(self))
+        #endif
         child.onMouseDown.remove(self.__onHorizontalSpacerDown)
         child.onMouseDown.remove(self.__onVerticalSpacerDown)
         super().removeChild(child)
         self._spacers.remove(child)
         for s in self._spacers:
             s.removeNeighbour(child)
-        
+    FUNCTIONEND
+    
     ### Reduces the number of spacer by "connecting" 
     ##  spacers laying next to each other.
     ##
     ##
     def __simplifySpacer(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__simplifySpacer():{}".format(self))
+        #endif
         
         for s0 in self._spacers:
             for s1 in self._spacers:
@@ -730,13 +867,17 @@ class FlexGrid(ContainerWidget):
                                 
                         self.removeSpacer(s1)
                         return self.__simplifySpacer()      
-
+    FUNCTIONEND
+    
     ### Finds panes touching the dragged spacer
     ##  and sorts them to left or right
     ##
     ##
     ## TODO: obsolet
     def __determineAllNeighbours(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__determineAllNeighbours():{}".format(self))
+        #endif
 
         for spacer in self._spacers:
             leftPanes = []
@@ -778,11 +919,15 @@ class FlexGrid(ContainerWidget):
             
             spacer.rightPanes = rightPanes
             spacer.leftPanes = leftPanes
-
+    FUNCTIONEND
+    
     ###
     ##
     ##
     def __determineDragRegion(self,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__determineDragRegion():{}".format(self))
+        #endif
         
         sl = spacer.x
         sr = spacer.right
@@ -819,7 +964,7 @@ class FlexGrid(ContainerWidget):
         
         self._minDragPosition = int(dragMin/BIUI_FLEXGRID_RASTERSTEP)*BIUI_FLEXGRID_RASTERSTEP + BIUI_FLEXGRID_RASTERSTEP
         self._maxDragPosition = int(dragMax/BIUI_FLEXGRID_RASTERSTEP)*BIUI_FLEXGRID_RASTERSTEP - BIUI_FLEXGRID_RASTERSTEP
-        
+    FUNCTIONEND
         
     ### Finds panes touching the dragged spacer
     ##  and sorts them to left or right
@@ -827,6 +972,9 @@ class FlexGrid(ContainerWidget):
     ##
     ##TODO: obsolet
     def __determineNeighbours(self,spacer):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__determineNeighbours():{}".format(self))
+        #endif
 
         leftPanes = []
         rightPanes = []
@@ -878,12 +1026,15 @@ class FlexGrid(ContainerWidget):
         
         self._minDragPosition = int(dragMin/BIUI_FLEXGRID_RASTERSTEP)*BIUI_FLEXGRID_RASTERSTEP + BIUI_FLEXGRID_RASTERSTEP
         self._maxDragPosition = int(dragMax/BIUI_FLEXGRID_RASTERSTEP)*BIUI_FLEXGRID_RASTERSTEP - BIUI_FLEXGRID_RASTERSTEP
-        
+    FUNCTIONEND
+    
     ### Handles a mouse down event of a horizontal spacer.
     ##
     ##
     def __onHorizontalSpacerDown(self,ev:Event)->None:
-        ##print("__onHorizontalSpacerDown")
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__onHorizontalSpacerDown():{}".format(self))
+        #endif
         
         ## Store dragged spacer.
         self._draggedSpacer = ev.eventSource
@@ -895,12 +1046,15 @@ class FlexGrid(ContainerWidget):
         
         self.onMouseMove.add(self.__hndOnVerticalMouseMove)
         self.onMouseUp.add(self.__hndOnMouseUp)
-        
+    FUNCTIONEND
+    
     ### Handles a mouse down event of a vertical spacer.
     ##
     ##
     def __onVerticalSpacerDown(self,ev:Event)->None:
-        ##print("__onVerticalSpacerDown")
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__onVerticalSpacerDown():{}".format(self))
+        #endif
         
         ## Store dragged spacer.
         self._draggedSpacer = ev.eventSource
@@ -912,41 +1066,53 @@ class FlexGrid(ContainerWidget):
         
         self.onMouseMove.add(self.__hndOnHorizontalMouseMove)
         self.onMouseUp.add(self.__hndOnMouseUp)
-        
+    FUNCTIONEND
+    
     ### Handles vertical dragging of a spacer.
     ##
     ##
     def __hndOnVerticalMouseMove(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndOnVerticalMouseMove():{}".format(self))
+        #endif
         sh = BIUI_FLEXGRID_SPACER_WIDTH/2
         
         pos = self.toLocal(ev.position)[0]
+        
         pos = max(min(pos,self._maxDragPosition),self._minDragPosition)
         pos = int(pos/BIUI_FLEXGRID_RASTERSTEP)*BIUI_FLEXGRID_RASTERSTEP
         
         self._draggedSpacer.x = pos-sh
         
         self._draggedSpacer.alignNeighbours()
-        
+    FUNCTIONEND
+    
     ### Handles a horizontal dragging of a spacer.
     ##
     ##
     def __hndOnHorizontalMouseMove(self,ev:MouseEvent)->None:
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndOnHorizontalMouseMove():{}".format(self))
+        #endif
         sh = BIUI_FLEXGRID_SPACER_WIDTH/2
         
         pos = self.toLocal(ev.position)[1]
+        
         pos = max(min(pos,self._maxDragPosition),self._minDragPosition)
         pos = int(pos/BIUI_FLEXGRID_RASTERSTEP)*BIUI_FLEXGRID_RASTERSTEP
         
         self._draggedSpacer.y = pos-sh
             
         self._draggedSpacer.alignNeighbours()
-            
+    FUNCTIONEND
+    
     ### Handles mouse up event of a spacer. 
     ##
     ##
     def __hndOnMouseUp(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndOnMouseUp():{}".format(self))
+        #endif
         s = ev.eventSource
         self.onMouseMove.remove(self.__hndOnVerticalMouseMove)
         self.onMouseMove.remove(self.__hndOnHorizontalMouseMove)
@@ -957,22 +1123,30 @@ class FlexGrid(ContainerWidget):
         self.__simplifySpacer()
         ## each time a spacer was moved, we record the panel layout.
         self.__saveLayout()
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##
     def __saveLayout(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__saveLayout():{}".format(self))
+        #endif
         self._layout.clear()
         self._layout.append((self,0,0,self.width,self.height))
         
         for s in self._spacers:
             self._layout.append((s,s.x,s.y,s.width,s.height))
-        
+    FUNCTIONEND
+    
     
     ###
     ##
     ##
-    def __onReSized(self,ev):
+    def __hndOnReSized(self,ev):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::__hndOnReSized():{}".format(self))
+        #endif
         
         if len(self._layout) == 0:
             return 
@@ -1037,13 +1211,15 @@ class FlexGrid(ContainerWidget):
         for i,e in enumerate(self._layout):
             if i > 0:
                 e[0].alignNeighbours()
-
+    FUNCTIONEND
 
     ###
     ##
     ##            
     def _calculateLayout(self):
-        
+        #ifdef SHOW_FUNCTIONNAMES
+        print("FlexGrid::_calculateLayout():{}".format(self))
+        #endif
         if not self.isInvalide():
             print("grid::calculateLayout quit.")
             return 
@@ -1057,4 +1233,5 @@ class FlexGrid(ContainerWidget):
             self._panes[0].height = self.height
             
         super()._calculateLayout()
-        
+    FUNCTIONEND
+    

@@ -1,9 +1,9 @@
 
 from .Widget import Widget
 from .ContainerWidget import ContainerWidget
+
 from .Label import Label
 from .Button import Button
-from .ButtonGroup import ButtonGroup
 from .ToggleButton import ToggleButton
 from .Checkbox import Checkbox
 from .Spacer import Spacer
@@ -20,4 +20,5 @@ from .ScrollNavigator import ScrollNavigator
 from .Pane import Pane
 from .TextField import TextField
 from .Window import Window
+from .ButtonGroup import ButtonGroup
  

@@ -62,7 +62,7 @@ class DirtyRectangleManager():
     def add3(self,rect):
         if rect in self._recs:
             return 
-        
+
         self._recs.append(rect)
 
     def add4(self,rect):

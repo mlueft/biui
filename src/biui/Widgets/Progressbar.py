@@ -1,3 +1,5 @@
+#include "biui.inc"
+
 import biui
 from biui.Widgets import ContainerWidget
 from biui.Widgets import Label
@@ -20,18 +22,28 @@ class Progressbar(ContainerWidget):
         ##
         self._showValue = True
         ##
-        self._label = Label()
-        self._label.name = "label"
-        self._label.alignment = Alignment.CENTER_CENTER
-        self._label.value = ""
+        self._label = self._createLabel()
         self.addChild(self._label,0,0)
-        
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def _createLabel(self):
+        result = Label()
+        result.name = "label"
+        result.alignment = Alignment.CENTER_CENTER
+        result.value = ""
+        return result
+    FUNCTIONEND
+    
     ### Get the label object.
     ##
     ##
     @property
     def showValue(self):
         return self._showValue
+    FUNCTIONEND
     
     ###
     ##
@@ -41,12 +53,15 @@ class Progressbar(ContainerWidget):
         if value == self._showValue:
             return
 
-        self._invalidate()
         if not value:
             self.label.value = ""
         else:
             self.label.value = value
+            
         self._showValue = value
+        
+        self._invalidate()
+    FUNCTIONEND
             
     ### Get the label object.
     ##
@@ -54,6 +69,7 @@ class Progressbar(ContainerWidget):
     @property
     def label(self):
         return self._label
+    FUNCTIONEND
     
     ### Set/Get the minimum value.
     ##
@@ -61,6 +77,7 @@ class Progressbar(ContainerWidget):
     @property
     def minValue(self):
         return self._minValue
+    FUNCTIONEND
     
     ###
     ##
@@ -70,6 +87,7 @@ class Progressbar(ContainerWidget):
         if self.value < value:
             self.value = max(self.value,value)
         self._minValue = value
+    FUNCTIONEND
     
     ### Set/Get the maximum value.
     ##
@@ -77,6 +95,7 @@ class Progressbar(ContainerWidget):
     @property
     def maxValue(self):
         return self._maxValue
+    FUNCTIONEND
     
     ###
     ##
@@ -86,7 +105,7 @@ class Progressbar(ContainerWidget):
         if self.value > value:
             self.value = min(self.value,value)
         self._maxValue = value
-
+    FUNCTIONEND
         
     ### Set/Get the current value.
     ##
@@ -94,6 +113,7 @@ class Progressbar(ContainerWidget):
     @property
     def value(self):
         return self._value
+    FUNCTIONEND
     
     ###
     ##
@@ -107,7 +127,8 @@ class Progressbar(ContainerWidget):
         self._value = value
         if self._showValue:
             self._label.value = value
-
+    FUNCTIONEND
+    
     ### @see biui.ContainerWidget.getChildAt
     ##
     ##    
@@ -132,3 +153,6 @@ class Progressbar(ContainerWidget):
             return None
                 
         return self
+    FUNCTIONEND
+    
+    

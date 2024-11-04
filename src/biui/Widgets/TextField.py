@@ -27,7 +27,7 @@ class TextField(Widget):
         ##
         self.name = "textfield"
         ##
-        self.__dataComponent = biui.TextDataEditComponent()
+        self.__dataComponent = self._createDataEditingComponent()
         self.__dataComponent.onDataChanged.add(self.__hndDataChanged)
         self.__dataComponent.onCursorpositionChanged.add(self.__hndCursorpositionChanged)
         self.__dataComponent.onSelectionChanged.add(self.__hndSelectionChanged)
@@ -36,18 +36,29 @@ class TextField(Widget):
         self.__cursorTimer.active = False
         self.__selectionBox = None
         self.onShortcut.add(self.__hndShortcut)
-        
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def _createDataEditingComponent(self):
+        result = biui.TextDataEditComponent()
+        return result
+    
     def __hndFocus(self,ev):
         self.__cursorTimer.active = True
+    FUNCTIONEND
     
     def __hndFocusLost(self,ev):
         self.__cursorTimer.active = False
         self.__cursorVisible = False
         self._invalidate()
+    FUNCTIONEND
         
     def __cursorCallBack(self,ev):
         self.__cursorVisible = not self.__cursorVisible
         self._invalidate()
+    FUNCTIONEND
        
     ###
     ##
@@ -59,6 +70,7 @@ class TextField(Widget):
     @property
     def editingMode(self):
         return self.__dataComponent.editingMode
+    FUNCTIONEND
     
     ###
     ##
@@ -66,10 +78,12 @@ class TextField(Widget):
     @editingMode.setter
     def editingMode(self,value):
         self.__dataComponent.editingMode = value
+    FUNCTIONEND
             
     @property
     def dataComponent(self):
         return self.__dataComponent
+    FUNCTIONEND
     
     ###
     ##
@@ -94,6 +108,7 @@ class TextField(Widget):
         self.__dataComponent.onSelectionChanged.add(self.__hndSelectionChanged)
         
         self._invalidate()
+    FUNCTIONEND
     
     ### returns the graphical dimension of the cursor.
     ##
@@ -122,6 +137,7 @@ class TextField(Widget):
         cp1 = size[0]
         
         return (cp,self.height-4,cp1,2)
+    FUNCTIONEND
     
     ### Return the graphical dimensions of the selection box.
     ##
@@ -147,6 +163,7 @@ class TextField(Widget):
             )
         
         return self.__selectionBox
+    FUNCTIONEND
     
     ### Returns the graphical cursor position
     ##
@@ -158,12 +175,14 @@ class TextField(Widget):
     @property
     def cursorVisible(self):
         return self.__cursorVisible 
+    FUNCTIONEND
     
     def __hndKeyDown(self,ev):
         ##print("TextField::__hndKeyDown")
         self.__cursorVisible = True
         self._invalidate()
         pass
+    FUNCTIONEND
     
     def __hndKeyUp(self,ev):
         ##print("TextField::__hndKeyUp: {}".format(ev.keyCode) )
@@ -233,24 +252,28 @@ class TextField(Widget):
         
         ##else:
         ##    print("Keyboard input not processed")
-
+    FUNCTIONEND
             
     def __hndDataChanged(self,ev):
         self._invalidate()
+    FUNCTIONEND
     
     def __hndCursorpositionChanged(self,ev):
         ##print("TextField::__hndCursorpositionChanged")
         self._invalidate()
+    FUNCTIONEND
         
     def __hndSelectionChanged(self,ev):
         self.__selectionBox = None
         self._invalidate()    
+    FUNCTIONEND
         
     ### Handles the font change of the font element.
     ##
     ##        
     def __hndFontOnSizeChanged(self,ev):
         self._invalidate()
+    FUNCTIONEND
                 
     ### Set/Get the value of the label.
     ##  The value is the shown text.
@@ -259,6 +282,7 @@ class TextField(Widget):
     @property   
     def value(self):
         return self.__dataComponent.data
+    FUNCTIONEND
     
     ###  Sets the shown text.
     ##
@@ -267,6 +291,7 @@ class TextField(Widget):
     @value.setter
     def value(self,value):
         self.__dataComponent.data = value
+    FUNCTIONEND
         
     ### Set/Get the text color.
     ##
@@ -275,6 +300,7 @@ class TextField(Widget):
     @property
     def color(self):
         return self._color
+    FUNCTIONEND
     
     ### Sets the color of the text.
     ##
@@ -284,6 +310,7 @@ class TextField(Widget):
     def color(self,value):
         self._color = value
         self._invalidate()
+    FUNCTIONEND
     
     ### Set/Get the font object.
     ##
@@ -292,6 +319,7 @@ class TextField(Widget):
     @property   
     def font(self):
         return self._font
+    FUNCTIONEND
         
     ### Sets the font object.
     ##
@@ -305,10 +333,12 @@ class TextField(Widget):
             
         self._font = value
         self._invalidate()
+    FUNCTIONEND
         
     def _invalidate(self):
         super()._invalidate()
         ##self.__selectionBox = None
+    FUNCTIONEND
         
     ###
     ##
@@ -350,6 +380,6 @@ class TextField(Widget):
         else:
             
             print("shortcut not processed")
-        
+    FUNCTIONEND
                 
         

@@ -1,3 +1,4 @@
+
 import sys,os
 
 sys.path.append('./')
@@ -21,8 +22,8 @@ def createButton():
     result.onMouseDown.add(hndOnMouseDown)
     result.onMouseClick.add(hndOnMouseClick)
     
-    result.onBeforeDraw.add(hndOnBeforeDraw)
-    result.onAfterDraw.add(hndOnAfterDraw)
+    result.onBeforeRender.add(hndOnBeforeRender)
+    result.onAfterRender.add(hndOnAfterRender)
     result.onFocus.add(hndOnFocus)
     result.onFocusLost.add(hndOnFocusLost)
     
@@ -67,11 +68,11 @@ def hndOnMouseDown(ev):
 def hndOnMouseClick(ev):
     print("hndOnMouseClick")
     
-def hndOnBeforeDraw(ev):
-    print("hndOnBeforeDraw")
+def hndOnBeforeRender(ev):
+    print("hndOnBeforeRender")
     
-def hndOnAfterDraw(ev):
-    print("hndOnAfterDraw")
+def hndOnAfterRender(ev):
+    print("hndOnAfterRender")
     
 def hndOnFocus(ev):
     print("hndOnFocus")
@@ -118,17 +119,17 @@ def initWindow(x = 0):
     wnd = Window(170,480)
     wnd.x = x
     wnd.y = 200
-    
+
     ##
     ## Buttons
     ##
-    for i in range(1):
+    for i in range(4):
         button0 = createButton()
         ##button0.onMouseUp.add(_test.upHandler)
         button0.x = 10
         button0.y = 100+i*45
         button0.width = 150
-        button0.height = 40
+        button0.height = 44
         button0.label.font.size = 25
         button0.label.color = biui.Color(200,200,200)
         button0.name = "test"+str(i)
@@ -136,6 +137,8 @@ def initWindow(x = 0):
         
 def main():
     init()
+    
+    
     ##
     ## Temporary main loop
     ##

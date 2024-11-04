@@ -186,7 +186,7 @@ def __fillFontFolders():
             addFontFolder( subject )
     
     ## WINDOWS
-    addFontFolder( "c:\windows\fonts" )
+    addFontFolder( "c:\\windows\\fonts" )
     
     ## MACOS
     
@@ -195,7 +195,8 @@ def __fillFontFolders():
 ##
 def _removeWindow(window):
     global __windows
-    __windows.remove(window)
+    if window in __windows:
+        __windows.remove(window)
     
 ###
 ##
@@ -540,7 +541,10 @@ def main():
     ###############################################################
     ##                                                  DRAWING GUI
     ###############################################################
-    
+
+    for w in __windows:
+        w._main()
+            
     for w in __windows:
         w._render()
         

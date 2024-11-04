@@ -1,8 +1,13 @@
+#include "biui.inc"
+
 import biui
 from biui.Widgets import ContainerWidget
 from biui.Widgets import Button
 from biui.Widgets import Progressbar
+from biui.Widgets import TextField
 from biui.Enum import Alignment
+from biui.Enum import Keys
+from pickle import NONE
 
 ###
 ##
@@ -11,8 +16,8 @@ class NumberSlider(ContainerWidget):
     
     def __init__(self):
         super().__init__()
+        ##self.layoutManager._debug = True
         
-
         ## 
         self._minValue = 0
         ##
@@ -24,35 +29,22 @@ class NumberSlider(ContainerWidget):
         ##
         self._microStep = 1
         ##
-        self._showNavigation = True
+        self._showNavigation = False
         ##
         self._screenDownPosition = None
         ##
-        self._decButton = Button()
-        self._decButton.name = "buttonDec"
-        self._decButton.minWidth=1
-        self._decButton.minHeight=1
-        self._decButton.value = "-"
-        self._decButton.alignment = Alignment.FILL
-        self._decButton.onMouseUp.add(self.__hndOnDecMouseUp)
-        self.addChild(self._decButton,0,0)
+        self._decButton = None
         
         ##
-        self._incButton = Button()
-        self._incButton.name = "buttonInc"
-        self._incButton.minWidth=1
-        self._incButton.minHeight=1
-        self._incButton.value = "+"
-        self._incButton.alignment = Alignment.FILL
-        self._incButton.onMouseUp.add(self.__hndIncOnMouseUp)
-        self.addChild(self._incButton,2,0)
+        self._incButton = None
         
         ##
-        self._bar = Progressbar()
-        self._bar.name = "progressbar"
-        self._bar.alignment = Alignment.FILL
-        self._bar.onMouseDown.add(self.__hndBarOnMouseDown)
+        self._bar = self._createBar()
         self.addChild(self._bar,1,0)
+        
+        ##
+        ## TODO: Why is TextField the module and not the class?
+        self._textfield = None
         
         lm = self.layoutManager
         lm.columnWidths = [30,0,30]
@@ -62,33 +54,193 @@ class NumberSlider(ContainerWidget):
         ##self._themeForegroundfunction = theme.drawNumberSliderAfterChildren
         
         self.width = 150
-        self.height = 50
+        self.height = 30
         
         self.minValue = -1024
         self.maxValue = 1024
         self.value = 0
         self.step = 0.5
         self.showNavigation = True
-        
+    FUNCTIONEND
 
+    ###
+    ##
+    ##
+    def _createBar(self):
+        result = Progressbar()
+        result.name = "progressbar"
+        result.alignment = Alignment.FILL
+        ##result.alignment = Alignment.CENTER_CENTER
+        result.tooltip = self.tooltip
+        result.minValue = self.minValue
+        result.maxValue = self.maxValue
+        result.onMouseDown.add(self.__hndBarOnMouseDown)
+        result.onMouseClick.add(self.__hndBarOnMouseClick)
+        return result
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def _createDecButton(self):
+        result = Button()
+        result.name = "buttonDec"
+        result.minWidth=1
+        result.minHeight=1
+        result.value = "-"
+        result.alignment = Alignment.FILL
+        result.tooltip = self.tooltip
+        result.onMouseUp.add(self.__hndOnDecMouseUp)
+        return result
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def createIncButton(self):
+        result = Button()
+        result.name = "buttonInc"
+        result.minWidth=1
+        result.minHeight=1
+        result.value = "+"
+        result.alignment = Alignment.FILL
+        result.tooltip = self.tooltip
+        result.onMouseUp.add(self.__hndIncOnMouseUp)
+        return result
+    FUNCTIONEND
+
+    ###
+    ##
+    ##
+    def createInputfield(self):
+        result = TextField.TextField()
+        result.name = "textfield"
+        result.alignment = Alignment.FILL
+        result.tooltip = self.tooltip
+        result.onKeyUp.add(self.__hndTextFieldKeyUp)
+        return result
+    FUNCTIONEND
+        
+    ###
+    ##
+    ##
+    def __dir__(self):
+        result = super().__dir__()
+        result = result + [
+            "_decButton", "_incButton", "_bar", "_textfield", 
+            "tooltip", "label", "minValue", "maxValue", "value", "step", "microStep", "showNavigation"
+        ]
+        result.sort()
+        return list(set(result))
+    FUNCTIONEND
+    
     ### @see biui.Widget.tooltip
     ##
     ##
     @property
     def tooltip(self):
         return self._tooltip
-    
+    FUNCTIONEND
 
     ### @see biui.Widget.tooltip
     ##
     ##
     @tooltip.setter
     def tooltip(self, value):
-        self._decButton.tooltip = value
-        self._incButton.tooltip = value
-        self._bar.tooltip = value
+        if self._decButton != None:
+            self._decButton.tooltip = value
+        if self._incButton != None:
+            self._incButton.tooltip = value
+        if self._bar != None:
+            self._bar.tooltip = value
         self._tooltip = value
-                
+    FUNCTIONEND
+
+    ###
+    ##
+    ##
+    def __endManualInput(self):
+        ## write back value
+        
+        self._textfield.value = self._textfield.value.strip()
+        
+        if self._textfield.value != "":
+            self.value = float(self._textfield.value)
+        
+        ## remove textfield
+        self.removeChild(self._textfield)
+        self._textfield = None
+        
+        ## add bar
+        self._bar = self._createBar()
+        self._bar.value = self.value
+        self.addChild(self._bar,1,0)
+        
+        ## restore boxes
+        if self.showNavigation:
+            ## Force buttons to be added
+            self._showNavigation = False
+            self.showNavigation = True
+        
+        self._invalidate()
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __hndOnFocusLost(self,ev):
+        self.__endManualInput()
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __startManualInput(self):
+        ## Stop dragging
+        self._bar.onMouseMove.remove(self.__hndWndOnMouseMove)
+        self._bar.onMouseUp.remove(self.__hndWndOnMouseUp)
+        biui.Mouse.show()        
+        
+        ## Hide bar
+        self.removeChild(self._bar)
+        self._bar = None
+        
+        ## hide buttons
+        if self._incButton != None:
+            self.removeChild(self._incButton)
+            self._incButton = None
+        if self._decButton != None:
+            self.removeChild(self._decButton)
+            self._decButton = None
+        
+        ## Make box full size
+        self.layoutManager.columnWidths = [1,0,1]
+        
+        ## Show Textfield
+        self._textfield = self.createInputfield()
+        self._textfield.onFocusLost.add(self.__hndOnFocusLost)
+        self.addChild(self._textfield,1,0)
+        self._textfield.value = str(self.value)
+        self._textfield.focus()        
+    FUNCTIONEND
+     
+    ###
+    ##
+    ##
+    def __hndTextFieldKeyUp(self,ev):
+        ev.stopPropagation()
+        if ev.keyCode in [Keys.K_RETURN,Keys.K_KP_ENTER]:
+            self.__endManualInput()
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __hndBarOnMouseClick(self,ev):
+        ev.stopPropagation()
+        self.__startManualInput()
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -101,7 +253,8 @@ class NumberSlider(ContainerWidget):
         self._bar.onMouseMove.add(self.__hndWndOnMouseMove)
         self._bar.onMouseUp.add(self.__hndWndOnMouseUp)
         biui.Mouse.hide()
-      
+    FUNCTIONEND
+    
     ###
     ##
     ##  
@@ -115,31 +268,40 @@ class NumberSlider(ContainerWidget):
             self.value += self.step
             
         biui.Mouse.position = self._screenDownPosition
+    FUNCTIONEND
     
+    ##
+    #
+    #
     def __hndWndOnMouseUp(self,ev):
+        print("mouseUp")
         ev.stopPropagation()
         self._bar.onMouseMove.remove(self.__hndWndOnMouseMove)
         self._bar.onMouseUp.remove(self.__hndWndOnMouseUp)
         biui.Mouse.show()
+    FUNCTIONEND
     
     ### Handles the mouse up event of the inc-Button.
     ##
     ##
     def __hndIncOnMouseUp(self,ev):
         self.value += self.microStep
-
+    FUNCTIONEND
+    
     ### Handles the up mouse event of the dec-Button.
     ##
     ##
     def __hndOnDecMouseUp(self,ev):
         self.value -= self.microStep
-        
+    FUNCTIONEND
+    
     ### Get the label object.
     ##
     ##
     @property
     def label(self):
         return self._bar.label
+    FUNCTIONEND
     
     ### Returns the minimum value of the slider.
     ##
@@ -148,6 +310,7 @@ class NumberSlider(ContainerWidget):
     @property
     def minValue(self):
         return self._minValue
+    FUNCTIONEND
     
     ### Sets the minimum value of the number slider.
     ##
@@ -161,7 +324,9 @@ class NumberSlider(ContainerWidget):
         self.maxValue = max(self.maxValue,value)
         self.value = max(self.minValue,value)
         self._minValue = value
-        self._bar.minValue = value
+        if self._bar != None:
+            self._bar.minValue = value
+    FUNCTIONEND
     
     ### Returns the maximum value of the number slider.
     ##
@@ -170,6 +335,7 @@ class NumberSlider(ContainerWidget):
     @property
     def maxValue(self):
         return self._maxValue
+    FUNCTIONEND
     
     ### Sets teh maximum value of the slider.
     ##
@@ -181,20 +347,22 @@ class NumberSlider(ContainerWidget):
             return
 
         self.minValue = min(self.minValue,value)
-        self.value = min(self.value,value)
+        self.value = min(self.maxValue,value)
         self._maxValue = value
-        self._bar.maxValue = value
-
+        if self._bar != None:
+            self._bar.maxValue = value
+    FUNCTIONEND
         
-    ### Sets the curent value of the slider.
+    ### Returns the curent value of the slider.
     ##
     ##  @return    The current value of the slider.
     ##
     @property
     def value(self):
         return self._value
+    FUNCTIONEND
     
-    ### Returns the current value of the slider.
+    ### Sets the current value of the slider.
     ##
     ##  @param value   The value of the slider.
     ##
@@ -203,15 +371,18 @@ class NumberSlider(ContainerWidget):
         
         if value == self._value:
             return
+        
         value = max(
             min(value,self._maxValue),
             self._minValue
         )
         
         self._value = value
-        self._bar.value = value
+        if self._bar != None:
+            self._bar.value = value
         self._invalidate()
-
+    FUNCTIONEND
+    
     ### Set/Get the value by which the sliders value is incremented
     ##  or decrimented by dragging with the mouse.
     ##
@@ -220,6 +391,7 @@ class NumberSlider(ContainerWidget):
     @property
     def step(self):
         return self._step
+    FUNCTIONEND
     
     ### Sets the step value of the slider.
     ##
@@ -228,7 +400,8 @@ class NumberSlider(ContainerWidget):
     @step.setter
     def step(self,value):
         self._step = value
-        
+    FUNCTIONEND
+    
     ### Set/Get the value by which the sliders value is incremented
     ##  or decrimented by clicking a the navigation button.
     ##
@@ -237,6 +410,7 @@ class NumberSlider(ContainerWidget):
     @property
     def microStep(self):
         return self._microStep
+    FUNCTIONEND
     
     ###
     ##
@@ -244,14 +418,16 @@ class NumberSlider(ContainerWidget):
     @microStep.setter
     def microStep(self,value):
         self._microStep = value
-        
-    ### Returns a booleab value indicating if the
+    FUNCTIONEND
+    
+    ### Returns a bool value indicating if the
     ##  navigation buttons are visible.
     ##
     ##
     @property
     def showNavigation(self):
         return self._showNavigation
+    FUNCTIONEND
     
     ### Defines if the navigation buttons are visible.
     ##
@@ -264,18 +440,18 @@ class NumberSlider(ContainerWidget):
         
         lm = self.layoutManager
         if value:
+            self._incButton = self.createIncButton()
+            self._decButton = self._createDecButton()
             self.addChild(self._decButton,0,0)
             self.addChild(self._incButton,2,0)
             lm.columnWidths = [self.height,0,self.height]
         else:
             self.removeChild(self._decButton)
             self.removeChild(self._incButton)
+            self._decButton = None
+            self._incButton = None
             lm.columnWidths = [1,0,1]
         
         self._showNavigation = value
-        self._invalidate()        
-        
-    def _calculateLayout(self):
-        super()._calculateLayout()
-        
-            
+        self._invalidate()
+    FUNCTIONEND    

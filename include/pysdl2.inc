@@ -206,7 +206,7 @@
 
 #define PYSDL2_DESTROYIMAGE(subject) \
 	"""MACROSTART:PYSDL2_DESTROYIMAGE"""; \
-	sdl2.SDL_DestroyImage(subject); \
+	"""sdl2.SDL_DestroyImage(subject);""" \
 	"""MACROEND:PYSDL2_DESTROYIMAGE""";
 
 #endif

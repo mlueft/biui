@@ -27,6 +27,12 @@ DONE:
 * Buttongroup
 * Label
 * FlexGrid (Blender's window layout management)
+* NumberSlider
+* Progressbar
+* TextField
+* MenuBar/TopBar
+* StatusBar
+* Scrollbar
 
 TODO:
 
@@ -35,17 +41,12 @@ TODO:
 * Label
   + format for pre/postfix
 * Checkbox
-* Progressbar
-* NumberSlider
+* TextField Mouse interaction
 * Combobox
 * TreeView
-* TextField
 * ListView
-* MenuBar/TopBar
 * IconBar(3D-View left side)
-* StatusBar
 * LayoutManager
-* Scrollbar
 
 Bugs:
  * Menuitems are not resized to text length
@@ -53,7 +54,11 @@ Bugs:
  * Sometimes the Layoutmanagemant doesn't redraw everything
    This comes from the DirtyRectangleManager and overlapped widgets
    doen't redraw
-   
+ * Resized flexgrids loses control over splitter and panels.
+ * Icons
+ * NumberSlider should have properties to enable/disable manual input
+ * Icon/Menubar needs control buttons to control out of view content
+ * Tabnavigator
  
 ```python
 

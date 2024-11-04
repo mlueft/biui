@@ -1,3 +1,4 @@
+#include "biui.inc"
 #include "pysdl2.inc"
 import sdl2
 import ctypes
@@ -19,6 +20,24 @@ class Image(Widget):
         self.__lockRatio = True
         self.__originalSize = None
         
+        self.onBeforeRender.add(self.__hndOnBeforeRender)
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __hndOnBeforeRender(self,ev):
+        ## We load the image and set width and height to 
+        ## the original image size 
+        theme = biui.getTheme()
+        img = theme.getImageLibrary().getImage(self.window.renderer,self.__file,0,0)
+        
+        PYSDL2_GETTEXTURESIZE(img,size)
+        
+        self.__originalSize = size
+        self.width = size[2]
+        self.height = size[3]        
+    FUNCTIONEND
         
     ### Returns the file path.
     ##
@@ -27,6 +46,7 @@ class Image(Widget):
     @property
     def file(self):
         return self.__file
+    FUNCTIONEND
     
     ### Sets the file path of the image to show.
     ##  TODO: At the time file is set the img has already to be added to the window.
@@ -42,18 +62,8 @@ class Image(Widget):
 
         self.__file = value
         self._invalidate()
-        
-        ## We load the image and set width and height to 
-        ## the original image size 
-        theme = biui.getTheme()
-        img = theme.getImageLibrary().getImage(self.window.renderer,value,0,0)
-        
-        PYSDL2_GETTEXTURESIZE(img,size)
-        
-        self.__originalSize = size
-        self.width = size[2]
-        self.height = size[3]
-                
+    FUNCTIONEND
+    
     ### 
     ##
     ##  @return            A boolean value.
@@ -61,6 +71,7 @@ class Image(Widget):
     @property
     def lockRatio(self):
         return self.__lockRatio
+    FUNCTIONEND
     
     ### 
     ##
@@ -75,13 +86,15 @@ class Image(Widget):
 
         self.__lockRatio = value
         self._invalidate()
-        
+    FUNCTIONEND
+    
     ### @see: biui.Widget.width
     ##
     ##
     @property
     def width(self):
         return super().width
+    FUNCTIONEND
     
     ### @see: biui.Widget.width
     ##
@@ -94,14 +107,16 @@ class Image(Widget):
             ratio = self.__originalSize[2]/self.__originalSize[3]
             value = value*ratio
             super(Image,self.__class__).height.fset(self,value)
-
+    FUNCTIONEND
+    
     ## @see: biui.Widget.height
     ##
     ##
     @property
     def height(self):
         return super().height
-            
+    FUNCTIONEND
+                
     ### @see: biui.Widget.height
     ##
     ##
@@ -114,18 +129,12 @@ class Image(Widget):
             ratio = self.__originalSize[2]/self.__originalSize[3]
             value = value*ratio
             super(Image,self.__class__).width.fset(self,value)
-            
+    FUNCTIONEND
+                
     ###
     ##
     ##
     @property
     def renderRect(self):
         return (0,0,self._width,self._height)
-    
-    ###
-    ##
-    ##
-    def __render(self, forceRedraw:bool=False):
-        pass
-    
-    
+    FUNCTIONEND        

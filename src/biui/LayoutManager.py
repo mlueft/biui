@@ -1,3 +1,5 @@
+#include "biui.inc"
+
 ##import biui
 from biui.Events import EventManager
 from biui.Events import Event
@@ -10,6 +12,7 @@ from biui.Enum import Alignment
 class LayoutManager():
     
     def __init__(self,x=0,y=0):
+        self._debug = False
         ##        
         self._children = [[[]]]
         ##
@@ -22,7 +25,8 @@ class LayoutManager():
         self.onChildRemoved = EventManager()
         
         self._resizeChildList(x+1,y+1)
-        
+    FUNCTIONEND
+    
     ### Just adds columns or Rows at the end
     ##
     ##  @param width
@@ -58,6 +62,7 @@ class LayoutManager():
         ## rowHeights
         for i in range(len(self._rowHeights),len(self._children[0])):
             self._rowHeights.append(0)        
+    FUNCTIONEND
         
     ### Adds a child element to the Layout.
     ##
@@ -71,6 +76,7 @@ class LayoutManager():
         self._height = len(self._children[0])
         self._children[x][y].append(child)
         self.onChildAdded.provoke(Event(child))
+    FUNCTIONEND
      
     ### Removes the given child element.
     ##
@@ -82,6 +88,7 @@ class LayoutManager():
                 if child in self._children[i][j]:
                     self._children[i][j].remove(child)
                     self.onChildRemoved.provoke(Event(child))
+    FUNCTIONEND
     
     ### Set/Get all column widths.
     ##
@@ -90,6 +97,7 @@ class LayoutManager():
     @property
     def columnWidths(self):
         return self._columnWidths
+    FUNCTIONEND
         
     ### Sets the column widths.
     ##
@@ -106,6 +114,7 @@ class LayoutManager():
                 self._columnWidths.append(values[i])
             else:
                 self._columnWidths.append(0)
+    FUNCTIONEND
     
     ### Set/Get all row heights.
     ##
@@ -114,6 +123,7 @@ class LayoutManager():
     @property
     def rowHeights(self):
         return self._rowHeights
+    FUNCTIONEND
     
     ### Sets the row heights.
     ##
@@ -130,6 +140,7 @@ class LayoutManager():
                 self._rowHeights.append(values[i])
             else:
                 self._rowHeights.append(0)
+    FUNCTIONEND
     
     ### Sets the width of the given column.
     ##
@@ -142,6 +153,7 @@ class LayoutManager():
             self._columnWidths.append(0.0)
             
         self._columnWidths[column] = value
+    FUNCTIONEND
             
     ### Sets the height of the given row.
     ##
@@ -154,8 +166,7 @@ class LayoutManager():
             self._rowHeights.append(0.0)
                     
         self._rowHeights[row] = value
-    
-
+    FUNCTIONEND
     
     ### Returns the (column,row) of the given child.
     ##
@@ -168,6 +179,7 @@ class LayoutManager():
                     if c==child:
                         return (i,j)
         return None
+    FUNCTIONEND
     
     ### Adds a column at the given position.
     ##  Columns are moved to right.
@@ -181,7 +193,8 @@ class LayoutManager():
         
         for i in self._rowHeights:
             self._children[index].append([])
-
+    FUNCTIONEND
+    
     ### Adds a Row at the given position.
     ##  Rows are moved down.
     ##
@@ -194,6 +207,7 @@ class LayoutManager():
             self._children[i].insert(index,[])
             
         self._rowHeights.insert(index,height)
+    FUNCTIONEND
         
     ### Returns the width value of the given column.
     ##
@@ -201,10 +215,14 @@ class LayoutManager():
     ##
     def getColumnWidth(self,index):
         return self._columnWidths[index]
+    FUNCTIONEND
     
-    def debug(self):
-        print(self._columnWidths)
-        print(self.rowHeights)
+    def debug(self,prefix=""):
+        print( "{}Layoutmanager".format(prefix) )
+        print( "{}    columns : {}".format(prefix,self._columnWidths) )
+        print( "{}    rows    : {}".format(prefix,self.rowHeights) )
+        print( "{}    children: {}".format(prefix,self._children) )
+    FUNCTIONEND
         
     ### Calculates the absolute values of cols
     ##  in relation to size.
@@ -244,6 +262,7 @@ class LayoutManager():
                 result[i] = spaceLeft/qty0
     
         return result
+    FUNCTIONEND
     
     ###  Calculate size and position of all children
     ##   in the grid defines by children, widths and heights
@@ -304,7 +323,8 @@ class LayoutManager():
                             child.y = cellY
                             child.width = cellWidth
                             child.height = cellHeight
-                            
+                            if self._debug:
+                                print("set child:{} {}x{} {}x{}".format(child.name,cellX,cellY,cellWidth,cellHeight) )
                         ## exclude dockings
                         elif alignment not in (11,12,13,14):
                             
@@ -369,4 +389,6 @@ class LayoutManager():
                             
                 cellY = cellY + cellHeight
             cellX = cellX + cellWidth
+    FUNCTIONEND
+    
     

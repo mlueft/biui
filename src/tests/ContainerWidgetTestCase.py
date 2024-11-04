@@ -49,7 +49,7 @@ class ContainerWidgetTestCase(unittest.TestCase):
     def testInvalidate(self):
         assert 1==1, ""
     
-    """
+    """ "
     connectScrollNavigator
     disconnectScrollNavigator
     scrollPosition
@@ -64,6 +64,6 @@ class ContainerWidgetTestCase(unittest.TestCase):
     onChildAdded
     onChildRemoved
     onScrollPositionChanged
-    """
+    """ #"
 if __name__ == "__main__":
     unittest.main() ## run all tests

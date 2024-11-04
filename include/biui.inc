@@ -14,9 +14,11 @@
 
 // Has to be even
 // Size of the spacer between flexpanes
-#define BIUI_FLEXGRID_SPACER_WIDTH 10
+#define BIUI_FLEXGRID_SPACER_WIDTH 3
 // Size of the Dragraster in Flecgrid
 #define BIUI_FLEXGRID_RASTERSTEP 5
+
+#define BIUI_FLEXGRID_CORNER_SIZE 10
 
 #define BIUI_THEMEFOLDER "themes"
 
@@ -36,5 +38,8 @@
 #define BIUI_ERR_MENUPANE_ADDCHILD "MenuPane.addChild: Use addItem() instead!"
 #define BIUI_ERR_MENUPANE_REMOVECHILD "MenuPane.removeChild: Use removeItem() instead!"
 #define BIUI_ERR_PROPERTY_NOT_EXISIS "This Property doesn't exist!"
+#define BIUI_ERR_DEL_ATTR_NOT_ALLOWED "It is not allowed to delete attributes."
+
+#define FUNCTIONEND #pass
 
 #endif

@@ -17,12 +17,12 @@ class MenuPane(ContainerWidget):
         ##
         self.onItemClick = EventManager()
         
-        self.onBeforeDraw.add(self.__hndOnBeforeDraw)
+        self.onBeforeRender.add(self.__hndOnBeforeRender)
         
     ###
     ##
     ##
-    def __hndOnBeforeDraw(self,ev):
+    def __hndOnBeforeRender(self,ev):
         ## We have to find the size of the biggest item
         ## the pane. Items are resized by layout manager.
         margin = 10

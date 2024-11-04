@@ -1,3 +1,4 @@
+#include "biui.inc"
 #include "pysdl2.inc"
 
 from typing import  List,Callable
@@ -57,31 +58,55 @@ class ContainerWidget(Widget):
         ## visible area
         self._scrollX:int = 0
         self._scrollY:int = 0
-        
+    FUNCTIONEND
     
     ###
     ##
-    def connectScrollNavigator(self,navigator)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::connectScrollNavigation():{}".format(self))
-        #endif
-        if navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
-            return
-        
-        navigator.onScrollPositionChanged.add(self.__hndOnScrollPositionChanged)
-        navigator.connectPane(self)
-
+    ##
+    def __dir__(self):
+        result = super().__dir__()
+        result = result + [
+            "onChildAdded",   "onChildRemoved", "onScrollPositionChanged",
+            
+            "scrollPosition", "scrollSize",     "scrollWidth", 
+            "scrollHeight",   "scrollX",        "scrollY",
+            "layoutManager",  "renderRect",
+            
+            "connectScrollNavigator", "disconnectScrollNavigator", "hasChildren",
+            "getChildren",            "hasChild",                  "removeChild",
+            "addChild",               "getChildAt",                "isInvalide",
+            "toLocal",                "toGlobal",
+            
+            "_calculateLayout",       "_render",       "_invalidate",   "_recordDirtyRect",
+            "_onMouseDown",           "_onMouseUp",    "_onMouseClick", "_onMouseWheel",
+            "_onMouseEnter",          "_onMouseLeave", "_onMouseMove",  "_onKeyDown",
+            "_onKeyUp",               "_onTextInput",  "_onShortcut",   "_onBeforeDraw",
+            "_onAfterDraw",           "_onScrollPositionChanged",       "_onChildRemoved",
+            "_onChildAdded"
+        ]
+        result.sort()
+        return list(set(result))
+    FUNCTIONEND
+    
     ###
     ##
-    def disconnectScrollNavigator(self,navigator)->None:
+    ##
+    def __del__(self):
         #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::disconnectScrollNavigation():{}".format(self))
+        print("ContainerWidget::__del__:{}".format(self))
         #endif
-        if not navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
-            return
+        if self._texture != None:
+            PYSDL2_DESTROYTEXTURE( self._texture )
+    FUNCTIONEND
+                 
+    def debug(self,prefix=""):
         
-        navigator.onScrollPositionChanged.remove(self.__hndOnScrollPositionChanged)
-        navigator.disconnectPane(self)
+        super().debug(prefix)
+        self.layoutManager.debug("{}  ".format(prefix))
+        
+        print("{}  CHILDREN:".format(prefix))
+        for c in self._children:
+            c.debug( "{}      ".format(prefix) )
             
     ###
     ##
@@ -100,7 +125,34 @@ class ContainerWidget(Widget):
   
         self.scrollX = self.scrollWidth*sp[0]
         self.scrollY = self.scrollHeight*sp[1]
+    FUNCTIONEND
+    
+    ###
+    ##
+    def connectScrollNavigator(self,navigator)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::connectScrollNavigation():{}".format(self))
+        #endif
+        if navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
+            return
         
+        navigator.onScrollPositionChanged.add(self.__hndOnScrollPositionChanged)
+        navigator.connectPane(self)
+    FUNCTIONEND
+        
+    ###
+    ##
+    def disconnectScrollNavigator(self,navigator)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::disconnectScrollNavigation():{}".format(self))
+        #endif
+        if not navigator.onScrollPositionChanged.has(self.__hndOnScrollPositionChanged):
+            return
+        
+        navigator.onScrollPositionChanged.remove(self.__hndOnScrollPositionChanged)
+        navigator.disconnectPane(self)
+    FUNCTIONEND
+         
     ### Returns the current scroll position.
     ##
     ##  @return            A tuple representing the position.
@@ -111,6 +163,7 @@ class ContainerWidget(Widget):
         print("ContainerWidget::scrollPosition_get():{}".format(self))
         #endif
         return (self._scrollX, self._scrollY)
+    FUNCTIONEND
     
     ### Returns the x/y position of the GUI element.
     ##
@@ -122,7 +175,8 @@ class ContainerWidget(Widget):
         print("ContainerWidget::scrollSize_get():{}".format(self))
         #endif
         return (self.scrollWidth, self.scrollHeight)
-            
+    FUNCTIONEND
+    
     ### Returns the maximum scroll position in x direction.
     ##
     ##  @return            
@@ -133,6 +187,7 @@ class ContainerWidget(Widget):
         print("ContainerWidget::scrollWidth_get():{}".format(self))
         #endif
         return self._scrollWidth-self.width
+    FUNCTIONEND
     
     ### Returns the maximum scroll position in y direction.
     ##
@@ -144,6 +199,7 @@ class ContainerWidget(Widget):
         print("ContainerWidget::scrollHeight_get():{}".format(self))
         #endif
         return self._scrollHeight-self.height
+    FUNCTIONEND
     
     ### Returns the current scroll position in x direction.
     ##
@@ -155,6 +211,7 @@ class ContainerWidget(Widget):
         print("ContainerWidget::scrollX_get():{}".format(self))
         #endif
         return self._scrollX
+    FUNCTIONEND
     
     ### Sets the current scroll position in x direction. 
     ##
@@ -175,8 +232,9 @@ class ContainerWidget(Widget):
         
         self._scrollX = value
         self._invalidate()
-        self.onScrollPositionChanged.provoke(Event(self))
-        
+        self._onScrollPositionChanged(Event(self))
+    FUNCTIONEND
+    
     ### Returns the current scroll position in y direction.
     ##
     ##  @return            
@@ -187,6 +245,7 @@ class ContainerWidget(Widget):
         print("ContainerWidget::scrollY_get():{}".format(self))
         #endif
         return self._scrollY
+    FUNCTIONEND
     
     ### Sets the current scroll position in y direction. 
     ##
@@ -207,8 +266,9 @@ class ContainerWidget(Widget):
         
         self._scrollY = value
         self._invalidate()
-        self.onScrollPositionChanged.provoke(Event(self))
-                
+        self._onScrollPositionChanged(Event(self))
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -218,17 +278,20 @@ class ContainerWidget(Widget):
         print("ContainerWidget::hasChildren():{}".format(self))
         #endif
         return len(self._children) > 0
+    FUNCTIONEND
     
     ### Returns all child elements.
     ##
     ##  @return               A list with Widgets.
     ##
+    ## TODO: Should this be property children?
     def getChildren(self)->list[Widget]:
         #ifdef SHOW_FUNCTIONNAMES
         print("ContainerWidget::getChildren():{}".format(self))
         #endif
         return self._children
-     
+    FUNCTIONEND
+    
     ### @see Widget.hasChild
     ##
     ##
@@ -241,6 +304,7 @@ class ContainerWidget(Widget):
                 return True
             
         return self == child
+    FUNCTIONEND
     
     ###  Removes the given child element.
     ##
@@ -257,9 +321,11 @@ class ContainerWidget(Widget):
                 child.onChildAdded.remove(self.__hndChildAdded)
                 child.onChildRemoved.remove(self.__hndChildRemoved)
             
-            self.onChildRemoved.provoke(Event(child))
+            self._onChildRemoved(Event(child))
+            ## TODO: Is it correct to trigger an event from outside the widget?
             child._onGotRemoved()
-     
+    FUNCTIONEND
+    
     ### Adds a child element to the container.
     ##
     ##  @param child         A Widget instance.
@@ -278,36 +344,39 @@ class ContainerWidget(Widget):
         if isinstance(child,ContainerWidget):
             child.onChildAdded.add(self.__hndChildAdded)
             child.onChildRemoved.add(self.__hndChildRemoved)
-        self.onChildAdded.provoke(Event(child))
+        self._onChildAdded(Event(child))
+        ## TODO: Is it correct to trigger an event from outside the widget?
         child._onGotAdded()
- 
+    FUNCTIONEND
+    
     ###
     ##
-    ##
+    ##  TODO: What is this event handling for?
     def __hndChildAdded(self,ev:EventManager)->None:
         #ifdef SHOW_FUNCTIONNAMES
         print("ContainerWidget::__hndChildAdded():{}".format(self))
         #endif
-        self.onChildAdded.provoke(ev)
+        self._onChildAdded(ev)
         ##print("childAdded")
-            
+    FUNCTIONEND
+    
     ###
     ##
-    ##
+    ##  TODO: What is this event handling for?
     def __hndChildRemoved(self,ev:EventManager)->None:
         #ifdef SHOW_FUNCTIONNAMES
         print("ContainerWidget::__hndChildRemoved():{}".format(self))
         #endif
-        self.onChildRemoved.provoke(ev)
+        self._onChildRemoved(ev)
         ##print("childAdded")
-        
+    FUNCTIONEND
+    
     ### Returns the child element at the given position, itself or None.
     ##
     ##  @param pos             A tuple representing a position in the
     ##                         element´s coordinate system.
     ##  @return                None or a Widget
     ##
-
     def getChildAt(self, pos:tuple[int,int])->Widget:
         #ifdef SHOW_FUNCTIONNAMES
         print("ContainerWidget::getChildAt():{}".format(self))
@@ -322,6 +391,7 @@ class ContainerWidget(Widget):
                             return c.getChildAt(pos)
                     
         return self
+    FUNCTIONEND
     
     ### @see Widget.isInvalide
     ##
@@ -336,6 +406,7 @@ class ContainerWidget(Widget):
                 return True
     
         return super().isInvalide()
+    FUNCTIONEND
     
     ### Returns the layout manager.
     ##
@@ -347,7 +418,8 @@ class ContainerWidget(Widget):
         print("ContainerWidget::layoutManager_get():{}".format(self))
         #endif
         return self._layoutManager
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##  @param value       A ayoutManager.
@@ -359,7 +431,8 @@ class ContainerWidget(Widget):
         print("ContainerWidget::layoutManager_set():{}".format(self))
         #endif
         self._layoutManager = value
-        
+    FUNCTIONEND
+    
     ### @see Widget._calculateLayout
     ##
     ##
@@ -367,38 +440,35 @@ class ContainerWidget(Widget):
         #ifdef SHOW_FUNCTIONNAMES
         print("ContainerWidget::_calculateLayout():{}".format(self))
         #endif
-        super()._calculateLayout()
         
+        ## First we calculate our own size
         self._layoutManager._calculateLayout(self.size)
         
+        ## And determine scroll size
+        sw = self.width
+        sh = self.height
+        ##print(sw,sh)
+        for child in self._children:
+            sw = max(sw,child.right)
+            sh = max(sh,child.bottom)
+        self._scrollWidth = sw
+        self._scrollHeight = sh
+        
+        ## Next we let all children recalculate
         for c in self._children:
             c._calculateLayout()
-        
-    ### @see Widget._onBeforeDraw
-    ##
-    ##
-    def _onBeforeDraw(self)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onBeforeDraw():{}".format(self))
-        #endif
-        for c in self._children:
-            c._onBeforeDraw()
-        super()._onBeforeDraw()
+
+        ## Finally we let super class record dirty rects.
+        super()._calculateLayout()
+    FUNCTIONEND
     
-    ### @see Widget._onAfterDraw
+    ### See Widget.
     ##
     ##
-    def _onAfterDraw(self)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onAfterDraw():{}".format(self))
-        #endif
-        for c in self._children:
-            c._onAfterDraw()
-        super()._onAfterDraw()
-    
-    ### @see Widget._redraw
-    ##
-    ##  todo: hinting
+    def recordDirtyRect(self):
+        box = (0,0,self._scrollWidth,self._scrollHeight)
+        self._recordDirtyRect(box)
+    FUNCTIONEND
     
     ###
     ##
@@ -409,7 +479,20 @@ class ContainerWidget(Widget):
         print("ContainerWidget::renderRect():{}".format(self))
         #endif
         return (self._scrollX,self._scrollY,self.width,self.height)
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def _main(self):
+        super()._main()
+        for c in self._children:
+            c._main()
+    FUNCTIONEND
         
+    ### @see Widget._render
+    ##
+    ##  todo: hinting        
     def _render(self, forceRedraw:bool=False ):
         #ifdef SHOW_FUNCTIONNAMES
         print("ContainerWidget::_render():{}".format(self))
@@ -417,24 +500,15 @@ class ContainerWidget(Widget):
         if not self.isInvalide():
             if not forceRedraw:
                 return
+
         ##print("ContainerWidget::_render(): {}".format(self))
         
         ##print( "redraw:{} {}x{} {}".format(self.name,self.x,self.y,forceRedraw))
  
         wnd = self.window
         renderer = self.window.renderer
-        sw = self.width
-        sh = self.height
-        ##print(sw,sh)
-        for child in self._children:
-            sw = max(sw,child.right)
-            sh = max(sh,child.bottom)
-            ##print("         ",sw,sh)
-        ##print("------------")
-        self._scrollWidth = sw
-        self._scrollHeight = sh
         
-        PYSDL2_CREATETEXTURE(renderer,sw,sh,texture)
+        PYSDL2_CREATETEXTURE(renderer,self._scrollWidth,self._scrollHeight,texture)
               
         pos = self.position
         
@@ -458,348 +532,8 @@ class ContainerWidget(Widget):
         self._isInvalide = False# pylint:disable=attribute-defined-outside-init
         
         return texture
-        
-    ### @see Widget._onMouseDown
-    ##
-    ##
-    def _onMouseDown(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onMouseDown():{}".format(self))
-        #endif
-        ## phase down
-        super()._onMouseDown(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onMouseDown(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-        
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onMouseDown(ev)
-        
-    ### @see Widget._onMouseUp
-    ##
-    ##
-    def _onMouseUp(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onMouseUp():{}".format(self))
-        #endif
-        ## phase down
-        super()._onMouseUp(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onMouseUp(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
- 
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onMouseUp(ev)
+    FUNCTIONEND
     
-    ### @see Widget._onMouseClick
-    ##
-    ##
-    def _onMouseClick(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onMouseClick():{}".format(self))
-        #endif
-        ## phase down
-        super()._onMouseClick(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onMouseClick(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-                    
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onMouseClick(ev)
-                
-    ### @see Widget._onMouseWheel
-    ##
-    ##    
-    def _onMouseWheel(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onMouseSheel():{}".format(self))
-        #endif
-        ## phase down
-        super()._onMouseWheel(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onMouseWheel(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-        
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onMouseWheel(ev)
-            
-    ### @see Widget._onMouseEnter
-    ##
-    ##    
-    def _onMouseEnter(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onMouseEnter():{}".format(self))
-        #endif
-        ## phase down
-        super()._onMouseEnter(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onMouseEnter(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-        
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onMouseEnter(ev)
-            
-    ### @see Widget._onMouseLeave
-    ##
-    ##    
-    def _onMouseLeave(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onMouseLeave():{}".format(self))
-        #endif
-        ## phase down
-        super()._onMouseLeave(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onMouseLeave(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-        
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onMouseLeave(ev)
-            
-    ### @see Widget._onMouseMove
-    ##
-    ##    
-    def _onMouseMove(self,ev:MouseEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onMouseMove():{}".format(self))
-        #endif
-        ## phase down
-        super()._onMouseMove(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onMouseMove(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-        
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onMouseMove(ev)
-                
-    ### @see Widget._onKeyDown
-    ##
-    ##    
-    def _onKeyDown(self,ev:KeyEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onKeyDown():{}".format(self))
-        #endif
-        ##print("{} ContainerWidget::sdlOnKeyDown".format(self))
-        ##phase down
-        super()._onKeyDown(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onKeyDown(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-            
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onKeyDown(ev)
-            
-    ### @see Widget._onKeyUp
-    ##
-    ##    
-    def _onKeyUp(self,ev:KeyEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onKeyUp():{}".format(self))
-        #endif
-        ##phase down
-        super()._onKeyUp(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onKeyUp(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-        
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onKeyUp(ev)
-    
-    ### @see Widget._onTextInput
-    ##
-    ##   
-    def _onTextInput(self,ev:KeyEvent)->None:
-        #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::_onTextInput():{}".format(self))
-        #endif
-        ##phase down
-        super()._onTextInput(ev)
-        if ev.propagationStopped:
-            return
-        
-        childFound = False
-        for c in self._children:
-            if c.hasChild(ev.eventSource):
-                c._onTextInput(ev)
-                childFound = True
-                if c == ev.eventSource:
-                    ## we set event phase to up!
-                    ## This is the case if c is not a ContainerWidget.
-                    ev._nextPhase()
-                break
-                
-        ## if no child has got the event.
-        ## the event has reached the deepest level.
-        if not childFound:
-            ## we set event phase to up!
-            ev._nextPhase()
-        else:
-            ## pahse up
-            if ev.propagationStopped:
-                return
-            super()._onTextInput(ev)
-                 
     ### @see Widget._invalidate
     ##
     ##   
@@ -813,13 +547,14 @@ class ContainerWidget(Widget):
         ## Here we can´t call super()
         ## because super sends the position
         ## here we need (0,0)
-        box = (0,0,self._scrollWidth,self._scrollHeight)
+        ##box = (0,0,self._scrollWidth,self._scrollHeight)
+        ##self._recordDirtyRect(box)
         
-        self._recordDirtyRect(box)
         ## set flag to recalculate the layout.
         ## set flag to redraw widget
         self._isInvalide = True# pylint:disable=attribute-defined-outside-init
-        
+    FUNCTIONEND
+    
     ### @see Widget.toLocal
     ##
     ##
@@ -832,6 +567,7 @@ class ContainerWidget(Widget):
             result = self._parent.toLocal(result)
         
         return result
+    FUNCTIONEND
     
     ### @see Widget.toGlobal
     ##
@@ -845,7 +581,8 @@ class ContainerWidget(Widget):
             result = self._parent.toGlobal(result)
         
         return result
-            
+    FUNCTIONEND
+    
     ### @see Widget._recordDirtyRect
     ##
     ##    
@@ -880,7 +617,7 @@ class ContainerWidget(Widget):
         br = min( box[0]+box[2]-sx, self.x+self.width )
         bb = min( box[1]+box[3]-sy, self.y+self.height )
         
-        ## we translate the box to the parent´S coordinate system
+        ## we translate the box to the parent´s coordinate system
         ## and we cut of if it´s reaching over the edgees.
         box = (
             self.x+bx,
@@ -889,10 +626,362 @@ class ContainerWidget(Widget):
             bb-by
         )
         self.parent._recordDirtyRect(box)
+    FUNCTIONEND
+
+    ### @see Widget._onMouseDown
+    ##
+    ##
+    def _onMouseDown(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseDown():{}".format(self))
+        #endif
+        ## phase down
+        super()._onMouseDown(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onMouseDown(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+        
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onMouseDown(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onMouseUp
+    ##
+    ##
+    def _onMouseUp(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseUp():{}".format(self))
+        #endif
+        ## phase down
+        super()._onMouseUp(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:   
+            if c.hasChild(ev.eventSource):
+                c._onMouseUp(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+ 
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onMouseUp(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onMouseClick
+    ##
+    ##
+    def _onMouseClick(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseClick():{}".format(self))
+        #endif
+        ## phase down
+        super()._onMouseClick(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onMouseClick(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+                    
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onMouseClick(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onMouseWheel
+    ##
+    ##    
+    def _onMouseWheel(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseSheel():{}".format(self))
+        #endif
+        ## phase down
+        super()._onMouseWheel(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onMouseWheel(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+        
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onMouseWheel(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onMouseEnter
+    ##
+    ##    
+    def _onMouseEnter(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseEnter():{}".format(self))
+        #endif
+        ## phase down
+        super()._onMouseEnter(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onMouseEnter(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+        
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onMouseEnter(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onMouseLeave
+    ##
+    ##    
+    def _onMouseLeave(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseLeave():{}".format(self))
+        #endif
+        ## phase down
+        super()._onMouseLeave(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onMouseLeave(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+        
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onMouseLeave(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onMouseMove
+    ##
+    ##    
+    def _onMouseMove(self,ev:MouseEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onMouseMove():{}".format(self))
+        #endif
+        ## phase down
+        super()._onMouseMove(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onMouseMove(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+        
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onMouseMove(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onKeyDown
+    ##
+    ##    
+    def _onKeyDown(self,ev:KeyEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onKeyDown():{}".format(self))
+        #endif
+        ##print("{} ContainerWidget::sdlOnKeyDown".format(self))
+        ##phase down
+        super()._onKeyDown(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onKeyDown(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+            
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onKeyDown(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onKeyUp
+    ##
+    ##    
+    def _onKeyUp(self,ev:KeyEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onKeyUp():{}".format(self))
+        #endif
+        ##phase down
+        super()._onKeyUp(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onKeyUp(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+        
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onKeyUp(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onTextInput
+    ##
+    ##   
+    def _onTextInput(self,ev:KeyEvent)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onTextInput():{}".format(self))
+        #endif
+        ##phase down
+        super()._onTextInput(ev)
+        if ev.propagationStopped:
+            return
+        
+        childFound = False
+        for c in self._children:
+            if c.hasChild(ev.eventSource):
+                c._onTextInput(ev)
+                childFound = True
+                if c == ev.eventSource:
+                    ## we set event phase to up!
+                    ## This is the case if c is not a ContainerWidget.
+                    ev._nextPhase()
+                break
+                
+        ## if no child has got the event.
+        ## the event has reached the deepest level.
+        if not childFound:
+            ## we set event phase to up!
+            ev._nextPhase()
+        else:
+            ## pahse up
+            if ev.propagationStopped:
+                return
+            super()._onTextInput(ev)
+    FUNCTIONEND
 
     ### @see Widget._onShortCut
     ##
-    ##
+    ##  TODO: This function name is confusing!
     def _onShortcut(self,ev:Event)->None:
         #ifdef SHOW_FUNCTIONNAMES
         print("ContainerWidget::_onShortcut():{}".format(self))
@@ -925,4 +1014,63 @@ class ContainerWidget(Widget):
             if ev.propagationStopped:
                 return
             super()._onShortcut(ev)
+    FUNCTIONEND
+    
+    ### @see Widget._onBeforeDraw
+    ##
+    ##
+    def _onBeforeRender(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onBeforeRender():{}".format(self))
+        #endif
+        for c in self._children:
+            c._onBeforeRender()
+        super()._onBeforeRender()
+    FUNCTIONEND
+    
+    ### @see Widget._onAfterRender
+    ##
+    ##
+    def _onAfterRender(self)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("ContainerWidget::_onAfterRender():{}".format(self))
+        #endif
+        for c in self._children:
+            c._onAfterRender()
+        super()._onAfterRender()
+    FUNCTIONEND
+    
+    ##
+    #
+    #
+    def _onScrollPositionChanged(self,ev):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onScrollPositionChanged():{}".format(self))
+        #endif
+        self.onScrollPositionChanged.provoke(ev)    
+    FUNCTIONEND
+    
+    ##
+    #
+    #
+    def _onChildRemoved(self,ev):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onChildRemoved():{}".format(self))
+        #endif
+        self.onChildRemoved.provoke(ev)
+    FUNCTIONEND
+    
+    ##
+    #
+    #
+    def _onChildAdded(self,ev):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Widget::_onChildAdded():{}".format(self))
+        #endif
+        self.onChildAdded.provoke(ev)            
+    FUNCTIONEND
+            
+            
+            
+            
             

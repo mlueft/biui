@@ -656,12 +656,17 @@ class Theme():
     
         ##PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
         
-
+        if widget.value != "":
+            text = widget.format.format(widget.value)
+        else:
+            text = ""
+            
         tx = widget.font.render(
             renderer,
-            widget.format.format(widget.value),
+            text,
             widget.color
         )
+
         
         PYSDL2_GETTEXTURESIZE(tx,r)
         

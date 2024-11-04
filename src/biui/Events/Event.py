@@ -13,7 +13,7 @@ class Event():
         
     ### Returns the event source object.
     ##
-    ##
+    ## TODO: Should this be source?
     @property
     def eventSource(self):
         return self.__eventSource

@@ -1,3 +1,5 @@
+#include "biui.inc"
+
 import biui
 
 from biui.Widgets import Widget
@@ -9,7 +11,7 @@ class Label(Widget):
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawLabel
         
-        self.onBeforeDraw.add(self.__hndOnBeforeDraw)
+        self.onBeforeRender.add(self.__hndOnBeforeRender)
         
         self.color = biui.Color(200,200,200,255)
         self._format = "{}"
@@ -21,11 +23,12 @@ class Label(Widget):
         self._autoSize = True        
         self.name = "label"
         self.value = "label"
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##
-    def __hndOnBeforeDraw(self,ev):
+    def __hndOnBeforeRender(self,ev):
         
         if not self._autoSize:
             return
@@ -38,19 +41,22 @@ class Label(Widget):
         self.height = size[1]
         
         ##super()._calculateLayout()
-        
+    FUNCTIONEND
+    
     ### Handles the font change of the font element.
     ##
     ##        
     def __hndFontOnSizeChanged(self,ev):
         self._invalidate()
-
+    FUNCTIONEND
+    
     ### Set/Get the format string of the label.
     ##
     ##
     @property   
     def format(self):
         return self._format
+    FUNCTIONEND
     
     ### Sets the label´s format.
     ##
@@ -60,13 +66,15 @@ class Label(Widget):
     def format(self,value):
         self._format = value
         self._invalidate()
-
+    FUNCTIONEND
+    
     ### Set/Get the value of autoSize.
     ##
     ##
     @property   
     def autoSize(self):
         return self._autoSize
+    FUNCTIONEND
     
     ###  Sets autoSize.
     ##
@@ -76,7 +84,7 @@ class Label(Widget):
     def autoSize(self,value):
         self._autoSize = value
         self._invalidate()
-        
+    FUNCTIONEND
                      
     ### Set/Get the value of the label.
     ##  The value is the shown text.
@@ -85,6 +93,7 @@ class Label(Widget):
     @property   
     def value(self):
         return self._value
+    FUNCTIONEND
     
     ###  Sets the shown text.
     ##
@@ -94,7 +103,8 @@ class Label(Widget):
     def value(self,value):
         self._value = value
         self._invalidate()
-        
+    FUNCTIONEND
+    
     ### Set/Get the text color.
     ##
     ##  @return  The color orject.
@@ -102,6 +112,7 @@ class Label(Widget):
     @property
     def color(self):
         return self._color
+    FUNCTIONEND
     
     ### Sets the color of the text.
     ##
@@ -111,6 +122,7 @@ class Label(Widget):
     def color(self,value):
         self._color = value
         self._invalidate()
+    FUNCTIONEND
     
     ### Set/Get the font object.
     ##
@@ -119,7 +131,8 @@ class Label(Widget):
     @property   
     def font(self):
         return self._font
-        
+    FUNCTIONEND
+    
     ### Sets the font object.
     ##
     ##  @param value 
@@ -132,5 +145,5 @@ class Label(Widget):
             
         self._font = value
         self._invalidate()
-        
+    FUNCTIONEND
         

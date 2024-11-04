@@ -170,29 +170,76 @@ class Window(ContainerWidget):
         biui._addWindow(self)
         
         ## Added in Widget. But Window does not need it.
-        self.onMouseDown.remove(self.hndMouseDown)
+        ##self.onMouseDown.remove(self.__hndMouseDown)
         
         biui.ShortcutControl.onShortcut.add(self.__hndOnShortcut)
     
-    ## SDL_GetWindowPosition
-    ## SDL_SetWindowPosition
+        ## SDL_GetWindowPosition
+        ## SDL_SetWindowPosition
+        
+        ## SDL_GetWindowSize
+        ## SDL_SetWindowSize
     
-    ## SDL_GetWindowSize
-    ## SDL_SetWindowSize
-
-    ## SDL_GetWindowMaximumSize
-    ## SDL_SetWindowMaximumSize
-
-    ## SDL_GetWindowMinimumSize
-    ## SDL_SetWindowMinimumSize
+        ## SDL_GetWindowMaximumSize
+        ## SDL_SetWindowMaximumSize
     
-    ## SDL_ShowWindow
-    ## SDL_HideWindow
-    ## SDL_MaximizeWindow
-    ## SDL_MinimizeWindow
-    ## SDL_RaiseWindow
-    ## SDL_RestoreWindow
+        ## SDL_GetWindowMinimumSize
+        ## SDL_SetWindowMinimumSize
+        
+        ## SDL_ShowWindow
+        ## SDL_HideWindow
+        ## SDL_MaximizeWindow
+        ## SDL_MinimizeWindow
+        ## SDL_RaiseWindow
+        ## SDL_RestoreWindow
+    FUNCTIONEND
+        
+    ###
+    ##
+    ##
+    def __dir__(self):
+        result = super().__dir__()
+        result = result + [
+            "onWindowClose",       "onWindowShown",       "onWindowHidden", 
+            "onWindowExposed",     "onWindowMoved",       "onWindowResized",
+            "onWindowSizeChanged", "onWindowMinimized",   "onWindowMaximized",
+            "onWindowRestored",    "onWindowEnter",       "onWindowFocus",
+            "onWindowLeave",       "onWindowFocusGained", "onWindowFocusLost", 
+            
+            
+             "window",    "x",     "y",  "width",
+             "height",    "title", "id", "renderer",
+              
+            "sdlOnMouseDown",   "sdlOnMouseUp",   "sdlOnMouseWheel",
+            "sdlOnMouseMotion", "sdlOnKeyDown",   "sdlOnKeyUp",
+            "sdlOnTextInput",   "sdlOnWindowEvent", 
+            
+            "showOverlay", "removeOverlay", "addOverlay", "setFocus",
+            "toWindow",    "toScreen",
+             
+            "_onQuit",            "_render",              "_recordDirtyRect",   "_onWindowClosed",
+            "_onWindowShown",     "_onWindowHidden",      "_onWindowExposed",   "_onWindowMoved",
+            "_onWindowResized",   "_onWindowSizeChanged", "_onWindowMinimized", "_onWindowMaximized", 
+            "_onWindowRestored",  "_onWindowEnter",       "_onWindowLeave",     "_onWindowFocusGained",
+            "_onWindowFocusLost", "_onWindowFocus"
+        ]
+        result.sort()
+        return list(set(result))
+    FUNCTIONEND
     
+    ###
+    ##
+    ##
+    def __del__(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::__del__:{}".format(self))
+        #endif
+        super().__del__()
+        if self.__guiTexture != None:
+            PYSDL2_DESTROYTEXTURE( self.__guiTexture )
+        biui._removeWindow(self)
+    FUNCTIONEND
+        
     ### Sets the currently focused widget.
     ##
     ##
@@ -203,15 +250,17 @@ class Window(ContainerWidget):
         if self.__focusedWidget == widget:
             return
         
+        ## TODO: Is it correct to trigger an event from outside the focused widget?
         ## defocus old widget
         if self.__focusedWidget:
-            self.__focusedWidget.onFocusLost.provoke(Event(self.__focusedWidget));
+            self.__focusedWidget._onFocusLost(Event(self.__focusedWidget));
         
         self.__focusedWidget = widget
         
         ## focus new widget
-        self.__focusedWidget.onFocus.provoke(Event(self.__focusedWidget));
-            
+        self.__focusedWidget._onFocus(Event(self.__focusedWidget));
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -226,7 +275,8 @@ class Window(ContainerWidget):
         sdl2.SDL_RemoveTimer( self.__tooltipTimerId )
         self.__tooltipTimerId = None
         self.removeOverlay("tooltip")
-            
+    FUNCTIONEND
+    
     ###
     ##
     ## todo: hinting
@@ -247,8 +297,20 @@ class Window(ContainerWidget):
         tt.y = self.__mousePosition[1]+10
         self.showOverlay(tt,"tooltip")
         return 0
-    
+    FUNCTIONEND
         
+    ###
+    ##
+    ##
+    def __hndOnWndClose(self,ev:Event)->None:##pylint: disable=unused-argument
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::__hndOnWndClose():{}".format(self))
+        #endif
+        ## TODO: clean up all eventmanagers
+        
+        biui._removeWindow(self)
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -258,6 +320,7 @@ class Window(ContainerWidget):
         #endif
         self.removeOverlay(overlayname)
         self.addOverlay(child, overlayname)
+    FUNCTIONEND
     
     ###
     ##
@@ -269,7 +332,9 @@ class Window(ContainerWidget):
         if overlayname in self.__overlays:
             for i in self.__overlays[overlayname]:
                 self.removeChild(i)
-            self.__overlays[overlayname] = []        
+            self.__overlays[overlayname] = []
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -281,6 +346,7 @@ class Window(ContainerWidget):
             self.__overlays[overlayname] = []        
         self.__overlays[overlayname].append(child)
         self.addChild(child)
+    FUNCTIONEND
     
     ### @see biui.Widget.x
     ##
@@ -291,6 +357,7 @@ class Window(ContainerWidget):
         print("Window::window_get():{}".format(self))
         #endif
         return self
+    FUNCTIONEND
     
     @property
     def x(self)->int:
@@ -299,6 +366,7 @@ class Window(ContainerWidget):
         #endif
         PYSDL2_GETWINDOWPOS(self._window,x,y)##pylint: disable=unused-variable
         return x
+    FUNCTIONEND
     
     ### @see biui.Widget.x
     ##
@@ -311,6 +379,7 @@ class Window(ContainerWidget):
         if value == self.x:
             return
         PYSDL2_SETWINDOWPOS(self._window,value,self.y)
+    FUNCTIONEND
     
     ### @see biui.Widget.y
     ##
@@ -322,7 +391,8 @@ class Window(ContainerWidget):
         #endif
         PYSDL2_GETWINDOWPOS(self._window,x,y)##pylint: disable=unused-variable
         return y
-
+    FUNCTIONEND
+    
     ### @see biui.Widget.y
     ##
     ##
@@ -334,7 +404,8 @@ class Window(ContainerWidget):
         if value == self.y:
             return
         PYSDL2_SETWINDOWPOS(self._window,self.x,value)
-
+    FUNCTIONEND
+        
     ### @see biui.Widget.width
     ##
     ##
@@ -345,6 +416,7 @@ class Window(ContainerWidget):
         #endif
         PYSDL2_GETWINDOWSIZE(self._window,w,h)##pylint: disable=unused-variable
         return w
+    FUNCTIONEND
     
     ### @see biui.Widget.width
     ##
@@ -359,6 +431,7 @@ class Window(ContainerWidget):
         if value > self.width:
             self._invalidate()
         PYSDL2_SETWINDOWSIZE(self._window,value,self.height)
+    FUNCTIONEND
     
     ### @see biui.Widget.height
     ##
@@ -370,6 +443,7 @@ class Window(ContainerWidget):
         #endif
         PYSDL2_GETWINDOWSIZE(self._window,w,h)##pylint: disable=unused-variable
         return h
+    FUNCTIONEND
     
     ### @see biui.Widget.height
     ##
@@ -384,7 +458,8 @@ class Window(ContainerWidget):
         if value > self.height:
             self._invalidate()
         PYSDL2_SETWINDOWSIZE(self._window,self.width,value)
-
+    FUNCTIONEND
+    
     ## Returns the title of the window.
     ##
     ##  @return            An string value.
@@ -395,7 +470,8 @@ class Window(ContainerWidget):
         print("Window::title_get():{}".format(self))
         #endif
         return self._title
-
+    FUNCTIONEND
+    
     ### Sets the title of the window.
     ##
     ##  @param value       An string value.
@@ -408,19 +484,8 @@ class Window(ContainerWidget):
         #endif
         PYSDL2_SETWINDOWTITLE(self._window,value)
         self._title = value
-    
-    ###
-    ##
-    ##
-    def __hndOnWndClose(self,ev:Event)->None:##pylint: disable=unused-argument
-        #ifdef SHOW_FUNCTIONNAMES
-        print("Window::__hndOnWndClose():{}".format(self))
-        #endif
-        ## TODO: clean up all eventmanagers
-        
-        PYSDL2_DESTROYTEXTURE(self._window)
-        biui._removeWindow(self)
-    
+    FUNCTIONEND
+     
     ### Handles the SDL mouse event for this window
     ##
     ##  todo: hinting
@@ -450,7 +515,8 @@ class Window(ContainerWidget):
         receiver = self.getChildAt(pos)
         ev = MouseEvent(receiver,bStates,pos,0,0)
         self._onMouseDown(ev)
-
+    FUNCTIONEND
+    
     ### Handles the SDL mouse event for this window
     ##
     ##  todo: hinting
@@ -481,7 +547,8 @@ class Window(ContainerWidget):
             self._onMouseClick(ev)
 
         self._onMouseUp(ev)
-            
+    FUNCTIONEND
+     
     ### Handles the SDL mouse event for this window
     ##
     ##  todo: hinting
@@ -519,6 +586,7 @@ class Window(ContainerWidget):
         receiver = self.getChildAt(pos)
         ev = MouseEvent(receiver,bStates,pos,event.wheel.x,event.wheel.y)
         self._onMouseWheel(ev)
+    FUNCTIONEND
     
     ### Handles the SDL mouse event for this window
     ##
@@ -558,7 +626,8 @@ class Window(ContainerWidget):
             self.__hoverWidget._onMouseEnter(ev)
         else:
             self._onMouseMove(ev)
-
+    FUNCTIONEND
+    
     ### 
     ##
     ##
@@ -576,7 +645,8 @@ class Window(ContainerWidget):
             event.key.timestamp
         )
         self._onKeyDown(ev)
-        
+    FUNCTIONEND
+    
     ### 
     ##
     ##
@@ -594,6 +664,7 @@ class Window(ContainerWidget):
             event.key.timestamp
         )
         self._onKeyUp(ev)
+    FUNCTIONEND
     
     ### 
     ##
@@ -605,6 +676,7 @@ class Window(ContainerWidget):
         ##print( "sdlOnTextInput {}".format(event.text.text) )
         ##self._onTextInput(event)
         pass
+    FUNCTIONEND
     
     ### Handles the sdl window event for this window
     ##
@@ -617,17 +689,17 @@ class Window(ContainerWidget):
         
         if event.window.event == sdl2.SDL_WINDOWEVENT_CLOSE:
             print("SDL_WINDOWEVENT_CLOSE")
-            self.onWindowClose.provoke(ev)
+            self._onWindowClose(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_SHOWN:
             ##print("SDL_WINDOWEVENT_SHOWN")
-            self.onWindowShown.provoke(ev)
+            self._onWindowShown(ev)
             self._invalidate()
         elif event.window.event == sdl2.SDL_WINDOWEVENT_HIDDEN:
             ##print("SDL_WINDOWEVENT_HIDDEN")
-            self.onWindowHidden.provoke(ev)
+            self._onWindowHidden(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_EXPOSED:
             ##print("SDL_WINDOWEVENT_EXPOSED")
-            self.onWindowExposed.provoke(ev)
+            self._onWindowExposed(ev)
             self._invalidate()
         elif event.window.event == sdl2.SDL_WINDOWEVENT_MOVED:
             ##print("SDL_WINDOWEVENT_MOVED")
@@ -637,7 +709,7 @@ class Window(ContainerWidget):
                     event.window.data1,
                     event.window.data2
                 )
-                self.onWindowMoved.provoke(ev)
+                self._onWindowMoved(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_RESIZED:
             ##print("SDL_WINDOWEVENT_RESIZED")
             if self.width != event.window.data1 or self.height != event.window.data2 or True:
@@ -648,7 +720,7 @@ class Window(ContainerWidget):
                 ##)
                 ##self.width = event.window.data1
                 ##self.height = event.window.data2
-                self.onWindowResized.provoke(ev)
+                self._onWindowResized(ev)
                 self._invalidate()
         elif event.window.event == sdl2.SDL_WINDOWEVENT_SIZE_CHANGED:
             print("SDL_WINDOWEVENT_SIZE_CHANGED(%s,%s) (%s,%s)",event.window.data1,event.window.data2,self.width,self.height)
@@ -660,38 +732,39 @@ class Window(ContainerWidget):
                 ##)
                 ##self.width = event.window.data1
                 ##self.height = event.window.data2
-                self.onWindowSizeChanged.provoke(ev)
+                self._onWindowSizeChanged(ev)
                 self._invalidate()
         elif event.window.event == sdl2.SDL_WINDOWEVENT_MINIMIZED:
             print("SDL_WINDOWEVENT_MINIMIZED")
-            self.onWindowMinimized.provoke(ev)
+            self._onWindowMinimized(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_MAXIMIZED:
             print("SDL_WINDOWEVENT_MAXIMIZED")
-            self.onWindowMaximized.provoke(ev)
+            self._onWindowMaximized(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_RESTORED:
             print("SDL_WINDOWEVENT_RESTORED")
-            self.onWindowRestored.provoke(ev)
+            self._onWindowRestored(ev)
             self._invalidate()
         elif event.window.event == sdl2.SDL_WINDOWEVENT_ENTER:
             print("SDL_WINDOWEVENT_ENTER")
-            self.onWindowEnter.provoke(ev)
+            self._onWindowEnter(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_LEAVE:
             print("SDL_WINDOWEVENT_LEAVE")
-            self.onWindowLeave.provoke(ev)
+            self._onWindowLeave(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_GAINED:
             print("SDL_WINDOWEVENT_FOCUS_GAINED")
-            self.onWindowFocusGained.provoke(ev)
+            self._onWindowFocusGained(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
             print("SDL_WINDOWEVENT_FOCUS_LOST")
-            self.onWindowFocusLost.provoke(ev)
+            self._onWindowFocusLost(ev)
         elif event.window.event == sdl2.SDL_WINDOWEVENT_TAKE_FOCUS:
             ##print("SDL_WINDOWEVENT_TAKE_FOCUS")
-            ##self.onWindowFocus.provoke(ev)
+            ##self._onWindowFocus(ev)
             ##self._invalidate()
             pass
         else:
             print("*Unknown Windowevent.")
-
+    FUNCTIONEND
+    
     ### Returns the current mouse position on the window.
     ##
     ##  @return         A tuple with x andy position of the
@@ -709,7 +782,8 @@ class Window(ContainerWidget):
         print("Window::id_get():{}".format(self))
         #endif
         return self._id 
-                
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -718,7 +792,8 @@ class Window(ContainerWidget):
         print("Window::_onQuit():{}".format(self))
         #endif
         pass
-
+    FUNCTIONEND
+    
     ### Returns the window´s renderer.
     ##
     ##  todo: hinting
@@ -728,9 +803,15 @@ class Window(ContainerWidget):
         print("Window::renderer_get():{}".format(self))
         #endif
         return self._renderer
-
+    FUNCTIONEND
+    
     ### @see biui.Widget._redraw
     ##
+    ## Event order at rendering:
+    ## 1. _onBeforeRender
+    ## 2. _calculateLayout
+    ## 3. _render
+    ## 4. _onAfterRender
     ##        
     def _render(self, forceRedraw:bool=False):
         #ifdef SHOW_FUNCTIONNAMES
@@ -754,28 +835,13 @@ class Window(ContainerWidget):
             if not forceRedraw:
                 return
         
-        ##print("window::redraw----------------------------------------",forceRedraw)
-        
         for c in self._children:
-            c._onBeforeDraw()
+            c._onBeforeRender()
         
         self._calculateLayout()
         
         theme = biui.getTheme()
 
-        ## Calculate scroll size
-        sw = self.width
-        sh = self.height
-        ##print(sw,sh)
-        for child in self._children:
-            sw = max(sw,child.right)
-            sh = max(sh,child.bottom)
-            ##print("         ",sw,sh)
-        ##print("------------")
-        self._scrollWidth = sw
-        self._scrollHeight = sh
-        
-        
         if self._texture is None:##pylint: disable=access-member-before-definition
             ## pylint false positive about attribute-defined-outside-init
             PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height, self._texture)
@@ -788,8 +854,6 @@ class Window(ContainerWidget):
         PYSDL2_CREATETEXTURE(self.renderer,self.width,self.height, self.__guiTexture)
         forceRedraw = True
         #endif
-        
-        ##PYSDL2_SETRENDERCONTEXT(self.renderer,self.__guiTexture)
         
         theme.drawWindowBeforeChildren(self,self.__guiTexture)
         
@@ -823,12 +887,14 @@ class Window(ContainerWidget):
         PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
         PYSDL2_RENDER_COPY(self.renderer,boxTexture,r,r)
         PYSDL2_DESTROYTEXTURE(boxTexture)
-        #else
+        #endif
+        pass
+        
+        #ifndef SHOW_UPDATE_BOX
         ## just render dirty rectangles
         ##dr = [[0,0,self.width,self.height]]
         for r in dr:
             r = list(r)
-            ##print(r)
             ## r must not reach over the widow´s texture
             r[0] = max(0,r[0])
             r[1] = max(0,r[1])
@@ -837,14 +903,16 @@ class Window(ContainerWidget):
             ##print(r)            
             PYSDL2_RENDER_COPY(self.renderer,self.__guiTexture,r,r)
         #endif
-        ##print("-----------------------------------")  
+        
+        ## Show it on screen.  
         PYSDL2_PRESENT(self.renderer)
         
         self._isInvalide = False##pylint: disable=attribute-defined-outside-init
         
         for c in self._children:
-            c._onAfterDraw()
-                    
+            c._onAfterRender()
+    FUNCTIONEND
+        
     ### @see biui.Widget._recordDirtyRect
     ##
     ##    
@@ -862,8 +930,10 @@ class Window(ContainerWidget):
         if box[1]+box[3] < 0:
             return
         ##print(box)
-        self.__dr.add(box)
         
+        self.__dr.add(box)
+    FUNCTIONEND
+    
     ### Transforms a screen position to a window position.
     ##
     ##
@@ -872,6 +942,7 @@ class Window(ContainerWidget):
         print("Window::toWindow():{}".format(self))
         #endif
         return (coordinates[0]-self.x,coordinates[1]-self.y)
+    FUNCTIONEND
     
     ### Transforms a window position to a screen position.
     ##
@@ -881,14 +952,14 @@ class Window(ContainerWidget):
         print("Window::toScreen():{}".format(self))
         #endif
         return (coordinates[0]+self.x,coordinates[1]+self.y)
+    FUNCTIONEND
     
     def __hndOnChildRemoved(self,ev):##pylint: disable=unused-argument
         #ifdef SHOW_FUNCTIONNAMES
         print("Window::_hndOnChildRemoved():{}".format(self))
         #endif
         self._invalidate()
-        
-    
+    FUNCTIONEND    
         
     ##def _onKeyDown(self,ev:KeyEvent)->None:
     ##    print("_onKeyDown")
@@ -910,5 +981,110 @@ class Window(ContainerWidget):
         event.eventSource = self.__focusedWidget
         
         self._onShortcut(event)
-        
-        
+    FUNCTIONEND
+    
+    def _onWindowClose(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowClose():{}".format(self))
+        #endif
+        self.onWindowClose.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowShown(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowShown():{}".format(self))
+        #endif
+        self.onWindowShown.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowHidden(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowHidden():{}".format(self))
+        #endif
+        self.onWindowHidden.provoke(ev)        
+    FUNCTIONEND
+    
+    def _onWindowExposed(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowExposed():{}".format(self))
+        #endif
+        self.onWindowExposed.provoke(ev)        
+    FUNCTIONEND
+    
+    def _onWindowMoved(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowMoved():{}".format(self))
+        #endif
+        self.onWindowMoved.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowResized(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowResized():{}".format(self))
+        #endif
+        self.onWindowResized.provoke(ev)    
+    FUNCTIONEND
+    
+    def _onWindowSizeChanged(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowSizeChanged():{}".format(self))
+        #endif
+        self.onWindowSizeChanged.provoke(ev)            
+    FUNCTIONEND
+    
+    def _onWindowMinimized(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowMinimized():{}".format(self))
+        #endif
+        self.onWindowMinimized.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowMaximized(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowMaximized():{}".format(self))
+        #endif
+        self.onWindowMaximized.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowRestored(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowRestored():{}".format(self))
+        #endif
+        self.onWindowRestored.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowEnter(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowEnter():{}".format(self))
+        #endif
+        self.onWindowEnter.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowLeave(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowLeave():{}".format(self))
+        #endif
+        self.onWindowLeave.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowFocusGained(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowFocusGained():{}".format(self))
+        #endif
+        self.onWindowFocusGained.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowFocusLost(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowFocusLost():{}".format(self))
+        #endif
+        self.onWindowFocusLost.provoke(ev)
+    FUNCTIONEND
+    
+    def _onWindowFocus(self,ev)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Window::_onWindowFocus():{}".format(self))
+        #endif
+        self.onWindowFocus.provoke(ev)
+    FUNCTIONEND
+          

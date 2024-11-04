@@ -38,7 +38,7 @@ class MenuItem(Button):
         
         self.__subMenuWidget = None
         
-        self.onBeforeDraw.add(self.__hndOnBeforeDraw)
+        self.onBeforeRender.add(self.__hndOnBeforeRender)
         self.onMouseClick.add(self.__hndOnMouseClick)
         self.onMouseEnter.add(self.__hndOnMouseEnter)
         
@@ -77,7 +77,7 @@ class MenuItem(Button):
     ###
     ##
     ##
-    def __hndOnBeforeDraw(self,ev):
+    def __hndOnBeforeRender(self,ev):
         margin = 10
         self.width = self.label.width+margin
         

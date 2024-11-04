@@ -1,3 +1,5 @@
+#include "biui.inc"
+
 import biui
 from biui.Widgets import Widget
 
@@ -11,8 +13,8 @@ class FlexSpacer(Widget):
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawFlexSpacer
         
-        self._minWidth = 2
-        self._minHeight = 2
+        self._minWidth = 1
+        self._minHeight = 1
         
         self._isVertical = isVertical
         
@@ -21,7 +23,8 @@ class FlexSpacer(Widget):
         
         ## Panes which are touching with the TOP/LEFT border.
         self._rightNeighbours = []
-                
+        self.backColor = biui.Color(255,0,0)
+    FUNCTIONEND
      
     ### Indicates if the spacer is vertical.
     ##
@@ -29,13 +32,15 @@ class FlexSpacer(Widget):
     @property
     def isVertical(self):
         return self._isVertical
-
+    FUNCTIONEND
+    
     ### Indicates if the spacer is horizontal.
     ##
     ##
     @property
     def isHorizontal(self):
         return not self._isVertical
+    FUNCTIONEND
         
     ### Returns all right/up neighbours.
     ##
@@ -43,6 +48,7 @@ class FlexSpacer(Widget):
     @property 
     def leftNeighbours(self):
         return self._leftNeibours
+    FUNCTIONEND
     
     ### Sets all right/up neighbours.
     ##
@@ -50,6 +56,7 @@ class FlexSpacer(Widget):
     @leftNeighbours.setter
     def leftNeighbours(self,value):
         self._leftNeibours = value
+    FUNCTIONEND
     
     ### Returns all right/down neighbours.
     ##
@@ -57,6 +64,7 @@ class FlexSpacer(Widget):
     @property
     def rightNeighbours(self):
         return self._rightNeighbours
+    FUNCTIONEND
     
     ### Sets all right/down neighbours.
     ##
@@ -64,6 +72,7 @@ class FlexSpacer(Widget):
     @rightNeighbours.setter
     def rightNeighbours(self,value):
         self._rightNeighbours = value
+    FUNCTIONEND
             
     ### Adds a left/up neighbour.
     ##
@@ -74,6 +83,7 @@ class FlexSpacer(Widget):
             return 
         
         self._leftNeibours.append(pane)
+    FUNCTIONEND
     
     ### Adds a right/down neighbour.
     ##
@@ -84,6 +94,7 @@ class FlexSpacer(Widget):
             return 
         
         self._rightNeighbours.append(pane)
+    FUNCTIONEND
     
     ### Adds one or more left/up neighbours.
     ##
@@ -91,6 +102,7 @@ class FlexSpacer(Widget):
     def addLeftNeighbours(self,panes):
         for p in panes:
             self.addLeftNeighbour(p)
+    FUNCTIONEND
     
     ### Adds one or more right/down neighbours.
     ##
@@ -98,6 +110,7 @@ class FlexSpacer(Widget):
     def addRightNeighbours(self,panes):
         for p in panes:
             self.addRightNeighbour(p)
+    FUNCTIONEND
             
     ### Removes the neighbour, if it is found as a neighbour.
     ##
@@ -108,26 +121,29 @@ class FlexSpacer(Widget):
             
         if pane in self._rightNeighbours:
             self._rightNeighbours.remove(pane)
-
+    FUNCTIONEND
+    
     ### Removes one or more neighbours if they are found as neighbours.
     ##
     ##
     def removeNeighbours(self,panes):
         for pane in panes:
             self.removePane(pane)
-
+    FUNCTIONEND
 
     ### Checks if pane is a left/up neighbour.
     ##
     ##
     def isLeftNeighbour(self,pane):
         return pane in self._leftNeibours
+    FUNCTIONEND
     
     ### Checks id pane is a right/down neighbour.
     ##
     ##
     def isRightNeighbour(self,pane):
         return pane in self._rightNeighbours
+    FUNCTIONEND
     
     ### Aligns all neighbour acording to the current left/right borders.
     ##
@@ -149,5 +165,5 @@ class FlexSpacer(Widget):
             
             for p in self._rightNeighbours:
                 p.top = self.bottom            
-        
+    FUNCTIONEND
         

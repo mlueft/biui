@@ -25,8 +25,8 @@ def createLabel():
     result.onMouseDown.add(hndOnMouseDown)
     result.onMouseClick.add(hndOnMouseClick)
     
-    result.onBeforeDraw.add(hndOnBeforeDraw)
-    result.onAfterDraw.add(hndOnAfterDraw)
+    result.onBeforeRender.add(hndOnBeforeRender)
+    result.onAfterRender.add(hndOnAfterRender)
     result.onFocus.add(hndOnFocus)
     result.onFocusLost.add(hndOnFocusLost)
     
@@ -66,11 +66,11 @@ def hndOnMouseDown(ev):
 def hndOnMouseClick(ev):
     print("hndOnMouseClick")
     
-def hndOnBeforeDraw(ev):
-    print("hndOnBeforeDraw")
+def hndOnBeforeRender(ev):
+    print("hndOnBeforeRender")
     
-def hndOnAfterDraw(ev):
-    print("hndOnAfterDraw")
+def hndOnAfterRender(ev):
+    print("hndOnAfterRender")
     
 def hndOnFocus(ev):
     print("hndOnFocus")

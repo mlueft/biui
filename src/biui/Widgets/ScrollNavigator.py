@@ -1,4 +1,6 @@
 #include "pysdl2.inc"
+#include "biui.inc"
+
 import sdl2
 
 import biui
@@ -24,9 +26,7 @@ class ScrollNavigator(ContainerWidget):
         self.__isHorizontal = False
         self.__isVertical = False
         
-        self.__dragger = Spacer()
-        self.__dragger.width = 30
-        self.__dragger.height = 30
+        self.__dragger = self.createDragger()
         self.__dragger.onMouseDown.add(self.__hndDraggerOnMouseDown)
         self.addChild(self.__dragger)
         
@@ -38,21 +38,34 @@ class ScrollNavigator(ContainerWidget):
         self.onResized.add(self.__hndOnResized)
         
         self.__scrollPosition = [0,0]
-        
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def createDragger(self):
+        result = Spacer()
+        result.width = 30
+        result.height = 30
+        return result
+    FUNCTIONEND
+    
     ###
     ##
     ##
     def __hndOnResized(self,ev):
         self.__dragger.x = (self.width-self.__dragger.width)*self.__scrollPosition[0]
         self.__dragger.y = (self.height-self.__dragger.height)*self.__scrollPosition[1]
-    
+    FUNCTIONEND
+        
     ### @see: biui.Widget.width
     ##
     ##
     @property
     def width(self):
         return super().width
-    
+    FUNCTIONEND
+        
     ### @see: biui.Widget.width
     ##
     @width.setter     
@@ -64,14 +77,16 @@ class ScrollNavigator(ContainerWidget):
             self.__dragger.y = 0
             self.__dragger.height = self.height
             self._invalidate()
-
+    FUNCTIONEND
+    
     ## @see: biui.Widget.height
     ##
     ##
     @property
     def height(self):
         return super().height
-            
+    FUNCTIONEND
+    
     ### @see: biui.Widget.height
     ##
     ##
@@ -84,7 +99,8 @@ class ScrollNavigator(ContainerWidget):
             self.__dragger.x = 0
             self.__dragger.width = self.width
             self._invalidate()
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -94,7 +110,8 @@ class ScrollNavigator(ContainerWidget):
     
         pane.onScrollPositionChanged.add(self.__hndPaneOnScrollPositionChanged)
         pane.connectScrollNavigator(self)
-        
+    FUNCTIONEND
+      
     ###
     ##
     ##
@@ -118,7 +135,7 @@ class ScrollNavigator(ContainerWidget):
             else:
                 self.__scrollPosition[0] = 0
                 self.__dragger.x = 0
-            return 
+            ##return 
         elif self.isVertical:
             if es.scrollHeight > 0:
                 self.__scrollPosition[1] = sp[1]/es.scrollHeight
@@ -126,7 +143,7 @@ class ScrollNavigator(ContainerWidget):
             else:
                 self.__scrollPosition[1] = 0
                 self.__dragger.y = 0
-            return 
+            ##return 
         else:
             if es.scrollWidth > 0:
                 self.__scrollPosition[0] = sp[0]/es.scrollWidth
@@ -134,13 +151,15 @@ class ScrollNavigator(ContainerWidget):
             else:
                 self.__scrollPosition[0] = 0
                 self.__dragger.x = 0
-            return
+            ##return
             if es.scrollHeight > 0:
                 self.__scrollPosition[1] = sp[1]/es.scrollHeight
                 self.__dragger.y = (self.height-self.__dragger.height)*sp[1]/es.scrollHeight
             else:
                 self.__scrollPosition[1] = 0
                 self.__dragger.y = 0
+        self._invalidate()
+    FUNCTIONEND
     
     ### Returns the State if the Scroll navigator is used as 
     ##  horizontal scroll bar.
@@ -150,7 +169,8 @@ class ScrollNavigator(ContainerWidget):
     @property
     def isHorizontal(self):
         return self.__isHorizontal
-    
+    FUNCTIONEND
+        
     ### Defines if the scroll navigator is used as a 
     ##  hotizontal scroll bar.
     ##
@@ -168,7 +188,8 @@ class ScrollNavigator(ContainerWidget):
             
         self.__isHorizontal = value
         self._invalidate()
-        
+    FUNCTIONEND
+            
     ### Returns the State if the Scroll navigator is used as 
     ##  vertical scroll bar.
     ##
@@ -177,7 +198,8 @@ class ScrollNavigator(ContainerWidget):
     @property
     def isVertical(self):
         return self.__isVertical
-    
+    FUNCTIONEND
+        
     ### Defines if the scroll navigator is used as a 
     ##  vertical scroll bar.
     ##
@@ -195,27 +217,33 @@ class ScrollNavigator(ContainerWidget):
                     
         self.__isVertical = value
         self._invalidate()
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##
     def __hndWindowStopDragging(self,ev=None):
+        print("ScrollNavigator::__hndWindowStopDragging")
         self.window.onMouseMove.remove(self.__hndWindowOnMouseMove)
         self.window.onMouseUp.remove(self.__hndWindowStopDragging)
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##
     def __hndDraggerOnMouseDown(self,ev):
+        print("ScrollNavigator::__hndDraggerOnMouseDown")
         self.__draggerDownPosition = ev.eventSource.toLocal(ev.position)
         self.window.onMouseMove.add(self.__hndWindowOnMouseMove)
         self.window.onMouseUp.add(self.__hndWindowStopDragging)
         ##self.window.onWindowLeave.add( self.__hndWindowStopDragging )
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##
     def __hndWindowOnMouseMove(self,ev):
+        ##print("ScrollNavigator::__hndWindowOnMouseMove")
         currentPos = self.toLocal(ev.position)
         
         x = self.__dragger.x
@@ -236,7 +264,9 @@ class ScrollNavigator(ContainerWidget):
         
         if x != self.__dragger.x or y != self.__dragger.y:
             self.onScrollPositionChanged.provoke(Event(self))
-        
+        self._invalidate()
+    FUNCTIONEND
+    
     ### Returns a tuple with x and y of the current scrollposition.
     ##  Values are between 0 and 1 for 0% and 100%.
     ##
@@ -263,4 +293,6 @@ class ScrollNavigator(ContainerWidget):
         
         self.__scrollPosition = [x,y]
         return self.__scrollPosition
+    FUNCTIONEND
+    
         

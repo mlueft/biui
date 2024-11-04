@@ -1,3 +1,5 @@
+#include "biui.inc"
+
 from typing import Callable
 
 import biui
@@ -27,8 +29,7 @@ class Button(ContainerWidget):
         self.__backColorDown:Color = None
         self.__backColorOver:Color = None
         
-        self._label:Label = Label()
-        self._label.alignment = Alignment.CENTER_CENTER
+        self._label:Label = self._createLabel()
        
         theme = biui.getTheme()
         self._themeBackgroundfunction:Callable = theme.drawButtonBeforeChildren
@@ -44,7 +45,17 @@ class Button(ContainerWidget):
         self.onMouseLeave.add(self.__hndOnMouseLeave)
         self.onMouseDown.add(self.__hndOnMouseDown)
         self.onMouseUp.add(self.__hndOnMouseUp)
-        
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def _createLabel(self):
+        result = Label()
+        result.alignment = Alignment.CENTER_CENTER
+        return result
+    FUNCTIONEND
+    
     ### 
     ##
     ##  @return            A Color instance.
@@ -52,6 +63,7 @@ class Button(ContainerWidget):
     @property
     def backColorOver(self)->Color:
         return self.__backColorOver
+    FUNCTIONEND
     
     ### Sets the backcolor for this widget.
     ##
@@ -61,6 +73,7 @@ class Button(ContainerWidget):
     @backColorOver.setter
     def backColorOver(self, value:Color):
         self.__backColorOver = value
+    FUNCTIONEND
                 
     ### 
     ##
@@ -69,6 +82,7 @@ class Button(ContainerWidget):
     @property
     def backColorDown(self)->Color:
         return self.__backColorDown
+    FUNCTIONEND
     
     ### Sets the backcolor for this widget.
     ##
@@ -78,6 +92,7 @@ class Button(ContainerWidget):
     @backColorDown.setter
     def backColorDown(self, value:Color):
         self.__backColorDown = value
+    FUNCTIONEND
         
     ### @see ContainerWidget.getChildAt
     ##
@@ -88,7 +103,7 @@ class Button(ContainerWidget):
         ## If the position is inside the button,
         ## the button is the last element in the DOM.
         return self
-
+    FUNCTIONEND
     
     ### Returns the embedded label instance
     ##  to make its properties accessible.
@@ -97,6 +112,7 @@ class Button(ContainerWidget):
     @property
     def label(self):
         return self._label
+    FUNCTIONEND
     
     ### Returns the current state of the button.
     ##  See: ButtonStates
@@ -104,6 +120,7 @@ class Button(ContainerWidget):
     @property
     def state(self)->int:
         return self._state
+    FUNCTIONEND
     
     ### Returns the icon instance of the button
     ##  to make its properties accessible. 
@@ -112,6 +129,7 @@ class Button(ContainerWidget):
     @property
     def icon(self):
         return self._icon
+    FUNCTIONEND
     
     ### Sets the icon instance.
     ##  TODO: Impliment the icon class.
@@ -124,6 +142,7 @@ class Button(ContainerWidget):
         self._icon = icon
         self.addChild(icon,0,0)
         self._invalidate()
+    FUNCTIONEND
 
     ### Returns the value of the button.
     ##  The value is the shown text.
@@ -132,6 +151,7 @@ class Button(ContainerWidget):
     @property
     def value(self)->str:
         return self._label.value
+    FUNCTIONEND
     
     ### Sets the value of the button.
     ##  The value is the shown text.
@@ -141,6 +161,7 @@ class Button(ContainerWidget):
     @value.setter
     def value(self,value:str)->None:
         self._label.value = value
+    FUNCTIONEND
 
     ###
     ##
@@ -149,6 +170,7 @@ class Button(ContainerWidget):
         self._invalidate()
         self._state = ButtonStates.OVER
         self._invalidate()
+    FUNCTIONEND
     
     ###
     ##
@@ -157,6 +179,7 @@ class Button(ContainerWidget):
         self._invalidate()
         self._state = ButtonStates.NORMAL
         self._invalidate()
+    FUNCTIONEND
 
     ###
     ##
@@ -165,6 +188,7 @@ class Button(ContainerWidget):
         self._invalidate()
         self._state = ButtonStates.DOWN
         self._invalidate()
+    FUNCTIONEND
                 
     ###
     ##
@@ -173,6 +197,7 @@ class Button(ContainerWidget):
         self._invalidate()
         self._state = ButtonStates.OVER
         self._invalidate()
+    FUNCTIONEND
                        
         
           

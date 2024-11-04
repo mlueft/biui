@@ -155,11 +155,12 @@ class Pane(ContainerWidget):
         return self.__contentPane.hasChildren()
     FUNCTIONEND
 
-    def getChildren(self):
+    @property
+    def children(self):
         #ifdef SHOW_FUNCTIONNAMES
-        print("Pane::getChildren():{}".format(self))
+        print("Pane::children():{}".format(self))
         #endif
-        return self.__contentPane.getChildren()
+        return self.__contentPane.children
     FUNCTIONEND
         
     def hasChild(self,child):

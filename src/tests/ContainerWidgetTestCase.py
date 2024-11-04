@@ -19,7 +19,7 @@ class ContainerWidgetTestCase(unittest.TestCase):
         ##biui.quit()
         pass
     
-    def testGetChildren(self):
+    def testChildren(self):
         assert 1==1, ""
 
     def testHasChild(self):

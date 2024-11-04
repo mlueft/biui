@@ -38,7 +38,7 @@ class ButtonGroup(Pane):
     def __hndOnMouseUp(self,ev:Event)->None:
         print("ButtonGroup::__hndOnMouseUp()")
         source = ev.eventSource
-        for c in self.getChildren():
+        for c in self.children:
             c.checked = c == source
     FUNCTIONEND
     

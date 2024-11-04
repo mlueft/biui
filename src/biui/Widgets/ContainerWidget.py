@@ -73,7 +73,7 @@ class ContainerWidget(Widget):
             "layoutManager",  "renderRect",
             
             "connectScrollNavigator", "disconnectScrollNavigator", "hasChildren",
-            "getChildren",            "hasChild",                  "removeChild",
+            "children",            "hasChild",                  "removeChild",
             "addChild",               "getChildAt",                "isInvalide",
             "toLocal",                "toGlobal",
             
@@ -284,10 +284,10 @@ class ContainerWidget(Widget):
     ##
     ##  @return               A list with Widgets.
     ##
-    ## TODO: Should this be property children?
-    def getChildren(self)->list[Widget]:
+    @property
+    def children(self)->list[Widget]:
         #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::getChildren():{}".format(self))
+        print("ContainerWidget::children():{}".format(self))
         #endif
         return self._children
     FUNCTIONEND

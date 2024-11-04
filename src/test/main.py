@@ -1203,8 +1203,8 @@ def hndChildrenOptionSwap(ev):
     
 def hndChildrenOptionDebug(ev):
     global childrenPane0,childrenPane1,childrenFocused
-    print("children Pane0: {}".format(len(childrenPane0.getChildren())))
-    print("children Pane1: {}".format(len(childrenPane1.getChildren())))
+    print("children Pane0: {}".format(len(childrenPane0.children)))
+    print("children Pane1: {}".format(len(childrenPane1.children)))
     
     if childrenFocused:
         print("focused button parent: {}".format(childrenFocused.parent))

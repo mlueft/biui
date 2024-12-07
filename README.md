@@ -33,9 +33,10 @@ DONE:
 * MenuBar/TopBar
 * StatusBar
 * Scrollbar
-
+* NumberSlider should have properties to enable/disable manual input
+* Naming of scrollProperties corrected.
+ 
 TODO:
-
 * stopPropagation() for keyboardevents? Should it have it?
 * Protect setter from unnecassary invalidate() calles.
 * Label
@@ -47,18 +48,26 @@ TODO:
 * ListView
 * IconBar(3D-View left side)
 * LayoutManager
-
+* Tabnavigator
+* Icons
+* Pane:
+    + Mousewheel control:
+  	    mouse wheel scrolls vertically, if content is higher than height
+  	    else, it scrolls horizontally.
+  	    Mousewheel with modifierkey scrolls horizontally.
+* TabNavigator:
+    + Scroll with mousewheel.
+	   If not all buttons have place on screen,
+	   show navigator.
 Bugs:
- * Menuitems are not resized to text length
- * Tool tips are not resized to text length
- * Sometimes the Layoutmanagemant doesn't redraw everything
-   This comes from the DirtyRectangleManager and overlapped widgets
-   doen't redraw
- * Resized flexgrids loses control over splitter and panels.
- * Icons
- * NumberSlider should have properties to enable/disable manual input
- * Icon/Menubar needs control buttons to control out of view content
- * Tabnavigator
+* Menuitems are not resized to text length
+* Tool tips are not resized to text length
+* Sometimes the Layoutmanagemant doesn't redraw everything
+  This comes from the DirtyRectangleManager and overlapped widgets
+  doen't redraw
+* Resized flexgrids loses control over splitter and panels.
+* Icon/Menubar needs control buttons to control out of view content
+
  
 ```python
 

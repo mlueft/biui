@@ -53,9 +53,9 @@ class ContainerWidgetTestCase(unittest.TestCase):
     connectScrollNavigator
     disconnectScrollNavigator
     scrollPosition
-    scrollSize
-    scrollWidth
-    scrollHeight
+    maxScrollPosition
+    maxScrollX
+    maxScrollY
     scrollX
     scrollY
     renderRect

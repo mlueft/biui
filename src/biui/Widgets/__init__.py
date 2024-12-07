@@ -21,4 +21,6 @@ from .Pane import Pane
 from .TextField import TextField
 from .Window import Window
 from .ButtonGroup import ButtonGroup
- 
+from .TabNavigator import TabNavigator
+from .TabPane import TabPane
+from .TabControl import TabControl

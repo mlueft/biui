@@ -451,7 +451,8 @@ class Theme():
             result = False
             color = self._shema["PANE_BACKGROUND"]
         
-        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget._scrollWidth+widget.width,widget._scrollHeight+widget.height))
+        ##PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget._scrollWidth+widget.width,widget._scrollHeight+widget.height))
+        PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(0,0,widget.scrollWidth,widget.scrollHeight))
         return result
     
     ### Is called after the child objects are drawn.

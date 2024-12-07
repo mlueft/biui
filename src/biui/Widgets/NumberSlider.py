@@ -18,6 +18,9 @@ class NumberSlider(ContainerWidget):
         super().__init__()
         ##self.layoutManager._debug = True
         
+        ##
+        self._allowManualInput = True
+        
         ## 
         self._minValue = 0
         ##
@@ -162,6 +165,9 @@ class NumberSlider(ContainerWidget):
     def __endManualInput(self):
         ## write back value
         
+        if self._textfield == None:
+            return 
+        
         self._textfield.value = self._textfield.value.strip()
         
         if self._textfield.value != "":
@@ -237,6 +243,8 @@ class NumberSlider(ContainerWidget):
     ##
     ##
     def __hndBarOnMouseClick(self,ev):
+        if not self._allowManualInput:
+            return
         ev.stopPropagation()
         self.__startManualInput()
     FUNCTIONEND
@@ -454,4 +462,22 @@ class NumberSlider(ContainerWidget):
         
         self._showNavigation = value
         self._invalidate()
-    FUNCTIONEND    
+    FUNCTIONEND  
+    
+    ###
+    ##
+    ##
+    @property
+    def allowManualInput(self):
+        return self._allowManualInput  
+
+    ###
+    ##
+    ##
+    @allowManualInput.setter
+    def allowManualInput(self,value):
+        ## TODO: stop current input
+        self._allowManualInput = value
+    
+    
+    

@@ -3,7 +3,7 @@
 import biui
 from biui.Widgets import Pane
 from biui.Widgets import Widget
-from biui.Events import Event
+from biui.Events import Event, EventManager
 
 ###
 ##
@@ -15,6 +15,9 @@ class ButtonGroup(Pane):
         theme = biui.getTheme()
         self._themeBackgroundfunction = theme.drawButtonGroupBeforeChildren
         self._themeForegroundfunction = theme.drawButtonGroupAfterChildren
+        
+        self.onChanged = EventManager()
+        
     FUNCTIONEND
     
     ### @see biui.ContainerWidget.addChild
@@ -31,14 +34,37 @@ class ButtonGroup(Pane):
     def removeChild(self, child:Widget)->None:
         super().removeChild(child)
         child.onMouseUp.remove(self.__hndOnMouseUp)
+    FUNCTIONEND
+    
+    def _onChanged(self):
+        self.onChanged.provoke( Event(self))
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    @property
+    def activeChild(self):
+        for i,c in enumerate(self.children):
+            if c.checked:
+                return i
+    FUNCTIONEND
+    
+    @activeChild.setter
+    def activeChild(self,index):
+        for i,c in enumerate(self.children):
+            c.checked = i == index
+        self._onChanged()
+    FUNCTIONEND
     
     ###
     ##
     ##
     def __hndOnMouseUp(self,ev:Event)->None:
-        print("ButtonGroup::__hndOnMouseUp()")
         source = ev.eventSource
-        for c in self.children:
-            c.checked = c == source
+        for i,c in enumerate(self.children):
+            if c == source:
+                self.activeChild = i
+                break
     FUNCTIONEND
     

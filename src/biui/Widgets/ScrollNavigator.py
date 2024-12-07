@@ -9,6 +9,8 @@ from biui.Widgets import Spacer
 from biui.Events import EventManager
 from biui.Events import Event
 
+import traceback
+
 ###
 ##
 ##
@@ -48,6 +50,25 @@ class ScrollNavigator(ContainerWidget):
         result.width = 30
         result.height = 30
         return result
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __hndScrollSizeChanged(self,ev):
+        print("ScrollNavigator::__hndScrollSizeChanged()")
+        es = ev.eventSource
+        if not self.isVertical:
+            factor = es.width/es.scrollWidth
+            size = self.width*factor
+            self.__dragger.width = size
+        
+        if not self.isHorizontal:
+            factor = es.height/es.scrollHeight
+            size = self.height*factor
+            self.__dragger.height = size
+        
+        self._invalidate()
     FUNCTIONEND
     
     ###
@@ -109,6 +130,7 @@ class ScrollNavigator(ContainerWidget):
             return
     
         pane.onScrollPositionChanged.add(self.__hndPaneOnScrollPositionChanged)
+        pane.onScrollSizeChanged.add(self.__hndScrollSizeChanged)
         pane.connectScrollNavigator(self)
     FUNCTIONEND
       
@@ -120,8 +142,10 @@ class ScrollNavigator(ContainerWidget):
             return
     
         pane.onScrollPositionChanged.remove(self.__hndPaneOnScrollPositionChanged)
+        pane.onScrollSizeChanged.remove(self.__hndScrollSizeChanged)
         pane.disconnectScrollNavigator(self)
-        
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -129,32 +153,32 @@ class ScrollNavigator(ContainerWidget):
         es = ev.eventSource
         sp = es.scrollPosition
         if self.isHorizontal:
-            if es.scrollWidth > 0:
-                self.__scrollPosition[0] = sp[0]/es.scrollWidth
-                self.__dragger.x = (self.width-self.__dragger.width)*sp[0]/es.scrollWidth
+            if es.maxScrollX > 0:
+                self.__scrollPosition[0] = sp[0]/es.maxScrollX
+                self.__dragger.x = (self.width-self.__dragger.width)*sp[0]/es.maxScrollX
             else:
                 self.__scrollPosition[0] = 0
                 self.__dragger.x = 0
             ##return 
         elif self.isVertical:
-            if es.scrollHeight > 0:
-                self.__scrollPosition[1] = sp[1]/es.scrollHeight
-                self.__dragger.y = (self.height-self.__dragger.height)*sp[1]/es.scrollHeight
+            if es.maxScrollY > 0:
+                self.__scrollPosition[1] = sp[1]/es.maxScrollY
+                self.__dragger.y = (self.height-self.__dragger.height)*sp[1]/es.maxScrollY
             else:
                 self.__scrollPosition[1] = 0
                 self.__dragger.y = 0
             ##return 
         else:
-            if es.scrollWidth > 0:
-                self.__scrollPosition[0] = sp[0]/es.scrollWidth
-                self.__dragger.x = (self.width-self.__dragger.width)*sp[0]/es.scrollWidth
+            if es.maxScrollX > 0:
+                self.__scrollPosition[0] = sp[0]/es.maxScrollX
+                self.__dragger.x = (self.width-self.__dragger.width)*sp[0]/es.maxScrollX
             else:
                 self.__scrollPosition[0] = 0
                 self.__dragger.x = 0
             ##return
-            if es.scrollHeight > 0:
-                self.__scrollPosition[1] = sp[1]/es.scrollHeight
-                self.__dragger.y = (self.height-self.__dragger.height)*sp[1]/es.scrollHeight
+            if es.maxScrollY > 0:
+                self.__scrollPosition[1] = sp[1]/es.maxScrollY
+                self.__dragger.y = (self.height-self.__dragger.height)*sp[1]/es.maxScrollY
             else:
                 self.__scrollPosition[1] = 0
                 self.__dragger.y = 0

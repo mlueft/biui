@@ -6,6 +6,7 @@ import biui
 from biui.Widgets import ContainerWidget
 from biui.Widgets import ScrollNavigator
 from biui.Enum import Alignment
+from biui.Events import Event, EventManager
 
 ###
 ##
@@ -19,6 +20,8 @@ class Pane(ContainerWidget):
         
         super().__init__()
         self.__contentPane = self._createContainerWidget()
+        self.__contentPane.alignment = Alignment.FILL
+        self.__contentPane.onScrollSizeChanged.add(self.__hndScrollSizeChanged )
         
         super().addChild(self.__contentPane,0,0)
         
@@ -34,7 +37,12 @@ class Pane(ContainerWidget):
         self._themeBackgroundfunction = theme.drawPaneBeforeChildren
         self._themeForegroundfunction = theme.drawPaneAfterChildren
         
-            
+        ###
+        ##
+        ##
+        self.onScrollSizeChanged:EventManager = EventManager()
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -42,13 +50,20 @@ class Pane(ContainerWidget):
     
     def _createContainerWidget(self):
         result = ContainerWidget()
-        result.alignment = Alignment.FILL
         return result
     FUNCTIONEND
     
     def _createScrollNavigator(self):
         resut = ScrollNavigator()
         return result
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    def __hndScrollSizeChanged(self,ev):
+        ##print("Pane::__hndScrollSizeChanged()")
+        self.onScrollSizeChanged.provoke( Event(self) )
     FUNCTIONEND
     
     ###
@@ -205,8 +220,8 @@ class Pane(ContainerWidget):
     ##  @return            A tuple representing the size.
     ##
     @property
-    def scrollSize(self):
-        return self.__contentPane.scrollSize
+    def maxScrollPosition(self):
+        return self.__contentPane.maxScrollPosition
     FUNCTIONEND
             
     ### Returns the maximum scroll position in x direction.
@@ -214,8 +229,8 @@ class Pane(ContainerWidget):
     ##  @return            
     ##
     @property
-    def scrollWidth(self):
-        return self.__contentPane.scrollWidth
+    def maxScrollX(self):
+        return self.__contentPane.maxScrollX
     FUNCTIONEND
     
     ### Returns the maximum scroll position in y direction.
@@ -223,8 +238,8 @@ class Pane(ContainerWidget):
     ##  @return            
     ##
     @property
-    def scrollHeight(self):
-        return self.__contentPane.scrollHeight
+    def maxScrollY(self):
+        return self.__contentPane.maxScrollY
     FUNCTIONEND
     
     ### Returns the current scroll position in x direction.
@@ -263,6 +278,30 @@ class Pane(ContainerWidget):
     @scrollY.setter
     def scrollY(self, value):
         self.__contentPane.scrollY = value
+    FUNCTIONEND
+        
+    ### Returns the width of the scroll area.
+    ##
+    ##
+    @property
+    def scrollWidth(self):
+        return self.__contentPane.scrollWidth
+    FUNCTIONEND
+    
+    ### Returns the height of the scroll area.
+    ##
+    ##
+    @property
+    def scrollHeight(self):
+        return self.__contentPane.scrollHeight
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    @property
+    def scrollSize(self):
+        return self.__contentPane.scrollSize
     FUNCTIONEND
         
     ###

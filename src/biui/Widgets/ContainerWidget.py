@@ -40,6 +40,11 @@ class ContainerWidget(Widget):
         ##
         self.onScrollPositionChanged:EventManager = EventManager()
                 
+        ###
+        ##
+        ##
+        self.onScrollSizeChanged:EventManager = EventManager()
+        
         ##
         ## todo: hinting
         self._texture = None
@@ -68,8 +73,8 @@ class ContainerWidget(Widget):
         result = result + [
             "onChildAdded",   "onChildRemoved", "onScrollPositionChanged",
             
-            "scrollPosition", "scrollSize",     "scrollWidth", 
-            "scrollHeight",   "scrollX",        "scrollY",
+            "scrollPosition", "maxScrollPosition",     "maxScrollX", 
+            "maxScrollY",   "scrollX",        "scrollY",
             "layoutManager",  "renderRect",
             
             "connectScrollNavigator", "disconnectScrollNavigator", "hasChildren",
@@ -117,14 +122,14 @@ class ContainerWidget(Widget):
         #endif
         sp = ev.eventSource.draggerPosition
         if ev.eventSource.isHorizontal: #pylint: disable=no-else-return
-            self.scrollX = self.scrollWidth*sp[0]
+            self.scrollX = self.maxScrollX*sp[0]
             return 
         elif ev.eventSource.isVertical:
-            self.scrollY = self.scrollHeight*sp[1]
+            self.scrollY = self.maxScrollY*sp[1]
             return
   
-        self.scrollX = self.scrollWidth*sp[0]
-        self.scrollY = self.scrollHeight*sp[1]
+        self.scrollX = self.maxScrollX*sp[0]
+        self.scrollY = self.maxScrollY*sp[1]
     FUNCTIONEND
     
     ###
@@ -170,11 +175,11 @@ class ContainerWidget(Widget):
     ##  @return            A tuple representing the size.
     ##
     @property
-    def scrollSize(self)->tuple[int,int]:
+    def maxScrollPosition(self)->tuple[int,int]:
         #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::scrollSize_get():{}".format(self))
+        print("ContainerWidget::maxScrollPosition_get():{}".format(self))
         #endif
-        return (self.scrollWidth, self.scrollHeight)
+        return (self.maxScrollX, self.maxScrollY)
     FUNCTIONEND
     
     ### Returns the maximum scroll position in x direction.
@@ -182,9 +187,9 @@ class ContainerWidget(Widget):
     ##  @return            
     ##
     @property
-    def scrollWidth(self)->int:
+    def maxScrollX(self)->int:
         #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::scrollWidth_get():{}".format(self))
+        print("ContainerWidget::maxScrollX_get():{}".format(self))
         #endif
         return self._scrollWidth-self.width
     FUNCTIONEND
@@ -194,9 +199,9 @@ class ContainerWidget(Widget):
     ##  @return            
     ##
     @property
-    def scrollHeight(self)->int:
+    def maxScrollY(self)->int:
         #ifdef SHOW_FUNCTIONNAMES
-        print("ContainerWidget::scrollHeight_get():{}".format(self))
+        print("ContainerWidget::maxScrollY_get():{}".format(self))
         #endif
         return self._scrollHeight-self.height
     FUNCTIONEND
@@ -227,7 +232,7 @@ class ContainerWidget(Widget):
         if value == self._scrollX:
             return
         
-        value = min(value,self.scrollWidth)
+        value = min(value,self.maxScrollX)
         value = max(value,0)
         
         self._scrollX = value
@@ -261,12 +266,36 @@ class ContainerWidget(Widget):
         if value == self._scrollY:
             return
         
-        value = min(value,self.scrollHeight)
+        value = min(value,self.maxScrollY)
         value = max(value,0)
         
         self._scrollY = value
         self._invalidate()
         self._onScrollPositionChanged(Event(self))
+    FUNCTIONEND
+    
+    ### Returns the width of the scroll area.
+    ##
+    ##
+    @property
+    def scrollWidth(self):
+        return self._scrollWidth
+    FUNCTIONEND
+    
+    ### Returns the height of the scroll area.
+    ##
+    ##
+    @property
+    def scrollHeight(self):
+        return self._scrollHeight
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    @property
+    def scrollSize(self):
+        return (self.scrollWidth,self.scrollHeight)
     FUNCTIONEND
     
     ###
@@ -451,6 +480,8 @@ class ContainerWidget(Widget):
         for child in self._children:
             sw = max(sw,child.right)
             sh = max(sh,child.bottom)
+            
+        scrollSizeChanged = self._scrollWidth != sw or self._scrollHeight != sh
         self._scrollWidth = sw
         self._scrollHeight = sh
         
@@ -458,6 +489,9 @@ class ContainerWidget(Widget):
         for c in self._children:
             c._calculateLayout()
 
+        if scrollSizeChanged:
+            self._onScrollSizeChanged( Event(self) )
+        
         ## Finally we let super class record dirty rects.
         super()._calculateLayout()
     FUNCTIONEND
@@ -1070,7 +1104,12 @@ class ContainerWidget(Widget):
         self.onChildAdded.provoke(ev)            
     FUNCTIONEND
             
-            
+    ##
+    #
+    #
+    def _onScrollSizeChanged(self,ev):
+        self.onScrollSizeChanged.provoke( ev )
+    FUNCTIONEND
             
             
             

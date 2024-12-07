@@ -47,7 +47,7 @@ class EventManager():
 	
 	### Calls all added handlers.
 	##
-	##
+	## TODO: provoke and stopPropergation? :-/
 	def provoke(self, event):
 		for handler in self.__handlers:
 			handler(event)

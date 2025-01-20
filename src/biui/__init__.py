@@ -31,6 +31,9 @@ Mouse = Mouse()
 ShortcutControl = ShortcutControl()
 Clipboard = Clipboard()
 
+fps = 0
+i = 0
+
 ##
 __themeFolder = BIUI_THEMEFOLDER
 
@@ -244,7 +247,9 @@ def getTheme(themeData = None):
 ##  @return        True as long as a window is open.
 ##
 def main():
-    global __windows, __timerObjects
+    global __windows, __timerObjects,fps,i
+    
+    _start = time()
     
     for t in __timerObjects:
         t.main()
@@ -548,6 +553,14 @@ def main():
     for w in __windows:
         w._render()
         
+    fps = 1/(time()-_start)
+    
+    if i < 10:
+        ##print("fps: {}".format(fps))
+        i = 0
+        
+    i = i -1
+    
     return len(__windows) > 0
 
 

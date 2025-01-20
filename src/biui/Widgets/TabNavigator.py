@@ -125,7 +125,5 @@ class TabNavigator(Pane):
                 b.alignment = Alignment.DOCK_TOP
     FUNCTIONEND
     
-
-    
     
     

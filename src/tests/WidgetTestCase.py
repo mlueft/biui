@@ -1,10 +1,18 @@
 import os
 import unittest
 import biui
-from biui.Widgets import Widget
+from biui.Widgets import Widget, ContainerWidget, Button, ButtonGroup, Window, Pane
 from biui.Enum import Alignment
 
 class WidgetTestCase(unittest.TestCase):
+    
+    def createSubject(self,type="Widget"):
+        if type == "Widget":
+            return Widget()
+        if type == "Button":
+            return Button()
+        if type == "Window":
+            return Button()
     
     def setUp(self):
         biui.init()
@@ -21,16 +29,17 @@ class WidgetTestCase(unittest.TestCase):
         pass
     
     def testPos(self):
-        subject = Widget()
+        subject = self.createSubject()
         valueX = 72
         valueY = 100
         subject.x = valueX
         subject.y = valueY
         """test Widget.pos"""
-        assert subject.position == (valueX, valueY), "Widget.position not set correctly."
+        value = subject.position
+        assert value == (valueX, valueY), "Widget.position({}) not set correctly.".format(value)
         
     def testSize(self):
-        subject = Widget()
+        subject = self.createSubject()
         valueW = 72
         valueH = 100
         subject.width = valueW
@@ -39,21 +48,21 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.size == (valueW, valueH), "Widget.size not set correctly."
     
     def testX(self):
-        subject = Widget()
+        subject = self.createSubject()
         value = 72
         subject.x = value
         """test Widget.x"""
         assert subject.x == value, "Widget.x not set correctly."
                 
     def testY(self):
-        subject = Widget()
+        subject = self.createSubject()
         value = 75
         subject.y = value
         """test Widget.y"""
         assert subject.y == value, "Widget.y not set correctly."
 
     def testLeft(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -73,7 +82,7 @@ class WidgetTestCase(unittest.TestCase):
             
         ##print( dMode.w,dMode.h)
                 
-        subject = Widget()
+        subject = self.createSubject()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -86,7 +95,7 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.height == 250, "Widget.top not set correctly."
         
     def testRight(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -99,7 +108,7 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.height == 200, "Widget.right not set correctly."
             
     def testBottom(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.x = 100
         subject.y = 100
         subject.width = 200
@@ -112,76 +121,83 @@ class WidgetTestCase(unittest.TestCase):
         assert subject.height == 150, "Widget.bottom not set correctly."
 
     def testWidth(self):
-        subject = Widget()
+        subject = self.createSubject()
         value = 54
         subject.width = value
         """test Widget.width"""
         assert subject.width == value, "Widget.width not set correctly."
     
     def testMinWidth0(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.minWidth = 50
         """test Widget.minWidth"""
         assert subject.minWidth == 50, "Widget.minWidth not set correctly."
 
     def testMinWidth1(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.width = 50
         subject.minWidth = 100
         """test Widget.minWidth"""
         assert subject.width == 100, "Widget.width not corrected."
     
     def testmaxWidth0(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.maxWidth = 50
         """test Widget.maxWidth"""
         assert subject.maxWidth == 50, "Widget.maxWidth not set correctly."
         
     def testmaxWidth1(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.width = 150
         subject.maxWidth = 50
         """test Widget.maxWidth"""
         assert subject.width == 50, "Widget.width not corrected."
         
     def testHeight(self):
-        subject = Widget()
+        subject = self.createSubject()
         value = 34
         subject.height = value
         """test Widget.height"""
         assert subject.height == value, "Widget.height not set correctly."
     
     def testMinHeight0(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.minHeight = 50
         """test Widget.minHeight"""
         assert subject.minHeight == 50, "Widget.minHeight not set correctly."
 
     def testMinHeight1(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.height = 50
         subject.minHeight = 150
         """test Widget.minHeight"""
         assert subject.height == 150, "Widget.height not corrected."
             
     def testmaxHeight0(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.maxHeight = 50
         """test Widget.maxHeight"""
         assert subject.maxHeight == 50, "Widget.maxHeight not set correctly."
 
     def testmaxHeight1(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.height=150
         subject.maxHeight = 50
         """test Widget.maxHeight"""
         assert subject.height == 50, "Widget.height not corrected."
     
-    def testHasChild(self):
-        assert 1==1, ""
+    def testHasChild0(self):
+        subject = self.createSubject()
+        """test Widget.hasChild"""
+        assert subject.hasChild(subject) == True, "Widget.hasChild() not corrected."
     
+    def testHasChild1(self):
+        subject = self.createSubject()
+        """test Widget.hasChild"""
+        assert subject.hasChild(self.createSubject()) == False, "Widget.hasChild() not corrected."
+        
     def testAlignment(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.alignment = Alignment.FILL
         """test Widget.alignment"""
         assert subject.alignment == Alignment.FILL, "Widget.alignment not set correctly."
@@ -198,12 +214,49 @@ class WidgetTestCase(unittest.TestCase):
     def testGetDirtyRect(self):
         assert 1==1, ""
     
-    def testWindow(self):
-        assert 1==1, ""
+    def testWindow0(self):
+        subject = self.createSubject()
+        """test Widget.window"""
+        assert subject.window == None, "Widget.window not set correctly."
     
-    def testParent(self):
-        assert 1==1, ""
+    def testWindow1(self):
+        
+        wnd = Window(1025,768)
+        subject = self.createSubject()
+        wnd.addChild(subject)
+        """test Widget.window"""
+        assert subject.window == wnd, "Widget.window not set correctly."
+
+    def testWindow2(self):
+        wnd0 = Window(1025,768)
+        wnd1 = Window(1025,768)
+        subject = self.createSubject()
+        wnd0.addChild(subject)
+        wnd1.addChild(subject)
+        """test Widget.window"""
+        assert subject.window == wnd1, "Widget.window not set correctly."
+                
+    def testParent0(self):
+        subject = self.createSubject()
+        """test Widget.parent"""
+        assert subject.parent == None, "Widget.parent not set correctly."
     
+    def testParent1(self):
+        wnd = Window(1025,768)
+        subject = self.createSubject()
+        wnd.addChild(subject)
+        """test Widget.parent"""
+        assert subject.parent == wnd, "Widget.parent not set correctly."
+
+    def testParent2(self):
+        wnd0 = Window(1025,768)
+        wnd1 = Window(1025,768)
+        subject = self.createSubject()
+        wnd0.addChild(subject)
+        wnd1.addChild(subject)
+        """test Widget.parent"""
+        assert subject.parent == wnd1, "Widget.parent not set correctly."
+                
     def testCalculateLayout(self):
         assert 1==1, ""
 
@@ -212,14 +265,14 @@ class WidgetTestCase(unittest.TestCase):
         assert 1==1, ""
         
     def testToLocal0(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.x=150
         subject.y=50
         """test Widget.toLocal"""
         assert subject.toLocal((160,60)) == (10,10), "Widget.toLocal not calculated correctly."
     
     def testToGlobal0(self):
-        subject = Widget()
+        subject = self.createSubject()
         subject.x=150
         subject.y=50
         """test Widget.toGlobal"""
@@ -230,6 +283,7 @@ class WidgetTestCase(unittest.TestCase):
         assert 1==1, ""
             
     """ "
+    getChildAt
     backColor
     borderColor
     tooltip
@@ -256,7 +310,4 @@ class WidgetTestCase(unittest.TestCase):
     
 if __name__ == "__main__":
     unittest.main() ## run all tests
-    
-    
-    
     

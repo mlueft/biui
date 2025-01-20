@@ -43,7 +43,7 @@ class NumberSlider(ContainerWidget):
         
         ##
         self._bar = self._createBar()
-        self.addChild(self._bar,1,0)
+        super().addChild(self._bar,1,0)
         
         ##
         ## TODO: Why is TextField the module and not the class?
@@ -174,13 +174,13 @@ class NumberSlider(ContainerWidget):
             self.value = float(self._textfield.value)
         
         ## remove textfield
-        self.removeChild(self._textfield)
+        super().removeChild(self._textfield)
         self._textfield = None
         
         ## add bar
         self._bar = self._createBar()
         self._bar.value = self.value
-        self.addChild(self._bar,1,0)
+        super().addChild(self._bar,1,0)
         
         ## restore boxes
         if self.showNavigation:
@@ -208,15 +208,15 @@ class NumberSlider(ContainerWidget):
         biui.Mouse.show()        
         
         ## Hide bar
-        self.removeChild(self._bar)
+        super().removeChild(self._bar)
         self._bar = None
         
         ## hide buttons
         if self._incButton != None:
-            self.removeChild(self._incButton)
+            super().removeChild(self._incButton)
             self._incButton = None
         if self._decButton != None:
-            self.removeChild(self._decButton)
+            super().removeChild(self._decButton)
             self._decButton = None
         
         ## Make box full size
@@ -225,7 +225,7 @@ class NumberSlider(ContainerWidget):
         ## Show Textfield
         self._textfield = self.createInputfield()
         self._textfield.onFocusLost.add(self.__hndOnFocusLost)
-        self.addChild(self._textfield,1,0)
+        super().addChild(self._textfield,1,0)
         self._textfield.value = str(self.value)
         self._textfield.focus()        
     FUNCTIONEND
@@ -450,12 +450,12 @@ class NumberSlider(ContainerWidget):
         if value:
             self._incButton = self.createIncButton()
             self._decButton = self._createDecButton()
-            self.addChild(self._decButton,0,0)
-            self.addChild(self._incButton,2,0)
+            super().addChild(self._decButton,0,0)
+            super().addChild(self._incButton,2,0)
             lm.columnWidths = [self.height,0,self.height]
         else:
-            self.removeChild(self._decButton)
-            self.removeChild(self._incButton)
+            super().removeChild(self._decButton)
+            super().removeChild(self._incButton)
             self._decButton = None
             self._incButton = None
             lm.columnWidths = [1,0,1]
@@ -470,7 +470,8 @@ class NumberSlider(ContainerWidget):
     @property
     def allowManualInput(self):
         return self._allowManualInput  
-
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -478,6 +479,57 @@ class NumberSlider(ContainerWidget):
     def allowManualInput(self,value):
         ## TODO: stop current input
         self._allowManualInput = value
+    FUNCTIONEND
     
+    ###
+    ##
+    ##
+    def connectScrollNavigator(self,navigator)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("NumberSlider::connectScrollNavigator():{}".format(self))
+        #endif
+        pass
+    FUNCTIONEND
     
+    ###
+    ##
+    ##
+    def disconnectScrollNavigator(self,navigator)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("NumberSlider::disconnectScrollNavigator():{}".format(self))
+        #endif
+        pass
+    FUNCTIONEND
+        
+    ###
+    ##
+    ##
+    @property
+    def hasChildren(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("NumberSlider::hasChildren():{}".format(self))
+        #endif
+        return False
+    FUNCTIONEND
+    
+    ###  
+    ##
+    ##   
+    def removeChild(self,child)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("NumberSlider::removeChild():{}".format(self))
+        #endif
+        pass
+    FUNCTIONEND
+    
+    ### 
+    ##
+    ##       
+    def addChild(self,child,x:int=0,y:int=0)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("NumberSlider::addChild():{}".format(self))
+        #endif
+        pass
+    FUNCTIONEND
+
     

@@ -23,7 +23,7 @@ class Progressbar(ContainerWidget):
         self._showValue = True
         ##
         self._label = self._createLabel()
-        self.addChild(self._label,0,0)
+        super().addChild(self._label,0,0)
     FUNCTIONEND
     
     ###
@@ -155,4 +155,44 @@ class Progressbar(ContainerWidget):
         return self
     FUNCTIONEND
     
+    ### 
+    ##
+    @property
+    def children(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Progressbar::children():{}".format(self))
+        #endif
+        return []
+    FUNCTIONEND
+    
+    ###
+    ##
+    ##
+    @property
+    def hasChildren(self):
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Progressbar::hasChildren():{}".format(self))
+        #endif
+        return False
+    FUNCTIONEND
+    
+    ###  
+    ##
+    ##   
+    def removeChild(self,child)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Progressbar::removeChild():{}".format(self))
+        #endif
+        pass
+    FUNCTIONEND
+    
+    ### 
+    ##
+    ##       
+    def addChild(self,child,x:int=0,y:int=0)->None:
+        #ifdef SHOW_FUNCTIONNAMES
+        print("Progressbar::addChild():{}".format(self))
+        #endif
+        pass
+    FUNCTIONEND
     

@@ -657,7 +657,7 @@ class Theme():
     
         ##PYSDL2_DRAWRECTFILLED(renderer,texture,color.rgba,(p[0],p[1],widget.width,widget.height))
         
-        if widget.value != "":
+        if widget.value != "" and widget.value != None:
             text = widget.format.format(widget.value)
         else:
             text = ""

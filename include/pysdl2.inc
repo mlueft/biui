@@ -1,6 +1,47 @@
 #ifndef _PYSDL2Definitions_
 #define _PYSDL2Definitions_
 
+#define RENDERER_DRIVER  -1
+#define RENDERER_FLAGS   sdl2.SDL_RENDERER_ACCELERATED|sdl2.SDL_RENDERER_PRESENTVSYNC
+#define PIXEL_FORMAT     sdl2.SDL_PIXELFORMAT_RGBA32
+#define TEXTURE_ACCESS   sdl2.SDL_TEXTUREACCESS_TARGET
+
+#define PYSDL2_CREATESURFACE(w,h,surface) \
+	"""MACROSTART:PYSDL2_CREATESURFACE"""; \
+	surface = sdl2.SDL_CreateRGBSurface( \
+		sdl2.SDL_SWSURFACE, \
+		w, \
+		h, \
+		32, \
+		0xFF000000, \
+		0x00FF0000, \
+		0x0000FF00, \
+		0x000000FF \
+	); \
+	sdl2.SDL_SetSurfaceBlendMode(surface, sdl2.SDL_BLENDMODE_BLEND); \
+	rect = sdl2.SDL_Rect(0,0,int(w),int(h)); \
+	sdl2.SDL_FillRect(surface,rect,0x00000000); \
+	"""MACROEND:PYSDL2_CREATESURFACE""";
+
+#define PYSDL2_CREATERENDERER(window,renderer) \
+	"""MACROSTART:PYSDL2_CREATERENDERER"""; \
+	renderer = sdl2.SDL_CreateRenderer(window,RENDERER_DRIVER,RENDERER_FLAGS); \
+	sdl2.SDL_SetRenderDrawBlendMode(renderer, sdl2.SDL_BLENDMODE_BLEND); \
+	"""MACROEND:PYSDL2_CREATERENDERER""";
+
+#define PYSDL2_CREATETEXTURE(renderer,w,h,texture) \
+	"""MACROSTART:PYSDL2_CREATETEXTURE"""; \
+	texture = sdl2.SDL_CreateTexture( \
+		renderer, \
+		PIXEL_FORMAT, \
+		TEXTURE_ACCESS, \
+		int(w), \
+		int(h) \
+	); \
+	sdl2.SDL_SetTextureBlendMode(texture,sdl2.SDL_BLENDMODE_BLEND); \
+	PYSDL2_FILL(renderer,texture,(0,0,0,0)); \
+	"""MACROEND:PYSDL2_CREATETEXTURE""";
+
 #define PYSDL2_INIT \
 	"""MACROSTART:PYSDL2_INIT"""; \
 	sdl2.ext.init( sdl2.SDL_INIT_TIMER ); \
@@ -72,42 +113,6 @@
 	width = _width.value; \
 	height = _height.value; \
 	"""MACROEND:PYSDL2_GETWINDOWSIZE""";
-
-#define PYSDL2_CREATERENDERER(window,index,flags,renderer) \
-	"""MACROSTART:PYSDL2_CREATERENDERER"""; \
-	renderer = sdl2.SDL_CreateRenderer(window,index,flags); \
-    sdl2.SDL_SetRenderDrawBlendMode(renderer, sdl2.SDL_BLENDMODE_BLEND); \
-	"""MACROEND:PYSDL2_CREATERENDERER""";
-
-#define PYSDL2_CREATESURFACE(w,h,surface) \
-	"""MACROSTART:PYSDL2_CREATESURFACE"""; \
-	surface = sdl2.SDL_CreateRGBSurface( \
-		sdl2.SDL_SWSURFACE, \
-		w, \
-		h, \
-		32, \
-		0xFF000000, \
-		0x00FF0000, \
-		0x0000FF00, \
-		0x000000FF \
-	); \
-	sdl2.SDL_SetSurfaceBlendMode(surface, sdl2.SDL_BLENDMODE_BLEND); \
-	rect = sdl2.SDL_Rect(0,0,int(w),int(h)); \
-	sdl2.SDL_FillRect(surface,rect,0x00000000); \
-	"""MACROEND:PYSDL2_CREATESURFACE""";
-
-#define PYSDL2_CREATETEXTURE(renderer,w,h,texture) \
-	"""MACROSTART:PYSDL2_CREATETEXTURE"""; \
-	texture = sdl2.SDL_CreateTexture( \
-		renderer, \
-		sdl2.SDL_PIXELFORMAT_RGBA32, \
-		sdl2.SDL_TEXTUREACCESS_TARGET, \
-		int(w), \
-		int(h) \
-	); \
-	sdl2.SDL_SetTextureBlendMode(texture,sdl2.SDL_BLENDMODE_BLEND); \
-	PYSDL2_FILL(renderer,texture,(0,0,0,0)); \
-	"""MACROEND:PYSDL2_CREATETEXTURE""";
 
 #define PYSDL2_RENDER_COPY(renderer,texture,srect,trect) \
 	"""MACROSTART:PYSDL2_RENDER_COPY"""; \

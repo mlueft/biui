@@ -3,7 +3,7 @@
 import sdl2 
 
 import biui
-from biui.Widgets import ContainerWidget
+from biui.Widgets import ScrollableContainerWidget
 from biui.Widgets import ScrollNavigator
 from biui.Enum import Alignment
 from biui.Events import Event, EventManager
@@ -11,7 +11,7 @@ from biui.Events import Event, EventManager
 ###
 ##
 ##
-class Pane(ContainerWidget):
+class Pane(ScrollableContainerWidget):
     
     ###
     ##
@@ -49,7 +49,7 @@ class Pane(ContainerWidget):
     FUNCTIONEND
     
     def _createContainerWidget(self):
-        result = ContainerWidget()
+        result = ScrollableContainerWidget()
         return result
     FUNCTIONEND
     

@@ -28,7 +28,7 @@ class Window(ContainerWidget):
     ###
     ##
     ##
-    def __init__(self,width,height):
+    def __init__(self,width=1024,height=768):
         #ifdef SHOW_FUNCTIONNAMES
         print("Window::_init__():{}".format(self))
         #endif
@@ -42,8 +42,7 @@ class Window(ContainerWidget):
         PYSDL2_GET_WINDOW_ID(self._window,self._id:str)
         
         self._title:str = ""
-        ##PYSDL2_CREATERENDERER(self._window,-1,sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_ACCELERATED,self._renderer)
-        PYSDL2_CREATERENDERER(self._window,-1,10,self._renderer)
+        PYSDL2_CREATERENDERER(self._window,self._renderer)
         
         ###
         ##

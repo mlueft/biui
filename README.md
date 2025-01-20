@@ -35,30 +35,35 @@ DONE:
 * Scrollbar
 * NumberSlider should have properties to enable/disable manual input
 * Naming of scrollProperties corrected.
+* Tabnavigator
  
 TODO:
+* A possibility to deactivate a widget.
+* zooming
 * stopPropagation() for keyboardevents? Should it have it?
-* Protect setter from unnecassary invalidate() calles.
-* Label
-  + format for pre/postfix
+* Protect setter from unnecassary invalidate() calls.
 * Checkbox
 * TextField Mouse interaction
 * Combobox
 * TreeView
 * ListView
+* Node editor
 * IconBar(3D-View left side)
 * LayoutManager
-* Tabnavigator
 * Icons
 * Pane:
     + Mousewheel control:
   	    mouse wheel scrolls vertically, if content is higher than height
   	    else, it scrolls horizontally.
   	    Mousewheel with modifierkey scrolls horizontally.
+    + Temporary 2D scrollnavigator when clicked in right lower corner
 * TabNavigator:
-    + Scroll with mousewheel.
+    + Scroll with mousewheel/ navigation buttons.
 	   If not all buttons have place on screen,
 	   show navigator.
+* Flexgrid:
+	* De/Serialization of grid layout
+
 Bugs:
 * Menuitems are not resized to text length
 * Tool tips are not resized to text length

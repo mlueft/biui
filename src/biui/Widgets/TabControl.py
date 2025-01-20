@@ -126,7 +126,15 @@ class TabControl(Pane):
     def activeTab(self,index):
         self.__setActiveTab(index,True)
     FUNCTIONEND
-
+    
+    ##
+    #
+    #
+    @property
+    def tabCount(self):
+        return len(self.__tabs)
+    FUNCTIONEND
+    
     ###
     ##
     ##
@@ -188,5 +196,20 @@ class TabControl(Pane):
         self.__tabHeight = value
         if self.__tabNavigator.alignment in [Alignment.DOCK_TOP,Alignment.DOCK_BOTTOM]:
             self.__tabNavigator.height = value
+    FUNCTIONEND
+    
+    @property
+    def showNavigation(self):
+        pass
+    FUNCTIONEND
+    
+    @showNavigation.setter
+    def showNavigation(self, value):
+        print("show tabs : {}".format(value))
+        if value and not self.hasChild(self.__tabNavigator):
+            self.addChild(self.__tabNavigator)
+        elif not value and self.hasChild(self.__tabNavigator):
+            self.removeChild(self.__tabNavigator)
+            
     FUNCTIONEND
     

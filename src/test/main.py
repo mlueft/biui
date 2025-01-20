@@ -1,9 +1,11 @@
+#include "biui.inc"
+
 import time
 import sys
 import os
 import random
 
-print( os.environ["PYTHONPATH"] )
+sys.path.append(os.getcwd()+"/py")
 
 import biui
 from biui.Events import EventPhase
@@ -161,6 +163,7 @@ def createMenu():
     mnu2.addItem(mnu3)
     
     return ms
+FUNCTIONEND
 
 def createSubject(type="button"):
     
@@ -184,204 +187,11 @@ def createSubject(type="button"):
         result = Image()
         result.file = "./test.jpg"
         return result
+FUNCTIONEND
 
-
-
-def createOptionPaneEmpty():
-    result = Pane()
-    result.alignment = Alignment.FILL
-    result.verticalScrollbar = True
-    return result
-
-def createOptionPaneLabel():
-    return createOptionPaneEmpty()
-
-def createOptionPanePane():
-    return createOptionPaneEmpty()
-
-def createOptionPaneButton():
-    return createOptionPaneEmpty()
-
-def createOptionPaneToggleButton():
-    return createOptionPaneEmpty()
-
-def createOptionPaneButtonGroup():
-    return createOptionPaneEmpty()
-
-def createOptionPaneTextField():
-    return createOptionPaneEmpty()
-
-def createOptionPaneProgressbar():
-    return createOptionPaneEmpty()
-
-def createOptionPaneNumberSlider():
-    return createOptionPaneEmpty()
-
-def createOptionPaneCheckbox():
-    return createOptionPaneEmpty()
-
-def createOptionPaneFlexGrid():
-    return createOptionPaneEmpty()
-
-def createOptionPaneMenubar():
-    return createOptionPaneEmpty()
-
-def createOptionPaneScrollNavigator():
-    return createOptionPaneEmpty()
-
-def createOptionPaneImage():
-    return createOptionPaneEmpty()
-
-def createOptionPaneDock():
-    result = createOptionPaneEmpty()
-    
-    buttonHeight = 25
-    result.layoutManager.rowHeights = [10,buttonHeight,buttonHeight,buttonHeight]
-    
-    row = 1
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "Image"
-    button.onMouseClick.add(hndDockOptionImage)
-    result.addChild(button,0,row)
-    row += 1
-    
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "Button"
-    button.onMouseClick.add(hndDockOptionButton)
-    result.addChild(button,0,row)
-    row += 1
-
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "label"
-    button.onMouseClick.add(hndDockOptionLabel)
-    result.addChild(button,0,row)
-    row += 1
-        
-    return result
-
-def createOptionPaneLayoutManager():
-    return createOptionPaneEmpty()
-
-def createOptionPaneChildren():
-    result = createOptionPaneEmpty()
-    
-    buttonHeight = 25
-    result.layoutManager.rowHeights = [10,buttonHeight,buttonHeight,buttonHeight,buttonHeight]
-
-    row = 1
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "debug"
-    button.onMouseClick.add(hndChildrenOptionDebug)
-    result.addChild(button,0,row)
-    row += 1
-        
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "Add Child"
-    button.onMouseClick.add(hndChildrenOptionAdd)
-    result.addChild(button,0,row)
-    row += 1
-    
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "Remove Child"
-    button.onMouseClick.add(hndChildrenOptionRemove)
-    result.addChild(button,0,row)
-    row += 1
-
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "swap Child"
-    button.onMouseClick.add(hndChildrenOptionSwap)
-    result.addChild(button,0,row)
-    row += 1
-        
-    return result
-
-def createOptionPaneTabPane():
-    result = createOptionPaneEmpty()
-    
-    buttonHeight = 25
-    result.layoutManager.rowHeights = [10,buttonHeight,buttonHeight,buttonHeight,buttonHeight]
-
-    row = 1
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "add"
-    button.onMouseClick.add(hndTabNavigatorOptionAdd)
-    result.addChild(button,0,row)
-    row += 1
-
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "remove tab"
-    button.onMouseClick.add(hndTabNavigatorOptionRemove0)
-    result.addChild(button,0,row)
-    row += 1
-
-    button = Button()
-    button.alignment = Alignment.FILL
-    button.value = "remove index"
-    button.onMouseClick.add(hndTabNavigatorOptionRemove1)
-    result.addChild(button,0,row)
-    row += 1
-
-
-    pane = Pane()
-    
-    pane.y = row*buttonHeight+10
-    pane.x = 40
-    pane.width = 90
-    pane.height = 90
-    
-    button = Button();
-    button.value = "T"
-    button.width = 30
-    button.height = 30
-    button.x = 30
-    button.y = 0
-    button.onMouseClick.add(hndTabAlignTOP)
-    pane.addChild(button)
-
-    button = Button();
-    button.value = "R"
-    button.width = 30
-    button.height = 30
-    button.x = 60
-    button.y = 30
-    button.onMouseClick.add(hndTabAlignRIGHT)
-    pane.addChild(button)
-        
-    button = Button();
-    button.value = "B"
-    button.width = 30
-    button.height = 30
-    button.x = 30
-    button.y = 60
-    button.onMouseClick.add(hndTabAlignBOTTOM)
-    pane.addChild(button)
-
-    button = Button();
-    button.value = "L"
-    button.width = 30
-    button.height = 30
-    button.x = 0
-    button.y = 30
-    button.onMouseClick.add(hndTabAlignLEFT)
-    pane.addChild(button)
-        
-    result.addChild(pane,0,row)
-    row += 1
-    
-    return result
-
-
-
-
+##
+## CONTENT PANELS
+##
 
 def createContentPaneLabel():
     result = Pane()
@@ -421,7 +231,15 @@ def createContentPaneLabel():
     label.x = 100
     label.y = 260
     result.addChild(label)
-        
+
+    label = Label()
+    label.color = Color(50,0,0)
+    label.value = None
+    label.format = "{} %"
+    label.x = 100
+    label.y = 300
+    result.addChild(label)
+            
     return result
 
 def createContentPanePane():
@@ -481,6 +299,7 @@ def createContentPanePane():
     pane.addChild(button)
     
     return result
+FUNCTIONEND
 
 def createContentPaneButton():
     result = Pane()
@@ -520,8 +339,17 @@ def createContentPaneButton():
     label.x = 100
     label.y = 260
     result.addChild(label)
-        
+
+    label = Button()
+    label.label.color = Color(50,0,0)
+    label.value = None
+    label.label.format = "{} %"
+    label.x = 100
+    label.y = 260
+    result.addChild(label)
+            
     return result
+FUNCTIONEND
 
 def createContentPaneToggleButton():
     result = Pane()
@@ -563,6 +391,7 @@ def createContentPaneToggleButton():
     result.addChild(label)
         
     return result
+FUNCTIONEND
 
 def createContentPaneButtonGroup():
     result = Pane()
@@ -677,6 +506,7 @@ def createContentPaneButtonGroup():
         buttonGroup.addChild(subject,0,i)
     
     return result
+FUNCTIONEND
 
 def createContentPaneTextField():
     result = Pane()
@@ -707,6 +537,7 @@ def createContentPaneTextField():
     result.addChild(textfield0)
     
     return result
+FUNCTIONEND
 
 def createContentPaneProgressbar():
     result = Pane()
@@ -746,6 +577,7 @@ def createContentPaneProgressbar():
     result.addChild(progressbar)
             
     return result
+FUNCTIONEND
 
 def createContentPaneNumberSlider():
     result = Pane()
@@ -794,6 +626,7 @@ def createContentPaneNumberSlider():
     result.addChild(progressbar)
         
     return result
+FUNCTIONEND
 
 def createContentPaneCheckBox():
     result = Pane()
@@ -808,6 +641,7 @@ def createContentPaneCheckBox():
     result.addChild(progressbar)
 
     return result
+FUNCTIONEND
 
 def createContentPaneFlexGrid():
     result = Pane()
@@ -820,6 +654,7 @@ def createContentPaneFlexGrid():
     flexPane = FlexPane()
     flexgrid.addFlexPane(flexPane)
     return result
+FUNCTIONEND
 
 def createContentPaneMenubar():
     result = Pane()
@@ -865,6 +700,7 @@ def createContentPaneMenubar():
     pane.addChild(menu)
         
     return result
+FUNCTIONEND
 
 def createContentPaneScrollNavigator():
     result = Pane()
@@ -903,6 +739,7 @@ def createContentPaneScrollNavigator():
     scrollNavigator.height = 200
     result.addChild(scrollNavigator)
     return result
+FUNCTIONEND
 
 def createContentPaneImage():
     
@@ -917,6 +754,7 @@ def createContentPaneImage():
     image.alignment = Alignment.FILL
     
     return result
+FUNCTIONEND
 
 def createContentPaneDock(type = "button"):
     
@@ -1165,6 +1003,7 @@ def createContentPaneDock(type = "button"):
         result.addChild(label,7,8)
         
     return result
+FUNCTIONEND
 
 def createContentPaneLayoutManager(type = "button"):
     
@@ -1209,6 +1048,7 @@ def createContentPaneLayoutManager(type = "button"):
 
         
     return result
+FUNCTIONEND
 
 def createContentPaneChildren(type = "button"):
     global childrenPane0, childrenPane1
@@ -1234,6 +1074,7 @@ def createContentPaneChildren(type = "button"):
     result.addChild(childrenPane1)
            
     return result
+FUNCTIONEND
 
 def createContentPaneTabPane(type = "button"):
     global childrenPane0, childrenPane1, tabNavigator
@@ -1252,16 +1093,276 @@ def createContentPaneTabPane(type = "button"):
     tabNavigator = navigator
     
     return result
+FUNCTIONEND
 
+
+##
+## OPTION PANELS
+##
+
+def createOptionPaneEmpty():
+    result = Pane()
+    result.alignment = Alignment.FILL
+    result.verticalScrollbar = True
+    return result
+FUNCTIONEND
+
+def createOptionPaneLabel():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPanePane():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneButton():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneToggleButton():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneButtonGroup():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneTextField():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneProgressbar():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneNumberSlider():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneCheckbox():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneFlexGrid():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneMenubar():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneScrollNavigator():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneImage():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneDock():
+    result = createOptionPaneEmpty()
+    
+    buttonHeight = 25
+    result.layoutManager.rowHeights = [10,buttonHeight,buttonHeight,buttonHeight]
+    
+    row = 1
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "Image"
+    button.onMouseClick.add(hndDockOptionImage)
+    result.addChild(button,0,row)
+    row += 1
+    
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "Button"
+    button.onMouseClick.add(hndDockOptionButton)
+    result.addChild(button,0,row)
+    row += 1
+
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "label"
+    button.onMouseClick.add(hndDockOptionLabel)
+    result.addChild(button,0,row)
+    row += 1
+        
+    return result
+FUNCTIONEND
+
+def createOptionPaneLayoutManager():
+    return createOptionPaneEmpty()
+FUNCTIONEND
+
+def createOptionPaneChildren():
+    result = createOptionPaneEmpty()
+    
+    buttonHeight = 25
+    result.layoutManager.rowHeights = [10,buttonHeight,buttonHeight,buttonHeight,buttonHeight]
+
+    row = 1
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "debug"
+    button.onMouseClick.add(hndChildrenOptionDebug)
+    result.addChild(button,0,row)
+    row += 1
+        
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "Add Child"
+    button.onMouseClick.add(hndChildrenOptionAdd)
+    result.addChild(button,0,row)
+    row += 1
+    
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "Remove Child"
+    button.onMouseClick.add(hndChildrenOptionRemove)
+    result.addChild(button,0,row)
+    row += 1
+
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "swap Child"
+    button.onMouseClick.add(hndChildrenOptionSwap)
+    result.addChild(button,0,row)
+    row += 1
+        
+    return result
+FUNCTIONEND
+
+def createOptionPaneTabPane():
+    result = createOptionPaneEmpty()
+    
+    buttonHeight = 25
+    result.layoutManager.rowHeights = [10,buttonHeight,buttonHeight,buttonHeight,buttonHeight,buttonHeight]
+
+    row = 1
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "add"
+    button.onMouseClick.add(hndTabNavigatorOptionAdd)
+    result.addChild(button,0,row)
+    row += 1
+
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "remove tab"
+    button.onMouseClick.add(hndTabNavigatorOptionRemove0)
+    result.addChild(button,0,row)
+    row += 1
+
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "remove index"
+    button.onMouseClick.add(hndTabNavigatorOptionRemove1)
+    result.addChild(button,0,row)
+    row += 1
+
+    pane = Pane()
+    pane.alignment = Alignment.FILL
+    pane.layoutManager.columnWidths = [0,0]
+    result.addChild(pane,0,row)
+    row += 1
+    
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "show"
+    button.onMouseClick.add(hndTabNavigatorOptionShowTabs)
+    pane.addChild(button,0,0)
+
+    
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "hide"
+    button.onMouseClick.add(hndTabNavigatorOptionHideTabs)
+    pane.addChild(button,1,0)
+
+    pane = Pane()
+    pane.alignment = Alignment.FILL
+    pane.layoutManager.columnWidths = [0,0]
+    result.addChild(pane,0,row)
+    row += 1
+    
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "prev"
+    button.onMouseClick.add(hndTabNavigatorOptionPrevTabs)
+    pane.addChild(button,0,0)
+
+    
+    button = Button()
+    button.alignment = Alignment.FILL
+    button.value = "next"
+    button.onMouseClick.add(hndTabNavigatorOptionNextTabs)
+    pane.addChild(button,1,0)
+        
+
+    pane = Pane()
+    
+    pane.y = row*buttonHeight+10
+    pane.x = 40
+    pane.width = 90
+    pane.height = 90
+    
+    button = Button();
+    button.value = "T"
+    button.width = 30
+    button.height = 30
+    button.x = 30
+    button.y = 0
+    button.onMouseClick.add(hndTabAlignTOP)
+    pane.addChild(button)
+
+    button = Button();
+    button.value = "R"
+    button.width = 30
+    button.height = 30
+    button.x = 60
+    button.y = 30
+    button.onMouseClick.add(hndTabAlignRIGHT)
+    pane.addChild(button)
+        
+    button = Button();
+    button.value = "B"
+    button.width = 30
+    button.height = 30
+    button.x = 30
+    button.y = 60
+    button.onMouseClick.add(hndTabAlignBOTTOM)
+    pane.addChild(button)
+
+    button = Button();
+    button.value = "L"
+    button.width = 30
+    button.height = 30
+    button.x = 0
+    button.y = 30
+    button.onMouseClick.add(hndTabAlignLEFT)
+    pane.addChild(button)
+        
+    result.addChild(pane,0,row)
+    row += 1
+    
+    return result
+FUNCTIONEND
+
+##
+## EVENT HANDLERS
+##
 
 def hndTabPaneOnTabHidden(ev):
     print("hndTabPaneOnTabHidden")
+FUNCTIONEND
 
 def hndTabPaneOnTabShown(ev):
     print("hndTabPaneOnTabShown")
+FUNCTIONEND
     
 def hndTabPaneOnTabChanged(ev):
     print("hndTabPaneOnTabChanged")
+FUNCTIONEND
     
 def hndTabNavigatorOptionAdd(ev):
     global tabNavigator, runner
@@ -1280,38 +1381,61 @@ def hndTabNavigatorOptionAdd(ev):
     tabNavigator.addTab(tab)
     
     runner+=1
+FUNCTIONEND
     
 def hndTabNavigatorOptionRemove0(ev):
     global tabNavigator
     tabNavigator.removeTab(
         tabNavigator.activeItem
     )
+FUNCTIONEND
 
 def hndTabNavigatorOptionRemove1(ev):
     global tabNavigator
     tabNavigator.removeTab(
         tabNavigator.activeTab
     )
+FUNCTIONEND
 
-def hndTabNavigatorOptionDebug(ev):
-    pass
+def hndTabNavigatorOptionShowTabs(ev):
+    global tabNavigator
+    tabNavigator.showNavigation = True
+FUNCTIONEND
+    
+def hndTabNavigatorOptionHideTabs(ev):
+    global tabNavigator
+    tabNavigator.showNavigation = False
+FUNCTIONEND
+
+def hndTabNavigatorOptionPrevTabs(ev):
+    global tabNavigator
+    tabNavigator.activeTab = max(0,tabNavigator.activeTab-1)
+FUNCTIONEND
+    
+def hndTabNavigatorOptionNextTabs(ev):
+    global tabNavigator
+    tabNavigator.activeTab = min(tabNavigator.tabCount,tabNavigator.activeTab+1)
+FUNCTIONEND
     
 def hndTabAlignTOP(ev):
     global tabNavigator
     tabNavigator.tabAlignment = Alignment.DOCK_TOP
+FUNCTIONEND
     
 def hndTabAlignRIGHT(ev):
     global tabNavigator
     tabNavigator.tabAlignment = Alignment.DOCK_RIGHT
+FUNCTIONEND
     
 def hndTabAlignBOTTOM(ev):
     global tabNavigator
     tabNavigator.tabAlignment = Alignment.DOCK_BOTTOM
+FUNCTIONEND
     
 def hndTabAlignLEFT(ev):
     global tabNavigator
     tabNavigator.tabAlignment = Alignment.DOCK_LEFT
-    
+FUNCTIONEND
     
 def hndDockOptionImage(ev):
     global content
@@ -1319,6 +1443,7 @@ def hndDockOptionImage(ev):
         contentPane.removeChild(content)
     content = createContentPaneDock("image")
     contentPane.addChild(content)
+FUNCTIONEND
 
 def hndDockOptionButton(ev):
     global content
@@ -1326,6 +1451,7 @@ def hndDockOptionButton(ev):
         contentPane.removeChild(content)
     content = createContentPaneDock("button")
     contentPane.addChild(content)
+FUNCTIONEND
 
 def hndDockOptionLabel(ev):
     global content
@@ -1333,8 +1459,7 @@ def hndDockOptionLabel(ev):
         contentPane.removeChild(content)
     content = createContentPaneDock("label")
     contentPane.addChild(content)
-    
-    
+FUNCTIONEND
     
 def hndChildrenOptionAdd(ev):
     global childrenPane0,childrenPane1,childrenFocused
@@ -1348,6 +1473,7 @@ def hndChildrenOptionAdd(ev):
     button.onMouseClick.add( hndChildrenMouseClick)
     childrenPane0.addChild(button)
     childrenFocused = button
+FUNCTIONEND
 
 def hndChildrenOptionRemove(ev):
     global childrenPane0,childrenPane1,childrenFocused
@@ -1357,6 +1483,7 @@ def hndChildrenOptionRemove(ev):
         
     if childrenPane1.hasChild(childrenFocused):
         childrenPane1.removeChild(childrenFocused)
+FUNCTIONEND
 
 def hndChildrenOptionSwap(ev):
     global childrenPane0,childrenPane1,childrenFocused
@@ -1376,6 +1503,7 @@ def hndChildrenOptionSwap(ev):
         childrenFocused.x = random.uniform(0, 2*childrenPane0.width-10)
         childrenFocused.y = random.uniform(0, 2*childrenPane0.height-10)        
         return
+FUNCTIONEND
     
 def hndChildrenOptionDebug(ev):
     global childrenPane0,childrenPane1,childrenFocused
@@ -1388,13 +1516,12 @@ def hndChildrenOptionDebug(ev):
     childrenPane0.layoutManager.debug()
     childrenPane1.layoutManager.debug()
     print("---------------------------")
+FUNCTIONEND
     
 def hndChildrenMouseClick(ev):
     global childrenFocused
     childrenFocused = ev.eventSource
-
-
-
+FUNCTIONEND
 
 def hndLabelClick(ev):
     global content, option
@@ -1410,6 +1537,7 @@ def hndLabelClick(ev):
         
     option = createOptionPaneLabel()
     optionPane.addChild(option)
+FUNCTIONEND
 
 def hndPaneClick(ev):
     global content, option
@@ -1425,6 +1553,7 @@ def hndPaneClick(ev):
         
     option = createOptionPanePane()
     optionPane.addChild(option)
+FUNCTIONEND
 
 def hndButtonClick(ev):
     global content,option
@@ -1439,6 +1568,7 @@ def hndButtonClick(ev):
         
     option = createOptionPaneButton()
     optionPane.addChild(option)
+FUNCTIONEND
         
 def hndToggleButtonClick(ev):
     global content, option
@@ -1453,6 +1583,7 @@ def hndToggleButtonClick(ev):
         
     option = createOptionPaneToggleButton()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndButtonGroupClick(ev):
     global content, option
@@ -1467,6 +1598,7 @@ def hndButtonGroupClick(ev):
         
     option = createOptionPaneButtonGroup()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndTextFieldClick(ev):
     global content, option
@@ -1481,6 +1613,7 @@ def hndTextFieldClick(ev):
         
     option = createOptionPaneTextField()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndProgressbarClick(ev):
     global content, option
@@ -1495,6 +1628,7 @@ def hndProgressbarClick(ev):
         
     option = createOptionPaneProgressbar()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndNumberSliderClick(ev):
     global content, option
@@ -1509,6 +1643,7 @@ def hndNumberSliderClick(ev):
         
     option = createOptionPaneNumberSlider()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndCheckboxClick(ev):
     global content, option
@@ -1523,6 +1658,7 @@ def hndCheckboxClick(ev):
         
     option = createOptionPaneCheckbox()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndFlexgridClick(ev):
     global content, option
@@ -1537,6 +1673,7 @@ def hndFlexgridClick(ev):
         
     option = createOptionPaneFlexGrid()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndMenubarClick(ev):
     global content, option
@@ -1551,6 +1688,7 @@ def hndMenubarClick(ev):
         
     option = createOptionPaneMenubar()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndScrollnavigatorClick(ev):
     global content, option
@@ -1565,6 +1703,7 @@ def hndScrollnavigatorClick(ev):
         
     option = createOptionPaneScrollNavigator()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndImageClick(ev):
     global content, option
@@ -1579,6 +1718,7 @@ def hndImageClick(ev):
         
     option = createOptionPaneImage()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndDockClick(ev):
     global content, option
@@ -1595,6 +1735,7 @@ def hndDockClick(ev):
         
     option = createOptionPaneDock()
     optionPane.addChild(option)
+FUNCTIONEND
 
 def hndLayoutManagerClick(ev):
     global content, option
@@ -1611,6 +1752,7 @@ def hndLayoutManagerClick(ev):
         
     option = createOptionPaneLayoutManager()
     optionPane.addChild(option)
+FUNCTIONEND
     
 def hndChildrenClick(ev):
     global content, option
@@ -1627,6 +1769,7 @@ def hndChildrenClick(ev):
         
     option = createOptionPaneChildren()
     optionPane.addChild(option)        
+FUNCTIONEND
         
 def hndTabPaneClick(ev):
     global content, option
@@ -1643,9 +1786,8 @@ def hndTabPaneClick(ev):
         
     option = createOptionPaneTabPane()
     optionPane.addChild(option)
+FUNCTIONEND
         
-       
-               
 def createGUI():
     global sidePane, contentPane, optionPane
     
@@ -1811,11 +1953,8 @@ def createGUI():
         optionPane = Pane()
         optionPane.alignment = Alignment.FILL
         sidePane.addChild(optionPane,0,1)
+FUNCTIONEND
 
-    return
-
-
-    
 def init():
 
     biui.init()
@@ -1828,6 +1967,7 @@ def init():
     biui.selectTheme("blocks")
     ##biui.selectTheme("default")
     createGUI()
+FUNCTIONEND
             
 def main():
     init()
@@ -1835,6 +1975,7 @@ def main():
     while biui.main():
         time.sleep(0.01)
         pass
+FUNCTIONEND
 
 if __name__ == '__main__':
     main()
